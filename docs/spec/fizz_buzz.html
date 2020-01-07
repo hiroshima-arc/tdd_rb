@@ -507,13 +507,30 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-html" data-lang="html">require 'cowsay'
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'cowsay'
 
 Handler = Proc.new do |req, res|
     res.status = 200
     res['Content-Type'] = 'text/plain'
     res.body = Cowsay.say('hello world', 'cow')
 end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>require 'minitest/autorun'
+
+class FizzBuzzTest &lt; Minitest::Test
+    def test_greeting
+        assert_equal "Hello", FizzBuzz.greeting
+    end
+end
+
+class FizzBuzz
+    def self.greeting
+        "Hello"
+    end
+end</pre>
 </div>
 </div>
 </div>
@@ -536,7 +553,7 @@ end</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 14:21:33 JST
+Last updated 2020-01-07 14:26:36 JST
 </div>
 </div>
 </body>
