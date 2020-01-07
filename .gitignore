@@ -71,3 +71,4 @@ gradle
 dist
 
 .DS_Store
+public
