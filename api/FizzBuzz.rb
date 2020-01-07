@@ -188,7 +188,17 @@ class FizzBuzz
   end
 end
 
-class FizzBuzzType01; end
+class FizzBuzzType01
+  def generate(number)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if is_fizz && is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+    number.to_s
+  end
+end
 
 class FizzBuzzType02; end
 
