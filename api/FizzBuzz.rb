@@ -10,25 +10,25 @@ class FizzBuzzTest < Minitest::Test
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列Fizzを返す
-            assert_equal 'Fizz', @fizzbuzz.generate(3)
+            assert_equal 'Fizz', @fizzbuzz.generate(3, 1)
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列Buzzを返す
-            assert_equal 'Buzz', @fizzbuzz.generate(5)
+            assert_equal 'Buzz', @fizzbuzz.generate(5, 1)
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.generate(15)
+            assert_equal 'FizzBuzz', @fizzbuzz.generate(15, 1)
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1)
+            assert_equal '1', @fizzbuzz.generate(1, 1)
           end
         end
 
@@ -123,13 +123,28 @@ class FizzBuzzTest < Minitest::Test
         end
       end
     end
+
+    describe 'それ以外のタイプの場合' do
+      def setup
+        @fizzbuzz = FizzBuzz
+      end
+
+      def test_例外を返す
+        e =
+          assert_raises RuntimeError do
+            @fizzbuzz.generate(1, 4)
+          end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
   end
 end
 
 class FizzBuzz
   MAX_NUMBER = 100
 
-  def self.generate(number, type = 1)
+  def self.generate(number, type)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 
@@ -144,10 +159,12 @@ class FizzBuzz
     when 3
       return 'FizzBuzz' if is_fizz && is_buzz
       number.to_s
+    else
+      raise '該当するタイプは存在しません'
     end
   end
 
   def self.generate_list
-    (1..MAX_NUMBER).map { |i| generate(i) }
+    (1..MAX_NUMBER).map { |i| generate(i, 1) }
   end
 end
