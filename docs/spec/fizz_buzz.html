@@ -449,7 +449,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_仕様">1. 仕様</h2>
 <div class="sectionbody">
-
+<div class="paragraph">
+<p>1 から 100 までの数をプリントするプログラムを書け。</p>
+</div>
+<div class="paragraph">
+<p>ただし 3 の倍数のときは数の代わりに｢Fizz｣と、5 の倍数のときは｢Buzz｣とプリントし、</p>
+</div>
+<div class="paragraph">
+<p>3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -457,7 +465,58 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_todoリスト">2.1. TODOリスト</h3>
-
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10003; 数を文字列にして返す</p>
+</li>
+<li>
+<p>&#10003; 1を渡したら文字列"1"を返す</p>
+</li>
+<li>
+<p>&#10003; 2を渡したら文字列"2"を返す</p>
+</li>
+<li>
+<p>&#10003; 3 の倍数のときは数の代わりに｢Fizz｣と返す</p>
+</li>
+<li>
+<p>&#10003; 3を渡したら文字列"Fizz"を返す</p>
+</li>
+<li>
+<p>&#10003; 5 の倍数のときは｢Buzz｣と返す</p>
+</li>
+<li>
+<p>&#10003; 5を渡したら文字列"Buzz"を返す</p>
+</li>
+<li>
+<p>&#10003; 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す</p>
+</li>
+<li>
+<p>&#10003; 15を渡したら文字列"FizzBuzz"を返す</p>
+</li>
+<li>
+<p>&#10003; 1 から 100 までの数を返す</p>
+</li>
+<li>
+<p>&#10003; はじめは文字列1を返す</p>
+</li>
+<li>
+<p>&#10003; 最後は文字列Buzzを返す</p>
+</li>
+<li>
+<p>&#10003; 2番目は文字列Fizzを返す</p>
+</li>
+<li>
+<p>&#10003; 4番目は文字列Buzzを返す</p>
+</li>
+<li>
+<p>&#10003; 14番目は文字列FizzBuzzを返す</p>
+</li>
+<li>
+<p>&#10003; プリントする</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_ユースケース図">2.2. ユースケース図</h3>
@@ -465,7 +524,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="sect2">
 <h3 id="_クラス図">2.3. クラス図</h3>
-
+<div class="imageblock">
+<div class="content">
+<img src="diag-80004b140e5ebaa5131dc6f9055063bd.png" alt="diag 80004b140e5ebaa5131dc6f9055063bd" width="157" height="104">
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_シーケンス図">2.4. シーケンス図</h3>
@@ -478,13 +541,97 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-html" data-lang="html">require 'cowsay'
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'cowsay'
+require_relative './FizzBuzz.rb'
 
-Handler = Proc.new do |req, res|
+Handler =
+  Proc.new do |req, res|
+    message = FizzBuzz.generate_list
     res.status = 200
     res['Content-Type'] = 'text/plain'
-    res.body = Cowsay.say('hello world', 'cow')
-end</code></pre>
+    res.body = Cowsay.say(message.to_s, 'cow')
+  end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>require 'minitest/autorun'
+
+class FizzBuzzTest &lt; Minitest::Test
+  describe 'FizzBuzz' do
+    def setup
+      @fizzbuzz = FizzBuzz
+    end
+
+    describe '三の倍数の場合' do
+      def test_3を渡したら文字列Fizzを返す
+        assert_equal 'Fizz', @fizzbuzz.generate(3)
+      end
+    end
+
+    describe '五の倍数の場合' do
+      def test_5を渡したら文字列Buzzを返す
+        assert_equal 'Buzz', @fizzbuzz.generate(5)
+      end
+    end
+
+    describe '三と五の倍数の場合' do
+      def test_15を渡したら文字列FizzBuzzを返す
+        assert_equal 'FizzBuzz', @fizzbuzz.generate(15)
+      end
+    end
+
+    describe 'その他の場合' do
+      def test_1を渡したら文字列1を返す
+        assert_equal '1', @fizzbuzz.generate(1)
+      end
+    end
+
+    describe '1から100までの数を返す' do
+      def setup
+        @result = FizzBuzz.generate_list
+      end
+
+      def test_はじめは文字列1を返す
+        assert_equal '1', @result.first
+      end
+
+      def test_最後は文字列Buzzを返す
+        assert_equal 'Buzz', @result.last
+      end
+
+      def test_2番目は文字列Fizzを返す
+        assert_equal 'Fizz', @result[2]
+      end
+
+      def test_4番目は文字列Buzzを返す
+        assert_equal 'Buzz', @result[4]
+      end
+
+      def test_14番目は文字列FizzBuzzを返す
+        assert_equal 'FizzBuzz', @result[14]
+      end
+    end
+  end
+end
+
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+    number.to_s
+  end
+
+  def self.generate_list
+    (1..MAX_NUMBER).map { |i| generate(i) }
+  end
+end</pre>
 </div>
 </div>
 </div>
@@ -507,7 +654,7 @@ end</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 14:00:21 JST
+Last updated 2020-01-07 16:53:36 JST
 </div>
 </div>
 </body>
