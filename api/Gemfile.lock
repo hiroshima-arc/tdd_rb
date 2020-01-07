@@ -2,12 +2,22 @@ GEM
   remote: https://rubygems.org/
   specs:
     cowsay (0.3.0)
+    debase (0.2.4.1)
+      debase-ruby_core_source (>= 0.10.2)
+    debase-ruby_core_source (0.10.9)
+    minitest (5.13.0)
+    rake (13.0.1)
+    ruby-debug-ide (0.7.0)
+      rake (>= 0.8.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   cowsay (~> 0.3.0)
+  debase
+  minitest
+  ruby-debug-ide
 
 BUNDLED WITH
    2.0.2

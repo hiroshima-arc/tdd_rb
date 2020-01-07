@@ -513,7 +513,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 14番目は文字列FizzBuzzを返す</p>
 </li>
 <li>
-<p>&#10063; プリントする</p>
+<p>&#10003; プリントする</p>
 </li>
 </ul>
 </div>
@@ -526,7 +526,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-e6c343ff77503832a46b54a998e2c016.png" alt="diag e6c343ff77503832a46b54a998e2c016" width="157" height="91">
+<img src="diag-80004b140e5ebaa5131dc6f9055063bd.png" alt="diag 80004b140e5ebaa5131dc6f9055063bd" width="157" height="104">
 </div>
 </div>
 </div>
@@ -542,12 +542,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'cowsay'
+require_relative './FizzBuzz.rb'
 
 Handler =
   Proc.new do |req, res|
+    message = FizzBuzz.generate_list
     res.status = 200
     res['Content-Type'] = 'text/plain'
-    res.body = Cowsay.say('hello world', 'cow')
+    res.body = Cowsay.say(message.to_s, 'cow')
   end</code></pre>
 </div>
 </div>
@@ -614,26 +616,20 @@ class FizzBuzzTest &lt; Minitest::Test
 end
 
 class FizzBuzz
+  MAX_NUMBER = 100
+
   def self.generate(number)
-    result = number.to_s
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
 
-    if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
-      result = 'FizzBuzz'
-    elsif number.modulo(3).zero?
-      result = 'Fizz'
-    elsif number.modulo(5).zero?
-      result = 'Buzz'
-    end
-
-    result
+    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+    number.to_s
   end
 
   def self.generate_list
-    result = []
-
-    (1..100).each { |i| result.push(generate(i)) }
-
-    result
+    (1..MAX_NUMBER).map { |i| generate(i) }
   end
 end</pre>
 </div>
@@ -658,7 +654,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 16:26:18 JST
+Last updated 2020-01-07 16:53:36 JST
 </div>
 </div>
 </body>
