@@ -29,6 +29,20 @@ class FizzBuzzTest < Minitest::Test
         assert_equal '1', @fizzbuzz.generate(1)
       end
     end
+
+    describe '1から100までの数を返す' do
+      def setup
+        @result = FizzBuzz.generate_list
+      end
+
+      def test_はじめは文字列1を返す
+        assert_equal '1', @result.first
+      end
+
+      def test_最後は文字列100を返す
+        assert_equal '100', @result.last
+      end
+    end
   end
 end
 
@@ -43,6 +57,14 @@ class FizzBuzz
     elsif number.modulo(5).zero?
       result = 'Buzz'
     end
+
+    result
+  end
+
+  def self.generate_list
+    result = []
+
+    (1..100).each { |i| result.push(i.to_s) }
 
     result
   end

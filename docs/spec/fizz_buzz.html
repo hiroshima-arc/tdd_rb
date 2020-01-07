@@ -498,10 +498,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10063; 1 から 100 までの数を返す</p>
 </li>
 <li>
-<p>&#10063; はじめは文字列1を返す</p>
+<p>&#10003; はじめは文字列1を返す</p>
 </li>
 <li>
-<p>&#10063; 最後は文字列100を返す</p>
+<p>&#10003; 最後は文字列100を返す</p>
 </li>
 <li>
 <p>&#10063; プリントする</p>
@@ -575,6 +575,20 @@ class FizzBuzzTest &lt; Minitest::Test
         assert_equal '1', @fizzbuzz.generate(1)
       end
     end
+
+    describe '1から100までの数を返す' do
+      def setup
+        @result = FizzBuzz.generate_list
+      end
+
+      def test_はじめは文字列1を返す
+        assert_equal '1', @result.first
+      end
+
+      def test_最後は文字列100を返す
+        assert_equal '100', @result.last
+      end
+    end
   end
 end
 
@@ -589,6 +603,14 @@ class FizzBuzz
     elsif number.modulo(5).zero?
       result = 'Buzz'
     end
+
+    result
+  end
+
+  def self.generate_list
+    result = []
+
+    (1..100).each { |i| result.push(i.to_s) }
 
     result
   end
@@ -615,7 +637,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 16:12:11 JST
+Last updated 2020-01-07 16:17:54 JST
 </div>
 </div>
 </body>
