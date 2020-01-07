@@ -35,6 +35,7 @@ end
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
+
     if number.modulo(3).zero? && number.modulo(5).zero?
       result = 'FizzBuzz'
     elsif number.modulo(3).zero?
@@ -42,6 +43,7 @@ class FizzBuzz
     elsif number.modulo(5).zero?
       result = 'Buzz'
     end
+
     result
   end
 end
