@@ -1,3 +1,5 @@
+[![](https://github.com/hiroshima-arc/tdd_rb/workflows/Ruby/badge.svg)](https://github.com/hiroshima-arc/tdd_rb/actions)
+
 # テスト駆動開発から始めるRuby入門
 
 ## 概要
