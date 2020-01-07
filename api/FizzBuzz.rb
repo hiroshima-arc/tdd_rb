@@ -46,6 +46,14 @@ class FizzBuzzTest < Minitest::Test
       def test_2番目は文字列Fizzを返す
         assert_equal 'Fizz', @result[2]
       end
+
+      def test_4番目は文字列Buzzを返す
+        assert_equal 'Buzz', @result[4]
+      end
+
+      def test_14番目は文字列FizzBuzzを返す
+        assert_equal 'FizzBuzz', @result[14]
+      end
     end
   end
 end

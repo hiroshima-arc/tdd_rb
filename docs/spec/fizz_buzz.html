@@ -495,7 +495,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 15を渡したら文字列"FizzBuzz"を返す</p>
 </li>
 <li>
-<p>&#10063; 1 から 100 までの数を返す</p>
+<p>&#10003; 1 から 100 までの数を返す</p>
 </li>
 <li>
 <p>&#10003; はじめは文字列1を返す</p>
@@ -507,10 +507,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 2番目は文字列Fizzを返す</p>
 </li>
 <li>
-<p>&#10063; 4番目は文字列Buzzを返す</p>
+<p>&#10003; 4番目は文字列Buzzを返す</p>
 </li>
 <li>
-<p>&#10063; 14番目は文字列FizzBuzzを返す</p>
+<p>&#10003; 14番目は文字列FizzBuzzを返す</p>
 </li>
 <li>
 <p>&#10063; プリントする</p>
@@ -601,6 +601,14 @@ class FizzBuzzTest &lt; Minitest::Test
       def test_2番目は文字列Fizzを返す
         assert_equal 'Fizz', @result[2]
       end
+
+      def test_4番目は文字列Buzzを返す
+        assert_equal 'Buzz', @result[4]
+      end
+
+      def test_14番目は文字列FizzBuzzを返す
+        assert_equal 'FizzBuzz', @result[14]
+      end
     end
   end
 end
@@ -650,7 +658,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 16:23:51 JST
+Last updated 2020-01-07 16:26:18 JST
 </div>
 </div>
 </body>
