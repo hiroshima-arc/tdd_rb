@@ -474,6 +474,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 1を渡したら文字列"1"を返す</p>
 </li>
 <li>
+<p>&#10003; 2を渡したら文字列"2"を返す</p>
+</li>
+<li>
 <p>&#10063; 3 の倍数のときは数の代わりに｢Fizz｣と返す</p>
 </li>
 <li>
@@ -535,11 +538,18 @@ class FizzBuzzTest &lt; Minitest::Test
     # 検証
     assert_equal '1', FizzBuzz.generate(1)
   end
+
+  def test_2を渡したら文字列2を返す
+    # 前準備
+    # 実行
+    # 検証
+    assert_equal '2', FizzBuzz.generate(2)
+  end
 end
 
 class FizzBuzz
   def self.generate(n)
-    '1'
+    n.to_s
   end
 end</pre>
 </div>
@@ -564,7 +574,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 15:13:14 JST
+Last updated 2020-01-07 15:26:22 JST
 </div>
 </div>
 </body>
