@@ -200,6 +200,10 @@ class FizzBuzzType01
   end
 end
 
-class FizzBuzzType02; end
+class FizzBuzzType02
+  def generate(number)
+    number.to_s
+  end
+end
 
 class FizzBuzzType03; end
