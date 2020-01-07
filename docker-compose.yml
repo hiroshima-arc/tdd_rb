@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  asciidocs:
+    build: ./docs
+    ports:
+      - 35729:35729
+    volumes:
+      - .:/work
+    working_dir: '/work'
+    command: ["gradle", "livereload"]

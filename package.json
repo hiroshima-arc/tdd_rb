@@ -8,6 +8,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nf start -j Procfile",
+    "start:asciidocs": "nf start -j docs/Procfile",
+    "start:slide": "nf start -j docs/slides/Procfile",
     "build": "webpack --config webpack.js",
     "deploy": "now",
     "deploy:local": "now dev",
@@ -15,7 +17,16 @@
     "format": "prettier --write src/**/*.*",
     "watch": "watch 'npm-run-all format format' ./src ",
     "app": "npm-run-all app:*",
-    "app:frontend": "browser-sync start --config bs-config.js"
+    "app:frontend": "browser-sync start --config bs-config.js",
+    "docs:asciidocs:proxy": "browser-sync start --config docs/bs-config.js",
+    "docs:asciidocs:build": "gradle asciidoctor",
+    "docs:asciidocs:watch": "watch 'npm-run-all docs:asciidocs:build' ./docs/src",
+    "docs:asciidocs:local": "gradle livereload",
+    "docs:slide:build": "marp docs/slides/PITCHME.md -o docs/slides/index.html",
+    "docs:slide:deploy": "cpx 'docs/slide/PITCHME.md' ./",
+    "docs:slide:proxy": "browser-sync start --config docs/slides/bs-config.js",
+    "docs:slide:watch": "marp -s docs/slides",
+    "docs:slide:preview": "marp -p -w docs/slides"
   },
   "repository": {
     "type": "git",
