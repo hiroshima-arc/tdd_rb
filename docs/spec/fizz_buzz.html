@@ -477,13 +477,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 2を渡したら文字列"2"を返す</p>
 </li>
 <li>
-<p>&#10063; 3 の倍数のときは数の代わりに｢Fizz｣と返す</p>
+<p>&#10003; 3 の倍数のときは数の代わりに｢Fizz｣と返す</p>
 </li>
 <li>
 <p>&#10003; 3を渡したら文字列"Fizz"を返す</p>
 </li>
 <li>
 <p>&#10063; 5 の倍数のときは｢Buzz｣と返す</p>
+</li>
+<li>
+<p>&#10003; 5を渡したら文字列"Buzz"を返す</p>
 </li>
 <li>
 <p>&#10063; 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す</p>
@@ -550,12 +553,20 @@ class FizzBuzzTest &lt; Minitest::Test
   def test_3を渡したら文字列Fizzを返す
     assert_equal 'Fizz', @fizzbuzz.generate(3)
   end
+
+  def test_5を渡したら文字列Buzzを返す
+    assert_equal 'Buzz', @fizzbuzz.generate(5)
+  end
 end
 
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    result = 'Fizz' if number % 3 == 0
+    if number.modulo(3).zero?
+      result = 'Fizz'
+    elsif number.modulo(5).zero?
+      result = 'Buzz'
+    end
     result
   end
 end</pre>
@@ -581,7 +592,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 15:48:18 JST
+Last updated 2020-01-07 15:55:15 JST
 </div>
 </div>
 </body>
