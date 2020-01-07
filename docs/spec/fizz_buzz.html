@@ -495,7 +495,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 15を渡したら文字列"FizzBuzz"を返す</p>
 </li>
 <li>
-<p>&#10063; 1 から 100 までの数</p>
+<p>&#10063; 1 から 100 までの数を返す</p>
+</li>
+<li>
+<p>&#10063; はじめは文字列1を返す</p>
+</li>
+<li>
+<p>&#10063; 最後は文字列100を返す</p>
 </li>
 <li>
 <p>&#10063; プリントする</p>
@@ -575,6 +581,7 @@ end
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
+
     if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
       result = 'FizzBuzz'
     elsif number.modulo(3).zero?
@@ -582,6 +589,7 @@ class FizzBuzz
     elsif number.modulo(5).zero?
       result = 'Buzz'
     end
+
     result
   end
 end</pre>
@@ -607,7 +615,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 16:07:51 JST
+Last updated 2020-01-07 16:12:11 JST
 </div>
 </div>
 </body>
