@@ -471,6 +471,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10063; 数を文字列にして返す</p>
 </li>
 <li>
+<p>&#10003; 1を渡したら文字列"1"を返す</p>
+</li>
+<li>
 <p>&#10063; 3 の倍数のときは数の代わりに｢Fizz｣と返す</p>
 </li>
 <li>
@@ -494,7 +497,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="sect2">
 <h3 id="_クラス図">2.3. クラス図</h3>
-
+<div class="imageblock">
+<div class="content">
+<img src="diag-e90b00158f4d5f4f3b5299cc5c56ed6b.png" alt="diag e90b00158f4d5f4f3b5299cc5c56ed6b" width="118" height="78">
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_シーケンス図">2.4. シーケンス図</h3>
@@ -509,11 +516,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'cowsay'
 
-Handler = Proc.new do |req, res|
+Handler =
+  Proc.new do |req, res|
     res.status = 200
     res['Content-Type'] = 'text/plain'
     res.body = Cowsay.say('hello world', 'cow')
-end</code></pre>
+  end</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -521,15 +529,18 @@ end</code></pre>
 <pre>require 'minitest/autorun'
 
 class FizzBuzzTest &lt; Minitest::Test
-    def test_greeting
-        assert_equal "Hello", FizzBuzz.greeting
-    end
+  def test_1を渡したら文字列1を返す
+    # 前準備
+    # 実行
+    # 検証
+    assert_equal '1', FizzBuzz.generate(1)
+  end
 end
 
 class FizzBuzz
-    def self.greeting
-        "Hello"
-    end
+  def self.generate(n)
+    '1'
+  end
 end</pre>
 </div>
 </div>
@@ -553,7 +564,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 14:26:36 JST
+Last updated 2020-01-07 15:13:14 JST
 </div>
 </div>
 </body>
