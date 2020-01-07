@@ -564,10 +564,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 15を渡したら文字列"FizzBuzz"を返す</p>
 </li>
 <li>
-<p>&#10063; それ以外のタイプの場合</p>
+<p>&#10003; それ以外のタイプの場合</p>
 </li>
 <li>
-<p>&#10063; 例外を返す</p>
+<p>&#10003; 例外を返す</p>
 </li>
 </ul>
 </div>
@@ -621,25 +621,25 @@ class FizzBuzzTest &lt; Minitest::Test
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列Fizzを返す
-            assert_equal 'Fizz', @fizzbuzz.generate(3)
+            assert_equal 'Fizz', @fizzbuzz.generate(3, 1)
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列Buzzを返す
-            assert_equal 'Buzz', @fizzbuzz.generate(5)
+            assert_equal 'Buzz', @fizzbuzz.generate(5, 1)
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.generate(15)
+            assert_equal 'FizzBuzz', @fizzbuzz.generate(15, 1)
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1)
+            assert_equal '1', @fizzbuzz.generate(1, 1)
           end
         end
 
@@ -734,13 +734,28 @@ class FizzBuzzTest &lt; Minitest::Test
         end
       end
     end
+
+    describe 'それ以外のタイプの場合' do
+      def setup
+        @fizzbuzz = FizzBuzz
+      end
+
+      def test_例外を返す
+        e =
+          assert_raises RuntimeError do
+            @fizzbuzz.generate(1, 4)
+          end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
   end
 end
 
 class FizzBuzz
   MAX_NUMBER = 100
 
-  def self.generate(number, type = 1)
+  def self.generate(number, type)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 
@@ -755,11 +770,13 @@ class FizzBuzz
     when 3
       return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
       number.to_s
+    else
+      raise '該当するタイプは存在しません'
     end
   end
 
   def self.generate_list
-    (1..MAX_NUMBER).map { |i| generate(i) }
+    (1..MAX_NUMBER).map { |i| generate(i, 1) }
   end
 end</pre>
 </div>
@@ -784,7 +801,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 17:51:37 JST
+Last updated 2020-01-07 17:59:05 JST
 </div>
 </div>
 </body>
