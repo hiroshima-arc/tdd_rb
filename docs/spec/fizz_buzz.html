@@ -483,13 +483,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 3を渡したら文字列"Fizz"を返す</p>
 </li>
 <li>
-<p>&#10063; 5 の倍数のときは｢Buzz｣と返す</p>
+<p>&#10003; 5 の倍数のときは｢Buzz｣と返す</p>
 </li>
 <li>
 <p>&#10003; 5を渡したら文字列"Buzz"を返す</p>
 </li>
 <li>
 <p>&#10063; 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す</p>
+</li>
+<li>
+<p>&#10063; 15を渡したら文字列"FizzBuzz"を返す</p>
 </li>
 <li>
 <p>&#10063; 1 から 100 までの数</p>
@@ -538,24 +541,28 @@ Handler =
 <pre>require 'minitest/autorun'
 
 class FizzBuzzTest &lt; Minitest::Test
-  def setup
-    @fizzbuzz = FizzBuzz
-  end
+  describe 'FizzBuzz' do
+    def setup
+      @fizzbuzz = FizzBuzz
+    end
 
-  def test_1を渡したら文字列1を返す
-    assert_equal '1', @fizzbuzz.generate(1)
-  end
+    describe '三の倍数の場合' do
+      def test_3を渡したら文字列Fizzを返す
+        assert_equal 'Fizz', @fizzbuzz.generate(3)
+      end
+    end
 
-  def test_2を渡したら文字列2を返す
-    assert_equal '2', @fizzbuzz.generate(2)
-  end
+    describe '五の倍数の場合' do
+      def test_5を渡したら文字列Buzzを返す
+        assert_equal 'Buzz', @fizzbuzz.generate(5)
+      end
+    end
 
-  def test_3を渡したら文字列Fizzを返す
-    assert_equal 'Fizz', @fizzbuzz.generate(3)
-  end
-
-  def test_5を渡したら文字列Buzzを返す
-    assert_equal 'Buzz', @fizzbuzz.generate(5)
+    describe 'その他の場合' do
+      def test_1を渡したら文字列1を返す
+        assert_equal '1', @fizzbuzz.generate(1)
+      end
+    end
   end
 end
 
@@ -592,7 +599,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 15:55:15 JST
+Last updated 2020-01-07 16:01:22 JST
 </div>
 </div>
 </body>
