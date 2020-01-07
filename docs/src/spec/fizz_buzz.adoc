@@ -59,9 +59,24 @@
 class FizzBuzz {
     MAX_NUMBER = 100
     ArrayList list
-    {static} String generate()
-    {static} ArrayList generate_list()
+    ArrayList generate_list()
 }
+
+class FizzBuzzType01 {
+    String generate()
+}
+
+class FizzBuzzType02 {
+    String generate()
+}
+
+class FizzBuzzType03 {
+    String generate()
+}
+
+FizzBuzz *- FizzBuzzType01
+FizzBuzz *- FizzBuzzType02
+FizzBuzz *- FizzBuzzType03
 ----
 
 === シーケンス図
