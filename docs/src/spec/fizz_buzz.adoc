@@ -58,6 +58,7 @@
 ----
 class FizzBuzz {
     MAX_NUMBER = 100
+    ArrayList list
     {static} String generate()
     {static} ArrayList generate_list()
 }

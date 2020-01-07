@@ -580,7 +580,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-80004b140e5ebaa5131dc6f9055063bd.png" alt="diag 80004b140e5ebaa5131dc6f9055063bd" width="157" height="104">
+<img src="diag-41d699a7f416ee5a420b4f812e5b6bd3.png" alt="diag 41d699a7f416ee5a420b4f812e5b6bd3" width="157" height="117">
 </div>
 </div>
 </div>
@@ -616,7 +616,7 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'タイプ1の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz
+          @fizzbuzz = FizzBuzz.new
         end
 
         describe '三の倍数の場合' do
@@ -645,7 +645,8 @@ class FizzBuzzTest &lt; Minitest::Test
 
         describe '1から100までの数を返す' do
           def setup
-            @result = FizzBuzz.generate_list
+            fizzbuzz = FizzBuzz.new
+            @result = fizzbuzz.generate_list
           end
 
           def test_はじめは文字列1を返す
@@ -674,7 +675,7 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'タイプ2の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz
+          @fizzbuzz = FizzBuzz.new
         end
 
         describe '三の倍数の場合' do
@@ -706,7 +707,7 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'タイプ3の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz
+          @fizzbuzz = FizzBuzz.new
         end
 
         describe '三の倍数の場合' do
@@ -737,7 +738,7 @@ class FizzBuzzTest &lt; Minitest::Test
 
     describe 'それ以外のタイプの場合' do
       def setup
-        @fizzbuzz = FizzBuzz
+        @fizzbuzz = FizzBuzz.new
       end
 
       def test_例外を返す
@@ -754,8 +755,9 @@ end
 
 class FizzBuzz
   MAX_NUMBER = 100
+  attr :list
 
-  def self.generate(number, type)
+  def generate(number, type)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 
@@ -775,8 +777,8 @@ class FizzBuzz
     end
   end
 
-  def self.generate_list
-    (1..MAX_NUMBER).map { |i| generate(i, 1) }
+  def generate_list
+    @list = (1..MAX_NUMBER).map { |i| generate(i, 1) }
   end
 end</pre>
 </div>
@@ -801,7 +803,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 17:59:05 JST
+Last updated 2020-01-07 18:21:41 JST
 </div>
 </div>
 </body>

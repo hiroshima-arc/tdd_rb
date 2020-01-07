@@ -5,7 +5,7 @@ class FizzBuzzTest < Minitest::Test
     describe 'タイプ1の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz
+          @fizzbuzz = FizzBuzz.new
         end
 
         describe '三の倍数の場合' do
@@ -34,7 +34,8 @@ class FizzBuzzTest < Minitest::Test
 
         describe '1から100までの数を返す' do
           def setup
-            @result = FizzBuzz.generate_list
+            fizzbuzz = FizzBuzz.new
+            @result = fizzbuzz.generate_list
           end
 
           def test_はじめは文字列1を返す
@@ -63,7 +64,7 @@ class FizzBuzzTest < Minitest::Test
     describe 'タイプ2の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz
+          @fizzbuzz = FizzBuzz.new
         end
 
         describe '三の倍数の場合' do
@@ -95,7 +96,7 @@ class FizzBuzzTest < Minitest::Test
     describe 'タイプ3の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz
+          @fizzbuzz = FizzBuzz.new
         end
 
         describe '三の倍数の場合' do
@@ -126,7 +127,7 @@ class FizzBuzzTest < Minitest::Test
 
     describe 'それ以外のタイプの場合' do
       def setup
-        @fizzbuzz = FizzBuzz
+        @fizzbuzz = FizzBuzz.new
       end
 
       def test_例外を返す
@@ -143,8 +144,9 @@ end
 
 class FizzBuzz
   MAX_NUMBER = 100
+  attr :list
 
-  def self.generate(number, type)
+  def generate(number, type)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 
@@ -164,7 +166,7 @@ class FizzBuzz
     end
   end
 
-  def self.generate_list
-    (1..MAX_NUMBER).map { |i| generate(i, 1) }
+  def generate_list
+    @list = (1..MAX_NUMBER).map { |i| generate(i, 1) }
   end
 end
