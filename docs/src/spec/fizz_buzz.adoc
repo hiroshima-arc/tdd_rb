@@ -25,8 +25,8 @@
  - [x] 15を渡したら文字列"FizzBuzz"を返す
 - [ ] 1 から 100 までの数を返す
   - [x] はじめは文字列1を返す
-  - [x] 最後は文字列100を返す
-  - [ ] 2番目は文字列Fizzを返す
+  - [x] 最後は文字列Buzzを返す
+  - [x] 2番目は文字列Fizzを返す
   - [ ] 4番目は文字列Buzzを返す
   - [ ] 14番目は文字列FizzBuzzを返す
 
@@ -39,6 +39,7 @@
 ----
 class FizzBuzz {
     {static} String generate()
+    {static} ArrayList generate_list()
 }
 ----
 

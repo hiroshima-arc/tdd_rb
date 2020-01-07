@@ -39,8 +39,12 @@ class FizzBuzzTest < Minitest::Test
         assert_equal '1', @result.first
       end
 
-      def test_最後は文字列100を返す
-        assert_equal '100', @result.last
+      def test_最後は文字列Buzzを返す
+        assert_equal 'Buzz', @result.last
+      end
+
+      def test_2番目は文字列Fizzを返す
+        assert_equal 'Fizz', @result[2]
       end
     end
   end
@@ -64,7 +68,7 @@ class FizzBuzz
   def self.generate_list
     result = []
 
-    (1..100).each { |i| result.push(i.to_s) }
+    (1..100).each { |i| result.push(generate(i)) }
 
     result
   end
