@@ -70,10 +70,6 @@ class FizzBuzz
   end
 
   def self.generate_list
-    result = []
-
-    (1..100).each { |i| result.push(generate(i)) }
-
-    result
+    (1..100).map { |i| generate(i) }
   end
 end
