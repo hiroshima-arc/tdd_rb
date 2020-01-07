@@ -5,36 +5,36 @@ class FizzBuzzTest < Minitest::Test
     describe 'タイプ1の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz.new
+          @fizzbuzz = FizzBuzz.new(1)
         end
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列Fizzを返す
-            assert_equal 'Fizz', @fizzbuzz.generate(3, 1)
+            assert_equal 'Fizz', @fizzbuzz.generate(3)
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列Buzzを返す
-            assert_equal 'Buzz', @fizzbuzz.generate(5, 1)
+            assert_equal 'Buzz', @fizzbuzz.generate(5)
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.generate(15, 1)
+            assert_equal 'FizzBuzz', @fizzbuzz.generate(15)
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1, 1)
+            assert_equal '1', @fizzbuzz.generate(1)
           end
         end
 
         describe '1から100までの数を返す' do
           def setup
-            fizzbuzz = FizzBuzz.new
+            fizzbuzz = FizzBuzz.new(1)
             @result = fizzbuzz.generate_list
           end
 
@@ -64,30 +64,30 @@ class FizzBuzzTest < Minitest::Test
     describe 'タイプ2の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz.new
+          @fizzbuzz = FizzBuzz.new(2)
         end
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.generate(3, 2)
+            assert_equal '3', @fizzbuzz.generate(3)
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.generate(5, 2)
+            assert_equal '5', @fizzbuzz.generate(5)
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列15を返す
-            assert_equal '15', @fizzbuzz.generate(15, 2)
+            assert_equal '15', @fizzbuzz.generate(15)
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1, 2)
+            assert_equal '1', @fizzbuzz.generate(1)
           end
         end
       end
@@ -96,30 +96,30 @@ class FizzBuzzTest < Minitest::Test
     describe 'タイプ3の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz.new
+          @fizzbuzz = FizzBuzz.new(3)
         end
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.generate(3, 3)
+            assert_equal '3', @fizzbuzz.generate(3)
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.generate(5, 3)
+            assert_equal '5', @fizzbuzz.generate(5)
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.generate(15, 3)
+            assert_equal 'FizzBuzz', @fizzbuzz.generate(15)
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1, 3)
+            assert_equal '1', @fizzbuzz.generate(1)
           end
         end
       end
@@ -127,13 +127,13 @@ class FizzBuzzTest < Minitest::Test
 
     describe 'それ以外のタイプの場合' do
       def setup
-        @fizzbuzz = FizzBuzz.new
+        @fizzbuzz = FizzBuzz.new(4)
       end
 
       def test_例外を返す
         e =
           assert_raises RuntimeError do
-            @fizzbuzz.generate(1, 4)
+            @fizzbuzz.generate(1)
           end
 
         assert_equal '該当するタイプは存在しません', e.message
@@ -146,11 +146,15 @@ class FizzBuzz
   MAX_NUMBER = 100
   attr :list
 
-  def generate(number, type)
+  def initialize(type)
+    @type = type
+  end
+
+  def generate(number)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 
-    case type
+    case @type
     when 1
       return 'FizzBuzz' if is_fizz && is_buzz
       return 'Fizz' if is_fizz
@@ -167,6 +171,6 @@ class FizzBuzz
   end
 
   def generate_list
-    @list = (1..MAX_NUMBER).map { |i| generate(i, 1) }
+    @list = (1..MAX_NUMBER).map { |i| generate(i) }
   end
 end
