@@ -55,13 +55,21 @@ class FizzBuzzTest < Minitest::Test
         assert_equal 'FizzBuzz', @result[14]
       end
     end
+
+    describe 'タイプ1の場合' do
+      describe '数を文字列にして返す' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', FizzBuzz.generate(1, 1)
+        end
+      end
+    end
   end
 end
 
 class FizzBuzz
   MAX_NUMBER = 100
 
-  def self.generate(number)
+  def self.generate(number, type = 1)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 
