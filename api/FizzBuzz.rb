@@ -1,18 +1,16 @@
 require 'minitest/autorun'
 
 class FizzBuzzTest < Minitest::Test
+  def setup
+    @fizzbuzz = FizzBuzz
+  end
+
   def test_1を渡したら文字列1を返す
-    # 前準備
-    # 実行
-    # 検証
-    assert_equal '1', FizzBuzz.generate(1)
+    assert_equal '1', @fizzbuzz.generate(1)
   end
 
   def test_2を渡したら文字列2を返す
-    # 前準備
-    # 実行
-    # 検証
-    assert_equal '2', FizzBuzz.generate(2)
+    assert_equal '2', @fizzbuzz.generate(2)
   end
 end
 
