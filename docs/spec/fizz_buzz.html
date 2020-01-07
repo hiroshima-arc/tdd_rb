@@ -563,6 +563,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p>&#10003; 15を渡したら文字列"FizzBuzz"を返す</p>
 </li>
+<li>
+<p>&#10063; それ以外のタイプの場合</p>
+</li>
+<li>
+<p>&#10063; 例外を返す</p>
+</li>
 </ul>
 </div>
 </div>
@@ -735,11 +741,11 @@ class FizzBuzz
   MAX_NUMBER = 100
 
   def self.generate(number, type = 1)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
     case type
     when 1
-      is_fizz = number.modulo(3).zero?
-      is_buzz = number.modulo(5).zero?
-
       return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
       return 'Fizz' if is_fizz
       return 'Buzz' if is_buzz
@@ -747,9 +753,6 @@ class FizzBuzz
     when 2
       number.to_s
     when 3
-      is_fizz = number.modulo(3).zero?
-      is_buzz = number.modulo(5).zero?
-
       return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
       number.to_s
     end
@@ -781,7 +784,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 17:47:38 JST
+Last updated 2020-01-07 17:51:37 JST
 </div>
 </div>
 </body>
