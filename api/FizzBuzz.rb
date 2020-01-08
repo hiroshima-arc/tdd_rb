@@ -34,7 +34,7 @@ class FizzBuzzTest < Minitest::Test
 
         describe '1から100までの数を返す' do
           def setup
-            fizzbuzz = FizzBuzz.new(1)
+            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
             @result = fizzbuzz.generate_list
           end
 
@@ -143,7 +143,7 @@ class FizzBuzz
   attr_reader :list
 
   def initialize(type)
-    @type = FizzBuzzType.create(type)
+    @type = type
   end
 
   def generate_list
