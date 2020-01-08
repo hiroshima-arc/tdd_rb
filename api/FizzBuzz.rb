@@ -177,6 +177,13 @@ class FizzBuzzTest < Minitest::Test
       assert_equal 100, list1.value.count
       assert_equal 200, list2.value.count
     end
+
+    def test_to_string
+      list = @fizzbuzz.execute(100)
+
+      assert_equal '1', list.to_s[0]
+      assert_equal 'Buzz', list.to_s[99]
+    end
   end
 end
 
@@ -260,7 +267,7 @@ class FizzBuzzList
   end
 
   def to_s
-    @value.to_s
+    @value.map { |i| i.value.to_s }
   end
 
   def add(value)
