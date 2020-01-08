@@ -580,7 +580,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-953ff33b7a1360e918215aeddd640007.png" alt="diag 953ff33b7a1360e918215aeddd640007" width="475" height="225">
+<img src="diag-7791208bbbb9f2dd42b07add34d8b4a8.png" alt="diag 7791208bbbb9f2dd42b07add34d8b4a8" width="483" height="225">
 </div>
 </div>
 </div>
@@ -617,7 +617,7 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'タイプ1の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz.create(1)
+          @fizzbuzz = FizzBuzzType.create(1)
         end
 
         describe '三の倍数の場合' do
@@ -676,7 +676,7 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'タイプ2の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz.create(2)
+          @fizzbuzz = FizzBuzzType.create(2)
         end
 
         describe '三の倍数の場合' do
@@ -708,7 +708,7 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'タイプ3の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz.create(3)
+          @fizzbuzz = FizzBuzzType.create(3)
         end
 
         describe '三の倍数の場合' do
@@ -741,7 +741,7 @@ class FizzBuzzTest &lt; Minitest::Test
       def test_例外を返す
         e =
           assert_raises RuntimeError do
-            FizzBuzz.create(4)
+            FizzBuzzType.create(4)
           end
 
         assert_equal '該当するタイプは存在しません', e.message
@@ -755,9 +755,15 @@ class FizzBuzz
   attr_reader :list
 
   def initialize(type)
-    @type = FizzBuzz.create(type)
+    @type = FizzBuzzType.create(type)
   end
 
+  def generate_list
+    @list = (1..MAX_NUMBER).map { |i| @type.generate(i) }
+  end
+end
+
+class FizzBuzzType
   def self.create(type)
     case type
     when 1
@@ -771,12 +777,6 @@ class FizzBuzz
     end
   end
 
-  def generate_list
-    @list = (1..MAX_NUMBER).map { |i| @type.generate(i) }
-  end
-end
-
-class FizzBuzzType
   def is_fizz(number)
     number.modulo(3).zero?
   end
@@ -829,7 +829,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-08 11:32:46 JST
+Last updated 2020-01-08 11:40:44 JST
 </div>
 </div>
 </body>
