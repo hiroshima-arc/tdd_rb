@@ -60,6 +60,7 @@ class FizzBuzz {
     MAX_NUMBER = 100
     FizzBuzzType type
     ArrayList list
+    String generate()
     ArrayList generate_list()
 }
 
@@ -74,21 +75,34 @@ class FizzBuzzType {
 }
 
 class FizzBuzzType01 {
-    String generate()
+  String generate()
 }
 
 class FizzBuzzType02 {
-    String generate()
+  String generate()
 }
 
 class FizzBuzzType03 {
-    String generate()
+  String generate()
+}
+
+class FizzBuzzValue {
+  Integer number
+  String value
+  boolean eql()
+}
+
+class FizzBuzzList {
+  ArrayList list
+  FizzBuzzList add()
 }
 
 FizzBuzz *- FizzBuzzType
 FizzBuzzType <|-- FizzBuzzType01
 FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType -> FizzBuzzValue
+FizzBuzzType -> FizzBuzzList
 ----
 
 === シーケンス図
