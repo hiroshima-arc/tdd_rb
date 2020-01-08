@@ -35,7 +35,8 @@ class FizzBuzzTest < Minitest::Test
         describe '1から100までの数を返す' do
           def setup
             fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-            @result = fizzbuzz.generate_list
+            fizzbuzz_list = fizzbuzz.generate_list
+            @result = fizzbuzz_list.value
           end
 
           def test_はじめは文字列1を返す
@@ -163,6 +164,7 @@ class FizzBuzz
 
   def initialize(type)
     @type = type
+    @list = FizzBuzzList.new([])
   end
 
   def generate(number)
@@ -170,7 +172,7 @@ class FizzBuzz
   end
 
   def generate_list
-    @list = (1..MAX_NUMBER).map { |i| @type.generate(i) }
+    @list.add((1..MAX_NUMBER).map { |i| @type.generate(i) })
   end
 end
 
@@ -244,4 +246,20 @@ class FizzBuzzValue
   end
 
   alias eql? ==
+end
+
+class FizzBuzzList
+  attr_reader :value
+
+  def initialize(list)
+    @value = list
+  end
+
+  def to_s
+    @value.to_s
+  end
+
+  def add(value)
+    FizzBuzzList.new(@value + value)
+  end
 end
