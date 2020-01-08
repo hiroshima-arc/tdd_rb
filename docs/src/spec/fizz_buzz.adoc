@@ -12,35 +12,115 @@
 
 3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。
 
+タイプごとに出力を切り替えることができる。
+
+タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz の場合のみをプリントする。
+
 == 設計
 === TODOリスト
-- [x] 数を文字列にして返す
- - [x] 1を渡したら文字列"1"を返す
- - [x] 2を渡したら文字列"2"を返す
-- [x] 3 の倍数のときは数の代わりに｢Fizz｣と返す
- - [x] 3を渡したら文字列"Fizz"を返す
-- [x] 5 の倍数のときは｢Buzz｣と返す
- - [x] 5を渡したら文字列"Buzz"を返す
-- [x] 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
- - [x] 15を渡したら文字列"FizzBuzz"を返す
-- [x] 1 から 100 までの数を返す
-  - [x] はじめは文字列1を返す
-  - [x] 最後は文字列Buzzを返す
-  - [x] 2番目は文字列Fizzを返す
-  - [x] 4番目は文字列Buzzを返す
-  - [x] 14番目は文字列FizzBuzzを返す
-- [x] プリントする
+- [x] タイプ1の場合
+ - [x] 数を文字列にして返す
+    - [x] 1を渡したら文字列"1"を返す
+    - [x] 2を渡したら文字列"2"を返す
+  - [x] 3 の倍数のときは数の代わりに｢Fizz｣と返す
+    - [x] 3を渡したら文字列"Fizz"を返す
+  - [x] 5 の倍数のときは｢Buzz｣と返す
+    - [x] 5を渡したら文字列"Buzz"を返す
+  - [x] 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+    - [x] 15を渡したら文字列"FizzBuzz"を返す
+- [x] タイプ2の場合
+  - [x] 数を文字列にして返す
+    - [x] 1を渡したら文字列"1"を返す
+    - [x] 2を渡したら文字列"2"を返す
+  - [x] 3 の倍数のときは数を文字列にして返す
+    - [x] 3を渡したら文字列"3"を返す
+  - [x] 5 の倍数のときは数を文字列にして返す
+    - [x] 5を渡したら文字列"5"を返す
+  - [x] 3 と 5 両方の倍数の場合には数を文字列にして返す
+    - [x] 15を渡したら文字列"15"を返す
+- [x] タイプ3の場合
+  - [x] 数を文字列にして返す
+    - [x] 1を渡したら文字列"1"を返す
+    - [x] 2を渡したら文字列"2"を返す
+  - [x] 3 の倍数のときは数を文字列にして返す
+    - [x] 3を渡したら文字列"3"を返す
+  - [x] 5 の倍数のときは数を文字列にして返す
+    - [x] 5を渡したら文字列"5"を返す
+  - [x] 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+    - [x] 15を渡したら文字列"FizzBuzz"を返す
+- [x] それ以外のタイプの場合
+  - [x] 例外を返す
 
 === ユースケース図
 
 === クラス図
 [plantuml]
 ----
-class FizzBuzz {
-    MAX_NUMBER = 100
-    {static} String generate()
-    {static} ArrayList generate_list()
+
+package Application {
+  interface FizzBuzzCommand {
+    execute()
+  }
+
+  class FizzBuzzValueCommand {
+    FizzBuzzType type
+    FizzBuzzValue execute()
+  }
+
+  class FizzBuzzListCommand {
+    FizzBuzzType type
+    FizzBuzzList execute()
+  }
 }
+
+package Domain {
+    package Model {
+      class FizzBuzzValue {
+        Integer number
+        String value
+        boolean eql()
+      }
+
+      class FizzBuzzList {
+        MAX_COUNT = 100
+        ArrayList list
+        FizzBuzzList add()
+      }
+    }
+
+    package Type {
+      class FizzBuzzType {
+        TYPE_01 = 1
+        TYPE_02 = 2
+        TYPE_03 = 3
+        FizzBuzzType {static} create()
+        Boolean is_fizz()
+        Boolean is_buzz()
+        String generate()
+      }
+
+      class FizzBuzzType01 {
+        String generate()
+      }
+
+      class FizzBuzzType02 {
+        String generate()
+      }
+
+      class FizzBuzzType03 {
+        String generate()
+      }
+    }
+}
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzCommand *- FizzBuzzType
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType -> FizzBuzzValue
+FizzBuzzType -> FizzBuzzList
+
 ----
 
 === シーケンス図
@@ -48,16 +128,62 @@ class FizzBuzz {
 == 開発
 
 [source, ruby]
+=== Application
 ----
 include::../../../api/index.rb[]
 ----
 
 ----
-include::../../../api/FizzBuzz.rb[]
+include::../../../api/fizz_buzz/application/fizz_buzz_command.rb[]
 ----
+
+----
+include::../../../api/fizz_buzz/application/fizz_buzz_list_command.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/application/fizz_buzz_value_command.rb[]
+----
+
+=== Domain
+==== Modle
+----
+include::../../../api/fizz_buzz/domain/model/fizz_buzz_list.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/domain/model/fizz_buzz_value.rb[]
+----
+
+==== Type
+----
+include::../../../api/fizz_buzz/domain/type/fizz_buzz_type.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/domain/type/fizz_buzz_type_01.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/domain/type/fizz_buzz_type_02.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/domain/type/fizz_buzz_type_03.rb[]
+----
+
+=== Test
+----
+include::../../../api/test/fizz_buzz/fizz_buzz_list_command_test.rb[]
+----
+
+----
+include::../../../api/test/fizz_buzz/fizz_buzz_value_command_test.rb[]
+----
+
 
 == 参照
 
-* http://asciidoctor.org/[Asciidoctor]
+* http://asciidoctor.org/[Asciidoctor^]
 
-* http://www.plantuml.com[PlantUML]
+* http://www.plantuml.com[PlantUML^]

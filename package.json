@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nf start -j Procfile",
-    "test": "ruby -Ilib:test ./api/*.rb",
+    "test": "cd api;rake test",
     "start:asciidocs": "nf start -j docs/Procfile",
     "start:slide": "nf start -j docs/slides/Procfile",
     "build": "webpack --config webpack.js",
