@@ -218,7 +218,59 @@
           const inputId = "class-diagram-input";
           const outputId = "class-im";
           const source = `
-                  `;
+package Presentation {
+  class FizzBuzzView {
+  }
+}
+
+package Application {
+  class FizzBuzzService {
+  }
+
+  interface FizzBuzzCommand {
+  }
+
+  class FizzBuzzValueCommand {
+  }
+
+  class FizzBuzzListCommand {
+  }
+}
+
+package Domain {
+    package Model {
+      class FizzBuzzValue {
+      }
+
+      class FizzBuzzList {
+      }
+    }
+
+    package Type {
+      class FizzBuzzType {
+      }
+
+      class FizzBuzzType01 {
+      }
+
+      class FizzBuzzType02 {
+      }
+
+      class FizzBuzzType03 {
+      }
+    }
+}
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzCommand *- FizzBuzzType
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType -> FizzBuzzValue
+FizzBuzzType -> FizzBuzzList
+FizzBuzzService -> FizzBuzzCommand
+FizzBuzzService <--- FizzBuzzView
+`;
           compress(source, outputId);
         })();
         function encode64(data) {
