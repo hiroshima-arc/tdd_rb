@@ -70,6 +70,7 @@ class FizzBuzzType {
   FizzBuzzType {static} create()
   Boolean is_fizz()
   Boolean is_buzz()
+  String generate()
 }
 
 class FizzBuzzType01 {

@@ -580,7 +580,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-b8cbf77ecc03bfd89eb7268e3164c240.png" alt="diag b8cbf77ecc03bfd89eb7268e3164c240" width="483" height="264">
+<img src="diag-555bbaf3f000e10b7a309cf948c5086e.png" alt="diag 555bbaf3f000e10b7a309cf948c5086e" width="483" height="277">
 </div>
 </div>
 </div>
@@ -617,7 +617,7 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'タイプ1の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzzType.create(FizzBuzzType::TYPE_01)
+          @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
         end
 
         describe '三の倍数の場合' do
@@ -646,7 +646,7 @@ class FizzBuzzTest &lt; Minitest::Test
 
         describe '1から100までの数を返す' do
           def setup
-            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+            fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
             @result = fizzbuzz.generate_list
           end
 
@@ -676,7 +676,7 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'タイプ2の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzzType.create(FizzBuzzType::TYPE_02)
+          @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_02))
         end
 
         describe '三の倍数の場合' do
@@ -708,7 +708,7 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'タイプ3の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzzType.create(FizzBuzzType::TYPE_03)
+          @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_03))
         end
 
         describe '三の倍数の場合' do
@@ -756,6 +756,10 @@ class FizzBuzz
 
   def initialize(type)
     @type = type
+  end
+
+  def generate(number)
+    @type.generate(number)
   end
 
   def generate_list
@@ -833,7 +837,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-08 11:49:50 JST
+Last updated 2020-01-08 12:17:13 JST
 </div>
 </div>
 </body>
