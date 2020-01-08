@@ -5,7 +5,7 @@ class FizzBuzzTest < Minitest::Test
     describe 'タイプ1の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzzType.create(FizzBuzzType::TYPE_01)
+          @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
         end
 
         describe '三の倍数の場合' do
@@ -34,7 +34,7 @@ class FizzBuzzTest < Minitest::Test
 
         describe '1から100までの数を返す' do
           def setup
-            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+            fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
             @result = fizzbuzz.generate_list
           end
 
@@ -64,7 +64,7 @@ class FizzBuzzTest < Minitest::Test
     describe 'タイプ2の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzzType.create(FizzBuzzType::TYPE_02)
+          @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_02))
         end
 
         describe '三の倍数の場合' do
@@ -96,7 +96,7 @@ class FizzBuzzTest < Minitest::Test
     describe 'タイプ3の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzzType.create(FizzBuzzType::TYPE_03)
+          @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_03))
         end
 
         describe '三の倍数の場合' do
@@ -144,6 +144,10 @@ class FizzBuzz
 
   def initialize(type)
     @type = type
+  end
+
+  def generate(number)
+    @type.generate(number)
   end
 
   def generate_list
