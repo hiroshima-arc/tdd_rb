@@ -35,8 +35,11 @@ class FizzBuzzTest < Minitest::Test
 
         describe '1から100までの数を返す' do
           def setup
-            fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-            fizzbuzz_list = fizzbuzz.generate_list
+            fizzbuzz =
+              FizzBuzzListCommand.new(
+                FizzBuzzType.create(FizzBuzzType::TYPE_01)
+              )
+            fizzbuzz_list = fizzbuzz.execute(100)
             @result = fizzbuzz_list.value
           end
 
@@ -290,5 +293,15 @@ class FizzBuzzValueCommand < FizzBuzzCommand
 
   def execute(number)
     @type.generate(number)
+  end
+end
+
+class FizzBuzzListCommand < FizzBuzzCommand
+  def initialize(type)
+    @type = type
+  end
+
+  def execute(number)
+    FizzBuzzList.new((1..number).map { |i| @type.generate(i) })
   end
 end
