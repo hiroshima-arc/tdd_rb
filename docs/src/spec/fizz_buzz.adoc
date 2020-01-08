@@ -99,6 +99,7 @@ class FizzBuzzValue {
 }
 
 class FizzBuzzList {
+  MAX_COUNT = 100
   ArrayList list
   FizzBuzzList add()
 }

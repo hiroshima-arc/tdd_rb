@@ -580,7 +580,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-106fc237e9a81533139dfee189960496.png" alt="diag 106fc237e9a81533139dfee189960496" width="924" height="334">
+<img src="diag-8aa7fcc62c28a3e0864a3ea5a341c7e4.png" alt="diag 8aa7fcc62c28a3e0864a3ea5a341c7e4" width="934" height="335">
 </div>
 </div>
 </div>
@@ -600,8 +600,10 @@ require_relative './FizzBuzz.rb'
 
 Handler =
   Proc.new do |req, res|
-    fizzbuzz = FizzBuzz.new(1)
-    message = fizzbuzz.generate_list
+    fizzbuzz =
+      FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    result = fizzbuzz.execute(100)
+    message = result.to_s
     res.status = 200
     res['Content-Type'] = 'text/plain'
     res.body = Cowsay.say(message.to_s, 'cow')
@@ -642,6 +644,30 @@ class FizzBuzzTest &lt; Minitest::Test
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
             assert_equal '1', @fizzbuzz.execute(1).value
+          end
+
+          def test_値は正の値のみ許可する
+            e =
+              assert_raises RuntimeError do
+                FizzBuzzValueCommand.new(
+                  FizzBuzzType.create(FizzBuzzType::TYPE_01)
+                )
+                  .execute(-1)
+              end
+
+            assert_equal '正の値のみ有効です', e.message
+          end
+
+          def test_100より多い数を許可しない
+            e =
+              assert_raises RuntimeError do
+                FizzBuzzListCommand.new(
+                  FizzBuzzType.create(FizzBuzzType::TYPE_01)
+                )
+                  .execute(101)
+
+                assert_equal '上限は100件までです', e.message
+              end
           end
         end
 
@@ -783,11 +809,18 @@ class FizzBuzzTest &lt; Minitest::Test
     end
 
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.execute(100)
+      list1 = @fizzbuzz.execute(50)
       list2 = list1.add(list1.value)
 
-      assert_equal 100, list1.value.count
-      assert_equal 200, list2.value.count
+      assert_equal 50, list1.value.count
+      assert_equal 100, list2.value.count
+    end
+
+    def test_to_string
+      list = @fizzbuzz.execute(100)
+
+      assert_equal '1', list.to_s[0]
+      assert_equal 'Buzz', list.to_s[99]
     end
   end
 end
@@ -849,6 +882,8 @@ class FizzBuzzValue
   attr_reader :number, :value
 
   def initialize(number, value)
+    raise '正の値のみ有効です' if number.negative?
+
     @number = number
     @value = value
   end
@@ -865,14 +900,17 @@ class FizzBuzzValue
 end
 
 class FizzBuzzList
+  MAX_COUNT = 100
   attr_reader :value
 
   def initialize(list)
+    raise "上限は#{MAX_COUNT}件までです" if list.count &gt; MAX_COUNT
+
     @value = list
   end
 
   def to_s
-    @value.to_s
+    @value.map { |i| i.value.to_s }
   end
 
   def add(value)
@@ -923,7 +961,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-08 13:22:52 JST
+Last updated 2020-01-08 14:26:14 JST
 </div>
 </div>
 </body>
