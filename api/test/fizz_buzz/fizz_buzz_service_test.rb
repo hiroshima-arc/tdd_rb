@@ -16,5 +16,15 @@ class FizzBuzzServiceTest < Minitest::Test
       result = @service.generate(3)
       assert_equal 'Fizz', result.value
     end
+
+    def test_5を渡したらFizzBuzzValueを返す
+      result = @service.generate(5)
+      assert_equal 'Buzz', result.value
+    end
+
+    def test_15を渡したらFizzBuzzValueを返す
+      result = @service.generate(15)
+      assert_equal 'FizzBuzz', result.value
+    end
   end
 end
