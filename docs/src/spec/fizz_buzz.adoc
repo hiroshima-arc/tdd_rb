@@ -56,12 +56,18 @@
 === クラス図
 [plantuml]
 ----
-class FizzBuzz {
-    MAX_NUMBER = 100
-    FizzBuzzType type
-    ArrayList list
-    String generate()
-    ArrayList generate_list()
+interface FizzBuzzCommand {
+  execute()
+}
+
+class FizzBuzzValueCommand {
+  FizzBuzzType type
+  FizzBuzzValue execute()
+}
+
+class FizzBuzzListCommand {
+  FizzBuzzType type
+  FizzBuzzList execute()
 }
 
 class FizzBuzzType {
@@ -96,8 +102,9 @@ class FizzBuzzList {
   ArrayList list
   FizzBuzzList add()
 }
-
-FizzBuzz *- FizzBuzzType
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzCommand *- FizzBuzzType
 FizzBuzzType <|-- FizzBuzzType01
 FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03

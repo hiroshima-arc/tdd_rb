@@ -580,7 +580,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-056e0c1b31d5cd07cd1f49c113453deb.png" alt="diag 056e0c1b31d5cd07cd1f49c113453deb" width="614" height="321">
+<img src="diag-106fc237e9a81533139dfee189960496.png" alt="diag 106fc237e9a81533139dfee189960496" width="924" height="334">
 </div>
 </div>
 </div>
@@ -617,37 +617,41 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'タイプ1の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+          @fizzbuzz =
+            FizzBuzzValueCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
         end
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列Fizzを返す
-            assert_equal 'Fizz', @fizzbuzz.generate(3).value
+            assert_equal 'Fizz', @fizzbuzz.execute(3).value
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列Buzzを返す
-            assert_equal 'Buzz', @fizzbuzz.generate(5).value
+            assert_equal 'Buzz', @fizzbuzz.execute(5).value
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.generate(15).value
+            assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1).value
+            assert_equal '1', @fizzbuzz.execute(1).value
           end
         end
 
         describe '1から100までの数を返す' do
           def setup
-            fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-            fizzbuzz_list = fizzbuzz.generate_list
+            fizzbuzz =
+              FizzBuzzListCommand.new(
+                FizzBuzzType.create(FizzBuzzType::TYPE_01)
+              )
+            fizzbuzz_list = fizzbuzz.execute(100)
             @result = fizzbuzz_list.value
           end
 
@@ -677,30 +681,31 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'タイプ2の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_02))
+          @fizzbuzz =
+            FizzBuzzValueCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_02))
         end
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.generate(3).value
+            assert_equal '3', @fizzbuzz.execute(3).value
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.generate(5).value
+            assert_equal '5', @fizzbuzz.execute(5).value
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列15を返す
-            assert_equal '15', @fizzbuzz.generate(15).value
+            assert_equal '15', @fizzbuzz.execute(15).value
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1).value
+            assert_equal '1', @fizzbuzz.execute(1).value
           end
         end
       end
@@ -709,30 +714,31 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'タイプ3の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_03))
+          @fizzbuzz =
+            FizzBuzzValueCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_03))
         end
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.generate(3).value
+            assert_equal '3', @fizzbuzz.execute(3).value
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.generate(5).value
+            assert_equal '5', @fizzbuzz.execute(5).value
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.generate(15).value
+            assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1).value
+            assert_equal '1', @fizzbuzz.execute(1).value
           end
         end
       end
@@ -752,39 +758,37 @@ class FizzBuzzTest &lt; Minitest::Test
 
   describe 'FizzBuzzValue' do
     def setup
-      @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      @fizzbuzz =
+        FizzBuzzValueCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
     end
 
     def test_同じ値
-      value1 = @fizzbuzz.generate(1)
-      value2 = @fizzbuzz.generate(1)
+      value1 = @fizzbuzz.execute(1)
+      value2 = @fizzbuzz.execute(1)
 
       assert value1.eql?(value2)
     end
 
     def test_to_string
-      value = @fizzbuzz.generate(3)
+      value = @fizzbuzz.execute(3)
 
       assert_equal '3:Fizz', value.to_s
     end
   end
-end
 
-class FizzBuzz
-  MAX_NUMBER = 100
-  attr_reader :list
+  describe 'FizzBuzzList' do
+    def setup
+      @fizzbuzz =
+        FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    end
 
-  def initialize(type)
-    @type = type
-    @list = FizzBuzzList.new([])
-  end
+    def test_新しいインスタンスが作られる
+      list1 = @fizzbuzz.execute(100)
+      list2 = list1.add(list1.value)
 
-  def generate(number)
-    @type.generate(number)
-  end
-
-  def generate_list
-    @list.add((1..MAX_NUMBER).map { |i| @type.generate(i) })
+      assert_equal 100, list1.value.count
+      assert_equal 200, list2.value.count
+    end
   end
 end
 
@@ -874,6 +878,28 @@ class FizzBuzzList
   def add(value)
     FizzBuzzList.new(@value + value)
   end
+end
+
+class FizzBuzzCommand; end
+
+class FizzBuzzValueCommand &lt; FizzBuzzCommand
+  def initialize(type)
+    @type = type
+  end
+
+  def execute(number)
+    @type.generate(number)
+  end
+end
+
+class FizzBuzzListCommand &lt; FizzBuzzCommand
+  def initialize(type)
+    @type = type
+  end
+
+  def execute(number)
+    FizzBuzzList.new((1..number).map { |i| @type.generate(i) })
+  end
 end</pre>
 </div>
 </div>
@@ -897,7 +923,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-08 12:47:43 JST
+Last updated 2020-01-08 13:22:52 JST
 </div>
 </div>
 </body>
