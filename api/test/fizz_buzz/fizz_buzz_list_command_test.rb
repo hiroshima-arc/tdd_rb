@@ -35,5 +35,19 @@ class FizzBuzzListCommandTest < Minitest::Test
     def test_14番目は文字列FizzBuzzを返す
       assert_equal 'FizzBuzz', @result[14].value
     end
+
+    def test_100より多い数を許可しない
+      e =
+        assert_raises RuntimeError do
+          FizzBuzz::Application::FizzBuzzListCommand.new(
+            FizzBuzz::Domain::Type::FizzBuzzType.create(
+              FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
+            )
+          )
+            .execute(101)
+
+          assert_equal '上限は100件までです', e.message
+        end
+    end
   end
 end

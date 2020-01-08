@@ -53,20 +53,6 @@ class FizzBuzzValueCommandTest < Minitest::Test
 
           assert_equal '正の値のみ有効です', e.message
         end
-
-        def test_100より多い数を許可しない
-          e =
-            assert_raises RuntimeError do
-              FizzBuzz::Application::FizzBuzzListCommand.new(
-                FizzBuzz::Domain::Type::FizzBuzzType.create(
-                  FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
-                )
-              )
-                .execute(101)
-
-              assert_equal '上限は100件までです', e.message
-            end
-        end
       end
     end
   end
