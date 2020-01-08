@@ -58,11 +58,15 @@
 ----
 class FizzBuzz {
     MAX_NUMBER = 100
+    FizzBuzzType type
     ArrayList list
     ArrayList generate_list()
 }
 
 class FizzBuzzType {
+  TYPE_01 = 1
+  TYPE_02 = 2
+  TYPE_03 = 3
   FizzBuzzType {static} create()
   Boolean is_fizz()
   Boolean is_buzz()
