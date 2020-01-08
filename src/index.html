@@ -27,7 +27,7 @@
       <h1>Ruby入門</h1>
     </div>
     <!-- ナビゲーションバー -->
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark stick-top">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark stick-top">
       <!-- サブコンポーネント -->
       <div class="container">
         <a href="index.html" class="navbar-brand">TDDRuby</a>
@@ -82,6 +82,232 @@
     <main>
       <!-- コンテンツ01 -->
       <div id="app"></div>
+      <div id="fizz-buzz-app">
+        <div class="py-3">
+          <section id="menu">
+            <div class="container">
+              <div id="app__message"></div>
+              <div class="nav nav-tabs" id="tab-menus" role="tablist">
+                <a
+                  aria-controls="panel-menu01"
+                  aria-selected="true"
+                  class="nav-item nav-link active"
+                  data-toggle="tab"
+                  href="#panel-menu01"
+                  id="tab-menu01"
+                  role="tab"
+                  >Counter</a
+                >
+                <a
+                  aria-controls="panel-menu02"
+                  aria-selected="false"
+                  class="nav-item nav-link"
+                  data-toggle="tab"
+                  href="#panel-menu02"
+                  id="tab-menu02"
+                  role="tab"
+                  >Table</a
+                >
+              </div>
+
+              <div class="tab-content" id="panel-menus">
+                <div
+                  aria-labelledby="tab-menu01"
+                  class="tab-pane fade show active border border-top-0 jumbotron"
+                  id="panel-menu01"
+                  role="tabpanel"
+                >
+                  <div id="app__counter" class="row d-flex align-items-center">
+                    <div class="col-md-1">
+                      <button class="btn btn-primary" id="decrement">
+                        -
+                      </button>
+                    </div>
+                    <div class="col-md-10">
+                      <h1 class="display-1 text-center">FizzBuzz</h1>
+                    </div>
+                    <div class="col-md-1">
+                      <button class="btn btn-primary" id="increment">
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  aria-labelledby="tab-menu02"
+                  class="tab-pane fade border border-top-0"
+                  id="panel-menu02"
+                  role="tabpanel"
+                >
+                  <dvi class="row p-3">
+                    <div id="app__table" class="col-md-12 order-md-2">
+                      <dvi class="row p-3">
+                        <div class="col-md-12 order-md-2">
+                          <div id="app__select">
+                            <select
+                              name="type"
+                              id="app__select--type"
+                              class="browser-default custom-select"
+                            >
+                              <option value="one">タイプ1</option>
+                              <option value="two">タイプ2</option>
+                              <option value="three">タイプ3</option>
+                            </select>
+                          </div>
+                          <div
+                            class="table-responsive"
+                            id="app__table-contents"
+                          >
+                            <table class="table table-striped">
+                              <thead>
+                                <tr>
+                                  <th>1</th>
+                                  <th>2</th>
+                                  <th>3</th>
+                                  <th>4</th>
+                                  <th>5</th>
+                                  <th>6</th>
+                                  <th>7</th>
+                                  <th>8</th>
+                                  <th>9</th>
+                                  <th>10</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>1</td>
+                                  <td>2</td>
+                                  <td>Fizz</td>
+                                  <td>4</td>
+                                  <td>Buzz</td>
+                                  <td>Fizz</td>
+                                  <td>7</td>
+                                  <td>8</td>
+                                  <td>Fizz</td>
+                                  <td>Buzz</td>
+                                </tr>
+                                <tr>
+                                  <td>11</td>
+                                  <td>Fizz</td>
+                                  <td>13</td>
+                                  <td>14</td>
+                                  <td>FizzBuzz</td>
+                                  <td>16</td>
+                                  <td>17</td>
+                                  <td>Fizz</td>
+                                  <td>19</td>
+                                  <td>Buzz</td>
+                                </tr>
+                                <tr>
+                                  <td>Fizz</td>
+                                  <td>22</td>
+                                  <td>23</td>
+                                  <td>Fizz</td>
+                                  <td>Buzz</td>
+                                  <td>26</td>
+                                  <td>Fizz</td>
+                                  <td>28</td>
+                                  <td>29</td>
+                                  <td>FizzBuzz</td>
+                                </tr>
+                                <tr>
+                                  <td>31</td>
+                                  <td>32</td>
+                                  <td>Fizz</td>
+                                  <td>34</td>
+                                  <td>Buzz</td>
+                                  <td>Fizz</td>
+                                  <td>37</td>
+                                  <td>38</td>
+                                  <td>Fizz</td>
+                                  <td>Buzz</td>
+                                </tr>
+                                <tr>
+                                  <td>41</td>
+                                  <td>Fizz</td>
+                                  <td>43</td>
+                                  <td>44</td>
+                                  <td>FizzBuzz</td>
+                                  <td>46</td>
+                                  <td>47</td>
+                                  <td>Fizz</td>
+                                  <td>49</td>
+                                  <td>Buzz</td>
+                                </tr>
+                                <tr>
+                                  <td>Fizz</td>
+                                  <td>52</td>
+                                  <td>53</td>
+                                  <td>Fizz</td>
+                                  <td>Buzz</td>
+                                  <td>56</td>
+                                  <td>Fizz</td>
+                                  <td>58</td>
+                                  <td>59</td>
+                                  <td>FizzBuzz</td>
+                                </tr>
+                                <tr>
+                                  <td>61</td>
+                                  <td>62</td>
+                                  <td>Fizz</td>
+                                  <td>64</td>
+                                  <td>Buzz</td>
+                                  <td>Fizz</td>
+                                  <td>67</td>
+                                  <td>68</td>
+                                  <td>Fizz</td>
+                                  <td>Buzz</td>
+                                </tr>
+                                <tr>
+                                  <td>71</td>
+                                  <td>Fizz</td>
+                                  <td>73</td>
+                                  <td>74</td>
+                                  <td>FizzBuzz</td>
+                                  <td>76</td>
+                                  <td>77</td>
+                                  <td>Fizz</td>
+                                  <td>79</td>
+                                  <td>Buzz</td>
+                                </tr>
+                                <tr>
+                                  <td>Fizz</td>
+                                  <td>82</td>
+                                  <td>83</td>
+                                  <td>Fizz</td>
+                                  <td>Buzz</td>
+                                  <td>86</td>
+                                  <td>Fizz</td>
+                                  <td>88</td>
+                                  <td>89</td>
+                                  <td>FizzBuzz</td>
+                                </tr>
+                                <tr>
+                                  <td>91</td>
+                                  <td>92</td>
+                                  <td>Fizz</td>
+                                  <td>94</td>
+                                  <td>Buzz</td>
+                                  <td>Fizz</td>
+                                  <td>97</td>
+                                  <td>98</td>
+                                  <td>Fizz</td>
+                                  <td>Buzz</td>
+                                </tr>
+                                <tr></tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </dvi>
+                    </div>
+                  </dvi>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
       <!-- /コンテンツ01 -->
     </main>
     <!-- /メイン -->
@@ -154,7 +380,8 @@
       <script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"></script>
       <script>
-        const dev = document.querySelector("#app"); if (dev !== null) {
+        const dev = document.querySelector("#app");
+        if (dev !== null) {
           dev.innerHTML = `
           <div class="container">
             <h1>FizzBuzz</h1>
@@ -201,11 +428,11 @@
 
 ## ToDoリスト
 - [ ] カウンター画面
-  - [ ] 画面イメージを作る
+  - [x] 画面イメージを作る
   - [ ] APIサービスを作る
   - [ ] APIサービスと連携するクライアントサービスを作る
 - [ ] 一覧表示画面
-  - [ ] 画面イメージを作る
+  - [x] 画面イメージを作る
   - [ ] APIサービスを作る
   - [ ] APIサービスと連携するクライアントサービスを作る
         `
