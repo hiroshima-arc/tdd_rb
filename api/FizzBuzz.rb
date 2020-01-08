@@ -264,14 +264,6 @@ class FizzBuzzType03 < FizzBuzzType
   end
 end
 
-module Assertions
-  class AssertionError < StandardError; end
-
-  def assert(&condition)
-    raise AssertionError.new('Assertion Failed') unless condition.call
-  end
-end
-
 class FizzBuzzValue
   attr_reader :number, :value
 
