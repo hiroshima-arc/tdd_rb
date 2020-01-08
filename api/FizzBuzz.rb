@@ -136,6 +136,25 @@ class FizzBuzzTest < Minitest::Test
       end
     end
   end
+
+  describe 'FizzBuzzValue' do
+    def setup
+      @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    end
+
+    def test_同じ値
+      value1 = @fizzbuzz.generate(1)
+      value2 = @fizzbuzz.generate(1)
+
+      assert value1.eql?(value2)
+    end
+
+    def test_to_string
+      value = @fizzbuzz.generate(3)
+
+      assert_equal '3:Fizz', value.to_s
+    end
+  end
 end
 
 class FizzBuzz
