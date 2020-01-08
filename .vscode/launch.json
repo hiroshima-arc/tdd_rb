@@ -15,6 +15,12 @@
             "type": "Ruby",
             "request": "launch",
             "program": "${workspaceRoot}/api/test/fizz_buzz/fizz_buzz_list_command_test.rb"
+        },
+        {
+            "name": "Debug Local FizzBuzzServiceTest",
+            "type": "Ruby",
+            "request": "launch",
+            "program": "${workspaceRoot}/api/test/fizz_buzz/fizz_buzz_service_test.rb"
         }
     ]
 }
