@@ -31,6 +31,24 @@ class FizzBuzzTest < Minitest::Test
           def test_1を渡したら文字列1を返す
             assert_equal '1', @fizzbuzz.execute(1).value
           end
+
+          def test_値は正の値のみ許可する
+            assert_raises Assertions::AssertionError do
+              FizzBuzzValueCommand.new(
+                FizzBuzzType.create(FizzBuzzType::TYPE_01)
+              )
+                .execute(-1)
+            end
+          end
+
+          def test_100より多い数を許可しない
+            assert_raises Assertions::AssertionError do
+              FizzBuzzListCommand.new(
+                FizzBuzzType.create(FizzBuzzType::TYPE_01)
+              )
+                .execute(101)
+            end
+          end
         end
 
         describe '1から100までの数を返す' do
@@ -171,11 +189,11 @@ class FizzBuzzTest < Minitest::Test
     end
 
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.execute(100)
+      list1 = @fizzbuzz.execute(50)
       list2 = list1.add(list1.value)
 
-      assert_equal 100, list1.value.count
-      assert_equal 200, list2.value.count
+      assert_equal 50, list1.value.count
+      assert_equal 100, list2.value.count
     end
 
     def test_to_string
@@ -240,10 +258,21 @@ class FizzBuzzType03 < FizzBuzzType
   end
 end
 
+module Assertions
+  class AssertionError < StandardError; end
+
+  def assert(&condition)
+    raise AssertionError.new('Assertion Failed') unless condition.call
+  end
+end
+
 class FizzBuzzValue
+  include Assertions
   attr_reader :number, :value
 
   def initialize(number, value)
+    assert { number >= 0 }
+
     @number = number
     @value = value
   end
@@ -260,9 +289,12 @@ class FizzBuzzValue
 end
 
 class FizzBuzzList
+  include Assertions
   attr_reader :value
 
   def initialize(list)
+    assert { list.count <= 100 }
+
     @value = list
   end
 
