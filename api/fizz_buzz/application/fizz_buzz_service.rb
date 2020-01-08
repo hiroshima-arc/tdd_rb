@@ -13,7 +13,7 @@ module FizzBuzz
               FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
             )
           )
-        command.execute(number)
+        command.execute(number.to_i)
       end
     end
   end
