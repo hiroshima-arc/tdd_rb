@@ -195,15 +195,10 @@
           spec.innerHTML = marked(
             `
 ## 仕様
-1 から 100 までの数をプリントするプログラムを書け。
+1から100までを１件ずつ画面に表示できる。
 
-ただし 3 の倍数のときは数の代わりに｢Fizz｣と、5 の倍数のときは｢Buzz｣とプリントし、
+1から100まで表示された内容を表示できる。
 
-3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。
-
-タイプごとに出力を切り替えることができる。
-
-タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz の場合のみをプリントする。 
 ## ToDoリスト
         `
           );
@@ -215,9 +210,6 @@
           const inputId = "class-diagram-input";
           const outputId = "class-im";
           const source = `
-class HelloWorld {
-  greeting(): String
-}
                   `;
           compress(source, outputId);
         })();
@@ -301,7 +293,7 @@ class HelloWorld {
       </script>
       <script>
         mocha.globals(["jQuery"]);
-        mocha.run();
+        //mocha.run();
       </script>
     </div>
   </body>
