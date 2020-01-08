@@ -440,7 +440,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_シーケンス図">2.4. シーケンス図</a></li>
 </ul>
 </li>
-<li><a href="#_開発">3. 開発</a></li>
+<li><a href="#_開発">3. 開発</a>
+<ul class="sectlevel2">
+<li><a href="#_application">Application</a></li>
+<li><a href="#_domain">3.1. Domain</a>
+<ul class="sectlevel3">
+<li><a href="#_modle">3.1.1. Modle</a></li>
+<li><a href="#_type">3.1.2. Type</a></li>
+</ul>
+</li>
+<li><a href="#_test">3.2. Test</a></li>
+</ul>
+</li>
 <li><a href="#_参照">4. 参照</a></li>
 </ul>
 </div>
@@ -580,7 +591,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-8aa7fcc62c28a3e0864a3ea5a341c7e4.png" alt="diag 8aa7fcc62c28a3e0864a3ea5a341c7e4" width="934" height="335">
+<img src="diag-e0f8a46247563097786761a2969ac880.png" alt="diag e0f8a46247563097786761a2969ac880" width="1212" height="402">
 </div>
 </div>
 </div>
@@ -593,352 +604,461 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_開発">3. 開発</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_application">Application</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'cowsay'
-require_relative './FizzBuzz.rb'
+<pre>require 'cowsay'
+require_relative './fizz_buzz/application/fizz_buzz_list_command.rb'
+require_relative './fizz_buzz/domain/type/fizz_buzz_type.rb'
+require_relative './fizz_buzz/domain/type/fizz_buzz_type_01.rb'
 
 Handler =
   Proc.new do |req, res|
     fizzbuzz =
-      FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      FizzBuzz::Application::FizzBuzzListCommand.new(
+        FizzBuzz::Domain::Type::FizzBuzzType.create(
+          FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
+        )
+      )
     result = fizzbuzz.execute(100)
     message = result.to_s
     res.status = 200
     res['Content-Type'] = 'text/plain'
     res.body = Cowsay.say(message.to_s, 'cow')
-  end</code></pre>
+  end</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>module FizzBuzz
+  module Application
+    class FizzBuzzCommand; end
+  end
+end</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>require_relative './fizz_buzz_command.rb'
+require_relative '../domain/model/fizz_buzz_list.rb'
+
+module FizzBuzz
+  module Application
+    class FizzBuzzListCommand &lt; FizzBuzzCommand
+      def initialize(type)
+        @type = type
+      end
+
+      def execute(number)
+        FizzBuzz::Domain::Model::FizzBuzzList.new(
+          (1..number).map { |i| @type.generate(i) }
+        )
+      end
+    end
+  end
+end</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>require_relative './fizz_buzz_command.rb'
+
+module FizzBuzz
+  module Application
+    class FizzBuzzValueCommand &lt; FizzBuzzCommand
+      def initialize(type)
+        @type = type
+      end
+
+      def execute(number)
+        @type.generate(number)
+      end
+    end
+  end
+end</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_domain">3.1. Domain</h3>
+<div class="sect3">
+<h4 id="_modle">3.1.1. Modle</h4>
+<div class="listingblock">
+<div class="content">
+<pre>module FizzBuzz
+  module Domain
+    module Model
+      class FizzBuzzList
+        MAX_COUNT = 100
+        attr_reader :value
+
+        def initialize(list)
+          raise "上限は#{MAX_COUNT}件までです" if list.count &gt; MAX_COUNT
+
+          @value = list
+        end
+
+        def to_s
+          @value.map { |i| i.value.to_s }
+        end
+
+        def add(value)
+          FizzBuzzList.new(@value + value)
+        end
+      end
+    end
+  end
+end</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>module FizzBuzz
+  module Domain
+    module Model
+      class FizzBuzzValue
+        attr_reader :number, :value
+
+        def initialize(number, value)
+          raise '正の値のみ有効です' if number.negative?
+
+          @number = number
+          @value = value
+        end
+
+        def to_s
+          "#{@number}:#{@value}"
+        end
+
+        def ==(other)
+          @number == other.number &amp;&amp; @value == other.value
+        end
+
+        alias eql? ==
+      end
+    end
+  end
+end</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_type">3.1.2. Type</h4>
+<div class="listingblock">
+<div class="content">
+<pre>module FizzBuzz
+  module Domain
+    module Type
+      class FizzBuzzType
+        TYPE_01 = 1
+        TYPE_02 = 2
+        TYPE_03 = 3
+
+        def self.create(type)
+          case type
+          when 1
+            FizzBuzzType01.new
+          when 2
+            FizzBuzzType02.new
+          when 3
+            FizzBuzzType03.new
+          else
+            raise '該当するタイプは存在しません'
+          end
+        end
+
+        def is_fizz(number)
+          number.modulo(3).zero?
+        end
+
+        def is_buzz(number)
+          number.modulo(5).zero?
+        end
+      end
+    end
+  end
+end</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>require_relative './fizz_buzz_type.rb'
+require_relative '../model/fizz_buzz_value.rb'
+
+module FizzBuzz
+  module Domain
+    module Type
+      class FizzBuzzType01 &lt; FizzBuzzType
+        def generate(number)
+          if is_fizz(number) &amp;&amp; is_buzz(number)
+            return(
+              FizzBuzz::Domain::Model::FizzBuzzValue.new(number, 'FizzBuzz')
+            )
+          end
+          if is_fizz(number)
+            return FizzBuzz::Domain::Model::FizzBuzzValue.new(number, 'Fizz')
+          end
+          if is_buzz(number)
+            return FizzBuzz::Domain::Model::FizzBuzzValue.new(number, 'Buzz')
+          end
+          FizzBuzz::Domain::Model::FizzBuzzValue.new(number, number.to_s)
+        end
+      end
+    end
+  end
+end</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>require_relative './fizz_buzz_type.rb'
+require_relative '../model/fizz_buzz_value.rb'
+
+module FizzBuzz
+  module Domain
+    module Type
+      class FizzBuzzType02 &lt; FizzBuzzType
+        def generate(number)
+          FizzBuzz::Domain::Model::FizzBuzzValue.new(number, number.to_s)
+        end
+      end
+    end
+  end
+end</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>require_relative './fizz_buzz_type.rb'
+require_relative '../model/fizz_buzz_value.rb'
+
+module FizzBuzz
+  module Domain
+    module Type
+      class FizzBuzzType03 &lt; FizzBuzzType
+        def generate(number)
+          if is_fizz(number) &amp;&amp; is_buzz(number)
+            return(
+              FizzBuzz::Domain::Model::FizzBuzzValue.new(number, 'FizzBuzz')
+            )
+          end
+          FizzBuzz::Domain::Model::FizzBuzzValue.new(number, number.to_s)
+        end
+      end
+    end
+  end
+end</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_test">3.2. Test</h3>
+<div class="listingblock">
+<div class="content">
+<pre>require 'minitest/autorun'
+require_relative '../../fizz_buzz/application/fizz_buzz_list_command.rb'
+require_relative '../../fizz_buzz/domain/type/fizz_buzz_type.rb'
+require_relative '../../fizz_buzz/domain/type/fizz_buzz_type_01.rb'
+
+class FizzBuzzListCommandTest &lt; Minitest::Test
+  describe '1から100までの数を返す' do
+    def setup
+      fizzbuzz =
+        FizzBuzz::Application::FizzBuzzListCommand.new(
+          FizzBuzz::Domain::Type::FizzBuzzType.create(
+            FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
+          )
+        )
+      fizzbuzz_list = fizzbuzz.execute(100)
+      @result = fizzbuzz_list.value
+    end
+
+    def test_はじめは文字列1を返す
+      assert_equal '1', @result.first.value
+    end
+
+    def test_最後は文字列Buzzを返す
+      assert_equal 'Buzz', @result.last.value
+    end
+
+    def test_2番目は文字列Fizzを返す
+      assert_equal 'Fizz', @result[2].value
+    end
+
+    def test_4番目は文字列Buzzを返す
+      assert_equal 'Buzz', @result[4].value
+    end
+
+    def test_14番目は文字列FizzBuzzを返す
+      assert_equal 'FizzBuzz', @result[14].value
+    end
+  end
+end</pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre>require 'minitest/autorun'
+require_relative '../../fizz_buzz/application/fizz_buzz_value_command.rb'
+require_relative '../../fizz_buzz/domain/type/fizz_buzz_type.rb'
+require_relative '../../fizz_buzz/domain/type/fizz_buzz_type_01.rb'
+require_relative '../../fizz_buzz/domain/type/fizz_buzz_type_02.rb'
+require_relative '../../fizz_buzz/domain/type/fizz_buzz_type_03.rb'
 
-class FizzBuzzTest &lt; Minitest::Test
-  describe 'FizzBuzz' do
-    describe 'タイプ1の場合' do
-      describe '数を文字列にして返す' do
-        def setup
-          @fizzbuzz =
-            FizzBuzzValueCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+class FizzBuzzValueCommandTest &lt; Minitest::Test
+  describe 'タイプ1の場合' do
+    describe '数を文字列にして返す' do
+      def setup
+        @fizzbuzz =
+          FizzBuzz::Application::FizzBuzzValueCommand.new(
+            FizzBuzz::Domain::Type::FizzBuzzType.create(
+              FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
+            )
+          )
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列Fizzを返す
+          assert_equal 'Fizz', @fizzbuzz.execute(3).value
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列Buzzを返す
+          assert_equal 'Buzz', @fizzbuzz.execute(5).value
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列FizzBuzzを返す
+          assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.execute(1).value
         end
 
-        describe '三の倍数の場合' do
-          def test_3を渡したら文字列Fizzを返す
-            assert_equal 'Fizz', @fizzbuzz.execute(3).value
-          end
-        end
-
-        describe '五の倍数の場合' do
-          def test_5を渡したら文字列Buzzを返す
-            assert_equal 'Buzz', @fizzbuzz.execute(5).value
-          end
-        end
-
-        describe '三と五の倍数の場合' do
-          def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
-          end
-        end
-
-        describe 'その他の場合' do
-          def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.execute(1).value
-          end
-
-          def test_値は正の値のみ許可する
-            e =
-              assert_raises RuntimeError do
-                FizzBuzzValueCommand.new(
-                  FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        def test_値は正の値のみ許可する
+          e =
+            assert_raises RuntimeError do
+              FizzBuzz::Application::FizzBuzzValueCommand.new(
+                FizzBuzz::Domain::Type::FizzBuzzType.create(
+                  FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
                 )
-                  .execute(-1)
-              end
-
-            assert_equal '正の値のみ有効です', e.message
-          end
-
-          def test_100より多い数を許可しない
-            e =
-              assert_raises RuntimeError do
-                FizzBuzzListCommand.new(
-                  FizzBuzzType.create(FizzBuzzType::TYPE_01)
-                )
-                  .execute(101)
-
-                assert_equal '上限は100件までです', e.message
-              end
-          end
-        end
-
-        describe '1から100までの数を返す' do
-          def setup
-            fizzbuzz =
-              FizzBuzzListCommand.new(
-                FizzBuzzType.create(FizzBuzzType::TYPE_01)
               )
-            fizzbuzz_list = fizzbuzz.execute(100)
-            @result = fizzbuzz_list.value
-          end
+                .execute(-1)
+            end
 
-          def test_はじめは文字列1を返す
-            assert_equal '1', @result.first.value
-          end
+          assert_equal '正の値のみ有効です', e.message
+        end
 
-          def test_最後は文字列Buzzを返す
-            assert_equal 'Buzz', @result.last.value
-          end
+        def test_100より多い数を許可しない
+          e =
+            assert_raises RuntimeError do
+              FizzBuzz::Application::FizzBuzzListCommand.new(
+                FizzBuzz::Domain::Type::FizzBuzzType.create(
+                  FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
+                )
+              )
+                .execute(101)
 
-          def test_2番目は文字列Fizzを返す
-            assert_equal 'Fizz', @result[2].value
-          end
-
-          def test_4番目は文字列Buzzを返す
-            assert_equal 'Buzz', @result[4].value
-          end
-
-          def test_14番目は文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @result[14].value
-          end
+              assert_equal '上限は100件までです', e.message
+            end
         end
       end
     end
+  end
 
-    describe 'タイプ2の場合' do
-      describe '数を文字列にして返す' do
-        def setup
-          @fizzbuzz =
-            FizzBuzzValueCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_02))
-        end
+  describe 'タイプ2の場合' do
+    describe '数を文字列にして返す' do
+      def setup
+        @fizzbuzz =
+          FizzBuzz::Application::FizzBuzzValueCommand.new(
+            FizzBuzz::Domain::Type::FizzBuzzType.create(
+              FizzBuzz::Domain::Type::FizzBuzzType::TYPE_02
+            )
+          )
+      end
 
-        describe '三の倍数の場合' do
-          def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.execute(3).value
-          end
-        end
-
-        describe '五の倍数の場合' do
-          def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.execute(5).value
-          end
-        end
-
-        describe '三と五の倍数の場合' do
-          def test_15を渡したら文字列15を返す
-            assert_equal '15', @fizzbuzz.execute(15).value
-          end
-        end
-
-        describe 'その他の場合' do
-          def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.execute(1).value
-          end
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.execute(3).value
         end
       end
-    end
 
-    describe 'タイプ3の場合' do
-      describe '数を文字列にして返す' do
-        def setup
-          @fizzbuzz =
-            FizzBuzzValueCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_03))
-        end
-
-        describe '三の倍数の場合' do
-          def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.execute(3).value
-          end
-        end
-
-        describe '五の倍数の場合' do
-          def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.execute(5).value
-          end
-        end
-
-        describe '三と五の倍数の場合' do
-          def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
-          end
-        end
-
-        describe 'その他の場合' do
-          def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.execute(1).value
-          end
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.execute(5).value
         end
       end
-    end
 
-    describe 'それ以外のタイプの場合' do
-      def test_例外を返す
-        e =
-          assert_raises RuntimeError do
-            FizzBuzzType.create(4)
-          end
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列15を返す
+          assert_equal '15', @fizzbuzz.execute(15).value
+        end
+      end
 
-        assert_equal '該当するタイプは存在しません', e.message
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.execute(1).value
+        end
       end
     end
   end
 
-  describe 'FizzBuzzValue' do
-    def setup
-      @fizzbuzz =
-        FizzBuzzValueCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
+  describe 'タイプ3の場合' do
+    describe '数を文字列にして返す' do
+      def setup
+        @fizzbuzz =
+          FizzBuzz::Application::FizzBuzzValueCommand.new(
+            FizzBuzz::Domain::Type::FizzBuzzType.create(
+              FizzBuzz::Domain::Type::FizzBuzzType::TYPE_03
+            )
+          )
+      end
 
-    def test_同じ値
-      value1 = @fizzbuzz.execute(1)
-      value2 = @fizzbuzz.execute(1)
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.execute(3).value
+        end
+      end
 
-      assert value1.eql?(value2)
-    end
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.execute(5).value
+        end
+      end
 
-    def test_to_string
-      value = @fizzbuzz.execute(3)
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列FizzBuzzを返す
+          assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
+        end
+      end
 
-      assert_equal '3:Fizz', value.to_s
-    end
-  end
-
-  describe 'FizzBuzzList' do
-    def setup
-      @fizzbuzz =
-        FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
-
-    def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.execute(50)
-      list2 = list1.add(list1.value)
-
-      assert_equal 50, list1.value.count
-      assert_equal 100, list2.value.count
-    end
-
-    def test_to_string
-      list = @fizzbuzz.execute(100)
-
-      assert_equal '1', list.to_s[0]
-      assert_equal 'Buzz', list.to_s[99]
-    end
-  end
-end
-
-class FizzBuzzType
-  TYPE_01 = 1
-  TYPE_02 = 2
-  TYPE_03 = 3
-
-  def self.create(type)
-    case type
-    when 1
-      FizzBuzzType01.new
-    when 2
-      FizzBuzzType02.new
-    when 3
-      FizzBuzzType03.new
-    else
-      raise '該当するタイプは存在しません'
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.execute(1).value
+        end
+      end
     end
   end
 
-  def is_fizz(number)
-    number.modulo(3).zero?
-  end
+  describe 'それ以外のタイプの場合' do
+    def test_例外を返す
+      e =
+        assert_raises RuntimeError do
+          FizzBuzz::Domain::Type::FizzBuzzType.create(4)
+        end
 
-  def is_buzz(number)
-    number.modulo(5).zero?
-  end
-end
-
-class FizzBuzzType01 &lt; FizzBuzzType
-  def generate(number)
-    if is_fizz(number) &amp;&amp; is_buzz(number)
-      return FizzBuzzValue.new(number, 'FizzBuzz')
+      assert_equal '該当するタイプは存在しません', e.message
     end
-    return FizzBuzzValue.new(number, 'Fizz') if is_fizz(number)
-    return FizzBuzzValue.new(number, 'Buzz') if is_buzz(number)
-    FizzBuzzValue.new(number, number.to_s)
-  end
-end
-
-class FizzBuzzType02 &lt; FizzBuzzType
-  def generate(number)
-    FizzBuzzValue.new(number, number.to_s)
-  end
-end
-
-class FizzBuzzType03 &lt; FizzBuzzType
-  def generate(number)
-    if is_fizz(number) &amp;&amp; is_buzz(number)
-      return FizzBuzzValue.new(number, 'FizzBuzz')
-    end
-    FizzBuzzValue.new(number, number.to_s)
-  end
-end
-
-class FizzBuzzValue
-  attr_reader :number, :value
-
-  def initialize(number, value)
-    raise '正の値のみ有効です' if number.negative?
-
-    @number = number
-    @value = value
-  end
-
-  def to_s
-    "#{@number}:#{@value}"
-  end
-
-  def ==(other)
-    @number == other.number &amp;&amp; @value == other.value
-  end
-
-  alias eql? ==
-end
-
-class FizzBuzzList
-  MAX_COUNT = 100
-  attr_reader :value
-
-  def initialize(list)
-    raise "上限は#{MAX_COUNT}件までです" if list.count &gt; MAX_COUNT
-
-    @value = list
-  end
-
-  def to_s
-    @value.map { |i| i.value.to_s }
-  end
-
-  def add(value)
-    FizzBuzzList.new(@value + value)
-  end
-end
-
-class FizzBuzzCommand; end
-
-class FizzBuzzValueCommand &lt; FizzBuzzCommand
-  def initialize(type)
-    @type = type
-  end
-
-  def execute(number)
-    @type.generate(number)
-  end
-end
-
-class FizzBuzzListCommand &lt; FizzBuzzCommand
-  def initialize(type)
-    @type = type
-  end
-
-  def execute(number)
-    FizzBuzzList.new((1..number).map { |i| @type.generate(i) })
   end
 end</pre>
+</div>
 </div>
 </div>
 </div>
@@ -949,10 +1069,10 @@ end</pre>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://asciidoctor.org/">Asciidoctor</a></p>
+<p><a href="http://asciidoctor.org/" target="_blank" rel="noopener">Asciidoctor</a></p>
 </li>
 <li>
-<p><a href="http://www.plantuml.com">PlantUML</a></p>
+<p><a href="http://www.plantuml.com" target="_blank" rel="noopener">PlantUML</a></p>
 </li>
 </ul>
 </div>
@@ -961,7 +1081,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-08 14:26:14 JST
+Last updated 2020-01-08 16:45:46 JST
 </div>
 </div>
 </body>
