@@ -5,7 +5,7 @@ class FizzBuzzTest < Minitest::Test
     describe 'タイプ1の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz.create(1)
+          @fizzbuzz = FizzBuzzType.create(1)
         end
 
         describe '三の倍数の場合' do
@@ -64,7 +64,7 @@ class FizzBuzzTest < Minitest::Test
     describe 'タイプ2の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz.create(2)
+          @fizzbuzz = FizzBuzzType.create(2)
         end
 
         describe '三の倍数の場合' do
@@ -96,7 +96,7 @@ class FizzBuzzTest < Minitest::Test
     describe 'タイプ3の場合' do
       describe '数を文字列にして返す' do
         def setup
-          @fizzbuzz = FizzBuzz.create(3)
+          @fizzbuzz = FizzBuzzType.create(3)
         end
 
         describe '三の倍数の場合' do
@@ -129,7 +129,7 @@ class FizzBuzzTest < Minitest::Test
       def test_例外を返す
         e =
           assert_raises RuntimeError do
-            FizzBuzz.create(4)
+            FizzBuzzType.create(4)
           end
 
         assert_equal '該当するタイプは存在しません', e.message
@@ -143,9 +143,15 @@ class FizzBuzz
   attr_reader :list
 
   def initialize(type)
-    @type = FizzBuzz.create(type)
+    @type = FizzBuzzType.create(type)
   end
 
+  def generate_list
+    @list = (1..MAX_NUMBER).map { |i| @type.generate(i) }
+  end
+end
+
+class FizzBuzzType
   def self.create(type)
     case type
     when 1
@@ -159,12 +165,6 @@ class FizzBuzz
     end
   end
 
-  def generate_list
-    @list = (1..MAX_NUMBER).map { |i| @type.generate(i) }
-  end
-end
-
-class FizzBuzzType
   def is_fizz(number)
     number.modulo(3).zero?
   end
