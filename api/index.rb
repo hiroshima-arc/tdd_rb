@@ -1,10 +1,16 @@
 require 'cowsay'
-require_relative './FizzBuzz.rb'
+require_relative './fizz_buzz/application/fizz_buzz_list_command.rb'
+require_relative './fizz_buzz/domain/type/fizz_buzz_type.rb'
+require_relative './fizz_buzz/domain/type/fizz_buzz_type_01.rb'
 
 Handler =
   Proc.new do |req, res|
     fizzbuzz =
-      FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      FizzBuzz::Application::FizzBuzzListCommand.new(
+        FizzBuzz::Domain::Type::FizzBuzzType.create(
+          FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
+        )
+      )
     result = fizzbuzz.execute(100)
     message = result.to_s
     res.status = 200
