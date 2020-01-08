@@ -62,6 +62,11 @@ class FizzBuzz {
     ArrayList generate_list()
 }
 
+class FizzBuzzType {
+  Boolean is_fizz()
+  Boolean is_buzz()
+}
+
 class FizzBuzzType01 {
     String generate()
 }
@@ -74,9 +79,10 @@ class FizzBuzzType03 {
     String generate()
 }
 
-FizzBuzz *- FizzBuzzType01
-FizzBuzz *- FizzBuzzType02
-FizzBuzz *- FizzBuzzType03
+FizzBuzz *- FizzBuzzType
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
 ----
 
 === シーケンス図

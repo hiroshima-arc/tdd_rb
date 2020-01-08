@@ -580,7 +580,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-e692780a6cb679c9bd69006750415da8.png" alt="diag e692780a6cb679c9bd69006750415da8" width="646" height="164">
+<img src="diag-953ff33b7a1360e918215aeddd640007.png" alt="diag 953ff33b7a1360e918215aeddd640007" width="475" height="225">
 </div>
 </div>
 </div>
@@ -600,7 +600,8 @@ require_relative './FizzBuzz.rb'
 
 Handler =
   Proc.new do |req, res|
-    message = FizzBuzz.generate_list
+    fizzbuzz = FizzBuzz.new(1)
+    message = fizzbuzz.generate_list
     res.status = 200
     res['Content-Type'] = 'text/plain'
     res.body = Cowsay.say(message.to_s, 'cow')
@@ -775,30 +776,34 @@ class FizzBuzz
   end
 end
 
-class FizzBuzzType01
-  def generate(number)
-    is_fizz = number.modulo(3).zero?
-    is_buzz = number.modulo(5).zero?
+class FizzBuzzType
+  def is_fizz(number)
+    number.modulo(3).zero?
+  end
 
-    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
-    return 'Fizz' if is_fizz
-    return 'Buzz' if is_buzz
+  def is_buzz(number)
+    number.modulo(5).zero?
+  end
+end
+
+class FizzBuzzType01 &lt; FizzBuzzType
+  def generate(number)
+    return 'FizzBuzz' if is_fizz(number) &amp;&amp; is_buzz(number)
+    return 'Fizz' if is_fizz(number)
+    return 'Buzz' if is_buzz(number)
     number.to_s
   end
 end
 
-class FizzBuzzType02
+class FizzBuzzType02 &lt; FizzBuzzType
   def generate(number)
     number.to_s
   end
 end
 
-class FizzBuzzType03
+class FizzBuzzType03 &lt; FizzBuzzType
   def generate(number)
-    is_fizz = number.modulo(3).zero?
-    is_buzz = number.modulo(5).zero?
-
-    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+    return 'FizzBuzz' if is_fizz(number) &amp;&amp; is_buzz(number)
     number.to_s
   end
 end</pre>
@@ -824,7 +829,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 18:53:05 JST
+Last updated 2020-01-08 11:32:46 JST
 </div>
 </div>
 </body>
