@@ -146,18 +146,19 @@ class FizzBuzzTest < Minitest::Test
 
   describe 'FizzBuzzValue' do
     def setup
-      @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      @fizzbuzz =
+        FizzBuzzValueCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
     end
 
     def test_同じ値
-      value1 = @fizzbuzz.generate(1)
-      value2 = @fizzbuzz.generate(1)
+      value1 = @fizzbuzz.execute(1)
+      value2 = @fizzbuzz.execute(1)
 
       assert value1.eql?(value2)
     end
 
     def test_to_string
-      value = @fizzbuzz.generate(3)
+      value = @fizzbuzz.execute(3)
 
       assert_equal '3:Fizz', value.to_s
     end
@@ -165,34 +166,17 @@ class FizzBuzzTest < Minitest::Test
 
   describe 'FizzBuzzList' do
     def setup
-      @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      @fizzbuzz =
+        FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
     end
 
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.generate_list
+      list1 = @fizzbuzz.execute(100)
       list2 = list1.add(list1.value)
 
       assert_equal 100, list1.value.count
       assert_equal 200, list2.value.count
     end
-  end
-end
-
-class FizzBuzz
-  MAX_NUMBER = 100
-  attr_reader :list
-
-  def initialize(type)
-    @type = type
-    @list = FizzBuzzList.new([])
-  end
-
-  def generate(number)
-    @type.generate(number)
-  end
-
-  def generate_list
-    @list.add((1..MAX_NUMBER).map { |i| @type.generate(i) })
   end
 end
 
