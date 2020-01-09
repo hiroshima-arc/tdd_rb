@@ -405,13 +405,16 @@
       <script>
         mocha.setup("tdd");
         const assert = chai.assert;
-        suite("FizzBuzzTest", () => {
-          test("greeting", () => {
-            assert.equal("Hello, world", greeting());
-          });
+        suite("FizzBuzzServiceTest", () => {
+          suite("GenerateApiService", () => {
+            test("3を渡したらJSONオブジェクトを返す", () => {
+              assert.deepEqual({number:3,value:'Fizz'}, generate(3))
+            })
+          })
         });
-        function greeting() {
-          return "Hello, world";
+
+        function generate(number) {
+          return {number:3, value:'Fizz'}
         }
       </script>
 
@@ -584,7 +587,7 @@ FizzBuzzService <--- FizzBuzzView
       </script>
       <script>
         mocha.globals(["jQuery"]);
-        //mocha.run();
+        mocha.run();
       </script>
     </div>
   </body>
