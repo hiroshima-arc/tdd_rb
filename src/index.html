@@ -307,9 +307,125 @@
 
         class FizzBuzzView {
           constructor() {
+            this._counterComponent = new FizzBuzzCounterComponent();
+            this._tableComponent = new FizzBuzzTableComponent();
+          }
+
+          render() {
+              const result = `
+              <div class="py-3">
+                <section id="menu">
+                  <div class="container">
+                    <div id="app__message"></div>
+                    <div class="nav nav-tabs" id="tab-menus" role="tablist">
+                      <a
+                        aria-controls="panel-menu01"
+                        aria-selected="true"
+                        class="nav-item nav-link active"
+                        data-toggle="tab"
+                        href="#panel-menu01"
+                        id="tab-menu01"
+                        role="tab"
+                        >Counter</a
+                      >
+                      <a
+                        aria-controls="panel-menu02"
+                        aria-selected="false"
+                        class="nav-item nav-link"
+                        data-toggle="tab"
+                        href="#panel-menu02"
+                        id="tab-menu02"
+                        role="tab"
+                        >Table</a
+                      >
+                    </div>
+
+                    <div class="tab-content" id="panel-menus">
+                      <div
+                        aria-labelledby="tab-menu01"
+                        class="tab-pane fade show active border border-top-0 jumbotron"
+                        id="panel-menu01"
+                        role="tabpanel"
+                      >
+                        <div id="app__counter" class="row d-flex align-items-center">
+                        </div>
+                      </div>
+                      <div
+                        aria-labelledby="tab-menu02"
+                        class="tab-pane fade border border-top-0"
+                        id="panel-menu02"
+                        role="tabpanel"
+                      >
+                        <dvi class="row p-3">
+                          <div id="app__table" class="col-md-12 order-md-2">
+                          </div>
+                        </dvi>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            `;
+
+              document.querySelector("#app-fizz-buzz").innerHTML = result;
+              this._counterComponent.render();
+              this._tableComponent.render();
+          }
+        }
+
+        class FizzBuzzCounterComponent {
+          constructor() {
+            this._counter = 0;
+            this._value = "FizzBuzz";
+          }
+
+          incrementEvent(e) {
+            this._counter += 1;
+            generate(this._counter).then(data => {
+              this._value = data.value;
+              this.render();
+            });
+          }
+
+          decrementEvent(e) {
+            this._counter === 0 ? (this._counter = 0) : (this._counter -= 1);
+            generate(this._counter).then(data => {
+              this._value = data.value;
+              this.render();
+            });
+          }
+
+          render() {
+            const counter = `
+              <div class="col-md-1">
+                <button class="btn btn-primary" id="decrement">
+                  -
+                </button>
+              </div>
+              <div class="col-md-10">
+                <h1 class="display-1 text-center">${this._value}</h1>
+              </div>
+              <div class="col-md-1">
+                <button class="btn btn-primary" id="increment">
+                  +
+                </button>
+              </div>
+            `;
+
+            document.querySelector("#app__counter").innerHTML = counter;
+            document
+              .querySelector("#increment")
+              .addEventListener("click", this.incrementEvent.bind(this));
+            document
+              .querySelector("#decrement")
+              .addEventListener("click", this.decrementEvent.bind(this));
+          }
+        }
+
+        class FizzBuzzTableComponent {
+          constructor() {
             this._list = [];
             this._type = 1;
-            this._counterComponent = new FizzBuzzCounterComponent();
           }
 
           selectEvent(e) {
@@ -321,7 +437,7 @@
             generateList(this._type).then(json => {
               this._list = json.data;
 
-              const table = (() => {
+              const result = (() => {
                 const select = (() => {
                   const type1 = `<option value="1">タイプ1</option>`;
                   const type2 =
@@ -395,137 +511,30 @@
                 })();
 
                 return `
-              <dvi class="row p-3">
-                <div class="col-md-12 order-md-2">
-                  <div id="app__select">
-                    ${select}
+                <dvi class="row p-3">
+                  <div class="col-md-12 order-md-2">
+                    <div id="app__select">
+                      ${select}
+                    </div>
+                    <div
+                      class="table-responsive"
+                      id="app__table-contents"
+                    >
+                      <table class="table table-striped">
+                        ${header}
+                        ${body}
+                      </table>
+                    </div>
                   </div>
-                  <div
-                    class="table-responsive"
-                    id="app__table-contents"
-                  >
-                    <table class="table table-striped">
-                      ${header}
-                      ${body}
-                    </table>
-                  </div>
-                </div>
-              </dvi>
+                </dvi>
             `;
               })();
 
-              const result = `
-              <div class="py-3">
-                <section id="menu">
-                  <div class="container">
-                    <div id="app__message"></div>
-                    <div class="nav nav-tabs" id="tab-menus" role="tablist">
-                      <a
-                        aria-controls="panel-menu01"
-                        aria-selected="true"
-                        class="nav-item nav-link active"
-                        data-toggle="tab"
-                        href="#panel-menu01"
-                        id="tab-menu01"
-                        role="tab"
-                        >Counter</a
-                      >
-                      <a
-                        aria-controls="panel-menu02"
-                        aria-selected="false"
-                        class="nav-item nav-link"
-                        data-toggle="tab"
-                        href="#panel-menu02"
-                        id="tab-menu02"
-                        role="tab"
-                        >Table</a
-                      >
-                    </div>
-
-                    <div class="tab-content" id="panel-menus">
-                      <div
-                        aria-labelledby="tab-menu01"
-                        class="tab-pane fade show active border border-top-0 jumbotron"
-                        id="panel-menu01"
-                        role="tabpanel"
-                      >
-                        <div id="app__counter" class="row d-flex align-items-center">
-                        </div>
-                      </div>
-                      <div
-                        aria-labelledby="tab-menu02"
-                        class="tab-pane fade border border-top-0"
-                        id="panel-menu02"
-                        role="tabpanel"
-                      >
-                        <dvi class="row p-3">
-                          <div id="app__table" class="col-md-12 order-md-2">
-                            ${table}
-                          </div>
-                        </dvi>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              </div>
-            `;
-
-              document.querySelector("#app-fizz-buzz").innerHTML = result;
+              document.querySelector("#app__table").innerHTML = result;
               document
                 .querySelector("#app__select--type")
                 .addEventListener("change", this.selectEvent.bind(this));
-
-              this._counterComponent.render();
             });
-          }
-        }
-
-        class FizzBuzzCounterComponent {
-          constructor() {
-            this._counter = 0;
-            this._value = "FizzBuzz";
-          }
-
-          incrementEvent(e) {
-            this._counter += 1;
-            generate(this._counter).then(data => {
-              this._value = data.value;
-              this.render();
-            });
-          }
-
-          decrementEvent(e) {
-            this._counter === 0 ? (this._counter = 0) : (this._counter -= 1);
-            generate(this._counter).then(data => {
-              this._value = data.value;
-              this.render();
-            });
-          }
-
-          render() {
-            const counter = `
-              <div class="col-md-1">
-                <button class="btn btn-primary" id="decrement">
-                  -
-                </button>
-              </div>
-              <div class="col-md-10">
-                <h1 class="display-1 text-center">${this._value}</h1>
-              </div>
-              <div class="col-md-1">
-                <button class="btn btn-primary" id="increment">
-                  +
-                </button>
-              </div>
-            `;
-
-            document.querySelector("#app__counter").innerHTML = counter;
-            document
-              .querySelector("#increment")
-              .addEventListener("click", this.incrementEvent.bind(this));
-            document
-              .querySelector("#decrement")
-              .addEventListener("click", this.decrementEvent.bind(this));
           }
         }
 
