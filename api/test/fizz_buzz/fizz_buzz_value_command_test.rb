@@ -135,7 +135,9 @@ class FizzBuzzValueCommandTest < Minitest::Test
     def test_例外を返す
       e =
         assert_raises RuntimeError do
-          FizzBuzz::Domain::Type::FizzBuzzType.create(4)
+          FizzBuzz::Application::Service::FizzBuzzValueCommand.new(
+            FizzBuzz::Domain::Type::FizzBuzzType.create(4)
+          )
         end
 
       assert_equal '該当するタイプは存在しません', e.message
