@@ -20,6 +20,8 @@ module FizzBuzz
             )
           result = command.execute(number.to_i)
           result.to_json
+        rescue => exception
+          { message: exception.message }.to_json
         end
 
         def generate_list(type, number)
@@ -29,6 +31,8 @@ module FizzBuzz
             )
           result = command.execute(number.to_i)
           { data: result.to_s }.to_json
+        rescue => exception
+          { message: exception.message }.to_json
         end
       end
     end

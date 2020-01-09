@@ -26,6 +26,11 @@ class FizzBuzzServiceTest < Minitest::Test
       result = @service.generate('15')
       assert_equal '{"number":15,"value":"FizzBuzz"}', result
     end
+
+    def test_マイナス1を渡したら例外JSONオブジェクトを返す
+      result = @service.generate('-1')
+      assert_equal '{"message":"正の値のみ有効です"}', result
+    end
   end
 
   describe 'generate list service' do
@@ -99,6 +104,22 @@ class FizzBuzzServiceTest < Minitest::Test
 
       def test_100件のJSONオブジェクトの最後は100
         assert_equal '100', JSON.parse(@result)['data'].last
+      end
+    end
+
+    describe 'それ以外の場合' do
+      def setup
+        @service = FizzBuzz::Application::Service::FizzBuzzService.new
+      end
+
+      def test_タイプ99を渡したら例外JSONオブジェクトを返す
+        result = @service.generate_list('99', '100')
+        assert_equal '{"message":"該当するタイプは存在しません"}', result
+      end
+
+      def test_件数に101を渡したら例外JSONオブジェクトを返す
+        result = @service.generate_list('1', '101')
+        assert_equal '{"message":"上限は100件までです"}', result
       end
     end
   end
