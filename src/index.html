@@ -233,8 +233,11 @@
           }
 
           decrementEvent(e) {
-            this._counter -= 1
-            this.render()
+            this._counter === 0 ? this._counter = 0 : this._counter -= 1;
+            generate(this._counter).then(data => {
+              this._value = data.value;
+              this.render();
+            });
           }
 
           render() {
@@ -463,10 +466,14 @@
                   </div>
                 </section>
               </div>
-            `
-            document.querySelector('#app-fizz-buzz').innerHTML = result;
-            document.querySelector('#increment').addEventListener('click', this.incrementEvent.bind(this))
-            document.querySelector('#decrement').addEventListener('click', this.decrementEvent.bind(this))
+            `;
+            document.querySelector("#app-fizz-buzz").innerHTML = result;
+            document
+              .querySelector("#increment")
+              .addEventListener("click", this.incrementEvent.bind(this));
+            document
+              .querySelector("#decrement")
+              .addEventListener("click", this.decrementEvent.bind(this));
           }
         }
 
