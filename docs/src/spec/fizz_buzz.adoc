@@ -125,7 +125,7 @@ FizzBuzzType <|-- FizzBuzzType01
 FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03
 FizzBuzzType -> FizzBuzzValue
-FizzBuzzType -> FizzBuzzList
+FizzBuzzListCommand --> FizzBuzzList
 
 ----
 
