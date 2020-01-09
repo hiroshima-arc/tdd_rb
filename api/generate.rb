@@ -6,6 +6,7 @@ Handler =
     service = FizzBuzz::Application::Service::FizzBuzzService.new
 
     res.status = 200
+    res['Access-Control-Allow-Origin'] = '*'
     res['Content-Type'] = 'text/plain'
     res.body = service.generate(number)
   end
