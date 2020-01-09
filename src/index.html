@@ -573,10 +573,14 @@
           const source = `
 package Presentation {
   class FizzBuzzView {
-    _counter
-    _value
     _list
     _type
+    render()
+  }
+
+  class FizzBuzzCounterComponent {
+    _conter
+    _value
     render()
   }
 }
@@ -628,6 +632,7 @@ FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03
 FizzBuzzService -> FizzBuzzCommand
 FizzBuzzService <--- FizzBuzzView
+FizzBuzzView *- FizzBuzzCounterComponent
 `;
           compress(source, outputId);
         })();
