@@ -199,11 +199,98 @@
               });
             });
           });
+
+          suite("GenerateListApiService", () => {
+            suite("タイプ1の場合", () => {
+              test("100件のJSONオブジェクトを返す", () => {
+                return generateList(1).then(json => {
+                  assert.equal(100, json.data.length);
+                });
+              });
+
+              test("最初の値は1", () => {
+                return generateList(1).then(json => {
+                  assert.equal("1", json.data[0]);
+                });
+              });
+
+              test("最後の値はBuzz", () => {
+                return generateList(1).then(json => {
+                  assert.equal("Buzz", json.data[99]);
+                });
+              });
+
+              test("14番目の値はFizzBuzz", () => {
+                return generateList(1).then(json => {
+                  assert.equal("FizzBuzz", json.data[14]);
+                });
+              });
+            });
+
+            suite("タイプ2の場合", () => {
+              test("最初の値は1", () => {
+                return generateList(2).then(json => {
+                  assert.equal("1", json.data[0]);
+                });
+              });
+
+              test("最後の値は100", () => {
+                return generateList(2).then(json => {
+                  assert.equal("100", json.data[99]);
+                });
+              });
+
+              test("14番目の値は15", () => {
+                return generateList(2).then(json => {
+                  assert.equal("15", json.data[14]);
+                });
+              });
+            });
+
+            suite("タイプ3の場合", () => {
+              test("最初の値は1", () => {
+                return generateList(3).then(json => {
+                  assert.equal("1", json.data[0]);
+                });
+              });
+
+              test("最後の値は100", () => {
+                return generateList(3).then(json => {
+                  assert.equal("100", json.data[99]);
+                });
+              });
+
+              test("14番目の値はFizzBuzz", () => {
+                return generateList(3).then(json => {
+                  assert.equal("FizzBuzz", json.data[14]);
+                });
+              });
+            });
+          });
         });
 
         function generate(number) {
           return new Promise((resolve, reject) => {
             fetch(`https://tddrb.k2works.now.sh/api/generate?number=${number}`)
+              .then(response => {
+                return response.json();
+              })
+              .then(json => {
+                console.log(JSON.stringify(json));
+                resolve(json);
+              })
+              .catch(err => {
+                console.log(err);
+                reject(err);
+              });
+          });
+        }
+
+        function generateList(type) {
+          return new Promise((resolve, reject) => {
+            fetch(
+              `https://tddrb.k2works.now.sh/api/generate_list?type=${type}&number=100`
+            )
               .then(response => {
                 return response.json();
               })
