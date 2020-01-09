@@ -590,6 +590,11 @@
           const outputId = "class-im";
           const source = `
 package Presentation {
+  class FizzBuzzApiService {
+    {static} generate()
+    {static} generateList()
+  }
+
   class FizzBuzzView {
     _counterComponent
     _tableComponent
@@ -658,9 +663,12 @@ FizzBuzzType <|-- FizzBuzzType01
 FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03
 FizzBuzzService -> FizzBuzzCommand
-FizzBuzzService <--- FizzBuzzView
+FizzBuzzService <--- FizzBuzzApiService
+FizzBuzzApiService <-- FizzBuzzCounterComponent
+FizzBuzzApiService <-- FizzBuzzTableComponent
 FizzBuzzView *- FizzBuzzCounterComponent
 FizzBuzzTableComponent -* FizzBuzzView
+
 `;
           compress(source, outputId);
         })();
