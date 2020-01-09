@@ -179,22 +179,27 @@
       <script>
         mocha.setup("tdd");
         const assert = chai.assert;
-        suite("FizzBuzzServiceTest", () => {
+        suite("FizzBuzzApiServiceTest", () => {
+          let apiService;
+          setup("前準備", () => {
+            apiService = FizzBuzzApiService;
+          })
+
           suite("GenerateApiService", () => {
             test("3を渡したらJSONオブジェクトを返す", () => {
-              return generate(3).then(data => {
+              return apiService.generate(3).then(data => {
                 assert.deepEqual({ number: 3, value: "Fizz" }, data);
               });
             });
 
             test("5を渡したらJSONオブジェクトを返す", () => {
-              return generate(5).then(data => {
+              return apiService.generate(5).then(data => {
                 assert.deepEqual({ number: 5, value: "Buzz" }, data);
               });
             });
 
             test("15を渡したらJSONオブジェクトを返す", () => {
-              return generate(15).then(data => {
+              return apiService.generate(15).then(data => {
                 assert.deepEqual({ number: 15, value: "FizzBuzz" }, data);
               });
             });
@@ -203,25 +208,25 @@
           suite("GenerateListApiService", () => {
             suite("タイプ1の場合", () => {
               test("100件のJSONオブジェクトを返す", () => {
-                return generateList(1).then(json => {
+                return apiService.generateList(1).then(json => {
                   assert.equal(100, json.data.length);
                 });
               });
 
               test("最初の値は1", () => {
-                return generateList(1).then(json => {
+                return apiService.generateList(1).then(json => {
                   assert.equal("1", json.data[0]);
                 });
               });
 
               test("最後の値はBuzz", () => {
-                return generateList(1).then(json => {
+                return apiService.generateList(1).then(json => {
                   assert.equal("Buzz", json.data[99]);
                 });
               });
 
               test("14番目の値はFizzBuzz", () => {
-                return generateList(1).then(json => {
+                return apiService.generateList(1).then(json => {
                   assert.equal("FizzBuzz", json.data[14]);
                 });
               });
@@ -229,19 +234,19 @@
 
             suite("タイプ2の場合", () => {
               test("最初の値は1", () => {
-                return generateList(2).then(json => {
+                return apiService.generateList(2).then(json => {
                   assert.equal("1", json.data[0]);
                 });
               });
 
               test("最後の値は100", () => {
-                return generateList(2).then(json => {
+                return apiService.generateList(2).then(json => {
                   assert.equal("100", json.data[99]);
                 });
               });
 
               test("14番目の値は15", () => {
-                return generateList(2).then(json => {
+                return apiService.generateList(2).then(json => {
                   assert.equal("15", json.data[14]);
                 });
               });
@@ -249,19 +254,19 @@
 
             suite("タイプ3の場合", () => {
               test("最初の値は1", () => {
-                return generateList(3).then(json => {
+                return apiService.generateList(3).then(json => {
                   assert.equal("1", json.data[0]);
                 });
               });
 
               test("最後の値は100", () => {
-                return generateList(3).then(json => {
+                return apiService.generateList(3).then(json => {
                   assert.equal("100", json.data[99]);
                 });
               });
 
               test("14番目の値はFizzBuzz", () => {
-                return generateList(3).then(json => {
+                return apiService.generateList(3).then(json => {
                   assert.equal("FizzBuzz", json.data[14]);
                 });
               });
@@ -269,40 +274,44 @@
           });
         });
 
-        function generate(number) {
-          return new Promise((resolve, reject) => {
-            fetch(`https://tddrb.k2works.now.sh/api/generate?number=${number}`)
-              .then(response => {
-                return response.json();
-              })
-              .then(json => {
-                console.log(JSON.stringify(json));
-                resolve(json);
-              })
-              .catch(err => {
-                console.log(err);
-                reject(err);
-              });
-          });
-        }
+        class FizzBuzzApiService {
+          static generate(number) {
+            return new Promise((resolve, reject) => {
+              fetch(
+                `https://tddrb.k2works.now.sh/api/generate?number=${number}`
+              )
+                .then(response => {
+                  return response.json();
+                })
+                .then(json => {
+                  console.log(JSON.stringify(json));
+                  resolve(json);
+                })
+                .catch(err => {
+                  console.log(err);
+                  reject(err);
+                });
+            });
+          }
 
-        function generateList(type) {
-          return new Promise((resolve, reject) => {
-            fetch(
-              `https://tddrb.k2works.now.sh/api/generate_list?type=${type}&number=100`
-            )
-              .then(response => {
-                return response.json();
-              })
-              .then(json => {
-                console.log(JSON.stringify(json));
-                resolve(json);
-              })
-              .catch(err => {
-                console.log(err);
-                reject(err);
-              });
-          });
+          static generateList(type) {
+            return new Promise((resolve, reject) => {
+              fetch(
+                `https://tddrb.k2works.now.sh/api/generate_list?type=${type}&number=100`
+              )
+                .then(response => {
+                  return response.json();
+                })
+                .then(json => {
+                  console.log(JSON.stringify(json));
+                  resolve(json);
+                })
+                .catch(err => {
+                  console.log(err);
+                  reject(err);
+                });
+            });
+          }
         }
 
         class FizzBuzzView {
@@ -312,7 +321,7 @@
           }
 
           render() {
-              const result = `
+            const result = `
               <div class="py-3">
                 <section id="menu">
                   <div class="container">
@@ -367,9 +376,9 @@
               </div>
             `;
 
-              document.querySelector("#app-fizz-buzz").innerHTML = result;
-              this._counterComponent.render();
-              this._tableComponent.render();
+            document.querySelector("#app-fizz-buzz").innerHTML = result;
+            this._counterComponent.render();
+            this._tableComponent.render();
           }
         }
 
@@ -381,7 +390,7 @@
 
           incrementEvent(e) {
             this._counter += 1;
-            generate(this._counter).then(data => {
+            FizzBuzzApiService.generate(this._counter).then(data => {
               this._value = data.value;
               this.render();
             });
@@ -389,7 +398,7 @@
 
           decrementEvent(e) {
             this._counter === 0 ? (this._counter = 0) : (this._counter -= 1);
-            generate(this._counter).then(data => {
+            FizzBuzzApiService.generate(this._counter).then(data => {
               this._value = data.value;
               this.render();
             });
@@ -434,7 +443,7 @@
           }
 
           render() {
-            generateList(this._type).then(json => {
+            FizzBuzzApiService.generateList(this._type).then(json => {
               this._list = json.data;
 
               const result = (() => {
