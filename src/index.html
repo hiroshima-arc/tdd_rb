@@ -376,9 +376,16 @@
               const body = (() => {
                 const td = (() => {
                   let row = [];
-                  [...Array(100).keys()].forEach(i => {
-                    row.push(`<td>${i}</td>`);
+                  let column = [];
+                  [...Array(100).keys()].forEach((v,k) => {
+                    column.push(`<td>${v}</td>`);
+
+                    if((k + 1) % 10 === 0) {
+                      row.push(column.join(''))
+                      column = []
+                    }
                   });
+
                   return row;
                 })();
 
