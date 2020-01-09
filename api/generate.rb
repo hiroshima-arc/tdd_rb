@@ -1,3 +1,4 @@
+require 'json'
 require_relative './fizz_buzz/application/service/fizz_buzz_service.rb'
 
 Handler =
