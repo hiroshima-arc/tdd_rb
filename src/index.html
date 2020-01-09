@@ -281,9 +281,7 @@
 
           generate(number) {
             return new Promise((resolve, reject) => {
-              fetch(
-                `${this.apiUrl}/generate?number=${number}`
-              )
+              fetch(`${this.apiUrl}/generate?number=${number}`)
                 .then(response => {
                   return response.json();
                 })
@@ -300,9 +298,7 @@
 
           generateList(type) {
             return new Promise((resolve, reject) => {
-              fetch(
-                `${this.apiUrl}/generate_list?type=${type}&number=100`
-              )
+              fetch(`${this.apiUrl}/generate_list?type=${type}&number=100`)
                 .then(response => {
                   return response.json();
                 })
@@ -320,8 +316,10 @@
 
         class FizzBuzzView {
           constructor() {
-            this._service = new FizzBuzzApiService()
-            this._counterComponent = new FizzBuzzCounterComponent(this._service);
+            this._service = new FizzBuzzApiService();
+            this._counterComponent = new FizzBuzzCounterComponent(
+              this._service
+            );
             this._tableComponent = new FizzBuzzTableComponent(this._service);
           }
 
@@ -439,7 +437,7 @@
 
         class FizzBuzzTableComponent {
           constructor(service) {
-            this._service = service
+            this._service = service;
             this._list = [];
             this._type = 1;
           }
@@ -482,7 +480,7 @@
                   // 0から始まるので最初の値を削除する
                   const th = [...Array(11).keys()]
                     .slice(1)
-                    .map(i => `<th>${i}</th>`)
+                    .map(i => `<th>${i}</th>`);
 
                   const td = (() => {
                     let row = [];
