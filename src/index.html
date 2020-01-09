@@ -598,17 +598,20 @@
           const source = `
 package Presentation {
   class FizzBuzzApiService {
-    {static} generate()
-    {static} generateList()
+    apiUrl
+    generate()
+    generateList()
   }
 
   class FizzBuzzView {
+    _service
     _counterComponent
     _tableComponent
     render()
   }
 
   class FizzBuzzCounterComponent {
+    _service
     _conter
     _value
     incrementEvent()
@@ -617,6 +620,7 @@ package Presentation {
   }
 
   class FizzBuzzTableComponent {
+    _service
     _list
     _type
     changeEvent()
@@ -671,8 +675,7 @@ FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03
 FizzBuzzService -> FizzBuzzCommand
 FizzBuzzService <--- FizzBuzzApiService
-FizzBuzzApiService <-- FizzBuzzCounterComponent
-FizzBuzzApiService <-- FizzBuzzTableComponent
+FizzBuzzApiService *-- FizzBuzzView
 FizzBuzzView *- FizzBuzzCounterComponent
 FizzBuzzTableComponent -* FizzBuzzView
 
