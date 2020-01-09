@@ -228,6 +228,11 @@
             this.render()
           }
 
+          decrementEvent(e) {
+            this._counter -= 1
+            this.render()
+          }
+
           render() {
             const result = `
               <div class="py-3">
@@ -457,6 +462,7 @@
             `
             document.querySelector('#app-fizz-buzz').innerHTML = result;
             document.querySelector('#increment').addEventListener('click', this.incrementEvent.bind(this))
+            document.querySelector('#decrement').addEventListener('click', this.decrementEvent.bind(this))
           }
         }
 
