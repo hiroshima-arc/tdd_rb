@@ -1,9 +1,9 @@
-require_relative './fizz_buzz/application/fizz_buzz_service.rb'
+require_relative './fizz_buzz/application/service/fizz_buzz_service.rb'
 
 Handler =
   Proc.new do |req, res|
     number = req.query['number']
-    service = FizzBuzz::Application::FizzBuzzService.new
+    service = FizzBuzz::Application::Service::FizzBuzzService.new
 
     res.status = 200
     res['Content-Type'] = 'text/plain'

@@ -1,10 +1,10 @@
 require 'minitest/autorun'
-require_relative '../../fizz_buzz/application/fizz_buzz_service.rb'
+require_relative '../../fizz_buzz/application/service/fizz_buzz_service.rb'
 
 class FizzBuzzServiceTest < Minitest::Test
   describe 'generate service' do
     def setup
-      @service = FizzBuzz::Application::FizzBuzzService.new
+      @service = FizzBuzz::Application::Service::FizzBuzzService.new
     end
 
     def test_1を渡したらFizzBuzzValueのJSONオブジェクトを返す

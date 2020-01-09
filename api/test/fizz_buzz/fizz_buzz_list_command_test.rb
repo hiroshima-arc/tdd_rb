@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require_relative '../../fizz_buzz/application/fizz_buzz_list_command.rb'
+require_relative '../../fizz_buzz/application/service/fizz_buzz_list_command.rb'
 require_relative '../../fizz_buzz/domain/type/fizz_buzz_type.rb'
 require_relative '../../fizz_buzz/domain/type/fizz_buzz_type_01.rb'
 
@@ -7,7 +7,7 @@ class FizzBuzzListCommandTest < Minitest::Test
   describe '1から100までの数を返す' do
     def setup
       fizzbuzz =
-        FizzBuzz::Application::FizzBuzzListCommand.new(
+        FizzBuzz::Application::Service::FizzBuzzListCommand.new(
           FizzBuzz::Domain::Type::FizzBuzzType.create(
             FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
           )
@@ -39,7 +39,7 @@ class FizzBuzzListCommandTest < Minitest::Test
     def test_100より多い数を許可しない
       e =
         assert_raises RuntimeError do
-          FizzBuzz::Application::FizzBuzzListCommand.new(
+          FizzBuzz::Application::Service::FizzBuzzListCommand.new(
             FizzBuzz::Domain::Type::FizzBuzzType.create(
               FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
             )
