@@ -479,58 +479,54 @@
                 })();
 
                 const table = (() => {
-                  const header = (() => {
-                    // 0から始まるので最初の値を削除する
-                    const th = [...Array(11).keys()]
-                      .slice(1)
-                      .map(i => `<th>${i}</th>`)
-                      .join("");
+                  // 0から始まるので最初の値を削除する
+                  const th = [...Array(11).keys()]
+                    .slice(1)
+                    .map(i => `<th>${i}</th>`)
 
-                    return `
-                  <thead>
-                    <tr>
-                      ${th}
-                    </tr>
-                  </thead>
-              `;
-                  })();
+                  const td = (() => {
+                    let row = [];
+                    let column = [];
+                    this._list.forEach((v, k) => {
+                      column.push(`<td>${v}</td>`);
 
-                  const body = (() => {
-                    const td = (() => {
-                      let row = [];
-                      let column = [];
-                      this._list.forEach((v, k) => {
-                        column.push(`<td>${v}</td>`);
+                      if ((k + 1) % 10 === 0) {
+                        row.push(column.join(""));
+                        column = [];
+                      }
+                    });
 
-                        if ((k + 1) % 10 === 0) {
-                          row.push(column.join(""));
-                          column = [];
-                        }
-                      });
-
-                      return row;
-                    })();
-
-                    return `
-                    <tbody>
-                      <tr>${td[0]}</tr>
-                      <tr>${td[1]}</tr>
-                      <tr>${td[2]}</tr>
-                      <tr>${td[3]}</tr>
-                      <tr>${td[4]}</tr>
-                      <tr>${td[5]}</tr>
-                      <tr>${td[6]}</tr>
-                      <tr>${td[7]}</tr>
-                      <tr>${td[8]}</tr>
-                      <tr>${td[9]}</tr>
-                    </tbody>
-                  `;
+                    return row;
                   })();
 
                   return `
                       <table class="table table-striped">
-                        ${header}
-                        ${body}
+                        <thead>
+                          <tr>
+                            ${th[0]}
+                            ${th[1]}
+                            ${th[2]}
+                            ${th[3]}
+                            ${th[4]}
+                            ${th[5]}
+                            ${th[6]}
+                            ${th[7]}
+                            ${th[8]}
+                            ${th[9]}
+                          </tr>
+                        </thead>
+                          <tbody>
+                            <tr>${td[0]}</tr>
+                            <tr>${td[1]}</tr>
+                            <tr>${td[2]}</tr>
+                            <tr>${td[3]}</tr>
+                            <tr>${td[4]}</tr>
+                            <tr>${td[5]}</tr>
+                            <tr>${td[6]}</tr>
+                            <tr>${td[7]}</tr>
+                            <tr>${td[8]}</tr>
+                            <tr>${td[9]}</tr>
+                          </tbody>
                       </table>
                   `;
                 })();
