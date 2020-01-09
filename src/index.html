@@ -675,7 +675,7 @@ FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03
 FizzBuzzService -> FizzBuzzCommand
 FizzBuzzService <--- FizzBuzzApiService
-FizzBuzzApiService *-- FizzBuzzView
+FizzBuzzApiService --* FizzBuzzView
 FizzBuzzView *- FizzBuzzCounterComponent
 FizzBuzzTableComponent -* FizzBuzzView
 
