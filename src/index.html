@@ -219,6 +219,15 @@
         }
 
         class FizzBuzzView {
+          constructor() {
+            this._counter = 0
+          }
+
+          incrementEvent(e) {
+            this._counter += 1
+            this.render()
+          }
+
           render() {
             const result = `
               <div class="py-3">
@@ -262,7 +271,7 @@
                             </button>
                           </div>
                           <div class="col-md-10">
-                            <h1 class="display-1 text-center">FizzBuzz</h1>
+                            <h1 class="display-1 text-center">${this._counter}</h1>
                           </div>
                           <div class="col-md-1">
                             <button class="btn btn-primary" id="increment">
@@ -447,6 +456,7 @@
               </div>
             `
             document.querySelector('#app-fizz-buzz').innerHTML = result;
+            document.querySelector('#increment').addEventListener('click', this.incrementEvent.bind(this))
           }
         }
 
@@ -492,6 +502,8 @@
           const source = `
 package Presentation {
   class FizzBuzzView {
+    _counter
+    render()
   }
 }
 
