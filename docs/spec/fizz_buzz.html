@@ -637,7 +637,8 @@ Handler =
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>require_relative './fizz_buzz/application/service/fizz_buzz_service.rb'
+<pre>require 'json'
+require_relative './fizz_buzz/application/service/fizz_buzz_service.rb'
 
 Handler =
   Proc.new do |req, res|
@@ -692,8 +693,8 @@ module FizzBuzz
             )
           result = command.execute(number.to_i)
           result.to_json
-        rescue =&gt; exception
-          { message: exception.message }.to_json
+        rescue StandardError =&gt; e
+          { message: e.message }.to_json
         end
 
         def generate_list(type, number)
@@ -703,8 +704,8 @@ module FizzBuzz
             )
           result = command.execute(number.to_i)
           { data: result.to_s }.to_json
-        rescue =&gt; exception
-          { message: exception.message }.to_json
+        rescue StandardError =&gt; e
+          { message: e.message }.to_json
         end
       end
     end
@@ -1313,7 +1314,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-09 18:09:47 JST
+Last updated 2020-01-09 19:17:07 JST
 </div>
 </div>
 </body>
