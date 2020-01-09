@@ -429,7 +429,7 @@
 ## ToDoリスト
 - [ ] カウンター画面
   - [x] 画面イメージを作る
-  - [ ] APIサービスを作る
+  - [x] APIサービスを作る
   - [ ] APIサービスと連携するクライアントサービスを作る
 - [ ] 一覧表示画面
   - [x] 画面イメージを作る
@@ -451,16 +451,18 @@ package Presentation {
 }
 
 package Application {
-  class FizzBuzzService {
-  }
+  package Service {
+    class FizzBuzzService {
+    }
 
-  interface FizzBuzzCommand {
-  }
+    interface FizzBuzzCommand {
+    }
 
-  class FizzBuzzValueCommand {
-  }
+    class FizzBuzzValueCommand {
+    }
 
-  class FizzBuzzListCommand {
+    class FizzBuzzListCommand {
+    }
   }
 }
 
