@@ -356,22 +356,23 @@
                 <option value="three">タイプ3</option>
               </select>
               `;
-              const header = `
-              <thead>
-                <tr>
-                  <th>1</th>
-                  <th>2</th>
-                  <th>3</th>
-                  <th>4</th>
-                  <th>5</th>
-                  <th>6</th>
-                  <th>7</th>
-                  <th>8</th>
-                  <th>9</th>
-                  <th>10</th>
-                </tr>
-              </thead>
+
+              const header = (() => {
+                // 0から始まるので最初の値を削除する
+                const th = [...Array(11).keys()]
+                  .slice(1)
+                  .map(i => `<th>${i}</th>`)
+                  .join("");
+
+                return `
+                  <thead>
+                    <tr>
+                      ${th}
+                    </tr>
+                  </thead>
               `;
+              })();
+
               const body = `
               <tbody>
                 <tr>
