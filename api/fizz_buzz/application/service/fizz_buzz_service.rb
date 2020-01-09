@@ -4,6 +4,8 @@ require_relative '../../application/service/fizz_buzz_value_command.rb'
 require_relative '../../application/service/fizz_buzz_list_command.rb'
 require_relative '../../domain/type/fizz_buzz_type.rb'
 require_relative '../../domain/type/fizz_buzz_type_01.rb'
+require_relative '../../domain/type/fizz_buzz_type_02.rb'
+require_relative '../../domain/type/fizz_buzz_type_03.rb'
 
 module FizzBuzz
   module Application

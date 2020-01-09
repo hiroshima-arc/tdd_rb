@@ -29,25 +29,77 @@ class FizzBuzzServiceTest < Minitest::Test
   end
 
   describe 'generate list service' do
-    def setup
-      @service = FizzBuzz::Application::Service::FizzBuzzService.new
-      @result = @service.generate_list('1', '100')
+    describe 'タイプ1の場合' do
+      def setup
+        @service = FizzBuzz::Application::Service::FizzBuzzService.new
+        @result = @service.generate_list('1', '100')
+      end
+
+      def test_100を渡したら100件のJSONオブジェクトを返す
+        assert_equal 100, JSON.parse(@result)['data'].count
+      end
+
+      def test_100件のJSONオブジェクトの最初は1
+        assert_equal '1', JSON.parse(@result)['data'].first
+      end
+
+      def test_100件のJSONオブジェクトの2番目はFizz
+        assert_equal 'Fizz', JSON.parse(@result)['data'][2]
+      end
+
+      def test_100件のJSONオブジェクトの14番目はFizzBuzz
+        assert_equal 'FizzBuzz', JSON.parse(@result)['data'][14]
+      end
+
+      def test_100件のJSONオブジェクトの最後はBuzz
+        assert_equal 'Buzz', JSON.parse(@result)['data'].last
+      end
     end
 
-    def test_100を渡したら100件のJSONオブジェクトを返す
-      assert_equal 100, JSON.parse(@result)['data'].count
+    describe 'タイプ2の場合' do
+      def setup
+        @service = FizzBuzz::Application::Service::FizzBuzzService.new
+        @result = @service.generate_list('2', '100')
+      end
+
+      def test_100件のJSONオブジェクトの最初は1
+        assert_equal '1', JSON.parse(@result)['data'].first
+      end
+
+      def test_100件のJSONオブジェクトの2番目は3
+        assert_equal '3', JSON.parse(@result)['data'][2]
+      end
+
+      def test_100件のJSONオブジェクトの14番目は15
+        assert_equal '15', JSON.parse(@result)['data'][14]
+      end
+
+      def test_100件のJSONオブジェクトの最後は100
+        assert_equal '100', JSON.parse(@result)['data'].last
+      end
     end
 
-    def test_100件のJSONオブジェクトの最初は1
-      assert_equal '1', JSON.parse(@result)['data'].first
-    end
+    describe 'タイプ3の場合' do
+      def setup
+        @service = FizzBuzz::Application::Service::FizzBuzzService.new
+        @result = @service.generate_list('3', '100')
+      end
 
-    def test_100件のJSONオブジェクトの2番目はFizz
-      assert_equal 'Fizz', JSON.parse(@result)['data'][2]
-    end
+      def test_100件のJSONオブジェクトの最初は1
+        assert_equal '1', JSON.parse(@result)['data'].first
+      end
 
-    def test_100件のJSONオブジェクトの最後はBuzz
-      assert_equal 'Buzz', JSON.parse(@result)['data'].last
+      def test_100件のJSONオブジェクトの2番目は3
+        assert_equal '3', JSON.parse(@result)['data'][2]
+      end
+
+      def test_100件のJSONオブジェクトの14番目はFizzBuzz
+        assert_equal 'FizzBuzz', JSON.parse(@result)['data'][14]
+      end
+
+      def test_100件のJSONオブジェクトの最後は100
+        assert_equal '100', JSON.parse(@result)['data'].last
+      end
     end
   end
 end
