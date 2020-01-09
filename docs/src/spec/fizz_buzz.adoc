@@ -61,6 +61,7 @@ package Application {
   package Service {
     class FizzBuzzService {
       String generate()
+      String generate_list()
     }
     interface FizzBuzzCommand {
       execute()
@@ -142,6 +143,10 @@ include::../../../api/index.rb[]
 
 ----
 include::../../../api/generate.rb[]
+----
+
+----
+include::../../../api/generate_list.rb[]
 ----
 
 ----

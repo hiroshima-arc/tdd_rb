@@ -595,7 +595,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-cd41f80c9a279b711013da765c1751f2.png" alt="diag cd41f80c9a279b711013da765c1751f2" width="1001" height="630">
+<img src="diag-a531d2ad2cde997539613aa4be2da517.png" alt="diag a531d2ad2cde997539613aa4be2da517" width="1001" height="643">
 </div>
 </div>
 </div>
@@ -645,6 +645,7 @@ Handler =
     service = FizzBuzz::Application::Service::FizzBuzzService.new
 
     res.status = 200
+    res['Access-Control-Allow-Origin'] = '*'
     res['Content-Type'] = 'text/plain'
     res.body = service.generate(number)
   end</pre>
@@ -652,10 +653,31 @@ Handler =
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>require_relative '../../domain/model/fizz_buzz_value.rb'
+<pre>require_relative './fizz_buzz/application/service/fizz_buzz_service.rb'
+
+Handler =
+  Proc.new do |req, res|
+    type = req.query['type']
+    number = req.query['number']
+    service = FizzBuzz::Application::Service::FizzBuzzService.new
+
+    res.status = 200
+    res['Access-Control-Allow-Origin'] = '*'
+    res['Content-Type'] = 'text/plain'
+    res.body = service.generate_list(type, number)
+  end</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>require 'json'
+require_relative '../../domain/model/fizz_buzz_value.rb'
 require_relative '../../application/service/fizz_buzz_value_command.rb'
+require_relative '../../application/service/fizz_buzz_list_command.rb'
 require_relative '../../domain/type/fizz_buzz_type.rb'
 require_relative '../../domain/type/fizz_buzz_type_01.rb'
+require_relative '../../domain/type/fizz_buzz_type_02.rb'
+require_relative '../../domain/type/fizz_buzz_type_03.rb'
 
 module FizzBuzz
   module Application
@@ -670,6 +692,15 @@ module FizzBuzz
             )
           result = command.execute(number.to_i)
           result.to_json
+        end
+
+        def generate_list(type, number)
+          command =
+            FizzBuzz::Application::Service::FizzBuzzListCommand.new(
+              FizzBuzz::Domain::Type::FizzBuzzType.create(type.to_i)
+            )
+          result = command.execute(number.to_i)
+          { data: result.to_s }.to_json
         end
       end
     end
@@ -1156,6 +1187,81 @@ class FizzBuzzServiceTest &lt; Minitest::Test
       assert_equal '{"number":15,"value":"FizzBuzz"}', result
     end
   end
+
+  describe 'generate list service' do
+    describe 'タイプ1の場合' do
+      def setup
+        @service = FizzBuzz::Application::Service::FizzBuzzService.new
+        @result = @service.generate_list('1', '100')
+      end
+
+      def test_100を渡したら100件のJSONオブジェクトを返す
+        assert_equal 100, JSON.parse(@result)['data'].count
+      end
+
+      def test_100件のJSONオブジェクトの最初は1
+        assert_equal '1', JSON.parse(@result)['data'].first
+      end
+
+      def test_100件のJSONオブジェクトの2番目はFizz
+        assert_equal 'Fizz', JSON.parse(@result)['data'][2]
+      end
+
+      def test_100件のJSONオブジェクトの14番目はFizzBuzz
+        assert_equal 'FizzBuzz', JSON.parse(@result)['data'][14]
+      end
+
+      def test_100件のJSONオブジェクトの最後はBuzz
+        assert_equal 'Buzz', JSON.parse(@result)['data'].last
+      end
+    end
+
+    describe 'タイプ2の場合' do
+      def setup
+        @service = FizzBuzz::Application::Service::FizzBuzzService.new
+        @result = @service.generate_list('2', '100')
+      end
+
+      def test_100件のJSONオブジェクトの最初は1
+        assert_equal '1', JSON.parse(@result)['data'].first
+      end
+
+      def test_100件のJSONオブジェクトの2番目は3
+        assert_equal '3', JSON.parse(@result)['data'][2]
+      end
+
+      def test_100件のJSONオブジェクトの14番目は15
+        assert_equal '15', JSON.parse(@result)['data'][14]
+      end
+
+      def test_100件のJSONオブジェクトの最後は100
+        assert_equal '100', JSON.parse(@result)['data'].last
+      end
+    end
+
+    describe 'タイプ3の場合' do
+      def setup
+        @service = FizzBuzz::Application::Service::FizzBuzzService.new
+        @result = @service.generate_list('3', '100')
+      end
+
+      def test_100件のJSONオブジェクトの最初は1
+        assert_equal '1', JSON.parse(@result)['data'].first
+      end
+
+      def test_100件のJSONオブジェクトの2番目は3
+        assert_equal '3', JSON.parse(@result)['data'][2]
+      end
+
+      def test_100件のJSONオブジェクトの14番目はFizzBuzz
+        assert_equal 'FizzBuzz', JSON.parse(@result)['data'][14]
+      end
+
+      def test_100件のJSONオブジェクトの最後は100
+        assert_equal '100', JSON.parse(@result)['data'].last
+      end
+    end
+  end
 end</pre>
 </div>
 </div>
@@ -1180,7 +1286,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-09 11:00:03 JST
+Last updated 2020-01-09 14:13:39 JST
 </div>
 </div>
 </body>
