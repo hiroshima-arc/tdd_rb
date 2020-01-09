@@ -183,7 +183,7 @@
           let apiService;
           setup("前準備", () => {
             apiService = new FizzBuzzApiService();
-          })
+          });
 
           suite("GenerateApiService", () => {
             test("3を渡したらJSONオブジェクトを返す", () => {
@@ -275,10 +275,14 @@
         });
 
         class FizzBuzzApiService {
+          get apiUrl() {
+            return "https://tddrb.k2works.now.sh/api";
+          }
+
           generate(number) {
             return new Promise((resolve, reject) => {
               fetch(
-                `https://tddrb.k2works.now.sh/api/generate?number=${number}`
+                `${this.apiUrl}/generate?number=${number}`
               )
                 .then(response => {
                   return response.json();
@@ -297,7 +301,7 @@
           generateList(type) {
             return new Promise((resolve, reject) => {
               fetch(
-                `https://tddrb.k2works.now.sh/api/generate_list?type=${type}&number=100`
+                `${this.apiUrl}/generate_list?type=${type}&number=100`
               )
                 .then(response => {
                   return response.json();
