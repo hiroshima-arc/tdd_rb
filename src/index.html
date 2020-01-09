@@ -220,20 +220,20 @@
 
         class FizzBuzzView {
           constructor() {
-            this._counter = 0
-            this._value = "FizzBuzz"
+            this._counter = 0;
+            this._value = "FizzBuzz";
           }
 
           incrementEvent(e) {
-            this._counter += 1
+            this._counter += 1;
             generate(this._counter).then(data => {
-              this._value = data.value
-              this.render()
-            })
+              this._value = data.value;
+              this.render();
+            });
           }
 
           decrementEvent(e) {
-            this._counter === 0 ? this._counter = 0 : this._counter -= 1;
+            this._counter === 0 ? (this._counter = 0) : (this._counter -= 1);
             generate(this._counter).then(data => {
               this._value = data.value;
               this.render();
@@ -255,7 +255,7 @@
                   +
                 </button>
               </div>
-            `
+            `;
             const table = `
               <dvi class="row p-3">
                 <div class="col-md-12 order-md-2">
@@ -416,7 +416,7 @@
                   </div>
                 </div>
               </dvi>
-            `
+            `;
             const result = `
               <div class="py-3">
                 <section id="menu">
