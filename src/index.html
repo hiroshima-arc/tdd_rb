@@ -221,11 +221,15 @@
         class FizzBuzzView {
           constructor() {
             this._counter = 0
+            this._value = "FizzBuzz"
           }
 
           incrementEvent(e) {
             this._counter += 1
-            this.render()
+            generate(this._counter).then(data => {
+              this._value = data.value
+              this.render()
+            })
           }
 
           decrementEvent(e) {
@@ -276,7 +280,7 @@
                             </button>
                           </div>
                           <div class="col-md-10">
-                            <h1 class="display-1 text-center">${this._counter}</h1>
+                            <h1 class="display-1 text-center">${this._value}</h1>
                           </div>
                           <div class="col-md-1">
                             <button class="btn btn-primary" id="increment">
