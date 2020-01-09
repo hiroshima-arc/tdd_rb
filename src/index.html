@@ -182,7 +182,7 @@
         suite("FizzBuzzApiServiceTest", () => {
           let apiService;
           setup("前準備", () => {
-            apiService = FizzBuzzApiService;
+            apiService = new FizzBuzzApiService();
           })
 
           suite("GenerateApiService", () => {
@@ -275,7 +275,7 @@
         });
 
         class FizzBuzzApiService {
-          static generate(number) {
+          generate(number) {
             return new Promise((resolve, reject) => {
               fetch(
                 `https://tddrb.k2works.now.sh/api/generate?number=${number}`
@@ -294,7 +294,7 @@
             });
           }
 
-          static generateList(type) {
+          generateList(type) {
             return new Promise((resolve, reject) => {
               fetch(
                 `https://tddrb.k2works.now.sh/api/generate_list?type=${type}&number=100`
@@ -316,8 +316,9 @@
 
         class FizzBuzzView {
           constructor() {
-            this._counterComponent = new FizzBuzzCounterComponent();
-            this._tableComponent = new FizzBuzzTableComponent();
+            this._service = new FizzBuzzApiService()
+            this._counterComponent = new FizzBuzzCounterComponent(this._service);
+            this._tableComponent = new FizzBuzzTableComponent(this._service);
           }
 
           render() {
@@ -383,14 +384,15 @@
         }
 
         class FizzBuzzCounterComponent {
-          constructor() {
+          constructor(service) {
+            this._service = service;
             this._counter = 0;
             this._value = "FizzBuzz";
           }
 
           incrementEvent(e) {
             this._counter += 1;
-            FizzBuzzApiService.generate(this._counter).then(data => {
+            this._service.generate(this._counter).then(data => {
               this._value = data.value;
               this.render();
             });
@@ -398,7 +400,7 @@
 
           decrementEvent(e) {
             this._counter === 0 ? (this._counter = 0) : (this._counter -= 1);
-            FizzBuzzApiService.generate(this._counter).then(data => {
+            this._service.generate(this._counter).then(data => {
               this._value = data.value;
               this.render();
             });
@@ -432,7 +434,8 @@
         }
 
         class FizzBuzzTableComponent {
-          constructor() {
+          constructor(service) {
+            this._service = service
             this._list = [];
             this._type = 1;
           }
@@ -443,7 +446,7 @@
           }
 
           render() {
-            FizzBuzzApiService.generateList(this._type).then(json => {
+            this._service.generateList(this._type).then(json => {
               this._list = json.data;
 
               const result = (() => {
