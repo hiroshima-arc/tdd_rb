@@ -310,6 +310,7 @@
             this._counter = 0;
             this._value = "FizzBuzz";
             this._list = [];
+            this._type = 1;
           }
 
           incrementEvent(e) {
@@ -328,8 +329,13 @@
             });
           }
 
+          selectEvent(e) {
+            this._type = e.target.value;
+            this.render()
+          }
+
           render() {
-            generateList(1).then(json => {
+            generateList(this._type).then(json => {
               this._list = json.data;
 
               const counter = `
@@ -355,9 +361,9 @@
                 id="app__select--type"
                 class="browser-default custom-select"
               >
-                <option value="one">タイプ1</option>
-                <option value="two">タイプ2</option>
-                <option value="three">タイプ3</option>
+                <option value="1">タイプ1</option>
+                <option value="2">タイプ2</option>
+                <option value="3">タイプ3</option>
               </select>
               `;
 
@@ -493,6 +499,9 @@
               document
                 .querySelector("#decrement")
                 .addEventListener("click", this.decrementEvent.bind(this));
+              document
+                .querySelector("#app__select--type")
+                .addEventListener("change", this.selectEvent.bind(this));
             });
           }
         }
@@ -544,6 +553,7 @@ package Presentation {
     _counter
     _value
     _list
+    _type
     render()
   }
 }
