@@ -692,6 +692,8 @@ module FizzBuzz
             )
           result = command.execute(number.to_i)
           result.to_json
+        rescue =&gt; exception
+          { message: exception.message }.to_json
         end
 
         def generate_list(type, number)
@@ -701,6 +703,8 @@ module FizzBuzz
             )
           result = command.execute(number.to_i)
           { data: result.to_s }.to_json
+        rescue =&gt; exception
+          { message: exception.message }.to_json
         end
       end
     end
@@ -1147,7 +1151,9 @@ class FizzBuzzValueCommandTest &lt; Minitest::Test
     def test_例外を返す
       e =
         assert_raises RuntimeError do
-          FizzBuzz::Domain::Type::FizzBuzzType.create(4)
+          FizzBuzz::Application::Service::FizzBuzzValueCommand.new(
+            FizzBuzz::Domain::Type::FizzBuzzType.create(4)
+          )
         end
 
       assert_equal '該当するタイプは存在しません', e.message
@@ -1185,6 +1191,11 @@ class FizzBuzzServiceTest &lt; Minitest::Test
     def test_15を渡したらFizzBuzzValueのJSONオブジェクトを返す
       result = @service.generate('15')
       assert_equal '{"number":15,"value":"FizzBuzz"}', result
+    end
+
+    def test_マイナス1を渡したら例外JSONオブジェクトを返す
+      result = @service.generate('-1')
+      assert_equal '{"message":"正の値のみ有効です"}', result
     end
   end
 
@@ -1261,6 +1272,22 @@ class FizzBuzzServiceTest &lt; Minitest::Test
         assert_equal '100', JSON.parse(@result)['data'].last
       end
     end
+
+    describe 'それ以外の場合' do
+      def setup
+        @service = FizzBuzz::Application::Service::FizzBuzzService.new
+      end
+
+      def test_タイプ99を渡したら例外JSONオブジェクトを返す
+        result = @service.generate_list('99', '100')
+        assert_equal '{"message":"該当するタイプは存在しません"}', result
+      end
+
+      def test_件数に101を渡したら例外JSONオブジェクトを返す
+        result = @service.generate_list('1', '101')
+        assert_equal '{"message":"上限は100件までです"}', result
+      end
+    end
   end
 end</pre>
 </div>
@@ -1286,7 +1313,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-09 14:13:39 JST
+Last updated 2020-01-09 18:09:47 JST
 </div>
 </div>
 </body>

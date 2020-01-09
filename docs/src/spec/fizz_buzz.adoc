@@ -141,6 +141,7 @@ FizzBuzzListCommand --> FizzBuzzList
 include::../../../api/index.rb[]
 ----
 
+
 ----
 include::../../../api/generate.rb[]
 ----
