@@ -373,131 +373,30 @@
               `;
               })();
 
-              const body = `
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>2</td>
-                  <td>Fizz</td>
-                  <td>4</td>
-                  <td>Buzz</td>
-                  <td>Fizz</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>Fizz</td>
-                  <td>Buzz</td>
-                </tr>
-                <tr>
-                  <td>11</td>
-                  <td>Fizz</td>
-                  <td>13</td>
-                  <td>14</td>
-                  <td>FizzBuzz</td>
-                  <td>16</td>
-                  <td>17</td>
-                  <td>Fizz</td>
-                  <td>19</td>
-                  <td>Buzz</td>
-                </tr>
-                <tr>
-                  <td>Fizz</td>
-                  <td>22</td>
-                  <td>23</td>
-                  <td>Fizz</td>
-                  <td>Buzz</td>
-                  <td>26</td>
-                  <td>Fizz</td>
-                  <td>28</td>
-                  <td>29</td>
-                  <td>FizzBuzz</td>
-                </tr>
-                <tr>
-                  <td>31</td>
-                  <td>32</td>
-                  <td>Fizz</td>
-                  <td>34</td>
-                  <td>Buzz</td>
-                  <td>Fizz</td>
-                  <td>37</td>
-                  <td>38</td>
-                  <td>Fizz</td>
-                  <td>Buzz</td>
-                </tr>
-                <tr>
-                  <td>41</td>
-                  <td>Fizz</td>
-                  <td>43</td>
-                  <td>44</td>
-                  <td>FizzBuzz</td>
-                  <td>46</td>
-                  <td>47</td>
-                  <td>Fizz</td>
-                  <td>49</td>
-                  <td>Buzz</td>
-                </tr>
-                <tr>
-                  <td>Fizz</td>
-                  <td>52</td>
-                  <td>53</td>
-                  <td>Fizz</td>
-                  <td>Buzz</td>
-                  <td>56</td>
-                  <td>Fizz</td>
-                  <td>58</td>
-                  <td>59</td>
-                  <td>FizzBuzz</td>
-                </tr>
-                <tr>
-                  <td>61</td>
-                  <td>62</td>
-                  <td>Fizz</td>
-                  <td>64</td>
-                  <td>Buzz</td>
-                  <td>Fizz</td>
-                  <td>67</td>
-                  <td>68</td>
-                  <td>Fizz</td>
-                  <td>Buzz</td>
-                </tr>
-                <tr>
-                  <td>71</td>
-                  <td>Fizz</td>
-                  <td>73</td>
-                  <td>74</td>
-                  <td>FizzBuzz</td>
-                  <td>76</td>
-                  <td>77</td>
-                  <td>Fizz</td>
-                  <td>79</td>
-                  <td>Buzz</td>
-                </tr>
-                <tr>
-                  <td>Fizz</td>
-                  <td>82</td>
-                  <td>83</td>
-                  <td>Fizz</td>
-                  <td>Buzz</td>
-                  <td>86</td>
-                  <td>Fizz</td>
-                  <td>88</td>
-                  <td>89</td>
-                  <td>FizzBuzz</td>
-                </tr>
-                <tr>
-                  <td>91</td>
-                  <td>92</td>
-                  <td>Fizz</td>
-                  <td>94</td>
-                  <td>Buzz</td>
-                  <td>Fizz</td>
-                  <td>97</td>
-                  <td>98</td>
-                  <td>Fizz</td>
-                  <td>Buzz</td>
-                </tr>
-                <tr></tr>
-              </tbody>
+              const body = (() => {
+                const td = (() => {
+                  let row = [];
+                  [...Array(100).keys()].forEach(i => {
+                    row.push(`<td>${i}</td>`);
+                  });
+                  return row;
+                })();
+
+                return `
+                <tbody>
+                  <tr>${td[0]}</tr>
+                  <tr>${td[1]}</tr>
+                  <tr>${td[2]}</tr>
+                  <tr>${td[3]}</tr>
+                  <tr>${td[4]}</tr>
+                  <tr>${td[5]}</tr>
+                  <tr>${td[6]}</tr>
+                  <tr>${td[7]}</tr>
+                  <tr>${td[8]}</tr>
+                  <tr>${td[9]}</tr>
+                </tbody>
               `;
+              })();
 
               return `
               <dvi class="row p-3">
