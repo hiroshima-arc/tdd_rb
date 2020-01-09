@@ -27,4 +27,27 @@ class FizzBuzzServiceTest < Minitest::Test
       assert_equal '{"number":15,"value":"FizzBuzz"}', result
     end
   end
+
+  describe 'generate list service' do
+    def setup
+      @service = FizzBuzz::Application::Service::FizzBuzzService.new
+      @result = @service.generate_list('1', '100')
+    end
+
+    def test_100を渡したら100件のJSONオブジェクトを返す
+      assert_equal 100, JSON.parse(@result)['data'].count
+    end
+
+    def test_100件のJSONオブジェクトの最初は1
+      assert_equal '1', JSON.parse(@result)['data'].first
+    end
+
+    def test_100件のJSONオブジェクトの2番目はFizz
+      assert_equal 'Fizz', JSON.parse(@result)['data'][2]
+    end
+
+    def test_100件のJSONオブジェクトの最後はBuzz
+      assert_equal 'Buzz', JSON.parse(@result)['data'].last
+    end
+  end
 end
