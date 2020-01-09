@@ -418,6 +418,12 @@
                 assert.deepEqual({ number: 5, value: "Buzz" }, data);
               });
             });
+
+            test("15を渡したらJSONオブジェクトを返す", () => {
+              return generate(15).then(data => {
+                assert.deepEqual({ number: 15, value: "FizzBuzz" }, data);
+              });
+            });
           });
         });
 
