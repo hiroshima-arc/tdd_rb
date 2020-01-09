@@ -309,6 +309,7 @@
           constructor() {
             this._counter = 0;
             this._value = "FizzBuzz";
+            this._list = [];
           }
 
           incrementEvent(e) {
@@ -328,7 +329,10 @@
           }
 
           render() {
-            const counter = `
+            generateList(1).then(json => {
+              this._list = json.data;
+
+              const counter = `
               <div class="col-md-1">
                 <button class="btn btn-primary" id="decrement">
                   -
@@ -344,8 +348,8 @@
               </div>
             `;
 
-            const table = (() => {
-              const select = `
+              const table = (() => {
+                const select = `
               <select
                 name="type"
                 id="app__select--type"
@@ -357,39 +361,39 @@
               </select>
               `;
 
-              const header = (() => {
-                // 0から始まるので最初の値を削除する
-                const th = [...Array(11).keys()]
-                  .slice(1)
-                  .map(i => `<th>${i}</th>`)
-                  .join("");
+                const header = (() => {
+                  // 0から始まるので最初の値を削除する
+                  const th = [...Array(11).keys()]
+                    .slice(1)
+                    .map(i => `<th>${i}</th>`)
+                    .join("");
 
-                return `
+                  return `
                   <thead>
                     <tr>
                       ${th}
                     </tr>
                   </thead>
               `;
-              })();
-
-              const body = (() => {
-                const td = (() => {
-                  let row = [];
-                  let column = [];
-                  [...Array(100).keys()].forEach((v,k) => {
-                    column.push(`<td>${v}</td>`);
-
-                    if((k + 1) % 10 === 0) {
-                      row.push(column.join(''))
-                      column = []
-                    }
-                  });
-
-                  return row;
                 })();
 
-                return `
+                const body = (() => {
+                  const td = (() => {
+                    let row = [];
+                    let column = [];
+                    this._list.forEach((v, k) => {
+                      column.push(`<td>${v}</td>`);
+
+                      if ((k + 1) % 10 === 0) {
+                        row.push(column.join(""));
+                        column = [];
+                      }
+                    });
+
+                    return row;
+                  })();
+
+                  return `
                 <tbody>
                   <tr>${td[0]}</tr>
                   <tr>${td[1]}</tr>
@@ -403,9 +407,9 @@
                   <tr>${td[9]}</tr>
                 </tbody>
               `;
-              })();
+                })();
 
-              return `
+                return `
               <dvi class="row p-3">
                 <div class="col-md-12 order-md-2">
                   <div id="app__select">
@@ -423,9 +427,9 @@
                 </div>
               </dvi>
             `;
-            })();
+              })();
 
-            const result = `
+              const result = `
               <div class="py-3">
                 <section id="menu">
                   <div class="container">
@@ -481,13 +485,15 @@
                 </section>
               </div>
             `;
-            document.querySelector("#app-fizz-buzz").innerHTML = result;
-            document
-              .querySelector("#increment")
-              .addEventListener("click", this.incrementEvent.bind(this));
-            document
-              .querySelector("#decrement")
-              .addEventListener("click", this.decrementEvent.bind(this));
+
+              document.querySelector("#app-fizz-buzz").innerHTML = result;
+              document
+                .querySelector("#increment")
+                .addEventListener("click", this.incrementEvent.bind(this));
+              document
+                .querySelector("#decrement")
+                .addEventListener("click", this.decrementEvent.bind(this));
+            });
           }
         }
 
@@ -536,6 +542,8 @@
 package Presentation {
   class FizzBuzzView {
     _counter
+    _value
+    _list
     render()
   }
 }
