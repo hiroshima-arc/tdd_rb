@@ -13,7 +13,8 @@ module FizzBuzz
               FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
             )
           )
-        command.execute(number.to_i)
+        result = command.execute(number.to_i)
+        result.to_json
       end
     end
   end

@@ -1,3 +1,5 @@
+require 'json'
+
 module FizzBuzz
   module Domain
     module Model
@@ -9,6 +11,14 @@ module FizzBuzz
 
           @number = number
           @value = value
+        end
+
+        def as_json(options = {})
+          { number: @number, value: @value }
+        end
+
+        def to_json(*options)
+          as_json(*options).to_json(*options)
         end
 
         def to_s
