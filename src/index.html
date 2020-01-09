@@ -526,6 +526,15 @@
               `;
                 })();
 
+                const table = (() => {
+                  return `
+                      <table class="table table-striped">
+                        ${header}
+                        ${body}
+                      </table>
+                  `
+                })();
+
                 return `
                 <dvi class="row p-3">
                   <div class="col-md-12 order-md-2">
@@ -536,10 +545,7 @@
                       class="table-responsive"
                       id="app__table-contents"
                     >
-                      <table class="table table-striped">
-                        ${header}
-                        ${body}
-                      </table>
+                     ${table}
                     </div>
                   </div>
                 </dvi>
