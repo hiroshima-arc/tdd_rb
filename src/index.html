@@ -412,12 +412,18 @@
                 assert.deepEqual({ number: 3, value: "Fizz" }, data);
               });
             });
+
+            test("5を渡したらJSONオブジェクトを返す", () => {
+              return generate(5).then(data => {
+                assert.deepEqual({ number: 5, value: "Buzz" }, data);
+              });
+            });
           });
         });
 
         function generate(number) {
           return new Promise((resolve, reject) => {
-            fetch("https://tddrb.k2works.now.sh/api/generate?number=3")
+            fetch(`https://tddrb.k2works.now.sh/api/generate?number=${number}`)
               .then(response => {
                 return response.json();
               })
