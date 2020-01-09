@@ -408,19 +408,28 @@
         suite("FizzBuzzServiceTest", () => {
           suite("GenerateApiService", () => {
             test("3を渡したらJSONオブジェクトを返す", () => {
-              assert.deepEqual({ number: 3, value: "Fizz" }, generate(3));
+              return generate(3).then(data => {
+                assert.deepEqual({ number: 3, value: "Fizz" }, data);
+              });
             });
           });
         });
 
         function generate(number) {
-          fetch("https://tddrb.k2works.now.sh/api/generate?number=3")
-            .then(response => {
-              return response.json();
-            })
-            .then(json => {
-              console.log(JSON.stringify(json));
-            });
+          return new Promise((resolve, reject) => {
+            fetch("https://tddrb.k2works.now.sh/api/generate?number=3")
+              .then(response => {
+                return response.json();
+              })
+              .then(json => {
+                console.log(JSON.stringify(json));
+                resolve(json);
+              })
+              .catch(err => {
+                console.log(err);
+                reject(err);
+              });
+          });
         }
       </script>
 
