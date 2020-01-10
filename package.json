@@ -23,6 +23,7 @@
     "watch:backend": "watch 'npm-run-all format:backend test' ./api",
     "app": "npm-run-all app:*",
     "app:frontend": "browser-sync start --config bs-config.js",
+    "app:webpack": "webpack-dev-server -d --progress --colors --display-error-details --hot --inline --config webpack.js",
     "docs:asciidocs:proxy": "browser-sync start --config docs/bs-config.js",
     "docs:asciidocs:build": "gradle asciidoctor",
     "docs:asciidocs:watch": "watch 'npm-run-all docs:asciidocs:build' ./docs/src",
