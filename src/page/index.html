@@ -82,6 +82,7 @@
     <main>
       <!-- コンテンツ01 -->
       <div id="app"></div>
+      <div id="app-dev"></div>
       <!-- /コンテンツ01 -->
     </main>
     <!-- /メイン -->
@@ -154,12 +155,20 @@
       <script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"></script>
       <script>
-        const dev = document.querySelector("#app");
+        const app = document.querySelector("#app");
+        if (app !== null) {
+          app.innerHTML = `
+          <div class="container">
+            <h1>FizzBuzz</h1>
+            <div id="app-fizz-buzz"></div>
+          </div> `;
+        }
+
+        const dev = document.querySelector("#app-dev");
         if (dev !== null) {
           dev.innerHTML = `
           <div class="container">
             <h1>FizzBuzz</h1>
-              <div class="py-3">
               <div id="mocha"></div>
             <div class="row p-3">
               <div id="spec"></div>
@@ -168,9 +177,6 @@
             <div class="row p-3">
               <img id="class-im"
               src=http://www.plantuml.com/plantuml/img/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000>
-            </div>
-            <h2>アプリケーション</h2>
-              <div id="app-fizz-buzz"></div>
             </div>
           </div> `;
         }
