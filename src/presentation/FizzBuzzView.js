@@ -1,3 +1,5 @@
+import FizzBuzzCounterComponent from "./FizzBuzzCounterComponent";
+
 export default class FizzBuzzView {
   constructor() {
     this._service = new FizzBuzzApiService();
