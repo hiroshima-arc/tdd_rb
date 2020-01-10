@@ -9,6 +9,7 @@
   "scripts": {
     "start": "nf start -j Procfile",
     "test": "cd api;rake test",
+    "test:fronend": "cross-env NODE_ENV=test mocha --ui tdd --require @babel/register test/**/*.test.*",
     "test:e2e": "cypress run --spec 'cypress/integration/fizz_buzz/**/*_spec.js'",
     "test:e2e:open": "cypress open",
     "start:asciidocs": "nf start -j docs/Procfile",
@@ -82,5 +83,8 @@
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0"
   }
 }
