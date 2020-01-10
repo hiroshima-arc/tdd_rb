@@ -1,3 +1,4 @@
+const fetch = require("node-fetch");
 export default class FizzBuzzApiService {
   get apiUrl() {
     return "https://tddrb.k2works.now.sh/api";
