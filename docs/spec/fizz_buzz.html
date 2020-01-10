@@ -431,10 +431,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_仕様">1. 仕様</a></li>
+<li><a href="#_仕様">1. 仕様</a>
+<ul class="sectlevel2">
+<li><a href="#_api">1.1. Api</a></li>
+<li><a href="#_クライアント">1.2. クライアント</a></li>
+</ul>
+</li>
 <li><a href="#_設計">2. 設計</a>
 <ul class="sectlevel2">
-<li><a href="#_todoリスト">2.1. TODOリスト</a></li>
+<li><a href="#_todoリスト">2.1. TODOリスト</a>
+<ul class="sectlevel3">
+<li><a href="#_api_2">2.1.1. Api</a></li>
+<li><a href="#_クライアント_2">2.1.2. クライアント</a></li>
+</ul>
+</li>
 <li><a href="#_ユースケース図">2.2. ユースケース図</a></li>
 <li><a href="#_クラス図">2.3. クラス図</a></li>
 <li><a href="#_シーケンス図">2.4. シーケンス図</a></li>
@@ -453,7 +463,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_type">3.2.2. Type</a></li>
 </ul>
 </li>
-<li><a href="#_test">3.3. Test</a></li>
+<li><a href="#_presentation">3.3. Presentation</a></li>
+<li><a href="#_test">3.4. Test</a></li>
 </ul>
 </li>
 <li><a href="#_参照">4. 参照</a></li>
@@ -464,6 +475,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_仕様">1. 仕様</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_api">1.1. Api</h3>
 <div class="paragraph">
 <p>1 から 100 までの数をプリントするプログラムを書け。</p>
 </div>
@@ -480,12 +493,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz の場合のみをプリントする。</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_クライアント">1.2. クライアント</h3>
+<div class="paragraph">
+<p>1から100までを１件ずつ画面に表示できる。</p>
+</div>
+<div class="paragraph">
+<p>1から100まで表示された内容を表示できる。</p>
+</div>
+</div>
+</div>
 </div>
 <div class="sect1">
 <h2 id="_設計">2. 設計</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_todoリスト">2.1. TODOリスト</h3>
+<div class="sect3">
+<h4 id="_api_2">2.1.1. Api</h4>
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
@@ -587,6 +612,56 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_クライアント_2">2.1.2. クライアント</h4>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10003; カウンター画面</p>
+</li>
+<li>
+<p>&#10003; 画面イメージを作る</p>
+</li>
+<li>
+<p>&#10003; APIサービスを作る</p>
+</li>
+<li>
+<p>&#10003; APIサービスと連携するクライアントサービスを作る</p>
+</li>
+<li>
+<p>&#10003; 正常系を実装する</p>
+</li>
+<li>
+<p>&#10003; UIを作る</p>
+</li>
+<li>
+<p>&#10003; UIとクライアントサービスを連携する</p>
+</li>
+<li>
+<p>&#10003; 一覧表示画面</p>
+</li>
+<li>
+<p>&#10003; 画面イメージを作る</p>
+</li>
+<li>
+<p>&#10003; APIサービスを作る</p>
+</li>
+<li>
+<p>&#10003; APIサービスと連携するクライアントサービスを作る</p>
+</li>
+<li>
+<p>&#10003; 正常系を実装する</p>
+</li>
+<li>
+<p>&#10003; UIを作る</p>
+</li>
+<li>
+<p>&#10003; UIとクライアントサービスを連携する</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 <div class="sect2">
 <h3 id="_ユースケース図">2.2. ユースケース図</h3>
 
@@ -595,7 +670,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-a531d2ad2cde997539613aa4be2da517.png" alt="diag a531d2ad2cde997539613aa4be2da517" width="1001" height="643">
+<img src="diag-e55b473997e9b568992b242402d6ebee.png" alt="diag e55b473997e9b568992b242402d6ebee" width="1439" height="700">
 </div>
 </div>
 </div>
@@ -955,7 +1030,303 @@ end</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_test">3.3. Test</h3>
+<h3 id="_presentation">3.3. Presentation</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">const fetch = require("node-fetch");
+export default class FizzBuzzApiService {
+  get apiUrl() {
+    return "https://tddrb.k2works.now.sh/api";
+  }
+
+  generate(number) {
+    return new Promise((resolve, reject) =&gt; {
+      fetch(`${this.apiUrl}/generate?number=${number}`)
+        .then(response =&gt; {
+          return response.json();
+        })
+        .then(json =&gt; {
+          console.log(JSON.stringify(json));
+          resolve(json);
+        })
+        .catch(err =&gt; {
+          console.log(err);
+          reject(err);
+        });
+    });
+  }
+
+  generateList(type) {
+    return new Promise((resolve, reject) =&gt; {
+      fetch(`${this.apiUrl}/generate_list?type=${type}&amp;number=100`)
+        .then(response =&gt; {
+          return response.json();
+        })
+        .then(json =&gt; {
+          console.log(JSON.stringify(json));
+          resolve(json);
+        })
+        .catch(err =&gt; {
+          console.log(err);
+          reject(err);
+        });
+    });
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>import FizzBuzzApiService from "./FizzBuzzApiService";
+import FizzBuzzCounterComponent from "./FizzBuzzCounterComponent";
+import FizzBuzzTableComponent from "./FizzBuzzTableComponent";
+
+export default class FizzBuzzView {
+  constructor() {
+    this._service = new FizzBuzzApiService();
+    this._counterComponent = new FizzBuzzCounterComponent(this._service);
+    this._tableComponent = new FizzBuzzTableComponent(this._service);
+  }
+
+  render() {
+    const result = `
+              &lt;div class="py-3"&gt;
+                &lt;section id="menu"&gt;
+                  &lt;div class="container"&gt;
+                    &lt;div id="app__message"&gt;&lt;/div&gt;
+                    &lt;div class="nav nav-tabs" id="tab-menus" role="tablist"&gt;
+                      &lt;a
+                        aria-controls="panel-menu01"
+                        aria-selected="true"
+                        class="nav-item nav-link active"
+                        data-toggle="tab"
+                        href="#panel-menu01"
+                        id="tab-menu01"
+                        role="tab"
+                        &gt;Counter&lt;/a
+                      &gt;
+                      &lt;a
+                        aria-controls="panel-menu02"
+                        aria-selected="false"
+                        class="nav-item nav-link"
+                        data-toggle="tab"
+                        href="#panel-menu02"
+                        id="tab-menu02"
+                        role="tab"
+                        &gt;Table&lt;/a
+                      &gt;
+                    &lt;/div&gt;
+
+                    &lt;div class="tab-content" id="panel-menus"&gt;
+                      &lt;div
+                        aria-labelledby="tab-menu01"
+                        class="tab-pane fade show active border border-top-0 jumbotron"
+                        id="panel-menu01"
+                        role="tabpanel"
+                      &gt;
+                        &lt;div id="app__counter" class="row d-flex align-items-center"&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      &lt;div
+                        aria-labelledby="tab-menu02"
+                        class="tab-pane fade border border-top-0"
+                        id="panel-menu02"
+                        role="tabpanel"
+                      &gt;
+                        &lt;dvi class="row p-3"&gt;
+                          &lt;div id="app__table" class="col-md-12 order-md-2"&gt;
+                          &lt;/div&gt;
+                        &lt;/dvi&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/section&gt;
+              &lt;/div&gt;
+            `;
+
+    document.querySelector("#app-fizz-buzz").innerHTML = result;
+    this._counterComponent.render();
+    this._tableComponent.render();
+  }
+}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>export default class FizzBuzzCounterComponent {
+  constructor(service) {
+    this._service = service;
+    this._counter = 0;
+    this._value = "FizzBuzz";
+  }
+
+  incrementEvent(e) {
+    this._counter += 1;
+    this._service.generate(this._counter).then(data =&gt; {
+      this._value = data.value;
+      this.render();
+    });
+  }
+
+  decrementEvent(e) {
+    this._counter === 0 ? (this._counter = 0) : (this._counter -= 1);
+    this._service.generate(this._counter).then(data =&gt; {
+      this._value = data.value;
+      this.render();
+    });
+  }
+
+  render() {
+    const counter = `
+              &lt;div class="col-md-1"&gt;
+                &lt;button class="btn btn-primary" id="decrement"&gt;
+                  -
+                &lt;/button&gt;
+              &lt;/div&gt;
+              &lt;div class="col-md-10"&gt;
+                &lt;h1 class="display-1 text-center"&gt;${this._value}&lt;/h1&gt;
+              &lt;/div&gt;
+              &lt;div class="col-md-1"&gt;
+                &lt;button class="btn btn-primary" id="increment"&gt;
+                  +
+                &lt;/button&gt;
+              &lt;/div&gt;
+            `;
+
+    document.querySelector("#app__counter").innerHTML = counter;
+    document
+      .querySelector("#increment")
+      .addEventListener("click", this.incrementEvent.bind(this));
+    document
+      .querySelector("#decrement")
+      .addEventListener("click", this.decrementEvent.bind(this));
+  }
+}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>export default class FizzBuzzTableComponent {
+  constructor(service) {
+    this._service = service;
+    this._list = [];
+    this._type = 1;
+  }
+
+  selectEvent(e) {
+    this._type = e.target.value;
+    this.render();
+  }
+
+  render() {
+    this._service.generateList(this._type).then(json =&gt; {
+      this._list = json.data;
+
+      const result = (() =&gt; {
+        const select = (() =&gt; {
+          const type1 = `&lt;option value="1"&gt;タイプ1&lt;/option&gt;`;
+          const type2 =
+            this._type === "2"
+              ? `&lt;option value="2" selected&gt;タイプ2&lt;/option&gt;`
+              : `&lt;option value="2"&gt;タイプ2&lt;/option&gt;`;
+          const type3 =
+            this._type === "3"
+              ? `&lt;option value="3" selected&gt;タイプ3&lt;/option&gt;`
+              : `&lt;option value="3"&gt;タイプ3&lt;/option&gt;`;
+
+          return `
+                    &lt;select
+                      name="type"
+                      id="app__select--type"
+                      class="browser-default custom-select"
+                    &gt;
+                      ${type1}
+                      ${type2}
+                      ${type3}
+                    &lt;/select&gt;
+              `;
+        })();
+
+        const table = (() =&gt; {
+          // 0から始まるので最初の値を削除する
+          const th = [...Array(11).keys()].slice(1).map(i =&gt; `&lt;th&gt;${i}&lt;/th&gt;`);
+
+          const td = (() =&gt; {
+            let row = [];
+            let column = [];
+            this._list.forEach((v, k) =&gt; {
+              column.push(`&lt;td&gt;${v}&lt;/td&gt;`);
+
+              if ((k + 1) % 10 === 0) {
+                row.push(column.join(""));
+                column = [];
+              }
+            });
+
+            return row;
+          })();
+
+          return `
+                      &lt;table class="table table-striped"&gt;
+                        &lt;thead&gt;
+                          &lt;tr&gt;
+                            ${th[0]}
+                            ${th[1]}
+                            ${th[2]}
+                            ${th[3]}
+                            ${th[4]}
+                            ${th[5]}
+                            ${th[6]}
+                            ${th[7]}
+                            ${th[8]}
+                            ${th[9]}
+                          &lt;/tr&gt;
+                        &lt;/thead&gt;
+                          &lt;tbody&gt;
+                            &lt;tr&gt;${td[0]}&lt;/tr&gt;
+                            &lt;tr&gt;${td[1]}&lt;/tr&gt;
+                            &lt;tr&gt;${td[2]}&lt;/tr&gt;
+                            &lt;tr&gt;${td[3]}&lt;/tr&gt;
+                            &lt;tr&gt;${td[4]}&lt;/tr&gt;
+                            &lt;tr&gt;${td[5]}&lt;/tr&gt;
+                            &lt;tr&gt;${td[6]}&lt;/tr&gt;
+                            &lt;tr&gt;${td[7]}&lt;/tr&gt;
+                            &lt;tr&gt;${td[8]}&lt;/tr&gt;
+                            &lt;tr&gt;${td[9]}&lt;/tr&gt;
+                          &lt;/tbody&gt;
+                      &lt;/table&gt;
+                  `;
+        })();
+
+        return `
+                &lt;dvi class="row p-3"&gt;
+                  &lt;div class="col-md-12 order-md-2"&gt;
+                    &lt;div id="app__select"&gt;
+                      ${select}
+                    &lt;/div&gt;
+                    &lt;div
+                      class="table-responsive"
+                      id="app__table-contents"
+                    &gt;
+                     ${table}
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/dvi&gt;
+            `;
+      })();
+
+      document.querySelector("#app__table").innerHTML = result;
+      document
+        .querySelector("#app__select--type")
+        .addEventListener("change", this.selectEvent.bind(this));
+    });
+  }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_test">3.4. Test</h3>
 <div class="listingblock">
 <div class="content">
 <pre>require 'minitest/autorun'
@@ -1293,6 +1664,108 @@ class FizzBuzzServiceTest &lt; Minitest::Test
 end</pre>
 </div>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre>const chai = require("chai");
+const assert = chai.assert;
+const FizzBuzzApiService = require("../src/presentation/FizzBuzzApiService").default
+
+suite("FizzBuzzApiServiceTest", () =&gt; {
+  let apiService;
+  setup("前準備", () =&gt; {
+    apiService = new FizzBuzzApiService();
+  });
+
+  suite("GenerateApiService", () =&gt; {
+    test("3を渡したらJSONオブジェクトを返す", () =&gt; {
+      return apiService.generate(3).then(data =&gt; {
+        assert.deepEqual({ number: 3, value: "Fizz" }, data);
+      });
+    });
+
+    test("5を渡したらJSONオブジェクトを返す", () =&gt; {
+      return apiService.generate(5).then(data =&gt; {
+        assert.deepEqual({ number: 5, value: "Buzz" }, data);
+      });
+    });
+
+    test("15を渡したらJSONオブジェクトを返す", () =&gt; {
+      return apiService.generate(15).then(data =&gt; {
+        assert.deepEqual({ number: 15, value: "FizzBuzz" }, data);
+      });
+    });
+  });
+
+  suite("GenerateListApiService", () =&gt; {
+    suite("タイプ1の場合", () =&gt; {
+      test("100件のJSONオブジェクトを返す", () =&gt; {
+        return apiService.generateList(1).then(json =&gt; {
+          assert.equal(100, json.data.length);
+        });
+      });
+
+      test("最初の値は1", () =&gt; {
+        return apiService.generateList(1).then(json =&gt; {
+          assert.equal("1", json.data[0]);
+        });
+      });
+
+      test("最後の値はBuzz", () =&gt; {
+        return apiService.generateList(1).then(json =&gt; {
+          assert.equal("Buzz", json.data[99]);
+        });
+      });
+
+      test("14番目の値はFizzBuzz", () =&gt; {
+        return apiService.generateList(1).then(json =&gt; {
+          assert.equal("FizzBuzz", json.data[14]);
+        });
+      });
+    });
+
+    suite("タイプ2の場合", () =&gt; {
+      test("最初の値は1", () =&gt; {
+        return apiService.generateList(2).then(json =&gt; {
+          assert.equal("1", json.data[0]);
+        });
+      });
+
+      test("最後の値は100", () =&gt; {
+        return apiService.generateList(2).then(json =&gt; {
+          assert.equal("100", json.data[99]);
+        });
+      });
+
+      test("14番目の値は15", () =&gt; {
+        return apiService.generateList(2).then(json =&gt; {
+          assert.equal("15", json.data[14]);
+        });
+      });
+    });
+
+    suite("タイプ3の場合", () =&gt; {
+      test("最初の値は1", () =&gt; {
+        return apiService.generateList(3).then(json =&gt; {
+          assert.equal("1", json.data[0]);
+        });
+      });
+
+      test("最後の値は100", () =&gt; {
+        return apiService.generateList(3).then(json =&gt; {
+          assert.equal("100", json.data[99]);
+        });
+      });
+
+      test("14番目の値はFizzBuzz", () =&gt; {
+        return apiService.generateList(3).then(json =&gt; {
+          assert.equal("FizzBuzz", json.data[14]);
+        });
+      });
+    });
+  });
+});</pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1314,7 +1787,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-09 19:17:07 JST
+Last updated 2020-01-10 17:13:42 JST
 </div>
 </div>
 </body>
