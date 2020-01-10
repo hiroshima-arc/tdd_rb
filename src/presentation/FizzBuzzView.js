@@ -1,4 +1,5 @@
 import FizzBuzzCounterComponent from "./FizzBuzzCounterComponent";
+import FizzBuzzTableComponent from "./FizzBuzzTableComponent";
 
 export default class FizzBuzzView {
   constructor() {
