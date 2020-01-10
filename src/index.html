@@ -27,7 +27,7 @@
       <h1>Ruby入門</h1>
     </div>
     <!-- ナビゲーションバー -->
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark stick-top">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark stick-top">
       <!-- サブコンポーネント -->
       <div class="container">
         <a href="index.html" class="navbar-brand">TDDRuby</a>
@@ -154,7 +154,8 @@
       <script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"></script>
       <script>
-        const dev = document.querySelector("#app"); if (dev !== null) {
+        const dev = document.querySelector("#app");
+        if (dev !== null) {
           dev.innerHTML = `
           <div class="container">
             <h1>FizzBuzz</h1>
@@ -178,14 +179,383 @@
       <script>
         mocha.setup("tdd");
         const assert = chai.assert;
-        suite("FizzBuzzTest", () => {
-          test("greeting", () => {
-            assert.equal("Hello, world", greeting());
+        suite("FizzBuzzApiServiceTest", () => {
+          let apiService;
+          setup("前準備", () => {
+            apiService = new FizzBuzzApiService();
+          });
+
+          suite("GenerateApiService", () => {
+            test("3を渡したらJSONオブジェクトを返す", () => {
+              return apiService.generate(3).then(data => {
+                assert.deepEqual({ number: 3, value: "Fizz" }, data);
+              });
+            });
+
+            test("5を渡したらJSONオブジェクトを返す", () => {
+              return apiService.generate(5).then(data => {
+                assert.deepEqual({ number: 5, value: "Buzz" }, data);
+              });
+            });
+
+            test("15を渡したらJSONオブジェクトを返す", () => {
+              return apiService.generate(15).then(data => {
+                assert.deepEqual({ number: 15, value: "FizzBuzz" }, data);
+              });
+            });
+          });
+
+          suite("GenerateListApiService", () => {
+            suite("タイプ1の場合", () => {
+              test("100件のJSONオブジェクトを返す", () => {
+                return apiService.generateList(1).then(json => {
+                  assert.equal(100, json.data.length);
+                });
+              });
+
+              test("最初の値は1", () => {
+                return apiService.generateList(1).then(json => {
+                  assert.equal("1", json.data[0]);
+                });
+              });
+
+              test("最後の値はBuzz", () => {
+                return apiService.generateList(1).then(json => {
+                  assert.equal("Buzz", json.data[99]);
+                });
+              });
+
+              test("14番目の値はFizzBuzz", () => {
+                return apiService.generateList(1).then(json => {
+                  assert.equal("FizzBuzz", json.data[14]);
+                });
+              });
+            });
+
+            suite("タイプ2の場合", () => {
+              test("最初の値は1", () => {
+                return apiService.generateList(2).then(json => {
+                  assert.equal("1", json.data[0]);
+                });
+              });
+
+              test("最後の値は100", () => {
+                return apiService.generateList(2).then(json => {
+                  assert.equal("100", json.data[99]);
+                });
+              });
+
+              test("14番目の値は15", () => {
+                return apiService.generateList(2).then(json => {
+                  assert.equal("15", json.data[14]);
+                });
+              });
+            });
+
+            suite("タイプ3の場合", () => {
+              test("最初の値は1", () => {
+                return apiService.generateList(3).then(json => {
+                  assert.equal("1", json.data[0]);
+                });
+              });
+
+              test("最後の値は100", () => {
+                return apiService.generateList(3).then(json => {
+                  assert.equal("100", json.data[99]);
+                });
+              });
+
+              test("14番目の値はFizzBuzz", () => {
+                return apiService.generateList(3).then(json => {
+                  assert.equal("FizzBuzz", json.data[14]);
+                });
+              });
+            });
           });
         });
-        function greeting() {
-          return "Hello, world";
+
+        class FizzBuzzApiService {
+          get apiUrl() {
+            return "https://tddrb.k2works.now.sh/api";
+          }
+
+          generate(number) {
+            return new Promise((resolve, reject) => {
+              fetch(`${this.apiUrl}/generate?number=${number}`)
+                .then(response => {
+                  return response.json();
+                })
+                .then(json => {
+                  console.log(JSON.stringify(json));
+                  resolve(json);
+                })
+                .catch(err => {
+                  console.log(err);
+                  reject(err);
+                });
+            });
+          }
+
+          generateList(type) {
+            return new Promise((resolve, reject) => {
+              fetch(`${this.apiUrl}/generate_list?type=${type}&number=100`)
+                .then(response => {
+                  return response.json();
+                })
+                .then(json => {
+                  console.log(JSON.stringify(json));
+                  resolve(json);
+                })
+                .catch(err => {
+                  console.log(err);
+                  reject(err);
+                });
+            });
+          }
         }
+
+        class FizzBuzzView {
+          constructor() {
+            this._service = new FizzBuzzApiService();
+            this._counterComponent = new FizzBuzzCounterComponent(
+              this._service
+            );
+            this._tableComponent = new FizzBuzzTableComponent(this._service);
+          }
+
+          render() {
+            const result = `
+              <div class="py-3">
+                <section id="menu">
+                  <div class="container">
+                    <div id="app__message"></div>
+                    <div class="nav nav-tabs" id="tab-menus" role="tablist">
+                      <a
+                        aria-controls="panel-menu01"
+                        aria-selected="true"
+                        class="nav-item nav-link active"
+                        data-toggle="tab"
+                        href="#panel-menu01"
+                        id="tab-menu01"
+                        role="tab"
+                        >Counter</a
+                      >
+                      <a
+                        aria-controls="panel-menu02"
+                        aria-selected="false"
+                        class="nav-item nav-link"
+                        data-toggle="tab"
+                        href="#panel-menu02"
+                        id="tab-menu02"
+                        role="tab"
+                        >Table</a
+                      >
+                    </div>
+
+                    <div class="tab-content" id="panel-menus">
+                      <div
+                        aria-labelledby="tab-menu01"
+                        class="tab-pane fade show active border border-top-0 jumbotron"
+                        id="panel-menu01"
+                        role="tabpanel"
+                      >
+                        <div id="app__counter" class="row d-flex align-items-center">
+                        </div>
+                      </div>
+                      <div
+                        aria-labelledby="tab-menu02"
+                        class="tab-pane fade border border-top-0"
+                        id="panel-menu02"
+                        role="tabpanel"
+                      >
+                        <dvi class="row p-3">
+                          <div id="app__table" class="col-md-12 order-md-2">
+                          </div>
+                        </dvi>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            `;
+
+            document.querySelector("#app-fizz-buzz").innerHTML = result;
+            this._counterComponent.render();
+            this._tableComponent.render();
+          }
+        }
+
+        class FizzBuzzCounterComponent {
+          constructor(service) {
+            this._service = service;
+            this._counter = 0;
+            this._value = "FizzBuzz";
+          }
+
+          incrementEvent(e) {
+            this._counter += 1;
+            this._service.generate(this._counter).then(data => {
+              this._value = data.value;
+              this.render();
+            });
+          }
+
+          decrementEvent(e) {
+            this._counter === 0 ? (this._counter = 0) : (this._counter -= 1);
+            this._service.generate(this._counter).then(data => {
+              this._value = data.value;
+              this.render();
+            });
+          }
+
+          render() {
+            const counter = `
+              <div class="col-md-1">
+                <button class="btn btn-primary" id="decrement">
+                  -
+                </button>
+              </div>
+              <div class="col-md-10">
+                <h1 class="display-1 text-center">${this._value}</h1>
+              </div>
+              <div class="col-md-1">
+                <button class="btn btn-primary" id="increment">
+                  +
+                </button>
+              </div>
+            `;
+
+            document.querySelector("#app__counter").innerHTML = counter;
+            document
+              .querySelector("#increment")
+              .addEventListener("click", this.incrementEvent.bind(this));
+            document
+              .querySelector("#decrement")
+              .addEventListener("click", this.decrementEvent.bind(this));
+          }
+        }
+
+        class FizzBuzzTableComponent {
+          constructor(service) {
+            this._service = service;
+            this._list = [];
+            this._type = 1;
+          }
+
+          selectEvent(e) {
+            this._type = e.target.value;
+            this.render();
+          }
+
+          render() {
+            this._service.generateList(this._type).then(json => {
+              this._list = json.data;
+
+              const result = (() => {
+                const select = (() => {
+                  const type1 = `<option value="1">タイプ1</option>`;
+                  const type2 =
+                    this._type === "2"
+                      ? `<option value="2" selected>タイプ2</option>`
+                      : `<option value="2">タイプ2</option>`;
+                  const type3 =
+                    this._type === "3"
+                      ? `<option value="3" selected>タイプ3</option>`
+                      : `<option value="3">タイプ3</option>`;
+
+                  return `
+                    <select
+                      name="type"
+                      id="app__select--type"
+                      class="browser-default custom-select"
+                    >
+                      ${type1}
+                      ${type2}
+                      ${type3}
+                    </select>
+              `;
+                })();
+
+                const table = (() => {
+                  // 0から始まるので最初の値を削除する
+                  const th = [...Array(11).keys()]
+                    .slice(1)
+                    .map(i => `<th>${i}</th>`);
+
+                  const td = (() => {
+                    let row = [];
+                    let column = [];
+                    this._list.forEach((v, k) => {
+                      column.push(`<td>${v}</td>`);
+
+                      if ((k + 1) % 10 === 0) {
+                        row.push(column.join(""));
+                        column = [];
+                      }
+                    });
+
+                    return row;
+                  })();
+
+                  return `
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            ${th[0]}
+                            ${th[1]}
+                            ${th[2]}
+                            ${th[3]}
+                            ${th[4]}
+                            ${th[5]}
+                            ${th[6]}
+                            ${th[7]}
+                            ${th[8]}
+                            ${th[9]}
+                          </tr>
+                        </thead>
+                          <tbody>
+                            <tr>${td[0]}</tr>
+                            <tr>${td[1]}</tr>
+                            <tr>${td[2]}</tr>
+                            <tr>${td[3]}</tr>
+                            <tr>${td[4]}</tr>
+                            <tr>${td[5]}</tr>
+                            <tr>${td[6]}</tr>
+                            <tr>${td[7]}</tr>
+                            <tr>${td[8]}</tr>
+                            <tr>${td[9]}</tr>
+                          </tbody>
+                      </table>
+                  `;
+                })();
+
+                return `
+                <dvi class="row p-3">
+                  <div class="col-md-12 order-md-2">
+                    <div id="app__select">
+                      ${select}
+                    </div>
+                    <div
+                      class="table-responsive"
+                      id="app__table-contents"
+                    >
+                     ${table}
+                    </div>
+                  </div>
+                </dvi>
+            `;
+              })();
+
+              document.querySelector("#app__table").innerHTML = result;
+              document
+                .querySelector("#app__select--type")
+                .addEventListener("change", this.selectEvent.bind(this));
+            });
+          }
+        }
+
+        const view = new FizzBuzzView();
+        view.render();
       </script>
 
       <script>
@@ -195,16 +565,25 @@
           spec.innerHTML = marked(
             `
 ## 仕様
-1 から 100 までの数をプリントするプログラムを書け。
+1から100までを１件ずつ画面に表示できる。
 
-ただし 3 の倍数のときは数の代わりに｢Fizz｣と、5 の倍数のときは｢Buzz｣とプリントし、
+1から100まで表示された内容を表示できる。
 
-3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。
-
-タイプごとに出力を切り替えることができる。
-
-タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz の場合のみをプリントする。 
 ## ToDoリスト
+- [x] カウンター画面
+  - [x] 画面イメージを作る
+  - [x] APIサービスを作る
+  - [x] APIサービスと連携するクライアントサービスを作る
+    - [x] 正常系を実装する
+  - [x] UIを作る
+  - [x] UIとクライアントサービスを連携する
+- [x] 一覧表示画面
+  - [x] 画面イメージを作る
+  - [x] APIサービスを作る
+  - [x] APIサービスと連携するクライアントサービスを作る
+    - [x] 正常系を実装する
+  - [x] UIを作る
+  - [x] UIとクライアントサービスを連携する
         `
           );
         }
@@ -215,10 +594,90 @@
           const inputId = "class-diagram-input";
           const outputId = "class-im";
           const source = `
-class HelloWorld {
-  greeting(): String
+package Presentation {
+  class FizzBuzzApiService {
+    apiUrl
+    generate()
+    generateList()
+  }
+
+  class FizzBuzzView {
+    _service
+    _counterComponent
+    _tableComponent
+    render()
+  }
+
+  class FizzBuzzCounterComponent {
+    _service
+    _conter
+    _value
+    incrementEvent()
+    decrementEvent()
+    render()
+  }
+
+  class FizzBuzzTableComponent {
+    _service
+    _list
+    _type
+    changeEvent()
+    render()
+  }
 }
-                  `;
+
+package Application {
+  package Service {
+    class FizzBuzzService {
+    }
+
+    interface FizzBuzzCommand {
+    }
+
+    class FizzBuzzValueCommand {
+    }
+
+    class FizzBuzzListCommand {
+    }
+  }
+}
+
+package Domain {
+    package Model {
+      class FizzBuzzValue {
+      }
+
+      class FizzBuzzList {
+      }
+    }
+
+    package Type {
+      class FizzBuzzType {
+      }
+
+      class FizzBuzzType01 {
+      }
+
+      class FizzBuzzType02 {
+      }
+
+      class FizzBuzzType03 {
+      }
+    }
+}
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzCommand *- FizzBuzzType
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzService -> FizzBuzzCommand
+FizzBuzzService <--- FizzBuzzApiService
+FizzBuzzApiService --* FizzBuzzView
+FizzBuzzView *- FizzBuzzCounterComponent
+FizzBuzzTableComponent -* FizzBuzzView
+
+`;
           compress(source, outputId);
         })();
         function encode64(data) {

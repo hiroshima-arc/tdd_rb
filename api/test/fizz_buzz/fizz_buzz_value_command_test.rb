@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require_relative '../../fizz_buzz/application/fizz_buzz_value_command.rb'
+require_relative '../../fizz_buzz/application/service/fizz_buzz_value_command.rb'
 require_relative '../../fizz_buzz/domain/type/fizz_buzz_type.rb'
 require_relative '../../fizz_buzz/domain/type/fizz_buzz_type_01.rb'
 require_relative '../../fizz_buzz/domain/type/fizz_buzz_type_02.rb'
@@ -10,7 +10,7 @@ class FizzBuzzValueCommandTest < Minitest::Test
     describe '数を文字列にして返す' do
       def setup
         @fizzbuzz =
-          FizzBuzz::Application::FizzBuzzValueCommand.new(
+          FizzBuzz::Application::Service::FizzBuzzValueCommand.new(
             FizzBuzz::Domain::Type::FizzBuzzType.create(
               FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
             )
@@ -43,7 +43,7 @@ class FizzBuzzValueCommandTest < Minitest::Test
         def test_値は正の値のみ許可する
           e =
             assert_raises RuntimeError do
-              FizzBuzz::Application::FizzBuzzValueCommand.new(
+              FizzBuzz::Application::Service::FizzBuzzValueCommand.new(
                 FizzBuzz::Domain::Type::FizzBuzzType.create(
                   FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
                 )
@@ -53,20 +53,6 @@ class FizzBuzzValueCommandTest < Minitest::Test
 
           assert_equal '正の値のみ有効です', e.message
         end
-
-        def test_100より多い数を許可しない
-          e =
-            assert_raises RuntimeError do
-              FizzBuzz::Application::FizzBuzzListCommand.new(
-                FizzBuzz::Domain::Type::FizzBuzzType.create(
-                  FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
-                )
-              )
-                .execute(101)
-
-              assert_equal '上限は100件までです', e.message
-            end
-        end
       end
     end
   end
@@ -75,7 +61,7 @@ class FizzBuzzValueCommandTest < Minitest::Test
     describe '数を文字列にして返す' do
       def setup
         @fizzbuzz =
-          FizzBuzz::Application::FizzBuzzValueCommand.new(
+          FizzBuzz::Application::Service::FizzBuzzValueCommand.new(
             FizzBuzz::Domain::Type::FizzBuzzType.create(
               FizzBuzz::Domain::Type::FizzBuzzType::TYPE_02
             )
@@ -112,7 +98,7 @@ class FizzBuzzValueCommandTest < Minitest::Test
     describe '数を文字列にして返す' do
       def setup
         @fizzbuzz =
-          FizzBuzz::Application::FizzBuzzValueCommand.new(
+          FizzBuzz::Application::Service::FizzBuzzValueCommand.new(
             FizzBuzz::Domain::Type::FizzBuzzType.create(
               FizzBuzz::Domain::Type::FizzBuzzType::TYPE_03
             )
@@ -149,7 +135,9 @@ class FizzBuzzValueCommandTest < Minitest::Test
     def test_例外を返す
       e =
         assert_raises RuntimeError do
-          FizzBuzz::Domain::Type::FizzBuzzType.create(4)
+          FizzBuzz::Application::Service::FizzBuzzValueCommand.new(
+            FizzBuzz::Domain::Type::FizzBuzzType.create(4)
+          )
         end
 
       assert_equal '該当するタイプは存在しません', e.message

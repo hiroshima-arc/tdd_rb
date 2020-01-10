@@ -58,18 +58,24 @@
 ----
 
 package Application {
-  interface FizzBuzzCommand {
-    execute()
-  }
+  package Service {
+    class FizzBuzzService {
+      String generate()
+      String generate_list()
+    }
+    interface FizzBuzzCommand {
+      execute()
+    }
 
-  class FizzBuzzValueCommand {
-    FizzBuzzType type
-    FizzBuzzValue execute()
-  }
+    class FizzBuzzValueCommand {
+      FizzBuzzType type
+      FizzBuzzValue execute()
+    }
 
-  class FizzBuzzListCommand {
-    FizzBuzzType type
-    FizzBuzzList execute()
+    class FizzBuzzListCommand {
+      FizzBuzzType type
+      FizzBuzzList execute()
+    }
   }
 }
 
@@ -112,6 +118,7 @@ package Domain {
       }
     }
 }
+FizzBuzzService -> FizzBuzzCommand
 FizzBuzzCommand <|-- FizzBuzzValueCommand
 FizzBuzzCommand <|-- FizzBuzzListCommand
 FizzBuzzCommand *- FizzBuzzType
@@ -119,7 +126,7 @@ FizzBuzzType <|-- FizzBuzzType01
 FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03
 FizzBuzzType -> FizzBuzzValue
-FizzBuzzType -> FizzBuzzList
+FizzBuzzListCommand --> FizzBuzzList
 
 ----
 
@@ -127,22 +134,35 @@ FizzBuzzType -> FizzBuzzList
 
 == 開発
 
-[source, ruby]
 === Application
+==== Service
+[source, ruby]
 ----
 include::../../../api/index.rb[]
 ----
 
 ----
-include::../../../api/fizz_buzz/application/fizz_buzz_command.rb[]
+include::../../../api/generate.rb[]
 ----
 
 ----
-include::../../../api/fizz_buzz/application/fizz_buzz_list_command.rb[]
+include::../../../api/generate_list.rb[]
 ----
 
 ----
-include::../../../api/fizz_buzz/application/fizz_buzz_value_command.rb[]
+include::../../../api/fizz_buzz/application/service/fizz_buzz_service.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/application/service/fizz_buzz_command.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/application/service/fizz_buzz_list_command.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/application/service/fizz_buzz_value_command.rb[]
 ----
 
 === Domain
@@ -179,6 +199,10 @@ include::../../../api/test/fizz_buzz/fizz_buzz_list_command_test.rb[]
 
 ----
 include::../../../api/test/fizz_buzz/fizz_buzz_value_command_test.rb[]
+----
+
+----
+include::../../../api/test/fizz_buzz/fizz_buzz_service_test.rb[]
 ----
 
 

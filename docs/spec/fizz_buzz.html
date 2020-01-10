@@ -442,14 +442,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_開発">3. 開発</a>
 <ul class="sectlevel2">
-<li><a href="#_application">Application</a></li>
-<li><a href="#_domain">3.1. Domain</a>
+<li><a href="#_application">3.1. Application</a>
 <ul class="sectlevel3">
-<li><a href="#_modle">3.1.1. Modle</a></li>
-<li><a href="#_type">3.1.2. Type</a></li>
+<li><a href="#_service">3.1.1. Service</a></li>
 </ul>
 </li>
-<li><a href="#_test">3.2. Test</a></li>
+<li><a href="#_domain">3.2. Domain</a>
+<ul class="sectlevel3">
+<li><a href="#_modle">3.2.1. Modle</a></li>
+<li><a href="#_type">3.2.2. Type</a></li>
+</ul>
+</li>
+<li><a href="#_test">3.3. Test</a></li>
 </ul>
 </li>
 <li><a href="#_参照">4. 参照</a></li>
@@ -591,7 +595,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-e0f8a46247563097786761a2969ac880.png" alt="diag e0f8a46247563097786761a2969ac880" width="1212" height="402">
+<img src="diag-a531d2ad2cde997539613aa4be2da517.png" alt="diag a531d2ad2cde997539613aa4be2da517" width="1001" height="643">
 </div>
 </div>
 </div>
@@ -605,10 +609,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_開発">3. 開発</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_application">Application</h3>
+<h3 id="_application">3.1. Application</h3>
+<div class="sect3">
+<h4 id="_service">3.1.1. Service</h4>
 <div class="listingblock">
 <div class="content">
-<pre>require 'cowsay'
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'cowsay'
 require_relative './fizz_buzz/application/fizz_buzz_list_command.rb'
 require_relative './fizz_buzz/domain/type/fizz_buzz_type.rb'
 require_relative './fizz_buzz/domain/type/fizz_buzz_type_01.rb'
@@ -626,14 +632,94 @@ Handler =
     res.status = 200
     res['Content-Type'] = 'text/plain'
     res.body = Cowsay.say(message.to_s, 'cow')
+  end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>require 'json'
+require_relative './fizz_buzz/application/service/fizz_buzz_service.rb'
+
+Handler =
+  Proc.new do |req, res|
+    number = req.query['number']
+    service = FizzBuzz::Application::Service::FizzBuzzService.new
+
+    res.status = 200
+    res['Access-Control-Allow-Origin'] = '*'
+    res['Content-Type'] = 'text/plain'
+    res.body = service.generate(number)
   end</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>require_relative './fizz_buzz/application/service/fizz_buzz_service.rb'
+
+Handler =
+  Proc.new do |req, res|
+    type = req.query['type']
+    number = req.query['number']
+    service = FizzBuzz::Application::Service::FizzBuzzService.new
+
+    res.status = 200
+    res['Access-Control-Allow-Origin'] = '*'
+    res['Content-Type'] = 'text/plain'
+    res.body = service.generate_list(type, number)
+  end</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>require 'json'
+require_relative '../../domain/model/fizz_buzz_value.rb'
+require_relative '../../application/service/fizz_buzz_value_command.rb'
+require_relative '../../application/service/fizz_buzz_list_command.rb'
+require_relative '../../domain/type/fizz_buzz_type.rb'
+require_relative '../../domain/type/fizz_buzz_type_01.rb'
+require_relative '../../domain/type/fizz_buzz_type_02.rb'
+require_relative '../../domain/type/fizz_buzz_type_03.rb'
+
+module FizzBuzz
+  module Application
+    module Service
+      class FizzBuzzService
+        def generate(number)
+          command =
+            FizzBuzz::Application::Service::FizzBuzzValueCommand.new(
+              FizzBuzz::Domain::Type::FizzBuzzType.create(
+                FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
+              )
+            )
+          result = command.execute(number.to_i)
+          result.to_json
+        rescue StandardError =&gt; e
+          { message: e.message }.to_json
+        end
+
+        def generate_list(type, number)
+          command =
+            FizzBuzz::Application::Service::FizzBuzzListCommand.new(
+              FizzBuzz::Domain::Type::FizzBuzzType.create(type.to_i)
+            )
+          result = command.execute(number.to_i)
+          { data: result.to_s }.to_json
+        rescue StandardError =&gt; e
+          { message: e.message }.to_json
+        end
+      end
+    end
+  end
+end</pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre>module FizzBuzz
   module Application
-    class FizzBuzzCommand; end
+    module Service
+      class FizzBuzzCommand; end
+    end
   end
 end</pre>
 </div>
@@ -641,19 +727,21 @@ end</pre>
 <div class="listingblock">
 <div class="content">
 <pre>require_relative './fizz_buzz_command.rb'
-require_relative '../domain/model/fizz_buzz_list.rb'
+require_relative '../../domain/model/fizz_buzz_list.rb'
 
 module FizzBuzz
   module Application
-    class FizzBuzzListCommand &lt; FizzBuzzCommand
-      def initialize(type)
-        @type = type
-      end
+    module Service
+      class FizzBuzzListCommand &lt; FizzBuzzCommand
+        def initialize(type)
+          @type = type
+        end
 
-      def execute(number)
-        FizzBuzz::Domain::Model::FizzBuzzList.new(
-          (1..number).map { |i| @type.generate(i) }
-        )
+        def execute(number)
+          FizzBuzz::Domain::Model::FizzBuzzList.new(
+            (1..number).map { |i| @type.generate(i) }
+          )
+        end
       end
     end
   end
@@ -666,24 +754,27 @@ end</pre>
 
 module FizzBuzz
   module Application
-    class FizzBuzzValueCommand &lt; FizzBuzzCommand
-      def initialize(type)
-        @type = type
-      end
+    module Service
+      class FizzBuzzValueCommand &lt; FizzBuzzCommand
+        def initialize(type)
+          @type = type
+        end
 
-      def execute(number)
-        @type.generate(number)
+        def execute(number)
+          @type.generate(number)
+        end
       end
     end
   end
 end</pre>
+</div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_domain">3.1. Domain</h3>
+<h3 id="_domain">3.2. Domain</h3>
 <div class="sect3">
-<h4 id="_modle">3.1.1. Modle</h4>
+<h4 id="_modle">3.2.1. Modle</h4>
 <div class="listingblock">
 <div class="content">
 <pre>module FizzBuzz
@@ -714,7 +805,9 @@ end</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>module FizzBuzz
+<pre>require 'json'
+
+module FizzBuzz
   module Domain
     module Model
       class FizzBuzzValue
@@ -725,6 +818,14 @@ end</pre>
 
           @number = number
           @value = value
+        end
+
+        def as_json(options = {})
+          { number: @number, value: @value }
+        end
+
+        def to_json(*options)
+          as_json(*options).to_json(*options)
         end
 
         def to_s
@@ -744,7 +845,7 @@ end</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_type">3.1.2. Type</h4>
+<h4 id="_type">3.2.2. Type</h4>
 <div class="listingblock">
 <div class="content">
 <pre>module FizzBuzz
@@ -854,11 +955,11 @@ end</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_test">3.2. Test</h3>
+<h3 id="_test">3.3. Test</h3>
 <div class="listingblock">
 <div class="content">
 <pre>require 'minitest/autorun'
-require_relative '../../fizz_buzz/application/fizz_buzz_list_command.rb'
+require_relative '../../fizz_buzz/application/service/fizz_buzz_list_command.rb'
 require_relative '../../fizz_buzz/domain/type/fizz_buzz_type.rb'
 require_relative '../../fizz_buzz/domain/type/fizz_buzz_type_01.rb'
 
@@ -866,7 +967,7 @@ class FizzBuzzListCommandTest &lt; Minitest::Test
   describe '1から100までの数を返す' do
     def setup
       fizzbuzz =
-        FizzBuzz::Application::FizzBuzzListCommand.new(
+        FizzBuzz::Application::Service::FizzBuzzListCommand.new(
           FizzBuzz::Domain::Type::FizzBuzzType.create(
             FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
           )
@@ -894,6 +995,20 @@ class FizzBuzzListCommandTest &lt; Minitest::Test
     def test_14番目は文字列FizzBuzzを返す
       assert_equal 'FizzBuzz', @result[14].value
     end
+
+    def test_100より多い数を許可しない
+      e =
+        assert_raises RuntimeError do
+          FizzBuzz::Application::Service::FizzBuzzListCommand.new(
+            FizzBuzz::Domain::Type::FizzBuzzType.create(
+              FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
+            )
+          )
+            .execute(101)
+
+          assert_equal '上限は100件までです', e.message
+        end
+    end
   end
 end</pre>
 </div>
@@ -901,7 +1016,7 @@ end</pre>
 <div class="listingblock">
 <div class="content">
 <pre>require 'minitest/autorun'
-require_relative '../../fizz_buzz/application/fizz_buzz_value_command.rb'
+require_relative '../../fizz_buzz/application/service/fizz_buzz_value_command.rb'
 require_relative '../../fizz_buzz/domain/type/fizz_buzz_type.rb'
 require_relative '../../fizz_buzz/domain/type/fizz_buzz_type_01.rb'
 require_relative '../../fizz_buzz/domain/type/fizz_buzz_type_02.rb'
@@ -912,7 +1027,7 @@ class FizzBuzzValueCommandTest &lt; Minitest::Test
     describe '数を文字列にして返す' do
       def setup
         @fizzbuzz =
-          FizzBuzz::Application::FizzBuzzValueCommand.new(
+          FizzBuzz::Application::Service::FizzBuzzValueCommand.new(
             FizzBuzz::Domain::Type::FizzBuzzType.create(
               FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
             )
@@ -945,7 +1060,7 @@ class FizzBuzzValueCommandTest &lt; Minitest::Test
         def test_値は正の値のみ許可する
           e =
             assert_raises RuntimeError do
-              FizzBuzz::Application::FizzBuzzValueCommand.new(
+              FizzBuzz::Application::Service::FizzBuzzValueCommand.new(
                 FizzBuzz::Domain::Type::FizzBuzzType.create(
                   FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
                 )
@@ -955,20 +1070,6 @@ class FizzBuzzValueCommandTest &lt; Minitest::Test
 
           assert_equal '正の値のみ有効です', e.message
         end
-
-        def test_100より多い数を許可しない
-          e =
-            assert_raises RuntimeError do
-              FizzBuzz::Application::FizzBuzzListCommand.new(
-                FizzBuzz::Domain::Type::FizzBuzzType.create(
-                  FizzBuzz::Domain::Type::FizzBuzzType::TYPE_01
-                )
-              )
-                .execute(101)
-
-              assert_equal '上限は100件までです', e.message
-            end
-        end
       end
     end
   end
@@ -977,7 +1078,7 @@ class FizzBuzzValueCommandTest &lt; Minitest::Test
     describe '数を文字列にして返す' do
       def setup
         @fizzbuzz =
-          FizzBuzz::Application::FizzBuzzValueCommand.new(
+          FizzBuzz::Application::Service::FizzBuzzValueCommand.new(
             FizzBuzz::Domain::Type::FizzBuzzType.create(
               FizzBuzz::Domain::Type::FizzBuzzType::TYPE_02
             )
@@ -1014,7 +1115,7 @@ class FizzBuzzValueCommandTest &lt; Minitest::Test
     describe '数を文字列にして返す' do
       def setup
         @fizzbuzz =
-          FizzBuzz::Application::FizzBuzzValueCommand.new(
+          FizzBuzz::Application::Service::FizzBuzzValueCommand.new(
             FizzBuzz::Domain::Type::FizzBuzzType.create(
               FizzBuzz::Domain::Type::FizzBuzzType::TYPE_03
             )
@@ -1051,10 +1152,142 @@ class FizzBuzzValueCommandTest &lt; Minitest::Test
     def test_例外を返す
       e =
         assert_raises RuntimeError do
-          FizzBuzz::Domain::Type::FizzBuzzType.create(4)
+          FizzBuzz::Application::Service::FizzBuzzValueCommand.new(
+            FizzBuzz::Domain::Type::FizzBuzzType.create(4)
+          )
         end
 
       assert_equal '該当するタイプは存在しません', e.message
+    end
+  end
+end</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>require 'minitest/autorun'
+require_relative '../../fizz_buzz/application/service/fizz_buzz_service.rb'
+
+class FizzBuzzServiceTest &lt; Minitest::Test
+  describe 'generate service' do
+    def setup
+      @service = FizzBuzz::Application::Service::FizzBuzzService.new
+    end
+
+    def test_1を渡したらFizzBuzzValueのJSONオブジェクトを返す
+      result = @service.generate('1')
+      assert_equal '{"number":1,"value":"1"}', result
+    end
+
+    def test_3を渡したらFizzBuzzValueのJSONオブジェクトを返す
+      result = @service.generate('3')
+      assert_equal '{"number":3,"value":"Fizz"}', result
+    end
+
+    def test_5を渡したらFizzBuzzValueのJSONオブジェクトを返す
+      result = @service.generate('5')
+      assert_equal '{"number":5,"value":"Buzz"}', result
+    end
+
+    def test_15を渡したらFizzBuzzValueのJSONオブジェクトを返す
+      result = @service.generate('15')
+      assert_equal '{"number":15,"value":"FizzBuzz"}', result
+    end
+
+    def test_マイナス1を渡したら例外JSONオブジェクトを返す
+      result = @service.generate('-1')
+      assert_equal '{"message":"正の値のみ有効です"}', result
+    end
+  end
+
+  describe 'generate list service' do
+    describe 'タイプ1の場合' do
+      def setup
+        @service = FizzBuzz::Application::Service::FizzBuzzService.new
+        @result = @service.generate_list('1', '100')
+      end
+
+      def test_100を渡したら100件のJSONオブジェクトを返す
+        assert_equal 100, JSON.parse(@result)['data'].count
+      end
+
+      def test_100件のJSONオブジェクトの最初は1
+        assert_equal '1', JSON.parse(@result)['data'].first
+      end
+
+      def test_100件のJSONオブジェクトの2番目はFizz
+        assert_equal 'Fizz', JSON.parse(@result)['data'][2]
+      end
+
+      def test_100件のJSONオブジェクトの14番目はFizzBuzz
+        assert_equal 'FizzBuzz', JSON.parse(@result)['data'][14]
+      end
+
+      def test_100件のJSONオブジェクトの最後はBuzz
+        assert_equal 'Buzz', JSON.parse(@result)['data'].last
+      end
+    end
+
+    describe 'タイプ2の場合' do
+      def setup
+        @service = FizzBuzz::Application::Service::FizzBuzzService.new
+        @result = @service.generate_list('2', '100')
+      end
+
+      def test_100件のJSONオブジェクトの最初は1
+        assert_equal '1', JSON.parse(@result)['data'].first
+      end
+
+      def test_100件のJSONオブジェクトの2番目は3
+        assert_equal '3', JSON.parse(@result)['data'][2]
+      end
+
+      def test_100件のJSONオブジェクトの14番目は15
+        assert_equal '15', JSON.parse(@result)['data'][14]
+      end
+
+      def test_100件のJSONオブジェクトの最後は100
+        assert_equal '100', JSON.parse(@result)['data'].last
+      end
+    end
+
+    describe 'タイプ3の場合' do
+      def setup
+        @service = FizzBuzz::Application::Service::FizzBuzzService.new
+        @result = @service.generate_list('3', '100')
+      end
+
+      def test_100件のJSONオブジェクトの最初は1
+        assert_equal '1', JSON.parse(@result)['data'].first
+      end
+
+      def test_100件のJSONオブジェクトの2番目は3
+        assert_equal '3', JSON.parse(@result)['data'][2]
+      end
+
+      def test_100件のJSONオブジェクトの14番目はFizzBuzz
+        assert_equal 'FizzBuzz', JSON.parse(@result)['data'][14]
+      end
+
+      def test_100件のJSONオブジェクトの最後は100
+        assert_equal '100', JSON.parse(@result)['data'].last
+      end
+    end
+
+    describe 'それ以外の場合' do
+      def setup
+        @service = FizzBuzz::Application::Service::FizzBuzzService.new
+      end
+
+      def test_タイプ99を渡したら例外JSONオブジェクトを返す
+        result = @service.generate_list('99', '100')
+        assert_equal '{"message":"該当するタイプは存在しません"}', result
+      end
+
+      def test_件数に101を渡したら例外JSONオブジェクトを返す
+        result = @service.generate_list('1', '101')
+        assert_equal '{"message":"上限は100件までです"}', result
+      end
     end
   end
 end</pre>
@@ -1081,7 +1314,7 @@ end</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-08 16:45:46 JST
+Last updated 2020-01-09 19:17:07 JST
 </div>
 </div>
 </body>

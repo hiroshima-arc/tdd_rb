@@ -5,10 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Local File",
+            "name": "Debug Local FizzBuzzValueCommandTest",
             "type": "Ruby",
             "request": "launch",
             "program": "${workspaceRoot}/api/test/fizz_buzz/fizz_buzz_value_command_test.rb"
+        },
+        {
+            "name": "Debug Local FizzBuzzListCommandTest",
+            "type": "Ruby",
+            "request": "launch",
+            "program": "${workspaceRoot}/api/test/fizz_buzz/fizz_buzz_list_command_test.rb"
+        },
+        {
+            "name": "Debug Local FizzBuzzServiceTest",
+            "type": "Ruby",
+            "request": "launch",
+            "program": "${workspaceRoot}/api/test/fizz_buzz/fizz_buzz_service_test.rb"
         }
     ]
 }
