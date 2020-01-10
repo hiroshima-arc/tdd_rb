@@ -9,7 +9,7 @@
   "scripts": {
     "start": "nf start -j Procfile",
     "test": "npm-run-all test:*",
-    "test:api": "cd api;rake test",
+    "test:api": "rake test",
     "test:frontend": "cross-env NODE_ENV=test mocha --ui tdd --require @babel/register test/**/*.test.*",
     "test:e2e": "cypress run --spec 'cypress/integration/fizz_buzz/**/*_spec.js'",
     "test:e2e:open": "cypress open",
