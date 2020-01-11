@@ -316,7 +316,95 @@ git commit -m 'test: 数を文字列にして返す'
 
 
 === リファクタリングから始めるテスト駆動開発
+
+変数名の変更を適用する。
+
+[source, ruby]
+----
+...
+class FizzBuzz
+  def self.generate(n)
+    n.to_s
+  end
+end
+----
+
+[source, ruby]
+----
+...
+class FizzBuzz
+  def self.generate(number)
+    number.to_s
+  end
+end
+----
+
+変更で壊れていないかを確認する。
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 33356
+
+  2/2: [======================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00083s
+2 tests, 2 assertions, 0 failures, 0 errors, 0 skips
+----
+
+コミットする。
+
+[source, bash]
+----
+git commit -m 'refactor: 変数名の変更'
+----
+
+テストコードも同様にリファクタリングする。
+[source, ruby]
+----
+class FizzBuzzTest < Minitest::Test
+  def test_1を渡したら文字列1を返す
+    # 前準備
+    # 実行
+    # 検証
+    assert_equal '1', FizzBuzz.generate(1)
+  end
+
+  def test_2を渡したら文字列2を返す
+    # 前準備
+    # 実行
+    # 検証
+    assert_equal '2', FizzBuzz.generate(2)
+  end
+end
+----
+
+[source, ruby]
+----
+class FizzBuzzTest < Minitest::Test
+  def setup
+    @fizzbuzz = FizzBuzz
+  end
+
+  def test_1を渡したら文字列1を返す
+    assert_equal '1', @fizzbuzz.generate(1)
+  end
+
+  def test_2を渡したら文字列2を返す
+    assert_equal '2', @fizzbuzz.generate(2)
+  end
+end
+----
+
+テストを実行して壊れていないことを確認したらコミットする。
+
+[source, bash]
+----
+git commit -m 'refactor: メソッドの抽出'
+----
+
 ==== 3を渡したら文字列Fizzを返す
+
 ==== 5を渡したら文字列Buzzを返す
 ==== 15を渡したら文字列FizzBuzzを返す
 ==== 1から100までの数を返す

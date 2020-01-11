@@ -945,6 +945,98 @@ Finished in 0.00098s
 </div>
 <div class="sect2">
 <h3 id="_リファクタリングから始めるテスト駆動開発">1.4. リファクタリングから始めるテスト駆動開発</h3>
+<div class="paragraph">
+<p>変数名の変更を適用する。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzz
+  def self.generate(n)
+    n.to_s
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzz
+  def self.generate(number)
+    number.to_s
+  end
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>変更で壊れていないかを確認する。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 33356
+
+  2/2: [======================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00083s
+2 tests, 2 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>コミットする。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">git commit -m 'refactor: 変数名の変更'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストコードも同様にリファクタリングする。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzTest &lt; Minitest::Test
+  def test_1を渡したら文字列1を返す
+    # 前準備
+    # 実行
+    # 検証
+    assert_equal '1', FizzBuzz.generate(1)
+  end
+
+  def test_2を渡したら文字列2を返す
+    # 前準備
+    # 実行
+    # 検証
+    assert_equal '2', FizzBuzz.generate(2)
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzTest &lt; Minitest::Test
+  def setup
+    @fizzbuzz = FizzBuzz
+  end
+
+  def test_1を渡したら文字列1を返す
+    assert_equal '1', @fizzbuzz.generate(1)
+  end
+
+  def test_2を渡したら文字列2を返す
+    assert_equal '2', @fizzbuzz.generate(2)
+  end
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストを実行して壊れていないことを確認したらコミットする。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">git commit -m 'refactor: メソッドの抽出'</code></pre>
+</div>
+</div>
 <div class="sect3">
 <h4 id="_3を渡したら文字列fizzを返す">1.4.1. 3を渡したら文字列Fizzを返す</h4>
 
@@ -1104,7 +1196,7 @@ Finished in 0.00098s
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-11 17:29:27 JST
+Last updated 2020-01-11 18:05:54 JST
 </div>
 </div>
 </body>
