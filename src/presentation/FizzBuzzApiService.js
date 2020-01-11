@@ -4,9 +4,9 @@ export default class FizzBuzzApiService {
     return "https://tddrb.k2works.now.sh/api";
   }
 
-  generate(number) {
+  _fetch(url) {
     return new Promise((resolve, reject) => {
-      fetch(`${this.apiUrl}/generate?number=${number}`)
+      fetch(url)
         .then(response => {
           return response.json();
         })
@@ -21,20 +21,11 @@ export default class FizzBuzzApiService {
     });
   }
 
+  generate(number) {
+    return this._fetch(`${this.apiUrl}/generate?number=${number}`);
+  }
+
   generateList(type) {
-    return new Promise((resolve, reject) => {
-      fetch(`${this.apiUrl}/generate_list?type=${type}&number=100`)
-        .then(response => {
-          return response.json();
-        })
-        .then(json => {
-          console.log(JSON.stringify(json));
-          resolve(json);
-        })
-        .catch(err => {
-          console.log(err);
-          reject(err);
-        });
-    });
+    return this._fetch(`${this.apiUrl}/generate_list?type=${type}&number=100`);
   }
 }
