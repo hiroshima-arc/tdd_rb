@@ -1,0 +1,27 @@
+name: Nodejs
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install, build, and test
+      run: |
+        npm ci
+        npm run build --if-present
+        npm run test:frontend:coverage
+      env:
+        CI: true
+        CODACY_PROJECT_TOKEN: 4a947650e5f94e47b9f35b8b247f02a7

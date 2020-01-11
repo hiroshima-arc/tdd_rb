@@ -72,3 +72,6 @@ dist
 
 .DS_Store
 public
+
+cypress/screenshots
+cypress/videos

@@ -45,13 +45,13 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "!!html-loader!./src/index.html",
+      template: "!!html-loader!./src/page/index.html",
       filename: "index.html"
     }),
     new MiniCssExtractPlugin({
       filename: "./contents.css",
       chunkFilename: "[id].css"
     }),
-    new CopyWebpackPlugin([{ from: "src/lib", to: "lib" }])
+    new CopyWebpackPlugin([{ from: "src/page/lib", to: "lib" }])
   ]
 };

@@ -15,7 +15,9 @@ jobs:
         ruby-version: 2.5.x
     - name: Build and test with Rake
       run: |
-        cd api
         gem install bundler
         bundle install --jobs 4 --retry 3
         bundle exec rake
+      env:
+        CODACY_PROJECT_TOKEN: 4a947650e5f94e47b9f35b8b247f02a7
+        CODACY_RUN_LOCAL: true

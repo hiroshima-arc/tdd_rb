@@ -8,7 +8,12 @@
   "main": "index.js",
   "scripts": {
     "start": "nf start -j Procfile",
-    "test": "cd api;rake test",
+    "test": "npm-run-all test:*",
+    "test:api": "rake test",
+    "test:frontend": "cross-env NODE_ENV=test mocha --ui tdd --require @babel/register test/**/*.test.*",
+    "test:frontend:coverage": "nyc --reporter=lcov --reporter=text npm run test:frontend && cat ./coverage/lcov.info | codacy-coverage",
+    "test:e2e": "cypress run --spec 'cypress/integration/fizz_buzz/**/*_spec.js'",
+    "test:e2e:open": "cypress open",
     "start:asciidocs": "nf start -j docs/Procfile",
     "start:slide": "nf start -j docs/slides/Procfile",
     "build": "webpack --config webpack.js",
@@ -21,6 +26,7 @@
     "watch:backend": "watch 'npm-run-all format:backend test' ./api",
     "app": "npm-run-all app:*",
     "app:frontend": "browser-sync start --config bs-config.js",
+    "app:webpack": "webpack-dev-server -d --progress --colors --display-error-details --hot --inline --config webpack.js",
     "docs:asciidocs:proxy": "browser-sync start --config docs/bs-config.js",
     "docs:asciidocs:build": "gradle asciidoctor",
     "docs:asciidocs:watch": "watch 'npm-run-all docs:asciidocs:build' ./docs/src",
@@ -62,6 +68,7 @@
     "cypress": "^3.8.1",
     "cypress-file-upload": "^3.5.3",
     "eslint": "^6.8.0",
+    "eslint-plugin-cypress": "^2.8.1",
     "foreman": "^3.0.1",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
@@ -79,5 +86,10 @@
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1"
+  },
+  "dependencies": {
+    "codacy-coverage": "^3.4.0",
+    "mocha-lcov-reporter": "^1.3.0",
+    "node-fetch": "^2.6.0"
   }
 }

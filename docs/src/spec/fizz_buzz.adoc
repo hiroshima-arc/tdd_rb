@@ -5,7 +5,7 @@
 = Fizz Buzz
 
 == 仕様
-
+=== Api
 1 から 100 までの数をプリントするプログラムを書け。
 
 ただし 3 の倍数のときは数の代わりに｢Fizz｣と、5 の倍数のときは｢Buzz｣とプリントし、
@@ -16,8 +16,15 @@
 
 タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz の場合のみをプリントする。
 
+=== クライアント
+
+1から100までを１件ずつ画面に表示できる。
+
+1から100まで表示された内容を表示できる。
+
 == 設計
 === TODOリスト
+==== Api
 - [x] タイプ1の場合
  - [x] 数を文字列にして返す
     - [x] 1を渡したら文字列"1"を返す
@@ -50,6 +57,22 @@
     - [x] 15を渡したら文字列"FizzBuzz"を返す
 - [x] それ以外のタイプの場合
   - [x] 例外を返す
+
+==== クライアント
+- [x] カウンター画面
+  - [x] 画面イメージを作る
+  - [x] APIサービスを作る
+  - [x] APIサービスと連携するクライアントサービスを作る
+    - [x] 正常系を実装する
+  - [x] UIを作る
+  - [x] UIとクライアントサービスを連携する
+- [x] 一覧表示画面
+  - [x] 画面イメージを作る
+  - [x] APIサービスを作る
+  - [x] APIサービスと連携するクライアントサービスを作る
+    - [x] 正常系を実装する
+  - [x] UIを作る
+  - [x] UIとクライアントサービスを連携する
 
 === ユースケース図
 
@@ -118,6 +141,39 @@ package Domain {
       }
     }
 }
+
+package Presentation {
+  class FizzBuzzApiService {
+    apiUrl
+    generate()
+    generateList()
+  }
+
+  class FizzBuzzView {
+    _service
+    _counterComponent
+    _tableComponent
+    render()
+  }
+
+  class FizzBuzzCounterComponent {
+    _service
+    _conter
+    _value
+    incrementEvent()
+    decrementEvent()
+    render()
+  }
+
+  class FizzBuzzTableComponent {
+    _service
+    _list
+    _type
+    changeEvent()
+    render()
+  }
+}
+
 FizzBuzzService -> FizzBuzzCommand
 FizzBuzzCommand <|-- FizzBuzzValueCommand
 FizzBuzzCommand <|-- FizzBuzzListCommand
@@ -127,7 +183,10 @@ FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03
 FizzBuzzType -> FizzBuzzValue
 FizzBuzzListCommand --> FizzBuzzList
-
+FizzBuzzService <--- FizzBuzzApiService
+FizzBuzzApiService --* FizzBuzzView
+FizzBuzzView *- FizzBuzzCounterComponent
+FizzBuzzTableComponent -* FizzBuzzView
 ----
 
 === シーケンス図
@@ -192,6 +251,24 @@ include::../../../api/fizz_buzz/domain/type/fizz_buzz_type_02.rb[]
 include::../../../api/fizz_buzz/domain/type/fizz_buzz_type_03.rb[]
 ----
 
+=== Presentation
+[source, javascript]
+----
+include::../../../src/presentation/FizzBuzzApiService.js[]
+----
+
+----
+include::../../../src/presentation/FizzBuzzView.js[]
+----
+
+----
+include::../../../src/presentation/FizzBuzzCounterComponent.js[]
+----
+
+----
+include::../../../src/presentation/FizzBuzzTableComponent.js[]
+----
+
 === Test
 ----
 include::../../../api/test/fizz_buzz/fizz_buzz_list_command_test.rb[]
@@ -203,6 +280,10 @@ include::../../../api/test/fizz_buzz/fizz_buzz_value_command_test.rb[]
 
 ----
 include::../../../api/test/fizz_buzz/fizz_buzz_service_test.rb[]
+----
+
+----
+include::../../../test/FizzBuzzApiService.test.js[]
 ----
 
 
