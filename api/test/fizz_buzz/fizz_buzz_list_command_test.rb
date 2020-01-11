@@ -1,5 +1,5 @@
-require 'minitest/autorun'
 require_relative '../test_helper.rb'
+require 'minitest/autorun'
 require_relative '../../fizz_buzz/application/service/fizz_buzz_list_command.rb'
 require_relative '../../fizz_buzz/domain/type/fizz_buzz_type.rb'
 require_relative '../../fizz_buzz/domain/type/fizz_buzz_type_01.rb'

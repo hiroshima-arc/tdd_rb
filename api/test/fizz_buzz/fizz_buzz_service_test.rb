@@ -1,5 +1,5 @@
-require 'minitest/autorun'
 require_relative '../test_helper.rb'
+require 'minitest/autorun'
 require_relative '../../fizz_buzz/application/service/fizz_buzz_service.rb'
 
 class FizzBuzzServiceTest < Minitest::Test
