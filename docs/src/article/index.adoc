@@ -4,18 +4,319 @@
 
 = テスト駆動開発から始めるRuby入門
 
+これはとあるプログラマがどのような思考を経てテスト駆動開発でアプリケーションを構築していったかを解説した内容である。
+
 == エピソード1
 === TODOリストから始めるテスト駆動開発
 ==== TODOリスト作成
+まずは仕様の確認をして [red]#TODOリスト# を作るところから始める。
+
+[quote, '_テスト駆動開発_ <<tdd>>']
+____
+TODOリスト
+
+何をテストすべきだろうか----着手する前に、必要になりそうなテストをリストに書き出しておこう。
+____
+
+仕様
+
+  1 から 100 までの数をプリントするプログラムを書け。
+  ただし 3 の倍数のときは数の代わりに｢Fizz｣と、5 の倍数のときは｢Buzz｣とプリントし、
+  3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。
+
+仕様をどのようにTODOに分解していくかは https://channel9.msdn.com/Events/de-code/2017/DO03?ocid=player[50 分でわかるテスト駆動開発^] の26分あたりを参考にする。
+
+
+TODOリスト
+
+- [ ] 数を文字列にして返す
+- [ ] 3 の倍数のときは数の代わりに｢Fizz｣と返す
+- [ ] 5 の倍数のときは｢Buzz｣と返す
+- [ ] 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+- [ ] 1 から 100 までの数
+- [ ] プリントする
+
+まず [red]#数を文字列にして返す# 作業に取り掛かりたいのだがまだプログラミング対象としてはサイズが大きいのでより具体的に分割する。
+
+- [ ] 数を文字列にして返す
+  - [ ] 1を渡したら文字列"1"を返す
 
 === テストファーストから始めるテスト駆動開発
-==== 1を渡したら文字列1を返す
-==== 2を渡したら文字列2を返す
+
+１つ目のTODOを片付けるにあたっていきなりプロダクションコードを書くのではなく [red]#テストファースト# [red]#アサートファースト# で進めていく。
+
+[quote, '_テスト駆動開発_ <<tdd>>']
+____
+テストファースト
+
+いつテストを書くべきだろうか----それはテスト対象のコードを書く前だ。
+____
+
+[quote, '_テスト駆動開発_ <<tdd>>']
+____
+アサートファースト
+
+いつアサーションを書くべきだろうか----最初に書こう
+
+* システム構築はどこから始めるべきだろうか。システム構築が終わったらこうなる、というストーリーを語るところからだ。
+* 機能はどこから書き始めるべきだろうか。コードが書き終わったらこのように動く、というテストを書くところからだ。
+* ではテストはどこから書き始めるべきだろうか。それはテストの終わりにパスすべきアサーションを書くところからだ。
+____
+
+今回RubyのテストフレームワークにはMiniTestを採用した。
+
+まず以下の内容のテキストファイルを作成して `main.rb` で保存する。
+
+[source, ruby]
+----
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+
+class HelloTest < Minitest::Test
+  def test_greeting
+    assert_equal 'hello world', greeting
+  end
+end
+
+def greeting
+  'hello world'
+end
+----
+
+テストを実行してみる。
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 9701
+
+  1/1: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00090s
+1 tests, 1 assertions, 0 failures, 0 errors, 0 skips
+----
+
+テストを失敗させてみる。
+
+[source, ruby]
+----
+...
+class HelloTest < Minitest::Test
+  def test_greeting
+    assert_equal 'hello world!!!', greeting
+  end
+end
+...
+----
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 18217
+
+ FAIL["test_greeting", #<Minitest::Reporters::Suite:0x00007f98a59194f8 @name="HelloTest">, 0.0007280000027094502]
+ test_greeting#HelloTest (0.00s)
+        Expected: "hello world!!!"
+          Actual: "hello world"
+        main.rb:11:in `test_greeting'
+
+  1/1: [======================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00101s
+1 tests, 1 assertions, 1 failures, 0 errors, 0 skips
+----
+
+gitリポジトリをセットアップする
+
+[source, bash]
+----
+$ git init
+$ git add .
+$ git commit -m 'セットアップ'
+----
+
+テスティングフレームワークの使い方はこれぐらいにして早速１つ目のTODOをに取り組む。
 
 === 仮実装から始めるテスト駆動開発
-==== 3を渡したら文字列Fizzを返す
+
+==== 1を渡したら文字列1を返す
+
+[source, ruby]
+----
+...
+class FizzBuzzTest < Minitest::Test
+  def test_1を渡したら文字列1を返す
+    # 前準備
+    # 実行
+    # 検証
+    assert_equal '1', FizzBuzz.generate(1)
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 678
+
+ERROR["test_1を渡したら文字列1を返す", #<Minitest::Reporters::Suite:0x00007f956d8b6870 @name="FizzBuzzTest">, 0.0006979999998293351]
+ test_1を渡したら文字列1を返す#FizzBuzzTest (0.00s)
+NameError:         NameError: uninitialized constant FizzBuzzTest::FizzBuzz
+        Did you mean?  FizzBuzzTest
+            main.rb:10:in `test_1を渡したら文字列1を返す'
+
+  1/1: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00201s
+1 tests, 0 assertions, 0 failures, 1 errors, 0 skips
+----
+
+そんなメソッド無いと怒られたのでここでようやくプロダクションコードを書く。
+
+最初のテストを通すため [red]#仮実装# をから始める。
+
+[quote, '_テスト駆動開発_ <<tdd>>']
+____
+仮実装を経て本実装へ
+
+失敗するテストを書いてから、最初に行う実装はどのようなものだろうか----ベタ書きの値を返そう。
+____
+
+
+[source, ruby]
+----
+...
+class FizzBuzzTest < Minitest::Test
+  def test_1を渡したら文字列1を返す
+    # 前準備
+    # 実行
+    # 検証
+    assert_equal '1', FizzBuzz.generate(1)
+  end
+end
+
+class FizzBuzz
+  def self.generate(n)
+    '1'
+  end
+end
+----
+
+テストが通ることを確認する。
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 60122
+
+  1/1: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00094s
+1 tests, 1 assertions, 0 failures, 0 errors, 0 skips
+----
+
+TODOリスト
+
+- [ ] 数を文字列にして返す
+  - [x] 1を渡したら文字列"1"を返す
+
+==== 2を渡したら文字列2を返す
+
+では2を渡したらどうなるだろうか。
+
+TODOリスト
+
+- [ ] 数を文字列にして返す
+  - [x] 1を渡したら文字列"1"を返す
+  - [ ] 2を渡したら文字列"2"を返す
+
+[source, ruby]
+----
+...
+class FizzBuzzTest < Minitest::Test
+  def test_1を渡したら文字列1を返す
+    # 前準備
+    # 実行
+    # 検証
+    assert_equal '1', FizzBuzz.generate(1)
+  end
+
+  def test_2を渡したら文字列2を返す
+    # 前準備
+    # 実行
+    # 検証
+    assert_equal '2', FizzBuzz.generate(2)
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 62350
+
+ FAIL["test_2を渡したら文字列2を返す", #<Minitest::Reporters::Suite:0x00007fa4968938d8 @name="FizzBuzzTest">, 0.0009390000013809185]
+ test_2を渡したら文字列2を返す#FizzBuzzTest (0.00s)
+        Expected: "2"
+          Actual: "1"
+        main.rb:17:in `test_2を渡したら文字列2を返す'
+
+  2/2: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00179s
+2 tests, 2 assertions, 1 failures, 0 errors, 0 skips
+----
+
+引数を文字列にして返すようにする。
+
+[source, ruby]
+----
+...
+class FizzBuzz
+  def self.generate(n)
+    n.to_s
+  end
+end
+----
+
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 42479
+
+  2/2: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00098s
+2 tests, 2 assertions, 0 failures, 0 errors, 0 skips
+----
+
+２つ目のテストによってgenerateメソッドの一般化を実現した。このようなアプローチを [red]#三角測量# という。
+
+[quote, '_テスト駆動開発_<<tdd>>']
+____
+三角測量
+
+テストから最も慎重に一般化を引き出すやり方はどのようなものだろうか----２つ以上の例があるときだけ、一般化を行うようにしよう。
+____
+
+TODOリスト
+
+- [x] 数を文字列にして返す
+  - [x] 1を渡したら文字列"1"を返す
+  - [x] 2を渡したら文字列"2"を返す
+
+ここでコミットして一段落。
+
+[source, bash]
+----
+git commit -m 'test: 数を文字列にして返す'
+----
+
 
 === リファクタリングから始めるテスト駆動開発
+==== 3を渡したら文字列Fizzを返す
 ==== 5を渡したら文字列Buzzを返す
 ==== 15を渡したら文字列FizzBuzzを返す
 ==== 1から100までの数を返す
@@ -50,3 +351,22 @@
 ==== クライアントモジュールの分割
 ==== 本番環境と開発環境で表示を切り返る
 ==== コードレビュー
+
+== 参照
+
+=== 参考サイト
+
+- https://channel9.msdn.com/Events/de-code/2017/DO03?ocid=player[50 分でわかるテスト駆動開発^]
+
+=== 参考図書
+
+++++
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://rcm-fe.amazon-adsystem.com/e/cm?ref=qf_sp_asin_til&t=k2works0c-22&m=amazon&o=9&p=8&l=as1&IS1=1&detail=1&asins=4274217884&linkId=568f25b974af5645e862928a12c354e1&bc1=ffffff&lt1=_top&fc1=333333&lc1=0066c0&bg1=ffffff&f=ifr"></iframe>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://rcm-fe.amazon-adsystem.com/e/cm?ref=qf_sp_asin_til&t=k2works0c-22&m=amazon&o=9&p=8&l=as1&IS1=1&detail=1&asins=427405019X&linkId=08e705a5969e20f5129b4d3cefbcdb15&bc1=000000&lt1=_top&fc1=333333&lc1=0066c0&bg1=ffffff&f=ifr"></iframe>
+++++
+
+[bibliography]
+== References
+
+- [[tdd]] Kent Beck (著), 和田 卓人 (翻訳):
+  オーム社; 新訳版 (2017/10/14)
