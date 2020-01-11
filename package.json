@@ -11,6 +11,7 @@
     "test": "npm-run-all test:*",
     "test:api": "rake test",
     "test:frontend": "cross-env NODE_ENV=test mocha --ui tdd --require @babel/register test/**/*.test.*",
+    "test:frontend:coverage": "nyc --reporter=lcov --reporter=text npm run test:frontend && cat ./coverage/lcov.info | codacy-coverage",
     "test:e2e": "cypress run --spec 'cypress/integration/fizz_buzz/**/*_spec.js'",
     "test:e2e:open": "cypress open",
     "start:asciidocs": "nf start -j docs/Procfile",
@@ -87,6 +88,8 @@
     "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
+    "codacy-coverage": "^3.4.0",
+    "mocha-lcov-reporter": "^1.3.0",
     "node-fetch": "^2.6.0"
   }
 }
