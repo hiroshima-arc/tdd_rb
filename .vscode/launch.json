@@ -21,6 +21,12 @@
             "type": "Ruby",
             "request": "launch",
             "program": "${workspaceRoot}/api/test/fizz_buzz/fizz_buzz_service_test.rb"
+        },
+        {
+            "name": "Debug Local Sample",
+            "type": "Ruby",
+            "request": "launch",
+            "program": "${workspaceRoot}/docs/src/article/code/main.rb"
         }
     ]
 }
