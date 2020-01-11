@@ -404,8 +404,242 @@ git commit -m 'refactor: メソッドの抽出'
 ----
 
 ==== 3を渡したら文字列Fizzを返す
+TODOリスト
+
+- [ ] 3 の倍数のときは数の代わりに｢Fizz｣と返す
+ - [ ] 3を渡したら文字列"Fizz"を返す
+
+[red]#テストファースト# [red]#アサートファースト#
+
+[source, ruby]
+----
+....
+  def test_3を渡したら文字列Fizzを返す
+    assert_equal 'Fizz', @fizzbuzz.generate(3)
+  end
+----
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 7095
+
+ FAIL["test_3を渡したら文字列Fizzを返す", #<Minitest::Reporters::Suite:0x00007fbadf865f50 @name="FizzBuzzTest">, 0.017029999995429534]
+ test_3を渡したら文字列Fizzを返す#FizzBuzzTest (0.02s)
+        --- expected
+        +++ actual
+        @@ -1 +1,3 @@
+        -"Fizz"
+        +# encoding: US-ASCII
+        +#    valid: true
+        +"3"
+        main.rb:19:in `test_3を渡したら文字列Fizzを返す'
+
+  3/3: [======================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.05129s
+3 tests, 3 assertions, 1 failures, 0 errors, 0 skips
+----
+
+明白な実装で片付ける。
+
+[quote, '_テスト駆動開発_<<tdd>>']
+____
+明白な実装
+
+シンプルな操作を実現するにはどうすればいいだろうか----そのまま実装しよう。
+
+仮実装や三角測量は、細かく細かく刻んだ小さなステップだ。だが、ときには実装をどうすべきか既に見えていることが。
+そのまま進もう。例えば先ほどのplusメソッドくらいシンプルなものを仮実装する必要が本当にあるだろうか。
+普通は、その必要はない。頭に浮かんだ明白な実装をただ単にコードに落とすだけだ。もしもレッドバーが出て驚いたら、あらためてもう少し歩幅を小さくしよう。
+____
+
+[source, ruby]
+----
+class FizzBuzz
+  def self.generate(number)
+    number.to_s
+  end
+end
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+    result = 'Fizz' if number % 3 == 0
+    result
+  end
+end
+----
+
+コンパイル・テスト・コミット
+[source, bash]
+----
+$ ruby main.rb
+$ git commit -m 'test: 3を渡したら文字列Buzzを返す'
+----
+
+TODOリスト
+
+- [ ] 3 の倍数のときは数の代わりに｢Fizz｣と返す
+ - [x] 3を渡したら文字列"Fizz"を返す
+
+レッド・グリーン・リファクター
+
+[source, ruby]
+----
+class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+    result = 'Fizz' if number % 3 == 0
+    result
+  end
+end
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+    result = 'Fizz' if number.modulo(3).zero?
+    result
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb
+$ git commit -m 'refactor: アルゴリズムの置き換え'
+----
 
 ==== 5を渡したら文字列Buzzを返す
+TODOリスト
+
+- [x] 3 の倍数のときは数の代わりに｢Fizz｣と返す
+ - [x] 3を渡したら文字列"Fizz"を返す
+- [ ] 5 の倍数のときは｢Buzz｣と返す
+ - [ ] 5を渡したら文字列"Buzz"を返す
+
+コンパイル・テスト・コミット
+
+[source, ruby]
+----
+...
+  def test_5を渡したら文字列Buzzを返す
+    assert_equal 'Buzz', @fizzbuzz.generate(5)
+  end
+end
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+    result = 'Fizz' if number % 3 == 0
+    result
+  end
+end
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+    if number.modulo(3).zero?
+      result = 'Fizz'
+    elsif number.modulo(5).zero?
+      result = 'Buzz'
+    end
+    result
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb
+$ git commit -m 'test: 5を渡したら文字列Buzzを返す'
+----
+
+TODOリスト
+
+- [x] 3 の倍数のときは数の代わりに｢Fizz｣と返す
+ - [x] 3を渡したら文字列"Fizz"を返す
+- [ ] 5 の倍数のときは｢Buzz｣と返す
+ - [x] 5を渡したら文字列"Buzz"を返す
+
+レッド・グリーン・リファクター
+
+[source, ruby]
+----
+class FizzBuzzTest < Minitest::Test
+  def setup
+    @fizzbuzz = FizzBuzz
+  end
+
+  def test_1を渡したら文字列1を返す
+    assert_equal '1', @fizzbuzz.generate(1)
+  end
+
+  def test_2を渡したら文字列2を返す
+    assert_equal '2', @fizzbuzz.generate(2)
+  end
+
+  def test_3を渡したら文字列Fizzを返す
+    assert_equal 'Fizz', @fizzbuzz.generate(3)
+  end
+
+  def test_5を渡したら文字列Buzzを返す
+    assert_equal 'Buzz', @fizzbuzz.generate(5)
+  end
+end
+----
+
+[source, ruby]
+----
+class FizzBuzzTest < Minitest::Test
+  describe 'FizzBuzz' do
+    def setup
+      @fizzbuzz = FizzBuzz
+    end
+
+    describe '三の倍数の場合' do
+      def test_3を渡したら文字列Fizzを返す
+        assert_equal 'Fizz', @fizzbuzz.generate(3)
+      end
+    end
+
+    describe '五の倍数の場合' do
+      def test_5を渡したら文字列Buzzを返す
+        assert_equal 'Buzz', @fizzbuzz.generate(5)
+      end
+    end
+
+    describe 'その他の場合' do
+      def test_1を渡したら文字列1を返す
+        assert_equal '1', @fizzbuzz.generate(1)
+      end
+
+      def test_2を渡したら文字列2を返す
+        assert_equal '2', @fizzbuzz.generate(2)
+      end
+    end
+  end
+end
+----
+
+[source, ruby]
+----
+$ ruby main.rb
+$ git commit -m 'refactor: メソッドのインライン化'
+----
+
 ==== 15を渡したら文字列FizzBuzzを返す
 ==== 1から100までの数を返す
 
