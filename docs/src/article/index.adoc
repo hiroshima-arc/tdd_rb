@@ -641,6 +641,217 @@ $ git commit -m 'refactor: メソッドのインライン化'
 ----
 
 ==== 15を渡したら文字列FizzBuzzを返す
+
+コンパイル・テスト・コミット
+
+[source, ruby]
+----
+...
+    describe '三と五の倍数の場合' do
+      def test_15を渡したら文字列FizzBuzzを返す
+        assert_equal 'FizzBuzz', @fizzbuzz.generate(15)
+      end
+    end
+...
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+    if number.modulo(3).zero?
+      result = 'Fizz'
+    elsif number.modulo(5).zero?
+      result = 'Buzz'
+    elsif number.modulo(15).zero?
+      result = 'FizzBuzz'
+    end
+    result
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 45982
+
+ FAIL["test_15を渡したら文字列FizzBuzzを返す", #<Minitest::Reporters::Suite:0x00007f822c00b2b0 @name="FizzBuzz::三と五の倍数の場合">, 0.00231200000
+0529224]
+ test_15を渡したら文字列FizzBuzzを返す#FizzBuzz::三と五の倍数の場合 (0.00s)
+        Expected: "FizzBuzz"
+          Actual: "Fizz"
+        main.rb:25:in `test_15を渡したら文字列FizzBuzzを返す'
+
+  4/4: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00964s
+4 tests, 4 assertions, 1 failures, 0 errors, 0 skips
+----
+
+Byebugをインストールする
+
+[source, bash]
+----
+$ gem install byebug
+----
+
+Bybugからプログラムを起動する
+
+[source, bash]
+----
+$ byebug main.rb
+
+[1, 10] in /Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/main.rb
+=>  1: require 'minitest/reporters'
+    2: Minitest::Reporters.use!
+    3: require 'minitest/autorun'
+    4:
+    5: class FizzBuzzTest < Minitest::Test
+    6:   describe 'FizzBuzz' do
+    7:     def setup
+    8:       @fizzbuzz = FizzBuzz
+    9:     end
+   10:
+(byebug)
+----
+
+詳しい操作に関しては https://qiita.com/jnchito/items/5aaf323ab4f24b526a61[printデバッグにさようなら！Ruby初心者のためのByebugチュートリアル^] を参照
+
+byebugメソッドでコード内にブレークポイントを埋め込む
+
+[source, ruby]
+----
+...
+    describe '三と五の倍数の場合' do
+      def test_15を渡したら文字列FizzBuzzを返す
+        require 'byebug'
+        byebug
+        assert_equal 'FizzBuzz', @fizzbuzz.generate(15)
+      end
+    end
+...
+----
+
+[source, bash]
+----
+$ byebug main.rb
+
+[1, 10] in /Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/main.rb
+=>  1: require 'minitest/reporters'
+    2: Minitest::Reporters.use!
+    3: require 'minitest/autorun'
+    4:
+    5: class FizzBuzzTest < Minitest::Test
+    6:   describe 'FizzBuzz' do
+    7:     def setup
+    8:       @fizzbuzz = FizzBuzz
+    9:     end
+   10:
+(byebug) c
+   22:
+   23:     describe '三と五の倍数の場合' do
+   24:       def test_15を渡したら文字列FizzBuzzを返す
+   25:         require 'byebug'
+   26:         byebug
+=> 27:         assert_equal 'FizzBuzz', @fizzbuzz.generate(15)
+   28:       end
+   29:     end
+   30:
+   31:     describe 'その他の場合' do
+(byebug) s
+   36:   end
+   37: end
+   38:
+   39: class FizzBuzz
+   40:   def self.generate(number)
+=> 41:     result = number.to_s
+   42:     if number.modulo(3).zero?
+   43:       result = 'Fizz'
+   44:     elsif number.modulo(5).zero?
+   45:       result = 'Buzz'
+(byebug) s
+   37: end
+   38:
+   39: class FizzBuzz
+   40:   def self.generate(number)
+   41:     result = number.to_s
+=> 42:     if number.modulo(3).zero?
+   43:       result = 'Fizz'
+   44:     elsif number.modulo(5).zero?
+   45:       result = 'Buzz'
+   46:     elsif number.modulo(15).zero?
+(byebug)
+   38:
+   39: class FizzBuzz
+   40:   def self.generate(number)
+   41:     result = number.to_s
+   42:     if number.modulo(3).zero?
+=> 43:       result = 'Fizz'
+   44:     elsif number.modulo(5).zero?
+   45:       result = 'Buzz'
+   46:     elsif number.modulo(15).zero?
+   47:       result = 'FizzBuzz'
+(byebug) result
+"15"
+(byebug) q!
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+    if number.modulo(3).zero?
+      result = 'Fizz'
+      if number.modulo(15).zero?
+        result = 'FizzBuzz'
+      end
+    elsif number.modulo(5).zero?
+      result = 'Buzz'
+    end
+    result
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb
+$ git commit -m 'test: 15を渡したら文字列FizzBuzzを返す'
+----
+
+
+レッド・グリーン・リファクター
+
+[source, ruby]
+----
+class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+    if number.modulo(3).zero? && number.modulo(5).zero?
+      result = 'FizzBuzz'
+    elsif number.modulo(3).zero?
+      result = 'Fizz'
+    elsif number.modulo(5).zero?
+      result = 'Buzz'
+    end
+    result
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb
+$ git commit -m 'refactor: アルゴリズムの置き換え:'
+----
+
+
+
+
+
 ==== 1から100までの数を返す
 
 
