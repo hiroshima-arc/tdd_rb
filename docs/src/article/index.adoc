@@ -4,12 +4,13 @@
 
 = テスト駆動開発から始めるRuby入門
 
-これはとあるプログラマがどのような思考を経てテスト駆動開発でアプリケーションを構築していったかを解説した内容である。
+これはとあるプログラマがどのような思考を経てテスト駆動開発でアプリケーションを構築していったかを解説した内容である。読者は隣りに座って話を聞きながらコードを追っかけているイメージで読み進めて言ってください。
 
 == エピソード1
 === TODOリストから始めるテスト駆動開発
-==== TODOリスト作成
-まずは仕様の確認をして [red]#TODOリスト# を作るところから始める。
+==== TODOリスト
+
+アプリケーションを作成するにあたってまず何をすればよいだろうか？私は、まず仕様の確認をして *TODOリスト* を作るところから始めます。
 
 [quote, '_テスト駆動開発_ <<tdd>>']
 ____
@@ -24,26 +25,29 @@ ____
   ただし 3 の倍数のときは数の代わりに｢Fizz｣と、5 の倍数のときは｢Buzz｣とプリントし、
   3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。
 
-仕様をどのようにTODOに分解していくかは https://channel9.msdn.com/Events/de-code/2017/DO03?ocid=player[50 分でわかるテスト駆動開発^] の26分あたりを参考にする。
+仕様の内容をそのままプログラムに落とし込むには少しサイズが大きいようですね。なので最初の作業は仕様をTODOリストに分解する作業から着手することにしましょう。仕様をどのようにTODOに分解していくかは https://channel9.msdn.com/Events/de-code/2017/DO03?ocid=player[50 分でわかるテスト駆動開発^] の26分あたりを参考してください。
 
 
 TODOリスト
 
-- [ ] 数を文字列にして返す
-- [ ] 3 の倍数のときは数の代わりに｢Fizz｣と返す
-- [ ] 5 の倍数のときは｢Buzz｣と返す
-- [ ] 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
-- [ ] 1 から 100 までの数
-- [ ] プリントする
+* 数を文字列にして返す
+* 3 の倍数のときは数の代わりに｢Fizz｣と返す
+* 5 の倍数のときは｢Buzz｣と返す
+* 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+* 1 から 100 までの数
+* プリントする
 
-まず [red]#数を文字列にして返す# 作業に取り掛かりたいのだがまだプログラミング対象としてはサイズが大きいのでより具体的に分割する。
+まず *数を文字列にして返す* 作業に取り掛かりたいのですがまだプログラミング対象としてはサイズが大きいようですね。さらに具体的に分割しましょう。
 
-- [ ] 数を文字列にして返す
-  - [ ] 1を渡したら文字列"1"を返す
+* 数を文字列にして返す
+** 1を渡したら文字列"1"を返す
+
+よし、これならプログラムの対象として実装できそうだ。
 
 === テストファーストから始めるテスト駆動開発
+==== テストファースト
 
-１つ目のTODOを片付けるにあたっていきなりプロダクションコードを書くのではなく [red]#テストファースト# [red]#アサートファースト# で進めていく。
+最初にプログラムする対象を決めたので早速コードを実装・・・ではなく *テストファースト* で作業を進めていきましょう。まずはプログラムを実行するための準備作業を進める必要がありますね。
 
 [quote, '_テスト駆動開発_ <<tdd>>']
 ____
@@ -52,20 +56,16 @@ ____
 いつテストを書くべきだろうか----それはテスト対象のコードを書く前だ。
 ____
 
+では、どうやってテストすればいいでしょうか？テストフレームワークを使って自動テストを書きましょう。
+
 [quote, '_テスト駆動開発_ <<tdd>>']
 ____
-アサートファースト
-
-いつアサーションを書くべきだろうか----最初に書こう
-
-* システム構築はどこから始めるべきだろうか。システム構築が終わったらこうなる、というストーリーを語るところからだ。
-* 機能はどこから書き始めるべきだろうか。コードが書き終わったらこのように動く、というテストを書くところからだ。
-* ではテストはどこから書き始めるべきだろうか。それはテストの終わりにパスすべきアサーションを書くところからだ。
+テスト（名詞）
+どうやってソフトウェアをテストすればよいだろか----自動テストを書こう。
 ____
 
-今回RubyのテストフレームワークにはMiniTestを採用した。
-
-まず以下の内容のテキストファイルを作成して `main.rb` で保存する。
+今回Rubyのテストフレームワークには http://docs.seattlerb.org/minitest/[Minitest] を利用します。Minitestの詳しい使い方に関しては _3.2 Minitestの基本_ <<pruby>>を参照してください。
+では、まず以下の内容のテキストファイルを作成して `main.rb` で保存します。
 
 [source, ruby]
 ----
@@ -84,7 +84,7 @@ def greeting
 end
 ----
 
-テストを実行してみる。
+テストを実行します。
 
 [source, bash]
 ----
@@ -97,7 +97,7 @@ Finished in 0.00090s
 1 tests, 1 assertions, 0 failures, 0 errors, 0 skips
 ----
 
-テストを失敗させてみる。
+テストは成功しましたね。では続いてテストを失敗させてみましょう。`hello world` を `hello world!!!` に書き換えてテストを実行してみるとどうなるでしょうか。
 
 [source, ruby]
 ----
@@ -127,7 +127,7 @@ Finished in 0.00101s
 1 tests, 1 assertions, 1 failures, 0 errors, 0 skips
 ----
 
-gitリポジトリをセットアップする
+オッケー、テスティングフレームワークが正常に読み込まれて動作することが確認できました。続いてバージョン管理システムのセットアップをしておきましょう。なに、バージョン管理システム何それ？だって！？君はセーブしないでロールプレイングゲームをクリアできるのか？できないならまず https://backlog.com/ja/git-tutorial/intro/01/[ここ^] でGitを使ったバージョン管理の基本を学んでおきましょう。
 
 [source, bash]
 ----
@@ -136,11 +136,36 @@ $ git add .
 $ git commit -m 'セットアップ'
 ----
 
-テスティングフレームワークの使い方はこれぐらいにして早速１つ目のTODOをに取り組む。
+これで https://t-wada.hatenablog.jp/entry/clean-code-that-works[ソフトウェア開発の三種の神器^]のうち *バージョン管理* と *テスティング* の準備が整いましたので *TODOリスト* の最初の作業に取り掛かかることができます。
 
-=== 仮実装から始めるテスト駆動開発
+=== アサートファーストから始めるテスト駆動開発
 
-==== 1を渡したら文字列1を返す
+==== 仮実装
+
+TODOリスト
+
+* 数を文字列にして返す
+** 1を渡したら文字列"1"を返す
+* 3 の倍数のときは数の代わりに｢Fizz｣と返す
+* 5 の倍数のときは｢Buzz｣と返す
+* 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+* 1 から 100 までの数
+* プリントする
+
+*1を渡したら文字列"1"を返す* プログラムを `main.rb` に書きましょう。最初に何を書くのかって？ *アサートファースト* です。アサーションを最初に書きましょう。
+
+[quote, '_テスト駆動開発_ <<tdd>>']
+____
+アサートファースト
+
+いつアサーションを書くべきだろうか----最初に書こう
+
+* システム構築はどこから始めるべきだろうか。システム構築が終わったらこうなる、というストーリーを語るところからだ。
+* 機能はどこから書き始めるべきだろうか。コードが書き終わったらこのように動く、というテストを書くところからだ。
+* ではテストはどこから書き始めるべきだろうか。それはテストの終わりにパスすべきアサーションを書くところからだ。
+____
+
+検証コードを書いて。
 
 [source, ruby]
 ----
@@ -154,6 +179,8 @@ class FizzBuzzTest < Minitest::Test
   end
 end
 ----
+
+テストを実行します。
 
 [source, bash]
 ----
@@ -172,9 +199,7 @@ Finished in 0.00201s
 1 tests, 0 assertions, 0 failures, 1 errors, 0 skips
 ----
 
-そんなメソッド無いと怒られたのでここでようやくプロダクションコードを書く。
-
-最初のテストを通すため [red]#仮実装# をから始める。
+`NameError:         NameError: uninitialized constant FizzBuzzTest::FizzBuzz` ...FizzBuzzが存在しない。そうですねまだ作ってないのだから当然ですよね。では `FizzBuzz.generate` メソッドを作りましょう。どんな振る舞いを書けばいいのでしょうか？とりあえず、最初のテストを通すため *仮実装* から始めるとしましょう。
 
 [quote, '_テスト駆動開発_ <<tdd>>']
 ____
@@ -182,7 +207,6 @@ ____
 
 失敗するテストを書いてから、最初に行う実装はどのようなものだろうか----ベタ書きの値を返そう。
 ____
-
 
 [source, ruby]
 ----
@@ -203,7 +227,7 @@ class FizzBuzz
 end
 ----
 
-テストが通ることを確認する。
+テストが通ることを確認します。
 
 [source, bash]
 ----
@@ -216,20 +240,32 @@ Finished in 0.00094s
 1 tests, 1 assertions, 0 failures, 0 errors, 0 skips
 ----
 
-TODOリスト
-
-- [ ] 数を文字列にして返す
-  - [x] 1を渡したら文字列"1"を返す
-
-==== 2を渡したら文字列2を返す
-
-では2を渡したらどうなるだろうか。
+オッケー、これでTODOリストを片付けることができた。え？こんなベタ書きのプログラムでいいの？他に考えないといけないことたくさんあるんじゃない？ばかじゃないの？と思われるかもしませんが、この細かいステップに今しばらくお付き合いいただきたい。
 
 TODOリスト
 
-- [ ] 数を文字列にして返す
-  - [x] 1を渡したら文字列"1"を返す
-  - [ ] 2を渡したら文字列"2"を返す
+* 数を文字列にして返す
+** [line-through]*1を渡したら文字列"1"を返す*
+* 3 の倍数のときは数の代わりに｢Fizz｣と返す
+* 5 の倍数のときは｢Buzz｣と返す
+* 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+* 1 から 100 までの数
+* プリントする
+
+==== 三角測量
+
+1を渡したら文字列1を返すようにできた。では、2を渡したらどうなるでしょうか。
+
+TODOリスト
+
+* 数を文字列にして返す
+** [line-through]_1を渡したら文字列"1"を返す_
+** *2を渡したら文字列"2"を返す*
+* 3 の倍数のときは数の代わりに｢Fizz｣と返す
+* 5 の倍数のときは｢Buzz｣と返す
+* 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+* 1 から 100 までの数
+* プリントする
 
 [source, ruby]
 ----
@@ -268,7 +304,7 @@ Finished in 0.00179s
 2 tests, 2 assertions, 1 failures, 0 errors, 0 skips
 ----
 
-引数を文字列にして返すようにする。
+テストが失敗しました。それは文字列1しか返さないプログラムなのだから当然ですよね。では1が渡されたら文字列1を返し、2を渡したら文字列2を返すようにプログラムを修正しましょう。
 
 [source, ruby]
 ----
@@ -280,6 +316,7 @@ class FizzBuzz
 end
 ----
 
+テストを実行します。
 
 [source, bash]
 ----
@@ -292,7 +329,7 @@ Finished in 0.00098s
 2 tests, 2 assertions, 0 failures, 0 errors, 0 skips
 ----
 
-２つ目のテストによってgenerateメソッドの一般化を実現した。このようなアプローチを [red]#三角測量# という。
+テストが無事通りました。このように２つ目のテストによって `FizzBuzz.generate` メソッドの一般化を実現することができました。このようなアプローチを *三角測量* と言います。
 
 [quote, '_テスト駆動開発_<<tdd>>']
 ____
@@ -303,11 +340,21 @@ ____
 
 TODOリスト
 
-- [x] 数を文字列にして返す
-  - [x] 1を渡したら文字列"1"を返す
-  - [x] 2を渡したら文字列"2"を返す
+* [line-through]*数を文字列にして返す*
+** [line-through]_1を渡したら文字列"1"を返す_
+** [line-through]_2を渡したら文字列"2"を返す_
+* 3 の倍数のときは数の代わりに｢Fizz｣と返す
+* 5 の倍数のときは｢Buzz｣と返す
+* 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+* 1 から 100 までの数
+* プリントする
 
-ここでコミットして一段落。
+たかが *数を文字列にして返す* プログラムを書くのにこんなに細かいステップを踏んでいくの？思ったかもしれません。プログラムを書くということは細かいステップを踏んで行くことなのです。そして、細かいステップを踏み続けることが大切なことなのです。ここでステップの区切りがいいところなので、バージョ管理システムにコミットしておきましょう。
+
+[quote, '_テスト駆動開発_<<tdd>>']
+____
+TDDで大事なのは、細かいステップを踏むことではなく、細かいステップを踏み続けられるようになることだ。
+____
 
 [source, bash]
 ----
@@ -316,50 +363,23 @@ git commit -m 'test: 数を文字列にして返す'
 
 
 === リファクタリングから始めるテスト駆動開発
+==== リファクタリング
 
-変数名の変更を適用する。
+ここでテスト駆動開発の流れを確認しておきましょう。
 
-[source, ruby]
-----
-...
-class FizzBuzz
-  def self.generate(n)
-    n.to_s
-  end
-end
-----
+[quote, '_テスト駆動開発_<<tdd>>']
+____
+1. レッド：動作しない、おそらく最初のうちはコンパイルも通らないテストを１つ書く。
+1. グリーン:そのテストを迅速に動作させる。このステップでは罪を犯してもよい。
+1. リファクタリング:テストを通すために発生した重複をすべて除去する。
 
-[source, ruby]
-----
-...
-class FizzBuzz
-  def self.generate(number)
-    number.to_s
-  end
-end
-----
+レッド・グリーン・リファクタリング。それがTDDのマントラだ。
+____
 
-変更で壊れていないかを確認する。
+コードはグリーンの状態ですが *リファクタリング* を実施していませんね。重複を除去しましょう。
 
-[source, bash]
-----
-$ ruby main.rb
-Started with run options --seed 33356
+テストコードを見てください。テストを実行するにあたって毎回前準備を実行する必要があります。こうした処理は往々にして同じ処理を実行するものなので *メソッドの抽出* を適用して重複を除去しましょう。
 
-  2/2: [======================================================================] 100% Time: 00:00:00, Time: 00:00:00
-
-Finished in 0.00083s
-2 tests, 2 assertions, 0 failures, 0 errors, 0 skips
-----
-
-コミットする。
-
-[source, bash]
-----
-git commit -m 'refactor: 変数名の変更'
-----
-
-テストコードも同様にリファクタリングする。
 [source, ruby]
 ----
 class FizzBuzzTest < Minitest::Test
@@ -379,6 +399,8 @@ class FizzBuzzTest < Minitest::Test
 end
 ----
 
+テストフレームワークでは前処理にあたる部分を実行する機能がサポートされています。Minitestでは `setup` メソッドがそれに当たるので `FizzBuzz` オブジェクトを共有して共通利用できるようにしてみましょう。
+
 [source, ruby]
 ----
 class FizzBuzzTest < Minitest::Test
@@ -396,20 +418,135 @@ class FizzBuzzTest < Minitest::Test
 end
 ----
 
-テストを実行して壊れていないことを確認したらコミットする。
+テストプログラムを変更してしまいましたが壊れていないでしょうか？確認するにはどうすればいいでしょう？
+テストを実行して確認すればいいですよね。
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 33356
+
+  2/2: [======================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00083s
+2 tests, 2 assertions, 0 failures, 0 errors, 0 skips
+----
+
+オッケー、前回コミットした時と同じグリーンの状態のままですよね。区切りが良いのでここでコミットしておきましょう。
 
 [source, bash]
 ----
 git commit -m 'refactor: メソッドの抽出'
 ----
 
-==== 3を渡したら文字列Fizzを返す
+
+もう一つ気になるところがあります。
+
+[source, ruby]
+----
+...
+class FizzBuzz
+  def self.generate(n)
+    n.to_s
+  end
+end
+----
+
+引数の名前が `n` ですね。コンピュータにはわかるかもしれませんが人間が読むコードとして少し不親切です。特にRubyのような動的言語では型が明確に定義されないのでなおさらです。ここは *変数名の変更* を適用して人間にとって読みやすいコードにリファクタリングしましょう。
+
+[source, ruby]
+----
+...
+class FizzBuzz
+  def self.generate(number)
+    number.to_s
+  end
+end
+----
+
+続いて、変更で壊れていないかを確認します。
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 33356
+
+  2/2: [======================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00083s
+2 tests, 2 assertions, 0 failures, 0 errors, 0 skips
+----
+
+
+オッケー、この時点でテストコードとプロダクトコードを変更しましたがその変更はすでに作成した自動テストによって壊れていないことを簡単に確認することができました。え、こんな簡単な変更でプログラムが壊れるわけないじゃん。ですって。残念ながら私は絶対ミスしない完璧な人間ではないし、どちらかといえばおっちょこちょいなプログラマなのでこんな間違いも普通にやらかします。
+
+[source, ruby]
+----
+...
+class FizzBuzz
+  def self.generate(number)
+    numbr.to_s
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 59453
+
+ERROR["test_1を渡したら文字列1を返す", #<Minitest::Reporters::Suite:0x0000564f6b1dfc70 @name="FizzBuzzTest">, 0.001019135997921694]
+ test_1を渡したら文字列1を返す#FizzBuzzTest (0.00s)
+NameError:         NameError: undefined local variable or method `numbr' for FizzBuzz:Class
+        Did you mean?  number
+            main.rb:21:in `generate'
+            main.rb:11:in `test_1を渡したら文字列1を返す'
+
+ERROR["test_2を渡したら文字列2を返す", #<Minitest::Reporters::Suite:0x0000564f6b1985f0 @name="FizzBuzzTest">, 0.003952859999117209]
+ test_2を渡したら文字列2を返す#FizzBuzzTest (0.00s)
+NameError:         NameError: undefined local variable or method `numbr' for FizzBuzz:Class
+        Did you mean?  number
+            main.rb:21:in `generate'
+            main.rb:15:in `test_2を渡したら文字列2を返す'
+
+  2/2: [====================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00746s
+2 tests, 0 assertions, 0 failures, 2 errors, 0 skips
+----
+
+そんなドジっ子プログラマでも自動テストと小さなステップのおかげで上記のようなしょうもない間違いもすぐに見つけてすぐに対応することができるのでコードを変更する勇気を持つことができるのです。
+
+
+[quote, '_テスト駆動開発_<<tdd>>']
+____
+テスト駆動開発は、プログラミング中の不安をコントロールする手法だ。
+____
+
+このグリーンの状態にいつでも戻れるようにコミットして次の *TODOリスト* の内容に取り掛かるとしましょう。
+
+[source, bash]
+----
+git commit -m 'refactor: 変数名の変更'
+----
+
+==== 明白な実装
+
+次は *3を渡したら文字列"Fizz"* を返すプログラムに取り組むとしましょう。
+
 TODOリスト
 
-- [ ] 3 の倍数のときは数の代わりに｢Fizz｣と返す
- - [ ] 3を渡したら文字列"Fizz"を返す
+* [line-through]_数を文字列にして返す_
+** [line-through]_1を渡したら文字列"1"を返す_
+** [line-through]_2を渡したら文字列"2"を返す_
+* 3 の倍数のときは数の代わりに｢Fizz｣と返す
+** *3を渡したら文字列"Fizz"を返す*
+* 5 の倍数のときは｢Buzz｣と返す
+* 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+* 1 から 100 までの数
+* プリントする
 
-[red]#テストファースト# [red]#アサートファースト#
+まずは、*テストファースト* *アサートファースト* で小さなステップで進めていくんでしたよね。
 
 [source, ruby]
 ----
@@ -441,7 +578,7 @@ Finished in 0.05129s
 3 tests, 3 assertions, 1 failures, 0 errors, 0 skips
 ----
 
-明白な実装で片付ける。
+さて、失敗するテストを書いたので次はテストを通すためのプロダクトコードを書くわけだがどうしましょうか？　*仮実装*　でベタなコードを書きますか？実現したい振る舞いは `もし3を渡したらならば文字列Fizzを返す` です。英語なら `If 3 then result is Fizz` といったところでしょうか。ここは *明白な実装* で片付けた方が早いでしょう。
 
 [quote, '_テスト駆動開発_<<tdd>>']
 ____
@@ -468,13 +605,15 @@ end
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    result = 'Fizz' if number % 3 == 0
+    if number % 3 == 0
+       result = 'Fizz'
+    end
     result
   end
 end
 ----
 
-コンパイル・テスト・コミット
+テストがグリーンになったのでコミットしておきます。
 [source, bash]
 ----
 $ ruby main.rb
@@ -483,17 +622,25 @@ $ git commit -m 'test: 3を渡したら文字列Buzzを返す'
 
 TODOリスト
 
-- [ ] 3 の倍数のときは数の代わりに｢Fizz｣と返す
- - [x] 3を渡したら文字列"Fizz"を返す
-
-レッド・グリーン・リファクター
+* [line-through]_数を文字列にして返す_
+** [line-through]_1を渡したら文字列"1"を返す_
+** [line-through]*2を渡したら文字列"2"を返す*
+* [line-through]_3 の倍数のときは数の代わりに｢Fizz｣と返す_
+** [line-through]_3を渡したら文字列"Fizz"を返す_
+* 5 の倍数のときは｢Buzz｣と返す
+** 5を渡したら文字列"Buzz"を返す
+* 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+* 1 から 100 までの数
+* プリントする
 
 [source, ruby]
 ----
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    result = 'Fizz' if number % 3 == 0
+    if number % 3 == 0
+       result = 'Fizz'
+    end
     result
   end
 end
@@ -504,11 +651,15 @@ end
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    result = 'Fizz' if number.modulo(3).zero?
+    if number.modulo(3).zero? == 0
+       result = 'Fizz'
+    end
     result
   end
 end
 ----
+
+ここでは *アルゴリズムの置き換え* を適用してよりRubyらしい書き方にリファクタリングしてみました。
 
 [source, bash]
 ----
@@ -516,15 +667,20 @@ $ ruby main.rb
 $ git commit -m 'refactor: アルゴリズムの置き換え'
 ----
 
-==== 5を渡したら文字列Buzzを返す
+だんだんとリズムに乗ってきましたここはギアを上げて *明白な実装* で引き続き *TODOリスト* の内容を片付けていきましょう。
+
 TODOリスト
 
-- [x] 3 の倍数のときは数の代わりに｢Fizz｣と返す
- - [x] 3を渡したら文字列"Fizz"を返す
-- [ ] 5 の倍数のときは｢Buzz｣と返す
- - [ ] 5を渡したら文字列"Buzz"を返す
-
-コンパイル・テスト・コミット
+* [line-through]_数を文字列にして返す_
+** [line-through]_1を渡したら文字列"1"を返す_
+** [line-through]_2を渡したら文字列"2"を返す_
+* [line-through]_3の倍数のときは数の代わりに｢Fizz｣と返す_
+** [line-through]_3を渡したら文字列"Fizz"を返す_
+* 5 の倍数のときは｢Buzz｣と返す
+** *5を渡したら文字列"Buzz"を返す*
+* 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+* 1 から 100 までの数
+* プリントする
 
 [source, ruby]
 ----
@@ -569,12 +725,16 @@ $ git commit -m 'test: 5を渡したら文字列Buzzを返す'
 
 TODOリスト
 
-- [x] 3 の倍数のときは数の代わりに｢Fizz｣と返す
- - [x] 3を渡したら文字列"Fizz"を返す
-- [ ] 5 の倍数のときは｢Buzz｣と返す
- - [x] 5を渡したら文字列"Buzz"を返す
-
-レッド・グリーン・リファクター
+* [line-through]_数を文字列にして返す_
+** [line-through]_1を渡したら文字列"1"を返す_
+** [line-through]_2を渡したら文字列"2"を返す_
+* [line-through]_3の倍数のときは数の代わりに｢Fizz｣と返す_
+** [line-through]_3を渡したら文字列"Fizz"を返す_
+* 5 の倍数のときは｢Buzz｣と返す
+** [line-through]*5を渡したら文字列"Buzz"を返す*
+* 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+* 1 から 100 までの数
+* プリントする
 
 [source, ruby]
 ----
@@ -640,9 +800,23 @@ $ ruby main.rb
 $ git commit -m 'refactor: メソッドのインライン化'
 ----
 
-==== 15を渡したら文字列FizzBuzzを返す
+ここでは、*メソッドのインライン化* を適用してしてテストコードを読みやすくすることにしました。自己文書化により動作する仕様書にすることができました。
 
-コンパイル・テスト・コミット
+さあ、*TODOリスト* もだいぶ消化されてきましたね。もうひと踏ん張りです。
+
+TODOリスト
+
+* [line-through]_数を文字列にして返す_
+** [line-through]_1を渡したら文字列"1"を返す_
+** [line-through]_2を渡したら文字列"2"を返す_
+* [line-through]_3の倍数のときは数の代わりに｢Fizz｣と返す_
+** [line-through]_3を渡したら文字列"Fizz"を返す_
+* [line-through]_5 の倍数のときは｢Buzz｣と返す_
+** [line-through]_5を渡したら文字列"Buzz"を返す_
+* 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+** *15を渡したら文字列FizzBuzzを返す*
+* 1 から 100 までの数
+* プリントする
 
 [source, ruby]
 ----
@@ -1871,16 +2045,21 @@ TODOリスト
 === 参考サイト
 
 - https://channel9.msdn.com/Events/de-code/2017/DO03?ocid=player[50 分でわかるテスト駆動開発^]
+- https://backlog.com/ja/git-tutorial/[サルでもわかるGit入門〜バージョン管理を使いこなそう〜^]
+- https://t-wada.hatenablog.jp/entry/clean-code-that-works[動作するきれいなコード: SeleniumConf Tokyo 2019 基調講演文字起こし+α]
 
 === 参考図書
 
 ++++
 <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://rcm-fe.amazon-adsystem.com/e/cm?ref=qf_sp_asin_til&t=k2works0c-22&m=amazon&o=9&p=8&l=as1&IS1=1&detail=1&asins=4274217884&linkId=568f25b974af5645e862928a12c354e1&bc1=ffffff&lt1=_top&fc1=333333&lc1=0066c0&bg1=ffffff&f=ifr"></iframe>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=k2works0c-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4774193976&linkId=fee0d915272172c2e25393dd52537bdc"></iframe>
 <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://rcm-fe.amazon-adsystem.com/e/cm?ref=qf_sp_asin_til&t=k2works0c-22&m=amazon&o=9&p=8&l=as1&IS1=1&detail=1&asins=427405019X&linkId=08e705a5969e20f5129b4d3cefbcdb15&bc1=000000&lt1=_top&fc1=333333&lc1=0066c0&bg1=ffffff&f=ifr"></iframe>
 ++++
 
 [bibliography]
 == References
 
-- [[tdd]] Kent Beck (著), 和田 卓人 (翻訳):
+- テスト駆動開発[[tdd]] Kent Beck (著), 和田 卓人 (翻訳):
   オーム社; 新訳版 (2017/10/14)
+- プロを目指す人のためのRuby入門 言語仕様からテスト駆動開発・デバッグ技法まで (Software Design plusシリーズ)[[pruby]] 伊藤 淳一  (著):
+  技術評論社 (2017/11/25)
