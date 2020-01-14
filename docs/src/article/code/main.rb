@@ -155,3 +155,5 @@ class FizzBuzz
     (1..MAX_NUMBER).map { |i| generate(i) }
   end
 end
+
+puts FizzBuzz.generate_list
