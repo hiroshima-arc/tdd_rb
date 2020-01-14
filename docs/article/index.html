@@ -1969,6 +1969,338 @@ $ git commit -m 'test: 1から100までの数を返す'</code></pre>
 </li>
 </ul>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+
+    if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
+      result = 'FizzBuzz'
+    elsif number.modulo(3).zero?
+      result = 'Fizz'
+    elsif number.modulo(5).zero?
+      result = 'Buzz'
+    end
+
+    result
+  end
+...:</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+
+    return 'FizzBuzz' if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
+    return 'Fizz' if number.modulo(3).zero?
+    return 'Buzz' if number.modulo(5).zero?
+
+    result
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 24552
+
+  9/9: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.04318s
+9 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'refactor: ガード節による入れ子条件の置き換え'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+
+    return 'FizzBuzz' if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
+    return 'Fizz' if number.modulo(3).zero?
+    return 'Buzz' if number.modulo(5).zero?
+
+    result
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  def self.generate(number)
+    return 'FizzBuzz' if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
+    return 'Fizz' if number.modulo(3).zero?
+    return 'Buzz' if number.modulo(5).zero?
+    number.to_s
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+$ git commit -m 'refactor:　変数のインライン化'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  def self.generate(number)
+    return 'FizzBuzz' if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
+    return 'Fizz' if number.modulo(3).zero?
+    return 'Buzz' if number.modulo(5).zero?
+    number.to_s
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  def self.generate(number)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+    number.to_s
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+$ git commit -m 'refactor:　変数の抽出'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+...
+  def self.print_1_to_100
+    result = []
+
+    (1..100).each { |i| result.push(generate(i)) }
+
+    result
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+...
+  def self.generate_list
+    result = []
+
+    (1..100).each { |i| result.push(generate(i)) }
+
+    result
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 23868
+
+ERROR["test_14番目は文字列FizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x00007ff0d918a368 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.0013330000001587905]
+ test_14番目は文字列FizzBuzzを返す#FizzBuzz::1から100までの数を返す (0.00s)
+NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
+            main.rb:37:in `setup'
+
+ERROR["test_4番目は文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00007ff0d985dd48 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.003452000000834232]
+ test_4番目は文字列Buzzを返す#FizzBuzz::1から100までの数を返す (0.00s)
+NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
+            main.rb:37:in `setup'
+
+ERROR["test_はじめは文字列1を返す", #&lt;Minitest::Reporters::Suite:0x00007ff0d91914b0 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.006145000001197332]
+ test_はじめは文字列1を返す#FizzBuzz::1から100までの数を返す (0.01s)
+NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
+            main.rb:37:in `setup'
+
+ERROR["test_2番目は文字列Fizzを返す", #&lt;Minitest::Reporters::Suite:0x00007ff0da87dca0 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.008593000000473694]
+ test_2番目は文字列Fizzを返す#FizzBuzz::1から100までの数を返す (0.01s)
+NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
+            main.rb:37:in `setup'
+
+ERROR["test_最後は文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00007ff0da8597d8 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.045028000000456814]
+ test_最後は文字列Buzzを返す#FizzBuzz::1から100までの数を返す (0.05s)
+NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
+            main.rb:37:in `setup'
+
+  9/9: [======================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.04876s
+9 tests, 4 assertions, 0 failures, 5 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzTest &lt; Minitest::Test
+...
+    describe '1から100までの数を返す' do
+      def setup
+        @result = FizzBuzz.generate_list
+      end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+$ git commit -m 'refactor:　メソッド名の変更'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+...
+  def self.generate_list
+    (1..100).each { |i| result.push(generate(i)) }
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 28039
+
+ERROR["test_14番目は文字列FizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x00007f85a88b5670 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.001374999999825377]
+ test_14番目は文字列FizzBuzzを返す#FizzBuzz::1から100までの数を返す (0.00s)
+NameError:         NameError: undefined local variable or method `result' for FizzBuzz:Class
+            main.rb:75:in `block in generate_list'
+            main.rb:75:in `each'
+            main.rb:75:in `generate_list'
+            main.rb:37:in `setup'
+
+ERROR["test_4番目は文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00007f85a88c70f0 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.002824999999575084]
+ test_4番目は文字列Buzzを返す#FizzBuzz::1から100までの数を返す (0.00s)
+NameError:         NameError: undefined local variable or method `result' for FizzBuzz:Class
+            main.rb:75:in `block in generate_list'
+            main.rb:75:in `each'
+            main.rb:75:in `generate_list'
+            main.rb:37:in `setup'
+
+ERROR["test_2番目は文字列Fizzを返す", #&lt;Minitest::Reporters::Suite:0x00007f859f070540 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.0041270000001532026]
+ test_2番目は文字列Fizzを返す#FizzBuzz::1から100までの数を返す (0.00s)
+NameError:         NameError: undefined local variable or method `result' for FizzBuzz:Class
+            main.rb:75:in `block in generate_list'
+            main.rb:75:in `each'
+            main.rb:75:in `generate_list'
+            main.rb:37:in `setup'
+
+ERROR["test_はじめは文字列1を返す", #&lt;Minitest::Reporters::Suite:0x00007f856f804638 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.03712699999960023]
+ test_はじめは文字列1を返す#FizzBuzz::1から100までの数を返す (0.04s)
+NameError:         NameError: undefined local variable or method `result' for FizzBuzz:Class
+            main.rb:75:in `block in generate_list'
+            main.rb:75:in `each'
+            main.rb:75:in `generate_list'
+            main.rb:37:in `setup'
+
+ERROR["test_最後は文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00007f856e8046e8 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.0393739999999525]
+ test_最後は文字列Buzzを返す#FizzBuzz::1から100までの数を返す (0.04s)
+NameError:         NameError: undefined local variable or method `result' for FizzBuzz:Class
+            main.rb:75:in `block in generate_list'
+            main.rb:75:in `each'
+            main.rb:75:in `generate_list'
+            main.rb:37:in `setup'
+
+  9/9: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.04360s
+9 tests, 4 assertions, 0 failures, 5 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+...
+  def self.generate_list
+    (1..100).each { |i| generate(i) }
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 13473
+
+ FAIL["test_最後は文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00007fbbc50574d0 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.0016329999998561107]
+ test_最後は文字列Buzzを返す#FizzBuzz::1から100までの数を返す (0.00s)
+        Expected: "Buzz"
+          Actual: 100
+        main.rb:45:in `test_最後は文字列Buzzを返す'
+
+ERROR["test_14番目は文字列FizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x00007fbbc50a6a80 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.001825999999709893]
+ test_14番目は文字列FizzBuzzを返す#FizzBuzz::1から100までの数を返す (0.00s)
+NoMethodError:         NoMethodError: undefined method `[]' for 1..100:Range
+            main.rb:57:in `test_14番目は文字列FizzBuzzを返す'
+
+ FAIL["test_はじめは文字列1を返す", #&lt;Minitest::Reporters::Suite:0x00007fbbc50ad330 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.002407999998467858]
+ test_はじめは文字列1を返す#FizzBuzz::1から100までの数を返す (0.00s)
+        Expected: "1"
+          Actual: 1
+        main.rb:41:in `test_はじめは文字列1を返す'
+
+ERROR["test_2番目は文字列Fizzを返す", #&lt;Minitest::Reporters::Suite:0x00007fbba5016c20 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.02718299999833107]
+ test_2番目は文字列Fizzを返す#FizzBuzz::1から100までの数を返す (0.03s)
+NoMethodError:         NoMethodError: undefined method `[]' for 1..100:Range
+            main.rb:49:in `test_2番目は文字列Fizzを返す'
+
+ERROR["test_4番目は文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00007fbba502dbc8 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.027986999999484397]
+ test_4番目は文字列Buzzを返す#FizzBuzz::1から100までの数を返す (0.03s)
+NoMethodError:         NoMethodError: undefined method `[]' for 1..100:Range
+            main.rb:53:in `test_4番目は文字列Buzzを返す'
+
+  9/9: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.02914s
+9 tests, 6 assertions, 2 failures, 3 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+...
+  def self.generate_list
+    (1..100).each { |i| generate(i) }
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 27662
+
+  9/9: [======================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00221s
+9 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'refactor: パイプラインによるループの置き換え'</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2113,7 +2445,7 @@ $ git commit -m 'test: 1から100までの数を返す'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-14 12:17:03 JST
+Last updated 2020-01-14 13:12:44 JST
 </div>
 </div>
 </body>

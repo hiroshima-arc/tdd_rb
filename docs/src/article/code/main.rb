@@ -34,7 +34,7 @@ class FizzBuzzTest < Minitest::Test
 
     describe '1から100までの数を返す' do
       def setup
-        @result = FizzBuzz.print_1_to_100
+        @result = FizzBuzz.generate_list
       end
 
       def test_はじめは文字列1を返す
@@ -62,22 +62,16 @@ end
 
 class FizzBuzz
   def self.generate(number)
-    result = number.to_s
-    if number.modulo(3).zero? && number.modulo(5).zero?
-      result = 'FizzBuzz'
-    elsif number.modulo(3).zero?
-      result = 'Fizz'
-    elsif number.modulo(5).zero?
-      result = 'Buzz'
-    end
-    result
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if is_fizz && is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+    number.to_s
   end
 
-  def self.print_1_to_100
-    result = []
-
-    (1..100).each { |i| result.push(generate(i)) }
-
-    result
+  def self.generate_list
+    (1..100).map { |i| generate(i) }
   end
 end
