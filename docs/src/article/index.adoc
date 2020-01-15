@@ -578,7 +578,7 @@ Finished in 0.05129s
 3 tests, 3 assertions, 1 failures, 0 errors, 0 skips
 ----
 
-さて、失敗するテストを書いたので次はテストを通すためのプロダクトコードを書くわけだがどうしましょうか？　*仮実装*　でベタなコードを書きますか？実現したい振る舞いは `もし3を渡したらならば文字列Fizzを返す` です。英語なら `If 3 then result is Fizz` といったところでしょうか。ここは *明白な実装* で片付けた方が早いでしょう。
+さて、失敗するテストを書いたので次はテストを通すためのプロダクトコードを書くわけだがどうしましょうか？　*仮実装*　でベタなコードを書きますか？実現したい振る舞いは `もし3を渡したらならば文字列Fizzを返す` です。英語なら `If number is 3, result is Fizz` といったところでしょうか。ここは *明白な実装* で片付けた方が早いでしょう。
 
 [quote, '_テスト駆動開発_<<tdd>>']
 ____
@@ -600,6 +600,10 @@ class FizzBuzz
 end
 ----
 
+ここでは, *if文* と *演算子* を使ってみましょう。なんかプログラムっぽくなってきましたね。
+
+`%` は割り算の余りを求める演算子<<pruby>>です。
+
 [source, ruby]
 ----
 class FizzBuzz
@@ -614,6 +618,7 @@ end
 ----
 
 テストがグリーンになったのでコミットしておきます。
+
 [source, bash]
 ----
 $ ruby main.rb
@@ -645,6 +650,8 @@ class FizzBuzz
   end
 end
 ----
+
+レッド・グリーンときたので次はリファクタリングですね。
 
 [source, ruby]
 ----
@@ -696,7 +703,9 @@ end
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    result = 'Fizz' if number % 3 == 0
+    if number.modulo(3).zero? == 0
+       result = 'Fizz'
+    end
     result
   end
 end
@@ -794,13 +803,19 @@ class FizzBuzzTest < Minitest::Test
 end
 ----
 
+ここでは、*メソッドのインライン化* を適用してしてテストコードを読みやすくすることにしました。テストコードの *自己文書化* により動作する仕様書にすることができました。
+
+[quote, '_テスト駆動開発_<<tdd>>']
+____
+混乱せずに読めるテストコードを目指すなら（コンピュータではなく人のためにテストを書いていることを忘れてはならない）、テストメソッドの長さは３行を目指そう。
+____
+
+
 [source, ruby]
 ----
 $ ruby main.rb
 $ git commit -m 'refactor: メソッドのインライン化'
 ----
-
-ここでは、*メソッドのインライン化* を適用してしてテストコードを読みやすくすることにしました。自己文書化により動作する仕様書にすることができました。
 
 さあ、*TODOリスト* もだいぶ消化されてきましたね。もうひと踏ん張りです。
 
@@ -864,14 +879,24 @@ Finished in 0.00964s
 4 tests, 4 assertions, 1 failures, 0 errors, 0 skips
 ----
 
-Byebugをインストールする
+
+おっと、調子に乗って *明白な実装* をしていたら怒られてしまいました。ここは一旦ギアを下げて小さなステップで何が問題かを調べることにしましょう。
+
+[quote, '_テスト駆動開発_<<tdd>>']
+____
+明白な実装はセカンドギアだ。頭で考えていることがうまくコードに落とせないときは、ギアを下げる用意をしよう。
+____
+
+調べるにあたってコードを読んでもいいのですが、問題が発生したのは `15を渡したら文字列FizzBuzzを返す` テストを追加したあとですよね？ということは原因は追加したコードにあるはずですよね？よって、追加部分をデバッグすれば原因をすぐ発見できると思いませんか？
+
+今回はRubyのデバッガとしてByebugをインストールして使うことにしましょう。
 
 [source, bash]
 ----
 $ gem install byebug
 ----
 
-Bybugからプログラムを起動する
+インストールが完了したら早速Bybugからプログラムを起動して動作を確認してみましょう。
 
 [source, bash]
 ----
@@ -891,9 +916,9 @@ $ byebug main.rb
 (byebug)
 ----
 
-詳しい操作に関しては https://qiita.com/jnchito/items/5aaf323ab4f24b526a61[printデバッグにさようなら！Ruby初心者のためのByebugチュートリアル^] を参照
+詳しい操作に関しては https://qiita.com/jnchito/items/5aaf323ab4f24b526a61[printデバッグにさようなら！Ruby初心者のためのByebugチュートリアル^] を参照してください。
 
-byebugメソッドでコード内にブレークポイントを埋め込む
+では、問題の原因を調査するためbyebugメソッドでコード内にブレークポイントを埋め込んでデバッガを実行してみましょう。
 
 [source, ruby]
 ----
@@ -923,6 +948,11 @@ $ byebug main.rb
     8:       @fizzbuzz = FizzBuzz
     9:     end
    10:
+----
+
+ブレークポイントまで `continue` コマンドで処理を進めます。`continue` コマンドは `c` でもいけます。
+[source, bash]
+----
 (byebug) c
    22:
    23:     describe '三と五の倍数の場合' do
@@ -934,6 +964,11 @@ $ byebug main.rb
    29:     end
    30:
    31:     describe 'その他の場合' do
+----
+
+続いて問題が発生した `@fizzbuzz.generate(15)` メソッド内にステップインします。
+[source, bash]
+----
 (byebug) s
    36:   end
    37: end
@@ -945,6 +980,11 @@ $ byebug main.rb
    43:       result = 'Fizz'
    44:     elsif number.modulo(5).zero?
    45:       result = 'Buzz'
+----
+
+引数の `number` は `15` だから `elsif number.modulo(15).zero?` の行で判定されるはず・・・
+[source, bash]
+----
 (byebug) s
    37: end
    38:
@@ -963,6 +1003,11 @@ $ byebug main.rb
    41:     result = number.to_s
    42:     if number.modulo(3).zero?
 => 43:       result = 'Fizz'
+----
+
+ファッ！？
+[source, bash]
+----
    44:     elsif number.modulo(5).zero?
    45:       result = 'Buzz'
    46:     elsif number.modulo(15).zero?
@@ -971,6 +1016,8 @@ $ byebug main.rb
 "15"
 (byebug) q!
 ----
+
+15は3で割り切れるから最初の判定で処理されますよね。まあ、常にコードに注意を払って頭の中で処理しながらコードを書いていればこんなミスすることは無いのでしょうが私はドジっ子プログラマなので計算機ができることは計算機にやらせて間違いがあれば原因を調べて解決するようにしています。とりあえず、グリーンにしておきましょう。
 
 [source, ruby]
 ----
@@ -990,14 +1037,42 @@ class FizzBuzz
 end
 ----
 
+テストが通ったのでコミットしておきます。コミットログにバグは残らないのですが作業の合間ではバグを作り込んでいましたよね。でも、テストがすぐに教えてくれるのですぐに修正することができました。結果として私のようなドジっ子プログラマでもバグの無いコードを書いているかのように見えるんですよ。
+
+
+[quote, '_テスト駆動開発_<<tdd>>']
+____
+私はテスト駆動開発を長年行っているので、他人にミスを気づかれる前に、自分の誤りを修正できるだけなのだ。
+____
+
+
 [source, bash]
 ----
 $ ruby main.rb
 $ git commit -m 'test: 15を渡したら文字列FizzBuzzを返す'
 ----
 
+先程のコードですが・・・
 
-レッド・グリーン・リファクター
+[source, ruby]
+----
+class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+    if number.modulo(3).zero?
+      result = 'Fizz'
+      if number.modulo(15).zero?
+        result = 'FizzBuzz'
+      end
+    elsif number.modulo(5).zero?
+      result = 'Buzz'
+    end
+    result
+  end
+end
+----
+
+*if文* の中でさらに *if文* をネストしています。いわゆる *不吉な臭い* がしますね。ここは仕様の文言にある `3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。` にそっと記述にするとともにネストした部分をわかりやすくするために *アルゴリズムの置き換え* を適用したリファクタリングをしましょう。
 
 [source, ruby]
 ----
@@ -1022,32 +1097,56 @@ $ ruby main.rb
 $ git commit -m 'refactor: アルゴリズムの置き換え:'
 ----
 
-==== 1から100までの数を返す
+==== 休憩
 
 TODOリスト
 
-- [x] 3 の倍数のときは数の代わりに｢Fizz｣と返す
- - [x] 3を渡したら文字列"Fizz"を返す
-- [x] 5 の倍数のときは｢Buzz｣と返す
- - [x] 5を渡したら文字列"Buzz"を返す
-- [ ] 1から100までの数を返す
- - [ ] はじめは文字列1を返す
- - [ ] 最後は文字列100を返す
+* [line-through]_数を文字列にして返す_
+** [line-through]_1を渡したら文字列"1"を返す_
+** [line-through]_2を渡したら文字列"2"を返す_
+* [line-through]_3の倍数のときは数の代わりに｢Fizz｣と返す_
+** [line-through]_3を渡したら文字列"Fizz"を返す_
+* [line-through]_5 の倍数のときは｢Buzz｣と返す_
+** [line-through]_5を渡したら文字列"Buzz"を返す_
+* [line-through]_3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す_
+** [line-through]_15を渡したら文字列FizzBuzzを返す_
+* *1 から 100 までの数*
+* プリントする
+
+数を引数にして文字列を返す `FizzBuzz::generate` メソッドはできたみたいですね。次のやることは・・・新しいメソッドを追加する必要がありそうですね。気分を切り替えるため少し休憩を取りましょう。
+
+[quote, '_テスト駆動開発_<<tdd>>']
+____
+疲れたり手詰まりになったりしたときはどうすればいいだろうか----休憩を取ろう。
+____
+
+引き続き *TODOリスト* を片付けたいのですが `1から100までの数` を返すプログラムを書くわけですよね。3を渡したらFizzのような *リテラル* を返すプログラムではなく 1から100までの *配列* を返すようなプログラムにする必要がありそうですね。TODOリストにするとこんな感じですかね。
+
+TODOリスト
+
+* 1 から 100 までの数の配列を返す
+** 配列の初めは文字列の1を返す
+** 配列の最後は文字列の100を返す
+* プリントする
+
+どうやら *配列* を返すプログラムを書かないと行けないようですね。え？ *明白な実装* の実装イメージが沸かないですか。そんな時は *仮実装* から始めるとしましょう。
+
+[quote, '_テスト駆動開発_<<tdd>>']
+____
+何を書くべきかわかっているときは、明白な実装を行う。わからないときには仮実装を行う。まだ正しい実装が見えてこないなら、三角測量を行う。それでもまだわからないなら、シャワーを浴びに行こう。
+____
+
+==== 学習用テスト
+
+*テストファースト* でまずRubyの *配列* の振る舞いを確認していきましょう。Rubyにおいて `配列とは複数のデータをまとめて格納できるオブジェクトのこと`<<pruby>> だそうですね。空の配列を作るには `[]` (配列リテラル)を使えばいいみたいですね。こんな感じかな？
 
 [source, ruby]
 ----
 ...
-    describe '1から100までの数を返す' do
-      def setup
-        @result = FizzBuzz.print_1_to_100
-      end
-
-      def test_はじめは文字列1を返す
-        assert_equal '1', @result.first
-      end
-
-      def test_最後は文字列100を返す
-        assert_equal '100', @result.last
+    describe '1から100までの数の配列を返す' do
+      def test_配列の初めは文字列の1を返す
+        result = []
+        assert_equal '1', result
       end
     end
   end
@@ -1057,31 +1156,32 @@ end
 [source, bash]
 ----
 $ ruby main.rb
-Started with run options --seed 39661
+Started with run options --seed 54004
 
-ERROR["test_はじめは文字列1を返す", #<Minitest::Reporters::Suite:0x00007fef0502c910 @name="FizzBuzz::1から100までの数を返す">, 0.0026019999995696708]
- test_はじめは文字列1を返す#FizzBuzz::1から100までの数を返す (0.00s)
-NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
-            main.rb:37:in `setup'
+ FAIL["test_配列の初めは文字列の1を返す", #<Minitest::Reporters::Suite:0x00007fd0fb93d540 @name="FizzBuzz::1から
+100までの数の配列を返す">, 0.0016740000028221402]
+ test_配列の初めは文字列の1を返す#FizzBuzz::1から100までの数の配列を返す (0.00s)
+        Expected: "1"
+          Actual: []
+        main.rb:37:in `test_配列の初めは文字列の1を返す'
 
-ERROR["test_最後は文字列100を返す", #<Minitest::Reporters::Suite:0x00007fef248b4cd0 @name="FizzBuzz::1から100までの数を返す">, 0.004527000000052794]
- test_最後は文字列100を返す#FizzBuzz::1から100までの数を返す (0.00s)
-NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
-            main.rb:37:in `setup'
+  5/5: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-  6/6: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
-
-Finished in 0.02732s
-6 tests, 4 assertions, 0 failures, 2 errors, 0 skips
+Finished in 0.00602s
+5 tests, 5 assertions, 1 failures, 0 errors, 0 skips
 ----
 
-仮実装
+これは同値ではないのはわかりますね。ではこうしたらどうなるでしょうか？
 
 [source, ruby]
 ----
-...:
-  def self.print_1_to_100
-    [1, 100]
+...
+    describe '1から100までの数の配列を返す' do
+      def test_配列の初めは文字列の1を返す
+        result = ['1']
+        assert_equal '1', result
+      end
+    end
   end
 end
 ----
@@ -1089,31 +1189,453 @@ end
 [source, bash]
 ----
 $ ruby main.rb
-Started with run options --seed 16600
+Started with run options --seed 32701
 
- FAIL["test_はじめは文字列1を返す", #<Minitest::Reporters::Suite:0x00007fe780062588 @name="FizzBuzz::1から100までの数を返す">, 0.002943999999843072]
- test_はじめは文字列1を返す#FizzBuzz::1から100までの数を返す (0.00s)
+ FAIL["test_配列の初めは文字列の1を返す", #<Minitest::Reporters::Suite:0x00007fb36f096030 @name="FizzBuzz::1から100までの数の配列を返す">, 0.0018850000014936086]
+ test_配列の初めは文字列の1を返す#FizzBuzz::1から100までの数の配列を返す (0.00s)
+        Expected: "1"
+          Actual: ["1"]
+        main.rb:38:in `test_配列の初めは文字列の1を返す'
+
+  5/5: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.04383s
+5 tests, 5 assertions, 1 failures, 0 errors, 0 skips
+----
+
+*配列* は `要素の変更、追加、削除`<<pruby>> で内容を色々操作できそうですね。でも、いちいちテストコードを編集してテストを実行させるのも面倒なのでここはデバッガを使ってみましょう。まずブレークポイントを設定して・・・
+
+[source, ruby]
+----
+...
+    describe '1から100までの数の配列を返す' do
+      def test_配列の初めは文字列の1を返す
+        require 'byebug'
+        byebug
+        result = ['1']
+        assert_equal '1', result
+      end
+    end
+  end
+end
+----
+
+デバッガを起動します。
+
+[source, bash]
+----
+$ byebug main.rb 
+
+[1, 10] in /Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/main.rb
+=>  1: require 'minitest/reporters'
+    2: Minitest::Reporters.use!
+    3: require 'minitest/autorun'
+    4: 
+    5: class FizzBuzzTest < Minitest::Test
+    6:   describe 'FizzBuzz' do
+    7:     def setup
+    8:       @fizzbuzz = FizzBuzz
+    9:     end
+   10: 
+(byebug) 
+----
+
+continueでブレークポイントまで進めます。
+
+[source, bash]
+----
+(byebug) c
+Started with run options --seed 15764
+
+  /0: [=---=---=---=---=---=---=---=---=---=---=---=---=---=---=---=---=---=-] 0% Time: 00:00:00,  ETA: ??:??:??
+[34, 43] in /Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/main.rb
+   34: 
+   35:     describe '1から100までの数の配列を返す' do
+   36:       def test_配列の初めは文字列の1を返す
+   37:         require 'byebug'
+   38:         byebug
+=> 39:         result = ['1']
+   40:         assert_equal '1', result
+   41:       end
+   42:     end
+   43:   end
+----
+
+ステップインして `result` の中身を確認してみましょう。
+
+[source, bash]
+----
+(byebug) s
+
+[35, 44] in /Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/main.rb
+   35:     describe '1から100までの数の配列を返す' do
+   36:       def test_配列の初めは文字列の1を返す
+   37:         require 'byebug'
+   38:         byebug
+   39:         result = ['1']
+=> 40:         assert_equal '1', result
+   41:       end
+   42:     end
+   43:   end
+   44: end
+(byebug) result
+["1"]
+----
+
+添字を指定して *配列* の最初の文字列を確認してみましょう。
+
+[source, bash]
+----
+(byebug) result
+["1"]
+(byebug) result[1]
+nil
+----
+
+おや？１番目は"1"では内容ですね。*配列* は0から始まるので1番目を指定するにはこうします。
+
+[source, bash]
+----
+(byebug) result
+["1"]
+(byebug) result[1]
+nil
+(byebug) result[0]
+"1"
+----
+
+続いて、複数の文字列から構成される *配列* を作ってみましょう。
+
+
+[source, bash]
+----
+(byebug) result = ['1','2','3']
+["1", "2", "3"]
+(byebug) result[0]
+"1"
+(byebug) result[2]
+"3"
+----
+
+ちなみにRubyだとこのように表記することができます。直感的でわかりやすくないですか？
+
+[source, bash]
+----
+(byebug) result
+["1", "2", "3"]
+(byebug) result.first
+"1"
+(byebug) result.last
+"3"
+----
+
+*配列* の振る舞いもだいぶイメージできたのでデバッガを終了させてテストコードを少し変えてみましょう。
+
+[source, bash]
+----
+(byebug) q
+Really quit? (y/n) y
+----
+
+[source, ruby]
+----
+...
+    describe '1から100までの数の配列を返す' do
+      def test_配列の初めは文字列の1を返す
+        result = ['1', '2', '3']
+        assert_equal '1', result.first
+        assert_equal '2', result[1]
+        assert_equal '3', result.last
+      end
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 39118
+
+  5/5: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00186s
+5 tests, 7 assertions, 0 failures, 0 errors, 0 skips
+----
+
+`result` に配列を返すメソッドを作れば良さそうですね。とりあえずメソッド名は今の時点ではあまり考えずに・・・
+
+[source, ruby]
+----
+...
+    describe '1から100までの数の配列を返す' do
+      def test_配列の初めは文字列の1を返す
+        result = FizzBuzz.print_1_to_100
+        assert_equal '1', result.first
+      end
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb 
+Started with run options --seed 19247
+
+ERROR["test_配列の初めは文字列の1を返す", #<Minitest::Reporters::Suite:0x00007faaea925058 @name="FizzBuzz::1から
+100までの数の配列を返す">, 0.0017889999980980065]
+ test_配列の初めは文字列の1を返す#FizzBuzz::1から100までの数の配列を返す (0.00s)
+NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
+            main.rb:37:in `test_配列の初めは文字列の1を返す'
+
+  5/5: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00454s
+5 tests, 4 assertions, 0 failures, 1 errors, 0 skips
+----
+
+ここまでくれば *仮実装* はできますね。
+
+[source, ruby]
+----
+class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+    if number.modulo(3).zero? && number.modulo(5).zero?
+      result = 'FizzBuzz'
+    elsif number.modulo(3).zero?
+      result = 'Fizz'
+    elsif number.modulo(5).zero?
+      result = 'Buzz'
+    end
+    result
+  end
+
+  def self.print_1_to_100
+    [1, 2, 3]
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 24564
+
+ FAIL["test_配列の初めは文字列の1を返す", #<Minitest::Reporters::Suite:0x00007fefd8917060 @name="FizzBuzz::1から
+100までの数の配列を返す">, 0.0011969999977736734]
+ test_配列の初めは文字列の1を返す#FizzBuzz::1から100までの数の配列を返す (0.00s)
         Expected: "1"
           Actual: 1
-        main.rb:41:in `test_はじめは文字列1を返す'
+        main.rb:38:in `test_配列の初めは文字列の1を返す'
 
- FAIL["test_最後は文字列100を返す", #<Minitest::Reporters::Suite:0x00007fe780060080 @name="FizzBuzz::1から100までの数を返す">, 0.0032649999993736856]
- test_最後は文字列100を返す#FizzBuzz::1から100までの数を返す (0.00s)
+  5/5: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00209s
+5 tests, 5 assertions, 1 failures, 0 errors, 0 skips
+----
+
+ファッ！？、ああ数字ではなく文字列で返すのだからこうですね。
+
+[source, ruby]
+----
+...
+  def self.print_1_to_100
+    ['1', '2', '3']
+  end
+end
+----
+
+*%記法* を使ってRubyらしく書くならこうですね。
+
+[source, ruby]
+----
+...
+  def self.print_1_to_100
+    %w[1 2 3]
+  end
+end
+----
+
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 42995
+
+  5/5: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00195s
+5 tests, 5 assertions, 0 failures, 0 errors, 0 skips
+----
+
+
+*TODOリスト*　の１つ目を *仮実装* で片づけことができました。ちなみにテストコードを使ってソフトウェアの振る舞いを検証するテクニックを *学習用テスト* と言います。
+
+[quote, '_テスト駆動開発_<<tdd>>']
+____
+チーム外の誰かが書いたソフトウェアのテストを書くのはどのようなときか----そのソフトウェアの新機能を初めて使う際に書いてみよう。
+____
+
+
+TODOリスト
+
+* 1 から 100 までの数の配列を返す
+** [line-through]*配列の初めは文字列の1を返す*
+** 配列の最後は文字列の100を返す
+* プリントする
+
+`FizzBuzz::print_1_to_100` メソッドはまだ最後の要素が検証されていませんね。*三角測量* で小さなステップで進めていくことにしましょう。
+
+[source, ruby]
+----
+...
+    describe '1から100までの数の配列を返す' do
+      def test_配列の初めは文字列の1を返す
+        result = FizzBuzz.print_1_to_100
+        assert_equal '1', result.first
+      end
+
+      def test_配列の最後は文字列の100を返す
+        result = FizzBuzz.print_1_to_100
+        assert_equal '100', result.last
+      end
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb 
+Started with run options --seed 12031
+
+ FAIL["test_配列の最後は文字列の100を返す", #<Minitest::Reporters::Suite:0x00007fccc9828500 @name="FizzBuzz::1から100までの数の配列を返す">, 0.0018540000019129366]
+ test_配列の最後は文字列の100を返す#FizzBuzz::1から100までの数の配列を返す (0.00s)
+        Expected: "100"
+          Actual: "3"
+        main.rb:43:in `test_配列の最後は文字列の100を返す'
+
+  6/6: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.02936s
+----
+
+配列は3までなので想定通りテストは失敗します。さて、1から100までの文字列で構成される配列をどうやって作りましょうか？ 先程は *if文* を使って *条件分岐* をプログラムで実行しました。今回は *繰り返し処理* をプログラムで実行する必要がありそうですね。Rubyの繰り返し処理は `配列のeachメソッドが繰り返し処理処理を実行しいる`<<pruby>> そうですね。やはり実際に動かして振る舞いを確認しないとイメージは難しいですよね。 *学習用テスト* を書いてもいいのですが今回は `irb上で簡単なコードを動かしてみる`<<pruby>>ことで振る舞いを検証してみましょう。まずコマンドラインで `irb` を起動します。
+
+[source, bash]
+----
+$ irb
+irb(main):001:0> 
+----
+
+まず先程デバッガでやった配列の作成をやってみましょう。
+
+[source, bash]
+----
+irb(main):001:0> result = %w[1 2 3]
+=> ["1", "2", "3"]
+----
+
+配列のeachメソッドをつかって配列の中身を繰り返し処理で表示させてみましょう。`p` はプリントメソッドです。
+
+[source, bash]
+----
+irb(main):003:0> result.each do |n| p n end
+"1"
+"2"
+"3"
+=> ["1", "2", "3"]
+----
+
+配列の中身を繰り返し処理で取り出す方法はわかりました。あとは100までの配列をどうやって作ればよいのでしょうか？ `['1','2','3'...'100']` と手書きで作りますか？100件ぐらいならまあできなくもないでしょうが1000件,10000件ならどうでしょうか？無理ですね。計算機にやってもらいましょう、`Rubyには「１から５まで」「文字'a'から文字'e'まで」のように、値の範囲を表すオブジェクトがあります。これを範囲オブジェクトと言います。`<<pruby>>、*範囲(Range)* 使いましょう。
+
+[source, bash]
+----
+irb(main):008:0> (1..5).each do |n| p n end
+1
+2
+3
+4
+5
+=> 1..5
+irb(main):009:0> (1...5).each do |n| p n end
+1
+2
+3
+4
+----
+
+100まで表示したいのでこうですね。
+
+[source, bash]
+----
+irb(main):010:0> (1..100).each do |n| p n end
+1
+2
+3
+..
+99
+100
+=> 1..100
+----
+
+`FizzBuzz::print_1_to_100` メソッドの *明白な実装* イメージができましたか？ `irb` を終了させてプロダクトコードを変更しましょう。
+
+[source, bash]
+----
+irb(main):011:0> exit
+----
+
+[source, ruby]
+----
+...
+  def self.print_1_to_100
+    result = []
+    (1..100).each do |n|
+      result << n
+    end
+    result
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb
+Started with run options --seed 38412
+
+ FAIL["test_配列の初めは文字列の1を返す", #<Minitest::Reporters::Suite:0x00007f858480edf8 @name="FizzBuzz::1から
+100までの数の配列を返す">, 0.0012219999989611097]
+ test_配列の初めは文字列の1を返す#FizzBuzz::1から100までの数の配列を返す (0.00s)
+        Expected: "1"
+          Actual: 1
+        main.rb:38:in `test_配列の初めは文字列の1を返す'
+
+ FAIL["test_配列の最後は文字列の100を返す", #<Minitest::Reporters::Suite:0x00007f858480c8f0 @name="FizzBuzz::1から100までの数の配列を返す">, 0.0014040000023669563]
+ test_配列の最後は文字列の100を返す#FizzBuzz::1から100までの数の配列を返す (0.00s)
         Expected: "100"
           Actual: 100
-        main.rb:45:in `test_最後は文字列100を返す'
+        main.rb:43:in `test_配列の最後は文字列の100を返す'
 
-  6/6: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
+  6/6: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.04183s
+Finished in 0.00218s
 6 tests, 6 assertions, 2 failures, 0 errors, 0 skips
 ----
 
+また、やらかしましたね。文字列に変換しなといけませんね。
+
 [source, ruby]
 ----
 ...
   def self.print_1_to_100
-    %w[1 100]
+    result = []
+    (1..100).each do |n|
+      result << n.to_s
+    end
+    result
   end
 end
 ----
@@ -1121,90 +1643,40 @@ end
 [source, bash]
 ----
 $ ruby main.rb
-Started with run options --seed 9
+Started with run options --seed 40179
 
-  6/6: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
+  6/6: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.03464s
+Finished in 0.00196s
 6 tests, 6 assertions, 0 failures, 0 errors, 0 skips
 ----
 
-[source, ruby]
-----
-...
-  def self.print_1_to_100
-    result = []
-
-    (1..100).each do |i|
-      result.push(i)
-    end
-
-    result
-  end
-end
-----
-
-[source, bash]
-----
-$ ruby main.rb
-Started with run options --seed 15628
-
- FAIL["test_はじめは文字列1を返す", #<Minitest::Reporters::Suite:0x00007fc1ac161ac8 @name="FizzBuzz::1から100までの数を返す">, 0.0013429999999061693]
- test_はじめは文字列1を返す#FizzBuzz::1から100までの数を返す (0.00s)
-        Expected: "1"
-          Actual: 1
-        main.rb:41:in `test_はじめは文字列1を返す'
-
- FAIL["test_最後は文字列100を返す", #<Minitest::Reporters::Suite:0x00007fc1ac08a8e8 @name="FizzBuzz::1から100までの数を返す">, 0.0015599999987898627]
- test_最後は文字列100を返す#FizzBuzz::1から100までの数を返す (0.00s)
-        Expected: "100"
-          Actual: 100
-        main.rb:45:in `test_最後は文字列100を返す'
-
-  6/6: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
-
-Finished in 0.02641s
-6 tests, 6 assertions, 2 failures, 0 errors, 0 skips
-----
+ちなみに、`do ... endを使う代わりに、{}で囲んでもブロックを作れるのです。`<<pruby>> なのでこのように書き換えれます。
 
 [source, ruby]
 ----
 ...
   def self.print_1_to_100
     result = []
-
-    (1..100).each do |i|
-      result.push(i.to_s)
-    end
-
+    (1..100).each { |n| result << n.to_s }
     result
   end
 end
 ----
 
-[source, bash]
-----
-$ ruby main.rb
-Started with run options --seed 54888
-
-  6/6: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
-
-Finished in 0.00289s
-6 tests, 6 assertions, 0 failures, 0 errors, 0 skips
-----
+ここで、一旦コミットしておきましょう。
 
 [source, bash]
 ----
-...
-  def self.print_1_to_100
-    result = []
-
-    (1..100).each { |i| result.push(i.to_s) }
-
-    result
-  end
-end
+$ git commit -m 'test: 1から100までの数を返す'
 ----
+
+TODOリスト
+
+* 1 から 100 までの数の配列を返す
+** [line-through]_配列の初めは文字列の1を返す_
+** [line-through]*配配列の最後は文字列の100を返す*
+* プリントする
 
 TODOリスト
 
