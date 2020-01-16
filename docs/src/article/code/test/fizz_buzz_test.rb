@@ -58,7 +58,7 @@ class FizzBuzzTest < Minitest::Test
         assert_equal 'FizzBuzz', @result[14]
       end
     end
-  end：
+  end
 
   describe '配列や繰り返し処理を理解する' do
     def test_繰り返し処理
