@@ -525,7 +525,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>これはとあるプログラマがどのような思考を経てテスト駆動開発でアプリケーションを構築していったかを解説した内容である。読者は隣りに座って話を聞きながらコードを追っかけているイメージで読み進めて言ってください。</p>
+<p>これはとあるプログラマがどのような思考を経てテスト駆動開発でアプリケーションを構築していったかを解説した内容である。隣りに座って話を聞きながらコードを追いかけているイメージで読み進めてみてださい。</p>
 </div>
 </div>
 </div>
@@ -563,7 +563,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>仕様の内容をそのままプログラムに落とし込むには少しサイズが大きいようですね。なので最初の作業は仕様をTODOリストに分解する作業から着手することにしましょう。仕様をどのようにTODOに分解していくかは <a href="https://channel9.msdn.com/Events/de-code/2017/DO03?ocid=player" target="_blank" rel="noopener">50 分でわかるテスト駆動開発</a> の26分あたりを参考してください。</p>
+<p>仕様の内容をそのままプログラムに落とし込むには少しサイズが大きいようですね。なので最初の作業は仕様をTODOリストに分解する作業から着手することにしましょう。仕様をどのようにTODOに分解していくかは <a href="https://channel9.msdn.com/Events/de-code/2017/DO03?ocid=player" target="_blank" rel="noopener">50 分でわかるテスト駆動開発</a> の26分あたりを参考にしてください。</p>
 </div>
 <div class="paragraph">
 <p>TODOリスト</p>
@@ -591,7 +591,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 <div class="paragraph">
-<p>まず <strong>数を文字列にして返す</strong> 作業に取り掛かりたいのですがまだプログラミング対象としてはサイズが大きいようですね。さらに具体的に分割しましょう。</p>
+<p>まず <code>数を文字列にして返す</code> 作業に取り掛かりたいのですがまだプログラミング対象としてはサイズが大きいようですね。もう少し具体的に分割しましょう。</p>
 </div>
 <div class="ulist">
 <ul>
@@ -608,7 +608,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 <div class="paragraph">
-<p>よし、これならプログラムの対象として実装できそうだ。</p>
+<p>これならプログラムの対象として実装できそうですね。</p>
 </div>
 </div>
 </div>
@@ -617,7 +617,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect3">
 <h4 id="_テストファースト">1.2.1. テストファースト</h4>
 <div class="paragraph">
-<p>最初にプログラムする対象を決めたので早速コードを実装・・・ではなく <strong>テストファースト</strong> で作業を進めていきましょう。まずはプログラムを実行するための準備作業を進める必要がありますね。</p>
+<p>最初にプログラムする対象を決めたので早速プロダクトコードを実装・・・ではなく <strong>テストファースト</strong> で作業を進めていきましょう。まずはプログラムを実行するための準備作業を進める必要がありますね。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -633,7 +633,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>では、どうやってテストすればいいでしょうか？テストフレームワークを使って自動テストを書きましょう。</p>
+<p>では、どうやってテストすればいいでしょうか？テスティングフレームワークを使って自動テストを書きましょう。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -647,7 +647,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>今回Rubyのテストフレームワークには <a href="http://docs.seattlerb.org/minitest/">Minitest</a> を利用します。Minitestの詳しい使い方に関しては <em>3.2 Minitestの基本</em> <a href="#pruby">[pruby]</a>を参照してください。
+<p>今回Rubyのテスティングフレームワークには <a href="http://docs.seattlerb.org/minitest/" target="_blank" rel="noopener">Minitest</a> を利用します。Minitestの詳しい使い方に関しては <em>Minitestの基本</em> <a href="#pruby">[pruby]</a>を参照してください。
 では、まず以下の内容のテキストファイルを作成して <code>main.rb</code> で保存します。</p>
 </div>
 <div class="listingblock">
@@ -713,7 +713,7 @@ Finished in 0.00101s
 </div>
 </div>
 <div class="paragraph">
-<p>オッケー、テスティングフレームワークが正常に読み込まれて動作することが確認できました。続いてバージョン管理システムのセットアップをしておきましょう。なに、バージョン管理システム何それ？だって！？君はセーブしないでロールプレイングゲームをクリアできるのか？できないならまず <a href="https://backlog.com/ja/git-tutorial/intro/01/" target="_blank" rel="noopener">ここ</a> でGitを使ったバージョン管理の基本を学んでおきましょう。</p>
+<p>オッケー、テスティングフレームワークが正常に読み込まれて動作することが確認できました。続いてバージョン管理システムのセットアップをしておきましょう。バージョン管理システム何それ？だって！？君はセーブしないでロールプレイングゲームをクリアできるのか？できないならまず <a href="https://backlog.com/ja/git-tutorial/intro/01/" target="_blank" rel="noopener">ここ</a> でGitを使ったバージョン管理の基本を学んでおきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -723,7 +723,7 @@ $ git commit -m 'セットアップ'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>これで <a href="https://t-wada.hatenablog.jp/entry/clean-code-that-works" target="_blank" rel="noopener">ソフトウェア開発の三種の神器</a>のうち <strong>バージョン管理</strong> と <strong>テスティング</strong> の準備が整いましたので <strong>TODOリスト</strong> の最初の作業に取り掛かかることができます。</p>
+<p>これで <a href="https://t-wada.hatenablog.jp/entry/clean-code-that-works" target="_blank" rel="noopener">ソフトウェア開発の三種の神器</a>のうち <strong>バージョン管理</strong> と <strong>テスティング</strong> の準備が整いましたので <strong>TODOリスト</strong> の最初の作業に取り掛かかるとしましょう。</p>
 </div>
 </div>
 </div>
@@ -741,7 +741,7 @@ $ git commit -m 'セットアップ'</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>1を渡したら文字列"1"を返す</p>
+<p><strong>1を渡したら文字列"1"を返す</strong></p>
 </li>
 </ul>
 </div>
@@ -764,7 +764,7 @@ $ git commit -m 'セットアップ'</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p><strong>1を渡したら文字列"1"を返す</strong> プログラムを <code>main.rb</code> に書きましょう。最初に何を書くのかって？ <strong>アサートファースト</strong> です。アサーションを最初に書きましょう。</p>
+<p><strong>1を渡したら文字列"1"を返す</strong> プログラムを <code>main.rb</code> に書きましょう。最初に何を書くのかって？ アサーションを最初に書きましょう。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -829,7 +829,7 @@ Finished in 0.00201s
 </div>
 </div>
 <div class="paragraph">
-<p><code>NameError:         NameError: uninitialized constant FizzBuzzTest::FizzBuzz</code> &#8230;&#8203;FizzBuzzが存在しない。そうですねまだ作ってないのだから当然ですよね。では <code>FizzBuzz.generate</code> メソッドを作りましょう。どんな振る舞いを書けばいいのでしょうか？とりあえず、最初のテストを通すため <strong>仮実装</strong> から始めるとしましょう。</p>
+<p><code>NameError:         NameError: uninitialized constant FizzBuzzTest::FizzBuzz</code> &#8230;&#8203;FizzBuzzが定義されていない。そうですねまだ作ってないのだから当然ですよね。では <code>FizzBuzz.generate</code> メソッドを作りましょう。どんな振る舞いを書けばいいのでしょうか？とりあえず最初のテストを通すため <strong>仮実装</strong> から始めるとしましょう。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -878,7 +878,7 @@ Finished in 0.00094s
 </div>
 </div>
 <div class="paragraph">
-<p>オッケー、これでTODOリストを片付けることができた。え？こんなベタ書きのプログラムでいいの？他に考えないといけないことたくさんあるんじゃない？ばかじゃないの？と思われるかもしませんが、この細かいステップに今しばらくお付き合いいただきたい。</p>
+<p>オッケー、これでTODOリストを片付けることができました。え？こんなベタ書きのプログラムでいいの？他に考えないといけないことたくさんあるんじゃない？ばかじゃないの？と思われるかもしませんが、この細かいステップに今しばらくお付き合いいただきたい。</p>
 </div>
 <div class="paragraph">
 <p>TODOリスト</p>
@@ -916,7 +916,7 @@ Finished in 0.00094s
 <div class="sect3">
 <h4 id="_三角測量">1.3.2. 三角測量</h4>
 <div class="paragraph">
-<p>1を渡したら文字列1を返すようにできた。では、2を渡したらどうなるでしょうか。</p>
+<p>1を渡したら文字列1を返すようにできました。では、2を渡したらどうなるでしょうか？</p>
 </div>
 <div class="paragraph">
 <p>TODOリスト</p>
@@ -1018,7 +1018,7 @@ Finished in 0.00098s
 </div>
 </div>
 <div class="paragraph">
-<p>テストが無事通りました。このように２つ目のテストによって <code>FizzBuzz.generate</code> メソッドの一般化を実現することができました。このようなアプローチを <strong>三角測量</strong> と言います。</p>
+<p>テストが無事通りました。このように２つ目のテストによって <code>FizzBuzz::generate</code> メソッドの一般化を実現することができました。このようなアプローチを <strong>三角測量</strong> と言います。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -1069,7 +1069,7 @@ Finished in 0.00098s
 </ul>
 </div>
 <div class="paragraph">
-<p>たかが <strong>数を文字列にして返す</strong> プログラムを書くのにこんなに細かいステップを踏んでいくの？思ったかもしれません。プログラムを書くということは細かいステップを踏んで行くことなのです。そして、細かいステップを踏み続けることが大切なことなのです。ここでステップの区切りがいいところなので、バージョ管理システムにコミットしておきましょう。</p>
+<p>たかが <strong>数を文字列にして返す</strong> プログラムを書くのにこんなに細かいステップを踏んでいくの？思ったかもしれません。プログラムを書くということは細かいステップを踏んで行くことなのです。そして、細かいステップを踏み続けることが大切なことなのです。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -1080,6 +1080,9 @@ Finished in 0.00098s
 <div class="attribution">
 &#8212; <em>テスト駆動開発</em><a href="#tdd">[tdd]</a>
 </div>
+</div>
+<div class="paragraph">
+<p>ここで一段落ついたので、これまでの作業内容をバージョ管理システムにコミットしておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1227,7 +1230,7 @@ Finished in 0.00083s
 </div>
 </div>
 <div class="paragraph">
-<p>オッケー、この時点でテストコードとプロダクトコードを変更しましたがその変更はすでに作成した自動テストによって壊れていないことを簡単に確認することができました。え、こんな簡単な変更でプログラムが壊れるわけないじゃん。ですって。残念ながら私は絶対ミスしない完璧な人間ではないし、どちらかといえばおっちょこちょいなプログラマなのでこんな間違いも普通にやらかします。</p>
+<p>オッケー、この時点でテストコードとプロダクトコードを変更しましたがその変更はすでに作成した自動テストによって壊れていないことを簡単に確認することができました。え、こんな簡単な変更でプログラムが壊れるわけないじゃん、ドジっ子なの？ですって。残念ながら私は絶対ミスしない完璧な人間ではないし、どちらかといえば注意力の足りないプログラマなのでこんな間違いも普通にやらかします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1265,7 +1268,7 @@ Finished in 0.00746s
 </div>
 </div>
 <div class="paragraph">
-<p>そんなドジっ子プログラマでも自動テストと小さなステップのおかげで上記のようなしょうもない間違いもすぐに見つけてすぐに対応することができるのでコードを変更する勇気を持つことができるのです。</p>
+<p>最初にプロダクトコードを書いて一通りの機能を作ってから動作を確認する進め方だとこの手の間違いはいつどこで作り込んだのかわからなくなるため原因の調査に時間がかかり残念な経験をしたドジっ子プログラマは変更なんてするもんじゃないと思いコードを変更することに不安を持つようになるでしょう。でも、テスト駆動開発ならそんなドジっ子プログラマでも自動テストと小さなステップのおかげで上記のようなしょうもない間違いもすぐに見つけてすぐに対応することができるのでコードを変更する勇気を持つことができるのです。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -1338,10 +1341,11 @@ Finished in 0.00746s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">....
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
   def test_3を渡したら文字列Fizzを返す
     assert_equal 'Fizz', @fizzbuzz.generate(3)
-  end</code></pre>
+  end
+...</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1367,7 +1371,7 @@ Finished in 0.05129s
 </div>
 </div>
 <div class="paragraph">
-<p>さて、失敗するテストを書いたので次はテストを通すためのプロダクトコードを書くわけだがどうしましょうか？　<strong>仮実装</strong>　でベタなコードを書きますか？実現したい振る舞いは <code>もし3を渡したらならば文字列Fizzを返す</code> です。英語なら <code>If number is 3, result is Fizz</code> といったところでしょうか。ここは <strong>明白な実装</strong> で片付けた方が早いでしょう。</p>
+<p>さて、失敗するテストを書いたので次はテストを通すためのプロダクトコードを書くわけですがどうしましょうか？　<strong>仮実装</strong>　でベタなコードを書きますか？実現したい振る舞いは <code>もし3を渡したらならば文字列Fizzを返す</code> です。英語なら <code>If number is 3, result is Fizz</code> といったところでしょうか。ここは <strong>明白な実装</strong> で片付けた方が早いでしょう。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -1397,7 +1401,7 @@ end</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>ここでは, <strong>if文</strong> と <strong>演算子</strong> を使ってみましょう。なんかプログラムっぽくなってきましたね。</p>
+<p>ここでは <strong>if文</strong> と <strong>演算子</strong> を使ってみましょう。なんかプログラムっぽくなってきましたね。</p>
 </div>
 <div class="paragraph">
 <p><code>%</code> は割り算の余りを求める演算子<a href="#pruby">[pruby]</a>です。</p>
@@ -1512,7 +1516,7 @@ $ git commit -m 'refactor: アルゴリズムの置き換え'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>だんだんとリズムに乗ってきましたここはギアを上げて <strong>明白な実装</strong> で引き続き <strong>TODOリスト</strong> の内容を片付けていきましょう。</p>
+<p>だんだんとリズムに乗ってきました。ここはギアを上げて <strong>明白な実装</strong> で引き続き <strong>TODOリスト</strong> の内容を片付けていきましょう。</p>
 </div>
 <div class="paragraph">
 <p>TODOリスト</p>
@@ -1862,7 +1866,7 @@ Finished in 0.00964s
 </div>
 </div>
 <div class="paragraph">
-<p>インストールが完了したら早速Bybugからプログラムを起動して動作を確認してみましょう。</p>
+<p>インストールが完了したら早速Byebugからプログラムを起動して動作を確認してみましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1994,7 +1998,7 @@ Finished in 0.00964s
 </div>
 </div>
 <div class="paragraph">
-<p>15は3で割り切れるから最初の判定で処理されますよね。まあ、常にコードに注意を払って頭の中で処理しながらコードを書いていればこんなミスすることは無いのでしょうが私はドジっ子プログラマなので計算機ができることは計算機にやらせて間違いがあれば原因を調べて解決するようにしています。とりあえず、グリーンにしておきましょう。</p>
+<p>15は3で割り切れるから最初の判定で処理されますよね。まあ、常にコードに注意を払って頭の中で処理しながらコードを書いていればこんなミスすることは無いのでしょうが私はドジっ子プログラマなので計算機ができることは計算機にやらせて間違いがあれば原因を調べて解決するようにしています。とりあえず、テストを通るようにしておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2017,6 +2021,12 @@ end</code></pre>
 <div class="paragraph">
 <p>テストが通ったのでコミットしておきます。コミットログにバグは残らないのですが作業の合間ではバグを作り込んでいましたよね。でも、テストがすぐに教えてくれるのですぐに修正することができました。結果として私のようなドジっ子プログラマでもバグの無いコードを書いているかのように見えるんですよ。</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+$ git commit -m 'test: 15を渡したら文字列FizzBuzzを返す'</code></pre>
+</div>
+</div>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -2025,12 +2035,6 @@ end</code></pre>
 </blockquote>
 <div class="attribution">
 &#8212; <em>テスト駆動開発</em><a href="#tdd">[tdd]</a>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
-$ git commit -m 'test: 15を渡したら文字列FizzBuzzを返す'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2055,7 +2059,7 @@ end</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><strong>if文</strong> の中でさらに <strong>if文</strong> をネストしています。いわゆる <strong>不吉な臭い</strong> がしますね。ここは仕様の文言にある <code>3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。</code> にそっと記述にするとともにネストした部分をわかりやすくするために <strong>アルゴリズムの置き換え</strong> を適用したリファクタリングをしましょう。</p>
+<p><strong>if文</strong> の中でさらに <strong>if文</strong> をネストしています。いわゆる <strong>コードの不吉な臭い</strong> がしますね。ここは仕様の文言にある <code>3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。</code> に沿った記述にするとともにネストした部分をわかりやすくするために <strong>アルゴリズムの置き換え</strong> を適用してリファクタリングをしましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2073,6 +2077,9 @@ end</code></pre>
   end
 end</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストして、コミットです。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2153,7 +2160,7 @@ $ git commit -m 'refactor: アルゴリズムの置き換え:'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>引き続き <strong>TODOリスト</strong> を片付けたいのですが <code>1から100までの数</code> を返すプログラムを書くわけですよね。3を渡したらFizzのような <strong>リテラル</strong> を返すプログラムではなく 1から100までの <strong>配列</strong> を返すようなプログラムにする必要がありそうですね。TODOリストにするとこんな感じですかね。</p>
+<p>引き続き <strong>TODOリスト</strong> を片付けたいのですが <code>1から100までの数</code> を返すプログラムを書かないといけません。3を渡したらFizzのような <strong>リテラル</strong> を返すプログラムではなく 1から100までの <strong>配列</strong> を返すようなプログラムにする必要がありそうですね。TODOリストにするとこんな感じでしょうか。</p>
 </div>
 <div class="paragraph">
 <p>TODOリスト</p>
@@ -2179,7 +2186,7 @@ $ git commit -m 'refactor: アルゴリズムの置き換え:'</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>どうやら <strong>配列</strong> を返すプログラムを書かないと行けないようですね。え？ <strong>明白な実装</strong> の実装イメージが沸かないですか。そんな時は <strong>仮実装</strong> から始めるとしましょう。</p>
+<p>どうやら <strong>配列</strong> を返すプログラムを書かないと行けないようですね。え？ <strong>明白な実装</strong> の実装イメージがわかない。そんな時は <strong>仮実装</strong> からステップを小さくして始めるとしましょう。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -2195,7 +2202,7 @@ $ git commit -m 'refactor: アルゴリズムの置き換え:'</code></pre>
 <div class="sect3">
 <h4 id="_学習用テスト">1.4.4. 学習用テスト</h4>
 <div class="paragraph">
-<p><strong>テストファースト</strong> でまずRubyの <strong>配列</strong> の振る舞いを確認していきましょう。Rubyにおいて <code>配列とは複数のデータをまとめて格納できるオブジェクトのこと</code><a href="#pruby">[pruby]</a> だそうですね。空の配列を作るには <code>[]</code> (配列リテラル)を使えばいいみたいですね。こんな感じかな？</p>
+<p><strong>テストファースト</strong> でまずRubyの <strong>配列</strong> の振る舞いを確認していきましょう。Rubyにおいて <em>配列とは複数のデータをまとめて格納できるオブジェクトのこと</em><a href="#pruby">[pruby]</a> だそうです。空の配列を作るには <code>[]</code> (配列リテラル)を使えばいいみたいですね。こんな感じかな？</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2262,7 +2269,7 @@ Finished in 0.04383s
 </div>
 </div>
 <div class="paragraph">
-<p><strong>配列</strong> は <code>要素の変更、追加、削除</code><a href="#pruby">[pruby]</a> で内容を色々操作できそうですね。でも、いちいちテストコードを編集してテストを実行させるのも面倒なのでここはデバッガを使ってみましょう。まずブレークポイントを設定して・・・</p>
+<p><strong>配列</strong> は <em>要素の変更、追加、削除</em><a href="#pruby">[pruby]</a> で内容を色々操作できそうですね。でも、いちいちテストコードを編集してテストを実行させるのも面倒なのでここはデバッガを使ってみましょう。まずブレークポイントを設定して・・・</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2356,7 +2363,7 @@ nil</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>おや？１番目は"1"では内容ですね。<strong>配列</strong> は0から始まるので1番目を指定するにはこうします。</p>
+<p>おや？１番目は"1"では無いようですね。<strong>配列</strong> は0から始まるので1番目を指定するにはこうします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2392,6 +2399,27 @@ nil
 "1"
 (byebug) result.last
 "3"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>最後に追加、削除、変更をやってみましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">(byebug) result = ['1','2','3']
+["1", "2", "3"]
+(byebug) result &lt;&lt; '4'
+["1", "2", "3", "4"]
+(byebug) result.push('4')
+["1", "2", "3", "4", "4"]
+(byebug) result.delete_at(3)
+"4"
+(byebug) result
+["1", "2", "3", "4"]
+(byebug) result[2] = '30'
+"30"
+(byebug) result
+["1", "2", "30", "4"]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2505,7 +2533,7 @@ Finished in 0.00209s
 </div>
 </div>
 <div class="paragraph">
-<p>ファッ！？、ああ数字ではなく文字列で返すのだからこうですね。</p>
+<p>ファッ！？、ああ、数字ではなく文字列で返すのだからこうですね。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2544,6 +2572,9 @@ Finished in 0.00195s
 </div>
 <div class="quoteblock">
 <blockquote>
+<div class="paragraph">
+<p>学習用テスト</p>
+</div>
 <div class="paragraph">
 <p>チーム外の誰かが書いたソフトウェアのテストを書くのはどのようなときか----そのソフトウェアの新機能を初めて使う際に書いてみよう。</p>
 </div>
@@ -2613,7 +2644,7 @@ Finished in 0.02936s</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>配列は3までなので想定通りテストは失敗します。さて、1から100までの文字列で構成される配列をどうやって作りましょうか？ 先程は <strong>if文</strong> を使って <strong>条件分岐</strong> をプログラムで実行しました。今回は <strong>繰り返し処理</strong> をプログラムで実行する必要がありそうですね。Rubyの繰り返し処理は <code>配列のeachメソッドが繰り返し処理処理を実行しいる</code><a href="#pruby">[pruby]</a> そうですね。やはり実際に動かして振る舞いを確認しないとイメージは難しいですよね。 <strong>学習用テスト</strong> を書いてもいいのですが今回は <code>irb上で簡単なコードを動かしてみる</code><a href="#pruby">[pruby]</a>ことで振る舞いを検証してみましょう。まずコマンドラインで <code>irb</code> を起動します。</p>
+<p>配列は3までなので想定通りテストは失敗します。さて、1から100までの文字列で構成される配列をどうやって作りましょうか？ 先程は <strong>if文</strong> を使って <strong>条件分岐</strong> をプログラムで実行しました。今回は <strong>繰り返し処理</strong> をプログラムで実行する必要がありそうですね。Rubyの繰り返し処理は <em>配列のeachメソッドが繰り返し処理処理を実行している</em><a href="#pruby">[pruby]</a> そうです。とはいえ、実際に動かして振る舞いを確認しないとイメージは難しいですよね。 <strong>学習用テスト</strong> を書いてもいいのですが今回は <em>irb上で簡単なコードを動かしてみる</em><a href="#pruby">[pruby]</a>ことで振る舞いを検証してみましょう。まずコマンドラインで <code>irb</code> を起動します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2643,7 +2674,7 @@ irb(main):001:0&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>配列の中身を繰り返し処理で取り出す方法はわかりました。あとは100までの配列をどうやって作ればよいのでしょうか？ <code>['1','2','3'&#8230;&#8203;'100']</code> と手書きで作りますか？100件ぐらいならまあできなくもないでしょうが1000件,10000件ならどうでしょうか？無理ですね。計算機にやってもらいましょう、<code>Rubyには「１から５まで」「文字&#8217;a&#8217;から文字&#8217;e&#8217;まで」のように、値の範囲を表すオブジェクトがあります。これを範囲オブジェクトと言います。</code><a href="#pruby">[pruby]</a>、<strong>範囲(Range)</strong> 使いましょう。</p>
+<p>配列の中身を繰り返し処理で取り出す方法はわかりました。あとは100までの配列をどうやって作ればよいのでしょうか？ <code>['1','2','3'&#8230;&#8203;'100']</code> と手書きで作りますか？100件ぐらいならまあできなくもないでしょうが1000件,10000件ならどうでしょうか？無理ですね。計算機にやってもらいましょう、<em>Rubyには「１から５まで」「文字&#8217;a&#8217;から文字&#8217;e&#8217;まで」のように、値の範囲を表すオブジェクトがあります。これを範囲オブジェクトと言います。</em><a href="#pruby">[pruby]</a>、おあつらえ向きの方法が用意されているみたいですね <strong>範囲(Range)</strong> 使いましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2722,7 +2753,7 @@ Finished in 0.00218s
 </div>
 </div>
 <div class="paragraph">
-<p>また、やらかしましたね。文字列に変換しなといけませんね。</p>
+<p>ファッ！？また、やらかしました。文字列に変換しなといけませんね。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2749,7 +2780,7 @@ Finished in 0.00196s
 </div>
 </div>
 <div class="paragraph">
-<p>ちなみに、<code>do &#8230;&#8203; endを使う代わりに、{}で囲んでもブロックを作れる</code><a href="#pruby">[pruby]</a> のでこのように書き換えれます。</p>
+<p>ちなみに、<em>do &#8230;&#8203; endを使う代わりに、{}で囲んでもブロックを作れる</em><a href="#pruby">[pruby]</a> のでこのように書き換えれます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2794,7 +2825,7 @@ end</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>1から100までの数の配列を返すメソッドはできました。しかし、このプログラムは1から100までの数を <code>FizzBuzz::generate</code> した結果を返すのが正しいふるまいですよね。 <strong>TODOリスト</strong> を追加してテストも追加します。</p>
+<p>1から100までの数の配列を返すメソッドはできました。しかし、このプログラムは1から100までの数を <code>FizzBuzz::generate</code> した結果を返すのが正しい振る舞いですよね。 <strong>TODOリスト</strong> を追加してテストも追加します。</p>
 </div>
 <div class="paragraph">
 <p>TODOリスト</p>
@@ -2857,7 +2888,7 @@ Finished in 0.03112s
 </div>
 </div>
 <div class="paragraph">
-<p>ですよね。ここは <strong>繰り返し処理</strong> のなかで <code>FizzBuzz::generate</code> を呼び出すように変更しましょう。</p>
+<p>ですよね、ここは <strong>繰り返し処理</strong> のなかで <code>FizzBuzz::generate</code> を呼び出すように変更しましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3951,7 +3982,7 @@ Finished in 0.00834s
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-15 19:17:05 JST
+Last updated 2020-01-16 11:28:04 JST
 </div>
 </div>
 </body>
