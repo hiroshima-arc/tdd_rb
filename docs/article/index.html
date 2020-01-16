@@ -2985,6 +2985,50 @@ Finished in 0.00217s
 end</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>ついでに <strong>メソッドの抽出</strong> をして重複をなくしておきましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>最初のステップ「準備(Arrange)」は、テスト間で重複しがちだ。それとは対象的に「実行(Act)」「アサート(Assert)」は重複しないことが多い。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>テスト駆動開発</em><a href="#tdd">[tdd]</a>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+    describe '1から100までのFizzBuzzの配列を返す' do
+      def setup
+        @result = FizzBuzz.print_1_to_100
+      end
+
+      def test_配列の初めは文字列の1を返す
+        assert_equal '1', @result.first
+      end
+
+      def test_配列の最後は文字列のBuzzを返す
+        assert_equal 'Buzz', @result.last
+      end
+
+      def test_配列の2番目は文字列のをFizz返す
+        assert_equal 'Fizz', @result[2]
+      end
+
+      def test_配列の4番目は文字列のをBuzz返す
+        assert_equal 'Buzz', @result[4]
+      end
+
+      def test_配列の14番目は文字列のをFizzBuzz返す
+        assert_equal 'FizzBuzz', @result[14]
+      end
+    end
+  end</code></pre>
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
@@ -3141,6 +3185,9 @@ Finished in 0.00307s
 </div>
 <div class="sect3">
 <h4 id="_コードの不吉な臭い">1.4.5. コードの不吉な臭い</h4>
+<div class="paragraph">
+<p>終わりが見えてきましがまだリファクタリングの必要がありそうです。</p>
+</div>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -3151,21 +3198,173 @@ Finished in 0.00307s
 &#8212; <em>テスト駆動開発</em><a href="#tdd">[tdd]</a>
 </div>
 </div>
+<div class="paragraph">
+<p>ここでプロダクトコードを眺めてみましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+    if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
+      result = 'FizzBuzz'
+    elsif number.modulo(3).zero?
+      result = 'Fizz'
+    elsif number.modulo(5).zero?
+      result = 'Buzz'
+    end
+    result
+  end
+
+  def self.print_1_to_100
+    result = []
+    (1..100).each { |n| result &lt;&lt; generate(n) }
+    result
+  end
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>コードの不吉な臭い</strong> が漂ってきませんか？私が感じた部分を解説していきますね。</p>
+</div>
 <div class="sect4">
 <h5 id="_不思議な名前">不思議な名前</h5>
+<div class="paragraph">
+<p>まず、気になったのが <code>print_1_to_100</code> メソッドです。このメソッドはFizzBuzzの配列を返すメソッドであって1から100までを表示するメソッドではありませんよね。ここは <strong>メソッド名の変更</strong> を適用して処理の内容に沿った名前に変更しましょう。え？動いている処理をわざわざ変更してプログラムを壊す危険を犯す必要があるのかですって。確かに自動テストのない状況でドジっ子プログラマがそんなことをすればいずれ残念なことになるでしょうね。でも、すでに自動テストが用意されている今なら自信をもって動いている処理でも変更できますよね。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+  def self.print_1_to_100
+    result = []
+    (1..100).each { |n| result &lt;&lt; generate(n) }
+    result
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+  def self.generate_list
+    result = []
+    (1..100).each { |n| result &lt;&lt; generate(n) }
+    result
+  end
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>変更で壊れていないか確認します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 47414
 
+ERROR["test_配列の初めは文字列の1を返す", #&lt;Minitest::Reporters::Suite:0x00007fe9e6858108 @name="FizzBuzz::1から
+100までのFizzBuzzの配列を返す"&gt;, 0.0023099999998521525]
+ test_配列の初めは文字列の1を返す#FizzBuzz::1から100までのFizzBuzzの配列を返す (0.00s)
+NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
+            main.rb:37:in `setup'
+...
+
+ERROR["test_配列の最後は文字列のBuzzを返す", #&lt;Minitest::Reporters::Suite:0x00007fe9f7097160 @name="FizzBuzz::1から100までのFizzBuzzの配列を返す"&gt;, 0.011574000000109663]
+ test_配列の最後は文字列のBuzzを返す#FizzBuzz::1から100までのFizzBuzzの配列を返す (0.01s)
+NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
+            main.rb:37:in `setup'
+
+  19/19: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01479s
+19 tests, 16 assertions, 0 failures, 5 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>いきなり失敗しちゃいました。でも、焦らずエラーメッセージを読みましょう。
+<code>NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class</code> メソッド名の変更したけどテストは以前のままでしたね。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+    describe '1から100までのFizzBuzzの配列を返す' do
+      def setup
+        @result = FizzBuzz.print_1_to_100
+      end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+    describe '1から100までのFizzBuzzの配列を返す' do
+      def setup
+        @result = FizzBuzz.generate_list
+      end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 54699
+
+  19/19: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00351s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>プロダクトコードは壊れていなことが確認できたので自信を持ってコミットしておきましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'refactor:　メソッド名の変更'</code></pre>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>TDDにおけるテストの考え方は実用主義に貫かれている。TDDにおいてテストは目的を達成するための手段であり、その目的は、大きなる自信を伴うコードだ。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>テスト駆動開発</em><a href="#tdd">[tdd]</a>
+</div>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_長い関数">長い関数</h5>
+<div class="paragraph">
+<p>次に気になったのが <code>generate</code> メソッド内のif分岐処理ですね。こうした条件分岐には仕様変更の際に追加ロジックが新たなif分岐として追加されてどんどん長くなって読みづらいコードに成長する危険性があります。そういうコードは早めに対策を打っておくのが賢明です。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+    if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
+      result = 'FizzBuzz'
+    elsif number.modulo(3).zero?
+      result = 'Fizz'
+    elsif number.modulo(5).zero?
+      result = 'Buzz'
+    end
+    result
+  end
 
+  def self.generate_list
+    result = []
+    (1..100).each { |n| result &lt;&lt; generate(n) }
+    result
+  end
+end</code></pre>
 </div>
-<div class="sect4">
-<h5 id="_ループ">ループ</h5>
-
 </div>
+<div class="paragraph">
+<p>まずコードをもう少し読みやすくしましょう。</p>
 </div>
-<div class="sect3">
-<h4 id="_動作するきれいなコード">1.4.6. 動作するきれいなコード</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
@@ -3182,7 +3381,37 @@ Finished in 0.00307s
 
     result
   end
-...:</code></pre>
+
+  def self.generate_list
+    result = []
+
+    (1..100).each { |n| result &lt;&lt; generate(n) }
+
+    result
+  end
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>処理の単位ごとに区切りをつけました。次はif分岐ですがこうします。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  def self.generate(number)
+    result = number.to_s
+
+    if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
+      result = 'FizzBuzz'
+    elsif number.modulo(3).zero?
+      result = 'Fizz'
+    elsif number.modulo(5).zero?
+      result = 'Buzz'
+    end
+
+    result
+  end
+...</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -3203,19 +3432,30 @@ Finished in 0.00307s
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
-Started with run options --seed 24552
+Started with run options --seed 62095
 
-  9/9: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
+  19/19: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.04318s
-9 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+Finished in 0.00296s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>条件に該当した場合は処理を最後まで進めずその場で終了させる書き方を <strong>ガード節</strong> と言います。このように書くことで追加ロジックが発生しても既存のコードを編集することなく追加することができるので安全に簡単に変更できるコードにすることができます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'refactor: ガード節による入れ子条件の置き換え'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>どの条件にも該当しない場合は数字を文字列してかえすのですが <strong>一時変数</strong> の <code>result</code> は最後でしか使われていませんね。このような場合は <strong>変数のインライン化</strong> を適用しましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"></code></pre>
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
@@ -3246,8 +3486,24 @@ Finished in 0.04318s
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
-$ git commit -m 'refactor:　変数のインライン化'</code></pre>
+Started with run options --seed 2528
+
+  19/19: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00255s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>変更によって壊れていないことが確認できたのでコミットします。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'refactor:　変数のインライン化'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>続いて、FizzBuzzを判定する部分ですがもう少しわかりやすくするため <strong>説明用変数の導入</strong> を適用します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3265,16 +3521,48 @@ $ git commit -m 'refactor:　変数のインライン化'</code></pre>
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
   def self.generate(number)
-    is_fizz = number.modulo(3).zero?
-    is_buzz = number.modulo(5).zero?
+    isFizz = number.modulo(3).zero?
+    isBuzz = number.modulo(5).zero?
 
-    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
-    return 'Fizz' if is_fizz
-    return 'Buzz' if is_buzz
+    return 'FizzBuzz' if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
+    return 'Fizz' if isFizz
+    return 'Buzz' if isBuzz
     number.to_s
   end
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>３で割り切れる場合の結果を <code>isFizz</code> 変数に 5で割り切れる場合の結果 <code>isBuzz</code> 変数に代入して使えるようにしました。FizzBuzzを返す判定部分にもこの説明用変数を使って壊れていないか確認しましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  def self.generate(number)
+    isFizz = number.modulo(3).zero?
+    isBuzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if isFizz &amp;&amp; isBuzz
+    return 'Fizz' if isFizz
+    return 'Buzz' if isBuzz
+    number.to_s
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 4314
+
+  19/19: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00262s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>壊れていませんね。ではコミットしておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3282,15 +3570,37 @@ $ git commit -m 'refactor:　変数のインライン化'</code></pre>
 $ git commit -m 'refactor:　変数の抽出'</code></pre>
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_ループ">ループ</h5>
+<div class="paragraph">
+<p><code>FizzBuzz::generate</code> メソッドのリファクタリングはできたので続いて <code>FizzBuzz::generate_list</code> メソッドを見ていきましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
-...
-  def self.print_1_to_100
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+  def self.generate_list
     result = []
 
-    (1..100).each { |i| result.push(generate(i)) }
+    (1..100).each { |n| result &lt;&lt; generate(n) }
 
+    result
+  end
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>空の <strong>配列</strong> を変数に代入してその変数に <code>FizzBuzz::generate</code> メソッドの結果を追加して返す処理ですがもしこのような変更をしてしまったらどうなるでしょうか？</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+  def self.generate_list
+    result = []
+
+    (1..100).each { |n| result &lt;&lt; generate(n) }
+
+    result = []
     result
   end
 end</code></pre>
@@ -3298,14 +3608,28 @@ end</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 19180
+
+ FAIL["test_配列の14番目は文字列のをFizzBuzz返す", #&lt;Minitest::Reporters::Suite:0x00007fa72805c018 @name="FizzBuzz::1から100までのFizzBuzzの配列を返す"&gt;, 0.0021289999967848416]
+ test_配列の14番目は文字列のをFizzBuzz返す#FizzBuzz::1から100までのFizzBuzzの配列を返す (0.00s)
+        Expected: "FizzBuzz"
+          Actual: nil
+        main.rb:57:in `test_配列の14番目は文字列のをFizzBuzz返す'
 ...
+
+Finished in 0.03063s
+19 tests, 21 assertions, 5 failures, 0 errors, 0 sk</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>せっかく作った配列を初期化して返してしまいましたね。このようにミュータブルな変数はバグを作り込む原因となる傾向があります。まず一時変数を使わないように変更しましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
   def self.generate_list
-    result = []
-
-    (1..100).each { |i| result.push(generate(i)) }
-
-    result
+    return (1..100).each { |n| result &lt;&lt; generate(n) }
   end
 end</code></pre>
 </div>
@@ -3313,62 +3637,30 @@ end</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
-Started with run options --seed 23868
+Started with run options --seed 56578
 
-ERROR["test_14番目は文字列FizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x00007ff0d918a368 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.0013330000001587905]
- test_14番目は文字列FizzBuzzを返す#FizzBuzz::1から100までの数を返す (0.00s)
-NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
+ERROR["test_配列の4番目は文字列のをBuzz返す", #&lt;Minitest::Reporters::Suite:0x00007fe705854af0 @name="FizzBuzz::1から100までのFizzBuzzの配列を返す"&gt;, 0.001975000002857996]
+ test_配列の4番目は文字列のをBuzz返す#FizzBuzz::1から100までのFizzBuzzの配列を返す (0.00s)
+NameError:         NameError: undefined local variable or method `result' for FizzBuzz:Class
+            main.rb:153:in `block in generate_list'
+            main.rb:153:in `each'
+            main.rb:153:in `generate_list'
             main.rb:37:in `setup'
-
-ERROR["test_4番目は文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00007ff0d985dd48 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.003452000000834232]
- test_4番目は文字列Buzzを返す#FizzBuzz::1から100までの数を返す (0.00s)
-NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
-            main.rb:37:in `setup'
-
-ERROR["test_はじめは文字列1を返す", #&lt;Minitest::Reporters::Suite:0x00007ff0d91914b0 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.006145000001197332]
- test_はじめは文字列1を返す#FizzBuzz::1から100までの数を返す (0.01s)
-NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
-            main.rb:37:in `setup'
-
-ERROR["test_2番目は文字列Fizzを返す", #&lt;Minitest::Reporters::Suite:0x00007ff0da87dca0 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.008593000000473694]
- test_2番目は文字列Fizzを返す#FizzBuzz::1から100までの数を返す (0.01s)
-NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
-            main.rb:37:in `setup'
-
-ERROR["test_最後は文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00007ff0da8597d8 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.045028000000456814]
- test_最後は文字列Buzzを返す#FizzBuzz::1から100までの数を返す (0.05s)
-NoMethodError:         NoMethodError: undefined method `print_1_to_100' for FizzBuzz:Class
-            main.rb:37:in `setup'
-
-  9/9: [======================================================================] 100% Time: 00:00:00, Time: 00:00:00
-
-Finished in 0.04876s
-9 tests, 4 assertions, 0 failures, 5 errors, 0 skips</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzTest &lt; Minitest::Test
 ...
-    describe '1から100までの数を返す' do
-      def setup
-        @result = FizzBuzz.generate_list
-      end
-...</code></pre>
+  19/19: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01032s
+19 tests, 16 assertions, 0 failures, 5 errors, 0 skips</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
-$ git commit -m 'refactor:　メソッド名の変更'</code></pre>
-</div>
+<div class="paragraph">
+<p>一時変数 <code>result</code> は使わないので</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
-...
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
   def self.generate_list
-    (1..100).each { |i| result.push(generate(i)) }
+    return (1..100).each { |n| generate(n) }
   end
 end</code></pre>
 </div>
@@ -3376,108 +3668,50 @@ end</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
-Started with run options --seed 28039
+Started with run options --seed 35137
 
-ERROR["test_14番目は文字列FizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x00007f85a88b5670 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.001374999999825377]
- test_14番目は文字列FizzBuzzを返す#FizzBuzz::1から100までの数を返す (0.00s)
-NameError:         NameError: undefined local variable or method `result' for FizzBuzz:Class
-            main.rb:75:in `block in generate_list'
-            main.rb:75:in `each'
-            main.rb:75:in `generate_list'
-            main.rb:37:in `setup'
-
-ERROR["test_4番目は文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00007f85a88c70f0 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.002824999999575084]
- test_4番目は文字列Buzzを返す#FizzBuzz::1から100までの数を返す (0.00s)
-NameError:         NameError: undefined local variable or method `result' for FizzBuzz:Class
-            main.rb:75:in `block in generate_list'
-            main.rb:75:in `each'
-            main.rb:75:in `generate_list'
-            main.rb:37:in `setup'
-
-ERROR["test_2番目は文字列Fizzを返す", #&lt;Minitest::Reporters::Suite:0x00007f859f070540 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.0041270000001532026]
- test_2番目は文字列Fizzを返す#FizzBuzz::1から100までの数を返す (0.00s)
-NameError:         NameError: undefined local variable or method `result' for FizzBuzz:Class
-            main.rb:75:in `block in generate_list'
-            main.rb:75:in `each'
-            main.rb:75:in `generate_list'
-            main.rb:37:in `setup'
-
-ERROR["test_はじめは文字列1を返す", #&lt;Minitest::Reporters::Suite:0x00007f856f804638 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.03712699999960023]
- test_はじめは文字列1を返す#FizzBuzz::1から100までの数を返す (0.04s)
-NameError:         NameError: undefined local variable or method `result' for FizzBuzz:Class
-            main.rb:75:in `block in generate_list'
-            main.rb:75:in `each'
-            main.rb:75:in `generate_list'
-            main.rb:37:in `setup'
-
-ERROR["test_最後は文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00007f856e8046e8 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.0393739999999525]
- test_最後は文字列Buzzを返す#FizzBuzz::1から100までの数を返す (0.04s)
-NameError:         NameError: undefined local variable or method `result' for FizzBuzz:Class
-            main.rb:75:in `block in generate_list'
-            main.rb:75:in `each'
-            main.rb:75:in `generate_list'
-            main.rb:37:in `setup'
-
-  9/9: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
-
-Finished in 0.04360s
-9 tests, 4 assertions, 0 failures, 5 errors, 0 skips</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
-...
-  def self.generate_list
-    (1..100).each { |i| generate(i) }
-  end
-end</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
-Started with run options --seed 13473
-
- FAIL["test_最後は文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00007fbbc50574d0 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.0016329999998561107]
- test_最後は文字列Buzzを返す#FizzBuzz::1から100までの数を返す (0.00s)
-        Expected: "Buzz"
-          Actual: 100
-        main.rb:45:in `test_最後は文字列Buzzを返す'
-
-ERROR["test_14番目は文字列FizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x00007fbbc50a6a80 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.001825999999709893]
- test_14番目は文字列FizzBuzzを返す#FizzBuzz::1から100までの数を返す (0.00s)
+ERROR["test_配列の4番目は文字列のをBuzz返す", #&lt;Minitest::Reporters::Suite:0x00007f7f1384ff78 @name="FizzBuzz::1から100までのFizzBuzzの配列を返す"&gt;, 0.0014560000017809216]
+ test_配列の4番目は文字列のをBuzz返す#FizzBuzz::1から100までのFizzBuzzの配列を返す (0.00s)
 NoMethodError:         NoMethodError: undefined method `[]' for 1..100:Range
-            main.rb:57:in `test_14番目は文字列FizzBuzzを返す'
+            main.rb:53:in `test_配列の4番目は文字列のをBuzz返す'
+...
+  19/19: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
- FAIL["test_はじめは文字列1を返す", #&lt;Minitest::Reporters::Suite:0x00007fbbc50ad330 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.002407999998467858]
- test_はじめは文字列1を返す#FizzBuzz::1から100までの数を返す (0.00s)
-        Expected: "1"
-          Actual: 1
-        main.rb:41:in `test_はじめは文字列1を返す'
-
-ERROR["test_2番目は文字列Fizzを返す", #&lt;Minitest::Reporters::Suite:0x00007fbba5016c20 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.02718299999833107]
- test_2番目は文字列Fizzを返す#FizzBuzz::1から100までの数を返す (0.03s)
-NoMethodError:         NoMethodError: undefined method `[]' for 1..100:Range
-            main.rb:49:in `test_2番目は文字列Fizzを返す'
-
-ERROR["test_4番目は文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00007fbba502dbc8 @name="FizzBuzz::1から100までの数を返す"&gt;, 0.027986999999484397]
- test_4番目は文字列Buzzを返す#FizzBuzz::1から100までの数を返す (0.03s)
-NoMethodError:         NoMethodError: undefined method `[]' for 1..100:Range
-            main.rb:53:in `test_4番目は文字列Buzzを返す'
-
-  9/9: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
-
-Finished in 0.02914s
-9 tests, 6 assertions, 2 failures, 3 errors, 0 skips</code></pre>
+Finished in 0.03285s
+19 tests, 18 assertions, 2 failures, 3 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>結果を配列にして返したいのですが <code>each</code> メソッドでうまくできませんね。ここは <code>map</code> メソッドをつつかましょ。。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+  def self.generate_list
+    return (1..100).map { |n| generate(n) }
+  end
+end</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
-...
+<pre class="highlight"><code class="language-bash" data-lang="bash"> $ ruby main.rb
+Started with run options --seed 44043
+
+  19/19: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00261s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>うまくいきましたね。Rubyではreturn文を省略できるので</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
   def self.generate_list
-    (1..100).each { |i| generate(i) }
+    (1..100).map { |n| generate(n) }
   end
 end</code></pre>
 </div>
@@ -3485,13 +3719,15 @@ end</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
-Started with run options --seed 27662
+Started with run options --seed 7994
 
-  9/9: [======================================================================] 100% Time: 00:00:00, Time: 00:00:00
+  19/19: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00221s
-9 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+Finished in 0.00238s</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><strong>パイプラインによるループの置き換え</strong>　の適用により <code>each</code> メソッドによる繰り返し処理を <code>map</code> メソッドを使ったイミュータブルな処理に変えることができました。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3499,11 +3735,428 @@ Finished in 0.00221s
 </div>
 </div>
 <div class="paragraph">
-<p>学習用テスト</p>
+<p>最大値は100にしていますが変更することもあるのでわかりやすくしておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">  describe '配列や繰り返し処理を理解する' do
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+
+...
+
+  def self.generate_list
+    (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 32408
+
+  19/19: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00241s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストは通りました。でもこのコードは初見の人には分かりづらいのでコメントを入れておきましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+  def self.generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_動作するきれいなコード">1.4.6. 動作するきれいなコード</h4>
+<div class="paragraph">
+<p>TODOリスト</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">数を文字列にして返す</em></p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">1を渡したら文字列"1"を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">2を渡したら文字列"2"を返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em class="line-through">3の倍数のときは数の代わりに｢Fizz｣と返す</em></p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">3を渡したら文字列"Fizz"を返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em class="line-through">5 の倍数のときは｢Buzz｣と返す</em></p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">5を渡したら文字列"Buzz"を返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em class="line-through">13 と 5 両方の倍数の場合には｢FizzBuzz｣と返す</em></p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">15を渡したら文字列FizzBuzzを返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em class="line-through">1 から 100 までのFizzBuzzの配列を返す</em></p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">配列の初めは文字列の1を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">配列の最後は文字列の100を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">配列の2番めは文字列のFizzを返す</em></p>
+</li>
+<li>
+<p><em class="line-through">配列の4番目は文字列のBuzzを返す</em></p>
+</li>
+<li>
+<p><em class="line-through">配列の14番目は文字列のFizzBuzzを返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>プリントする</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>TODOリスト</strong>　も残すところあと１つとなりました。これまで <code>main.rb</code> ファイル１つだけで開発を行ってきましたがリリースするにはもうひと手間かけたほうがいいでしょうね。libディレクトリを作成したあと`main.rb` ファイルを <code>fizz_buzz.rb</code> ファイルに名前を変更してlibディレクトリに移動します。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/
+|--lib/
+    |
+     -- fizz_buzz.rb</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>続いてテストコードをテストディレクトリに保存してプログラム本体とテストコードを分離します</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/
+|--lib/
+    |
+     -- fizz_buzz.rb
+|--test/
+    |
+     -- fizz_buzz_test.rb</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>分離したテストが動くか確認しておきましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby test/fizz_buzz_test.rb
+Started with run options --seed 17134
+
+ERROR["test_1を渡したら文字列1を返す", #&lt;Minitest::Reporters::Suite:0x00007fc07a085060 @name="FizzBuzz::その他の場合"&gt;, 0.001282999997783918]
+ test_1を渡したら文字列1を返す#FizzBuzz::その他の場合 (0.00s)
+NameError:         NameError: uninitialized constant FizzBuzzTest::FizzBuzz
+        Did you mean?  FizzBuzzTest
+            test/fizz_buzz_test.rb:8:in `setup'
+...
+  19/19: [===============================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.03717s
+19 tests, 12 assertions, 0 failures, 9 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストファイルからFizzBuzzクラスを読み込めるようにする必要があります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
+class FizzBuzzTest &lt; Minitest::Test
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby test/fizz_buzz_test.rb
+Started with run options --seed 44438
+
+  19/19: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00279s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>では最後に <code>main.rb</code> ファイルを追加して <code>FizzBuzz:generate_list</code> を呼び出すようにします。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/main.rb
+  |--lib/
+      |
+       -- fizz_buzz.rb
+  |--test/
+      |
+       -- fizz_buzz_test.rb</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">require './lib/fizz_buzz.rb'
+
+puts FizzBuzz.generate_list</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>puts</code> は結果を画面に出力するメソッドです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+1
+2
+Fizz
+4
+Buzz
+Fizz
+7
+8
+Fizz
+Buzz
+11
+Fizz
+13
+14
+FizzBuzz
+...
+Buzz</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>プログラムの完成です。コミットしておきましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'feat: FizzBuzz'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>TODOリスト</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">数を文字列にして返す</em></p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">1を渡したら文字列"1"を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">2を渡したら文字列"2"を返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em class="line-through">3の倍数のときは数の代わりに｢Fizz｣と返す</em></p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">3を渡したら文字列"Fizz"を返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em class="line-through">5 の倍数のときは｢Buzz｣と返す</em></p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">5を渡したら文字列"Buzz"を返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em class="line-through">13 と 5 両方の倍数の場合には｢FizzBuzz｣と返す</em></p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">15を渡したら文字列FizzBuzzを返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em class="line-through">1 から 100 までのFizzBuzzの配列を返す</em></p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">配列の初めは文字列の1を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">配列の最後は文字列の100を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">配列の2番めは文字列のFizzを返す</em></p>
+</li>
+<li>
+<p><em class="line-through">配列の4番目は文字列のBuzzを返す</em></p>
+</li>
+<li>
+<p><em class="line-through">配列の14番目は文字列のFizzBuzzを返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em class="line-through">プリントする</em></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>以下のコードを作成した。</p>
+</div>
+<div class="listingblock">
+<div class="title">/main.rb</div>
+<div class="content">
+<pre>require './lib/fizz_buzz.rb'
+
+puts FizzBuzz.generate_list</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/fizz_buzz.rb</div>
+<div class="content">
+<pre>class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number)
+    isFizz = number.modulo(3).zero?
+    isBuzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if isFizz &amp;&amp; isBuzz
+    return 'Fizz' if isFizz
+    return 'Buzz' if isBuzz
+    number.to_s
+  end
+
+  def self.generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/test/fizz_buzz_test.rb</div>
+<div class="content">
+<pre>require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
+class FizzBuzzTest &lt; Minitest::Test
+  describe 'FizzBuzz' do
+    def setup
+      @fizzbuzz = FizzBuzz
+    end
+
+    describe '三の倍数の場合' do
+      def test_3を渡したら文字列Fizzを返す
+        assert_equal 'Fizz', @fizzbuzz.generate(3)
+      end
+    end
+
+    describe '五の倍数の場合' do
+      def test_5を渡したら文字列Buzzを返す
+        assert_equal 'Buzz', @fizzbuzz.generate(5)
+      end
+    end
+
+    describe '三と五の倍数の場合' do
+      def test_15を渡したら文字列FizzBuzzを返す
+        assert_equal 'FizzBuzz', @fizzbuzz.generate(15)
+      end
+    end
+
+    describe 'その他の場合' do
+      def test_1を渡したら文字列1を返す
+        assert_equal '1', @fizzbuzz.generate(1)
+      end
+    end
+
+    describe '1から100までのFizzBuzzの配列を返す' do
+      def setup
+        @result = FizzBuzz.generate_list
+      end
+
+      def test_配列の初めは文字列の1を返す
+        assert_equal '1', @result.first
+      end
+
+      def test_配列の最後は文字列のBuzzを返す
+        assert_equal 'Buzz', @result.last
+      end
+
+      def test_配列の2番目は文字列のFizzを返す
+        assert_equal 'Fizz', @result[2]
+      end
+
+      def test_配列の4番目は文字列のBuzzを返す
+        assert_equal 'Buzz', @result[4]
+      end
+
+      def test_配列の14番目は文字列のFizzBuzzを返す
+        assert_equal 'FizzBuzz', @result[14]
+      end
+    end
+  end：
+
+  describe '配列や繰り返し処理を理解する' do
     def test_繰り返し処理
       $stdout = StringIO.new
       [1, 2, 3].each { |i| p i * i }
@@ -3579,253 +4232,206 @@ Finished in 0.00221s
       result = [1, 2, 3, 4, 5].reduce { |total, n| total + n }
       assert_equal 15, result
     end
-  end</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'test: 学習用テスト'</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
-...
-  def self.generate_list
-    (1..100).each { |i| generate(i) }
   end
-end</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
-  MAX_NUMBER = 100
-...
-  def self.generate_list
-    (1..MAX_NUMBER).map { |i| generate(i) }
-  end
-end</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
-$ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
+end</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>TODOリスト
-- [x] 数を文字列にして返す
- - [x] 1を渡したら文字列"1"を返す
- - [x] 2を渡したら文字列"2"を返す
-- [x] 3 の倍数のときは数の代わりに｢Fizz｣と返す
- - [x] 3を渡したら文字列"Fizz"を返す
-- [x] 5 の倍数のときは｢Buzz｣と返す
- - [x] 5を渡したら文字列"Buzz"を返す
-- [x] 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
- - [x] 15を渡したら文字列"FizzBuzz"を返す
-- [x] 1 から 100 までの数を返す
-  - [x] はじめは文字列1を返す
-  - [x] 最後は文字列Buzzを返す
-  - [x] 2番目は文字列Fizzを返す
-  - [x] 4番目は文字列Buzzを返す
-  - [x] 14番目は文字列FizzBuzzを返す
-- [ ] プリントする</p>
+<p>どうでしょう、学習用テストは除くとしてプロダクトコードに対して倍以上のテストコードを作っていますよね。テストコードを作らず一発で <code>fizz_buzz.rb</code> のようなコードを書くことはできますか？ たしかに <code><a href="https://www.google.com/search?hl=ja&amp;sxsrf=ACYBGNRC-UwZUT1OMCdicC984bdIxzeG0A%3A1579161119693&amp;source=hp&amp;ei=HxYgXsCsJ4qF0wS3k5e4Ag&amp;q=fizz+buzz+ruby&amp;oq=fizz+buzz+ruby&amp;gs_l=psy-ab.3..0.1369.4308..4714&#8230;&#8203;0.0..0.140.1446.6j8&#8230;&#8203;&#8230;&#8203;0&#8230;&#8203;.1..gws-wiz&#8230;&#8203;&#8230;&#8203;.0i131j0i131i4j0i4j35i39j0i4i3j0i10i203j0i203j0i30j0i10i30j0i8i30.PLE9lL0CGmo&amp;ved=0ahUKEwiAuNHM0YfnAhWKwpQKHbfJBScQ4dUDCAg&amp;uact=5" target="_blank" rel="noopener">fizz buzz ruby</a></code> といったキーワードで検索すればサンプルコードは見つかるのでコピーして同じ振る舞いをするコードをすぐに書くことはできるでしょう。でも仕様が追加された場合はどうしましょう。</p>
 </div>
-<div class="listingblock">
+<div class="paragraph">
+<p>仕様</p>
+</div>
+<div class="literalblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
-  MAX_NUMBER = 100
-
-  def self.generate(number)
-    is_fizz = number.modulo(3).zero?
-    is_buzz = number.modulo(5).zero?
-
-    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
-    return 'Fizz' if is_fizz
-    return 'Buzz' if is_buzz
-    number.to_s
-  end
-
-  def self.generate_list
-    (1..MAX_NUMBER).map { |i| generate(i) }
-  end
-end
-
-puts FizzBuzz.generate_list</code></pre>
+<pre>1 から 100 までの数をプリントするプログラムを書け。
+ただし 3 の倍数のときは数の代わりに｢Fizz｣と、5 の倍数のときは｢Buzz｣とプリントし、
+3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。
+タイプごとに出力を切り替えることができる。
+タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz の場合のみをプリントする。</pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
-1
-2
-Fizz
-4
-Buzz
-Fizz
-7
-8
-Fizz
-Buzz
-11
-Fizz
-13
-14
-FizzBuzz
-16
-17
-Fizz
-19
-Buzz
-Fizz
-22
-23
-Fizz
-Buzz
-26
-Fizz
-28
-29
-FizzBuzz
-31
-32
-Fizz
-34
-Buzz
-Fizz
-37
-38
-Fizz
-Buzz
-41
-Fizz
-43
-44
-FizzBuzz
-46
-47
-Fizz
-49
-Buzz
-Fizz
-52
-53
-Fizz
-Buzz
-56
-Fizz
-58
-59
-FizzBuzz
-61
-62
-Fizz
-64
-Buzz
-Fizz
-67
-68
-Fizz
-Buzz
-71
-Fizz
-73
-74
-FizzBuzz
-76
-77
-Fizz
-79
-Buzz
-Fizz
-82
-83
-Fizz
-Buzz
-86
-Fizz
-88
-89
-FizzBuzz
-91
-92
-Fizz
-94
-Buzz
-Fizz
-97
-98
-Fizz
-Buzz
-Started with run options --seed 48518
-
-  19/19: [====================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
-
-Finished in 0.00834s
-19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'feat: FizzBuzz'</code></pre>
-</div>
+<div class="paragraph">
+<p>また同じようなコードサンプルを探しますか？私ならば <strong>TODOリスト</strong> に以下の項目を追加することから始めます。</p>
 </div>
 <div class="paragraph">
 <p>TODOリスト</p>
 </div>
-<div class="ulist checklist">
-<ul class="checklist">
+<div class="ulist">
+<ul>
 <li>
-<p>&#10003; 数を文字列にして返す</p>
-</li>
+<p>タイプ1の場合</p>
+<div class="ulist">
+<ul>
 <li>
-<p>&#10003; 1を渡したら文字列"1"を返す</p>
-</li>
+<p>数を文字列にして返す</p>
+<div class="ulist">
+<ul>
 <li>
-<p>&#10003; 2を渡したら文字列"2"を返す</p>
-</li>
-<li>
-<p>&#10003; 3 の倍数のときは数の代わりに｢Fizz｣と返す</p>
-</li>
-<li>
-<p>&#10003; 3を渡したら文字列"Fizz"を返す</p>
-</li>
-<li>
-<p>&#10003; 5 の倍数のときは｢Buzz｣と返す</p>
-</li>
-<li>
-<p>&#10003; 5を渡したら文字列"Buzz"を返す</p>
-</li>
-<li>
-<p>&#10003; 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す</p>
-</li>
-<li>
-<p>&#10003; 15を渡したら文字列"FizzBuzz"を返す</p>
-</li>
-<li>
-<p>&#10003; 1 から 100 までの数を返す</p>
-</li>
-<li>
-<p>&#10003; はじめは文字列1を返す</p>
-</li>
-<li>
-<p>&#10003; 最後は文字列Buzzを返す</p>
-</li>
-<li>
-<p>&#10003; 2番目は文字列Fizzを返す</p>
-</li>
-<li>
-<p>&#10003; 4番目は文字列Buzzを返す</p>
-</li>
-<li>
-<p>&#10003; 14番目は文字列FizzBuzzを返す</p>
-</li>
-<li>
-<p>&#10003; プリントする</p>
+<p>1を渡したら文字列"1"を返す</p>
 </li>
 </ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>次に何をやるかはもうわかりますよね。テスト駆動開発とはただ失敗するテストを１つずつ書いて通していくことではありません。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>TDDは分析技法であり、設計技法であり、実際には開発のすべてのアクティビティを構造化する技法なのだ。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>テスト駆動開発</em><a href="#tdd">[tdd]</a>
+</div>
+</div>
+<div class="paragraph">
+<p>ではテストファーストで書けば質の高い良いコードがかけるようになるのでしょうか？以下のコードを見てください。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+
+class FizzBuzz
+  # fizz_buzzメソッドを実行する
+  def self.fizz_buzz(n)
+  a = n.to_s
+    if n % 3 == 0
+      a = 'Fizz'
+    if n % 15 == 0
+      a = 'FizzBuzz'
+    end
+        elsif n % 5 == 0
+          a = 'Buzz'
+        end
+           a
+  end
+
+# 1から100までをプリントする
+  def self.print_1_to_100
+              n = []
+    (1..100).each do |i|
+  n &lt;&lt; fizz_buzz(i)
+                        end
+  n
+  end
+end
+
+class FizzBuzzTest &lt; Minitest::Test
+  describe 'FizzBuzz' do
+    def setup
+      @p = FizzBuzz
+    end
+
+      def test_15を渡したら文字列pを返す
+        assert_equal 'FizzBuzz', FizzBuzz.fizz_buzz(15)
+      end
+      def test_3を渡したら文字列3を返す
+        assert_equal 'Fizz', FizzBuzz.fizz_buzz(3)
+      end
+      def test_1を渡したら文字列1を返す
+        assert_equal '1', @p.fizz_buzz(1)
+      end
+      def test_5を渡したら文字列Buzzを返す
+        assert_equal 'Buzz', FizzBuzz.fizz_buzz(5)
+      end
+
+    describe '1から100までプリントする' do
+  def setup
+    @x = FizzBuzz.print_1_to_100
+  end
+
+  def test_配列の4番目は文字列のをBuzz返す
+    assert_equal 'Buzz', @x[4]
+  end
+
+      def test_配列の初めは文字列の1を返す
+        assert_equal '1', @x.first
+      end
+
+      def test_配列の最後は文字列のBuzzを返す
+        assert_equal 'Buzz', FizzBuzz.print_1_to_100.last
+      end
+
+def test_配列の14番目は文字列のFizzBuzz返す
+  assert_equal 'FizzBuzz', @x[14]
+end
+  def test_配列の2番目は文字列の2を返す
+    assert_equal 'Fizz', @x[2]
+  end
+
+    end
+  end
+end</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby test/fizz_buzz_tfd_test.rb
+Started with run options --seed 43131
+
+  9/9: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00135s
+9 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>プログラムは動くしテストも通ります。でもこれはテスト駆動開発で作られたと言えるでしょうか？質の高い良いコードでしょうか？何が足りないかはわかりますよね。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>テスト駆動開発における質の向上の手段は、リファクタリングによる継続的でインクリメンタルな設計であり、「単なるテストファースト」と「テスト駆動開発」の違いはそこにあります。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>テスト駆動開発 付録C 訳者解説</em><a href="#tdd">[tdd]</a>
+</div>
+</div>
+<div class="paragraph">
+<p>そもそも良いコードは何なのでしょうか？いくつかの見解があるようです。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>TDDは「より良いコードを書けば、よりうまくいく」という素朴で奇妙な仮設によって成り立っている</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>テスト駆動開発</em><a href="#tdd">[tdd]</a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>「動作するきれいなコード」。RonJeffriesのこの簡潔な言葉が、テスト駆動開発(TDD)のゴールだ。動作するきれいなコードはあらゆる意味で価値がある。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>テスト駆動開発</em><a href="#tdd">[tdd]</a>
+</div>
+</div>
+<div class="paragraph">
+<p>少なくともテスト駆動開発のゴールに良いコードがあるということはいえるでしょう。え？どうやったら良いコードを書けるようになるかって？私が教えてほしいのですがただ言えることは他の分野と同様に練習の積み重ねのむこうにあるのだろうということだけです。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>私がかつて発見した、そして多くの人に気づいてもらいたい効果とは、反復可能な振る舞いを規則にまで還元することで、規則の適用は機会的に反復可能になるということだ。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>テスト駆動開発</em><a href="#tdd">[tdd]</a>
+</div>
 </div>
 </div>
 </div>
@@ -3982,7 +4588,7 @@ Finished in 0.00834s
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-16 11:28:04 JST
+Last updated 2020-01-16 18:06:08 JST
 </div>
 </div>
 </body>
