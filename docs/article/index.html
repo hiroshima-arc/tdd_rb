@@ -441,38 +441,34 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_テストファーストから始めるテスト駆動開発">1.2. テストファーストから始めるテスト駆動開発</a>
 <ul class="sectlevel3">
 <li><a href="#_テストファースト">1.2.1. テストファースト</a></li>
+<li><a href="#_仮実装">1.2.2. 仮実装</a></li>
+<li><a href="#_三角測量">1.2.3. 三角測量</a></li>
 </ul>
 </li>
-<li><a href="#_仮実装から始めるテスト駆動開発">1.3. 仮実装から始めるテスト駆動開発</a>
+<li><a href="#_リファクタリングから始めるテスト駆動開発">1.3. リファクタリングから始めるテスト駆動開発</a>
 <ul class="sectlevel3">
-<li><a href="#_仮実装">1.3.1. 仮実装</a></li>
-<li><a href="#_三角測量">1.3.2. 三角測量</a></li>
-</ul>
-</li>
-<li><a href="#_リファクタリングから始めるテスト駆動開発">1.4. リファクタリングから始めるテスト駆動開発</a>
-<ul class="sectlevel3">
-<li><a href="#_リファクタリング">1.4.1. リファクタリング</a>
+<li><a href="#_リファクタリング">1.3.1. リファクタリング</a>
 <ul class="sectlevel4">
 <li><a href="#_メソッドの抽出">メソッドの抽出</a></li>
 <li><a href="#_変数名の変更">変数名の変更</a></li>
 </ul>
 </li>
-<li><a href="#_明白な実装">1.4.2. 明白な実装</a>
+<li><a href="#_明白な実装">1.3.2. 明白な実装</a>
 <ul class="sectlevel4">
 <li><a href="#_アルゴリズムの置き換え">アルゴリズムの置き換え</a></li>
 <li><a href="#_メソッドのインライン化">メソッドのインライン化</a></li>
 </ul>
 </li>
-<li><a href="#_休憩">1.4.3. 休憩</a></li>
-<li><a href="#_学習用テスト">1.4.4. 学習用テスト</a></li>
-<li><a href="#_コードの不吉な臭い">1.4.5. コードの不吉な臭い</a>
+<li><a href="#_休憩">1.3.3. 休憩</a></li>
+<li><a href="#_学習用テスト">1.3.4. 学習用テスト</a></li>
+<li><a href="#_コードの不吉な臭い">1.3.5. コードの不吉な臭い</a>
 <ul class="sectlevel4">
 <li><a href="#_不思議な名前">不思議な名前</a></li>
 <li><a href="#_長い関数">長い関数</a></li>
 <li><a href="#_ループ">ループ</a></li>
 </ul>
 </li>
-<li><a href="#_動作するきれいなコード">1.4.6. 動作するきれいなコード</a></li>
+<li><a href="#_動作するきれいなコード">1.3.6. 動作するきれいなコード</a></li>
 </ul>
 </li>
 </ul>
@@ -736,11 +732,8 @@ $ git commit -m 'セットアップ'</code></pre>
 <p>これで <a href="https://t-wada.hatenablog.jp/entry/clean-code-that-works" target="_blank" rel="noopener">ソフトウェア開発の三種の神器</a>のうち <strong>バージョン管理</strong> と <strong>テスティング</strong> の準備が整いましたので <strong>TODOリスト</strong> の最初の作業に取り掛かかるとしましょう。</p>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_仮実装から始めるテスト駆動開発">1.3. 仮実装から始めるテスト駆動開発</h3>
 <div class="sect3">
-<h4 id="_仮実装">1.3.1. 仮実装</h4>
+<h4 id="_仮実装">1.2.2. 仮実装</h4>
 <div class="paragraph">
 <p>TODOリスト</p>
 </div>
@@ -874,15 +867,12 @@ Finished in 0.00201s
 &#8212; <em>テスト駆動開発</em> <a href="#tdd">[tdd]</a>
 </div>
 </div>
+<div class="paragraph">
+<p><code>FizzBuzz</code> <strong>クラス</strong> を定義して <strong>文字列リテラル</strong> を返す <code>FizzBuzz::generate</code> <strong>クラスメソッド</strong> を作成しましょう。ちょっと何言ってるかわからないかもしれませんがとりあえずそんなものだと思って書いてみてください。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
-class FizzBuzzTest &lt; Minitest::Test
-  def test_1を渡したら文字列1を返す
-    assert_equal '1', FizzBuzz.generate(1)
-  end
-end
-
 class FizzBuzz
   def self.generate(n)
     '1'
@@ -941,7 +931,7 @@ Finished in 0.00094s
 </div>
 </div>
 <div class="sect3">
-<h4 id="_三角測量">1.3.2. 三角測量</h4>
+<h4 id="_三角測量">1.2.3. 三角測量</h4>
 <div class="paragraph">
 <p>1を渡したら文字列1を返すようにできました。では、2を渡したらどうなるでしょうか？</p>
 </div>
@@ -1012,7 +1002,7 @@ Finished in 0.00179s
 </div>
 </div>
 <div class="paragraph">
-<p>テストが失敗しました。それは文字列1しか返さないプログラムなのだから当然ですよね。では1が渡されたら文字列1を返し、2を渡したら文字列2を返すようにプログラムを修正しましょう。 Rubyで文字列に変換するメソッドは <code>to_s</code> と使ってこのように書きます。</p>
+<p>テストが失敗しました。それは文字列1しか返さないプログラムなのだから当然ですよね。では1が渡されたら文字列1を返し、2を渡したら文字列2を返すようにプログラムを修正しましょう。 <strong>数値リテラル</strong> を <strong>文字列リテラル</strong>　に変換する必要があります。公式リファレンスで調べてみましょう。Rubyの公式リファレンスは <a href="https://docs.ruby-lang.org/" target="_blank" rel="noopener">https://docs.ruby-lang.org/</a> です。 <a href="https://docs.ruby-lang.org/ja/" target="_blank" rel="noopener">日本語リファレンス</a> から <a href="https://docs.ruby-lang.org/ja/search/" target="_blank" rel="noopener">るりまサーチ</a>を選択してキーワード検索してみましょう。 <a href="https://docs.ruby-lang.org/ja/search/query:%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B/" target="_blank" rel="noopener">文字列 変換</a> キーワードで検索すると <code>to_s</code> というキーワードが出てきました。今度は <a href="https://docs.ruby-lang.org/ja/search/query:to_s/" target="_blank" rel="noopener">to_s</a> で検索すると色々出てきました、どうやら <code>to_s</code> を使えばいいみたいですね。ちなみに検索エンジンから <a href="https://www.google.com/search?hl=ja&amp;sxsrf=ACYBGNRISq_mMHcQ1nGzgT3k_igW82f1Sg%3A1579494685196&amp;source=hp&amp;ei=HS0lXqnSCeeumAXN5ZigCg&amp;q=Ruby+%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B&amp;oq=Ruby+%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B&amp;gs_l=psy-ab.3..0i4i37l2j0i8i30l6.1386.6456..6820&#8230;&#8203;2.0..0.139.2322.1j20&#8230;&#8203;&#8230;&#8203;0&#8230;&#8203;.1..gws-wiz&#8230;&#8203;&#8230;&#8203;.0i131i4j0i4j0i131j35i39j0j0i8i4i30.FfEPbOjPZcw&amp;ved=0ahUKEwjp1IidrJHnAhVnF6YKHc0yBqQQ4dUDCAg&amp;uact=5" target="_blank" rel="noopener">Ruby 文字列 変換</a> で検索してもいろいろ出てくるのですがすべてのサイトが必ずしも正確な説明をしているまたは最新のバージョンに対応しているとは限らないので始めは公式リファレンスや市販の書籍から調べる癖をつけておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1090,7 +1080,7 @@ Finished in 0.00098s
 </ul>
 </div>
 <div class="paragraph">
-<p>たかが <strong>数を文字列にして返す</strong> プログラムを書くのにこんなに細かいステップを踏んでいくの？思ったかもしれません。プログラムを書くということは細かいステップを踏んで行くことなのです。そして、細かいステップを踏み続けることが大切なことなのです。</p>
+<p>たかが <strong>数を文字列にして返す</strong> プログラムを書くのにこんなに細かいステップを踏んでいくの？と思ったかもしれません。プログラムを書くということは細かいステップを踏んで行くことなのです。そして、細かいステップを踏み続けることが大切なことなのです。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -1139,9 +1129,9 @@ Finished in 0.00098s
 </div>
 </div>
 <div class="sect2">
-<h3 id="_リファクタリングから始めるテスト駆動開発">1.4. リファクタリングから始めるテスト駆動開発</h3>
+<h3 id="_リファクタリングから始めるテスト駆動開発">1.3. リファクタリングから始めるテスト駆動開発</h3>
 <div class="sect3">
-<h4 id="_リファクタリング">1.4.1. リファクタリング</h4>
+<h4 id="_リファクタリング">1.3.1. リファクタリング</h4>
 <div class="paragraph">
 <p>ここでテスト駆動開発の流れを確認しておきましょう。</p>
 </div>
@@ -1226,7 +1216,7 @@ end</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>テストフレームワークでは前処理にあたる部分を実行する機能がサポートされています。Minitestでは <code>setup</code> メソッドがそれに当たるので <code>FizzBuzz</code> オブジェクトを共有して共通利用できるようにしてみましょう。</p>
+<p>テストフレームワークでは前処理にあたる部分を実行する機能がサポートされています。Minitestでは <code>setup</code> メソッドがそれに当たるので <code>FizzBuzz</code> オブジェクトを共有して共通利用できるようにしてみましょう。ここでは <strong>インスタンス変数</strong> に <code>FizzBuzz</code> <strong>クラス</strong> の参照を <strong>代入</strong> して各テストメソッドで共有できるようにしました。ちょっと何言ってるかわからないかもしれませんがここではそんなことをやってるぐらいのイメージで大丈夫です。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1413,7 +1403,7 @@ Finished in 0.00746s
 </div>
 </div>
 <div class="sect3">
-<h4 id="_明白な実装">1.4.2. 明白な実装</h4>
+<h4 id="_明白な実装">1.3.2. 明白な実装</h4>
 <div class="paragraph">
 <p>次は <strong>3を渡したら文字列"Fizz"</strong> を返すプログラムに取り組むとしましょう。</p>
 </div>
@@ -1524,10 +1514,8 @@ end</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>ここでは <strong>if文</strong> と <strong>演算子</strong> を使ってみましょう。なんかプログラムっぽくなってきましたね。</p>
-</div>
-<div class="paragraph">
-<p><code>%</code> は割り算の余りを求める <strong>演算子</strong><a href="#pruby">[pruby]</a>です。</p>
+<p>ここでは <strong>if式</strong> と <strong>演算子</strong> を使ってみましょう。なんかプログラムっぽくなってきましたね。
+3で割で割り切れる場合はFizzを返すということは <strong>数数リテラル</strong> 3で割った余りが0の場合は <strong>文字列リテラル</strong> Fizzを返すということなので余りを求める <strong>演算子</strong> を調べる必要がありますね。公式リファレンスで <strong>算術演算子</strong> をキーワードで検索したところ <a href="https://docs.ruby-lang.org/ja/search/query:%E7%AE%97%E8%A1%93%E6%BC%94%E7%AE%97%E5%AD%90/" target="_blank" rel="noopener">いろいろ</a> 出てきました。 <a href="https://docs.ruby-lang.org/ja/search/query:%E7%AE%97%E8%A1%93%E6%BC%94%E7%AE%97%E5%AD%90/query:%25/" target="_blank" rel="noopener">%</a> を使えばいいみたいですね。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1632,7 +1620,7 @@ end</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>ここでは <strong>アルゴリズムの置き換え</strong> を適用してよりRubyらしい書き方にリファクタリングしてみました。</p>
+<p>ここでは <strong>アルゴリズムの置き換え</strong> を適用してより　<strong>メソッドチェーンと述語メソッド</strong> を使ってRubyらしい書き方にリファクタリングしてみました。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -1648,6 +1636,26 @@ end</code></pre>
 </blockquote>
 <div class="attribution">
 &#8212; <em>新装版 リファクタリング</em><a href="#rft">[rft]</a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>メソッドチェーンは言葉の通り、メソッドを繋げて呼び出す方法です。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>かんたんRuby</em> <a href="#kruby">[kruby]</a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>述語メソッドとはメソッド名の末尾に「？」をつけたメソッドのことを指します。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>かんたんRuby</em> <a href="#kruby">[kruby]</a>
 </div>
 </div>
 <div class="listingblock">
@@ -1890,6 +1898,16 @@ end</code></pre>
 &#8212; <em>テスト駆動開発</em><a href="#tdd">[tdd]</a>
 </div>
 </div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>この関数名は「自己文書化」されている。関数名はいろんあところで使用されるのだから、優れたコメントよりも名前のほうが大切だ。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">$ ruby main.rb
@@ -2015,7 +2033,7 @@ Finished in 0.00964s
 </div>
 </div>
 <div class="paragraph">
-<p>調べるにあたってコードを読んでもいいのですが、問題が発生したのは <code>15を渡したら文字列FizzBuzzを返す</code> テストを追加したあとですよね？ということは原因は追加したコードにあるはずですよね？よって、追加部分をデバッグすれば原因をすぐ発見できると思いませんか？</p>
+<p>調べるにあたってコードを頭から読んでもいいのですが、問題が発生したのは <code>15を渡したら文字列FizzBuzzを返す</code> テストを追加したあとですよね？ということは原因は追加したコードにあるはずですよね？よって、追加部分をデバッグすれば原因をすぐ発見できると思いませんか？</p>
 </div>
 <div class="paragraph">
 <p>今回はRubyのデバッガとしてByebugをインストールして使うことにしましょう。</p>
@@ -2219,7 +2237,7 @@ end</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><strong>if文</strong> の中でさらに <strong>if文</strong> をネストしています。いわゆる <strong>コードの不吉な臭い</strong> がしますね。ここは仕様の文言にある <code>3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。</code> に沿った記述にするとともにネストした部分をわかりやすくするために <strong>アルゴリズムの置き換え</strong> を適用してリファクタリングをしましょう。</p>
+<p><strong>if式</strong> の中でさらに <strong>if式</strong> をネストしています。いわゆる <strong>コードの不吉な臭い</strong> がしますね。ここは仕様の文言にある <code>3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。</code> に沿った記述にするとともにネストした部分をわかりやすくするために <strong>アルゴリズムの置き換え</strong> を適用してリファクタリングをしましょう。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -2260,7 +2278,7 @@ $ git commit -m 'refactor: アルゴリズムの置き換え:'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_休憩">1.4.3. 休憩</h4>
+<h4 id="_休憩">1.3.3. 休憩</h4>
 <div class="paragraph">
 <p>TODOリスト</p>
 </div>
@@ -2318,7 +2336,7 @@ $ git commit -m 'refactor: アルゴリズムの置き換え:'</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>数を引数にして文字列を返す <code>FizzBuzz::generate</code> メソッドはできたみたいですね。次のやることは・・・新しいメソッドを追加する必要がありそうですね。気分を切り替えるため少し休憩を取りましょう。</p>
+<p>数を引数にして文字列を返す <code>FizzBuzz::generate</code> メソッドはできたみたいですね。次のやることは・・・新しいメソッドを追加する必要がありそうです。気分を切り替えるため少し休憩を取りましょう。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -2331,7 +2349,7 @@ $ git commit -m 'refactor: アルゴリズムの置き換え:'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>引き続き <strong>TODOリスト</strong> を片付けたいのですが <code>1から100までの数</code> を返すプログラムを書かないといけません。3を渡したらFizzのような <strong>リテラル</strong> を返すプログラムではなく 1から100までの <strong>配列</strong> を返すようなプログラムにする必要がありそうですね。<strong>TODOリスト</strong> にするとこんな感じでしょうか。</p>
+<p>引き続き <strong>TODOリスト</strong> を片付けたいのですが <code>1から100までの数</code> を返すプログラムを書かないといけません。3を渡したらFizzのような <strong>リテラル</strong> を返すプログラムではなく 1から100までの <strong>配列オブジェクト</strong> を返すようなプログラムにする必要がありそうです。<strong>TODOリスト</strong> にするとこんな感じでしょうか。</p>
 </div>
 <div class="paragraph">
 <p>TODOリスト</p>
@@ -2357,7 +2375,7 @@ $ git commit -m 'refactor: アルゴリズムの置き換え:'</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>どうやら <strong>配列</strong> を返すプログラムを書かないと行けないようですね。え？ <strong>明白な実装</strong> の実装イメージがわかない。そんな時は <strong>仮実装</strong> からステップを小さくして始めるとしましょう。</p>
+<p>どうやら <strong>配列オブジェクト</strong> を返すプログラムを書かないといけないようですね。え？ <strong>明白な実装</strong> の実装イメージがわかない。そんな時は <strong>仮実装</strong> からステップを小さくして始めるとしましょう。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -2371,9 +2389,9 @@ $ git commit -m 'refactor: アルゴリズムの置き換え:'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_学習用テスト">1.4.4. 学習用テスト</h4>
+<h4 id="_学習用テスト">1.3.4. 学習用テスト</h4>
 <div class="paragraph">
-<p><strong>テストファースト</strong> でまずRubyの <strong>配列</strong> の振る舞いを確認していきましょう。Rubyにおいて <em>配列とは複数のデータをまとめて格納できるオブジェクトのこと</em><a href="#pruby">[pruby]</a> だそうです。空の配列を作るには <code>[]</code> (配列リテラル)を使えばいいみたいですね。こんな感じかな？</p>
+<p><strong>テストファースト</strong> でまずRubyの <strong>配列</strong> の振る舞いを確認していきましょう。公式リファレンスによるとRubyではArrayクラスとして定義されているようですね。空の配列を作るには <code>[]</code> (配列リテラル)を使えばいいみたいですね。こんな感じかな？</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2440,7 +2458,7 @@ Finished in 0.04383s
 </div>
 </div>
 <div class="paragraph">
-<p><strong>配列</strong> は <em>要素の変更、追加、削除</em><a href="#pruby">[pruby]</a> で内容を色々操作できそうですね。でも、いちいちテストコードを編集してテストを実行させるのも面倒なのでここはデバッガを使ってみましょう。まずブレークポイントを設定して・・・</p>
+<p><strong>配列</strong> には <a href="https://docs.ruby-lang.org/ja/latest/class/Array.html" target="_blank" rel="noopener">要素を操作するメソッドが用意されており</a> 内容を色々操作できそうですね。でも、いちいちテストコードを編集してテストを実行させるのも面倒なのでここはデバッガを使ってみましょう。まずブレークポイントを設定して・・・</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2716,7 +2734,7 @@ end</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><strong>%記法</strong> を使ってRubyらしく書くならこうですね。</p>
+<p><strong>%記法</strong> を使うとよりRubyらしく書けます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2725,6 +2743,16 @@ end</code></pre>
     %w[1 2 3]
   end
 end</code></pre>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>%記法とは、文字列や正規表現などを定義する際に、%を使った特別な書き方をすることでエスケープ文字を省略するなど、可読性を高めることができる記法です。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>かんたんRuby</em> <a href="#kruby">[kruby]</a>
 </div>
 </div>
 <div class="listingblock">
@@ -2815,7 +2843,17 @@ Finished in 0.02936s</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>配列は3までなので想定通りテストは失敗します。さて、1から100までの文字列で構成される配列をどうやって作りましょうか？ 先程は <strong>if文</strong> を使って <strong>条件分岐</strong> をプログラムで実行しました。今回は <strong>繰り返し処理</strong> をプログラムで実行する必要がありそうですね。Rubyの繰り返し処理は <em>配列のeachメソッドが繰り返し処理処理を実行している</em><a href="#pruby">[pruby]</a> そうです。とはいえ、実際に動かして振る舞いを確認しないとイメージは難しいですよね。 <strong>学習用テスト</strong> を書いてもいいのですが今回は <em>irb上で簡単なコードを動かしてみる</em><a href="#pruby">[pruby]</a>ことで振る舞いを検証してみましょう。まずコマンドラインで <code>irb</code> を起動します。</p>
+<p>配列は3までなので想定通りテストは失敗します。さて、1から100までの文字列で構成される配列をどうやって作りましょうか？ 先程は <strong>if式</strong> を使って <strong>条件分岐</strong> をプログラムで実行しました。今回は <strong>繰り返し処理</strong> をプログラムで実行する必要がありそうですね。Rubyの繰り返し処理には <strong>for式</strong> <strong>while/until/loop</strong> などがありますが実際のところ <strong>eachメソッド</strong> を使った繰り返し処理が主流です。とはいえ、実際に動かして振る舞いを確認しないとイメージは難しいですよね。 <strong>学習用テスト</strong> を書いてもいいのですが今回は <em>irb上で簡単なコードを動かしてみる</em><a href="#pruby">[pruby]</a>ことで振る舞いを検証してみましょう。まずコマンドラインで <code>irb</code> を起動します。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Rubyにはfor文はあります。ですが、ほとんどのRubyプログラマはfor文を使いません。筆者も5〜6年Rubyを使っていますが、for文を書いたことは一度もありません。Rubyの場合はforのような構文で繰り返し処理をさせるのではなく、配列自身に対して「繰り返せ」という命令を送ります。ここで登場するのがeachメソッドです。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>プロを目指す人のためのRuby入門</em> <a href="#pruby">[pruby]</a>
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2845,7 +2883,17 @@ irb(main):001:0&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>配列の中身を繰り返し処理で取り出す方法はわかりました。あとは100までの配列をどうやって作ればよいのでしょうか？ <code>['1','2','3'&#8230;&#8203;'100']</code> と手書きで作りますか？100件ぐらいならまあできなくもないでしょうが1000件,10000件ならどうでしょうか？無理ですね。計算機にやってもらいましょう、<em>Rubyには「１から５まで」「文字&#8217;a&#8217;から文字&#8217;e&#8217;まで」のように、値の範囲を表すオブジェクトがあります。これを範囲オブジェクトと言います。</em><a href="#pruby">[pruby]</a>、おあつらえ向きの方法が用意されているみたいですね <strong>範囲(Range)</strong> 使いましょう。</p>
+<p>配列の中身を繰り返し処理で取り出す方法はわかりました。あとは100までの配列をどうやって作ればよいのでしょうか？ <code>['1','2','3'&#8230;&#8203;'100']</code> と手書きで作りますか？100件ぐらいならまあできなくもないでしょうが1000件,10000件ならどうでしょうか？無理ですね。計算機にやってもらいましょう、調べてみるとRubyには <strong>レンジオブジェクト(Range)</strong> というもの用意されいるそうです。説明を読んでもピンと来ないので実際に動作を確認してみましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>レンジオブジェクト（範囲オブジェクトとも呼ばれます）はRangeクラスのオブジェクトのことで、「..」や「&#8230;&#8203;」演算子を使って定義します。「1..3」のように定義し、主に整数値や文字列を使って範囲を表現します。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>かんたんRuby</em> <a href="#kruby">[kruby]</a>
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3121,7 +3169,7 @@ Finished in 0.00217s
 </div>
 </div>
 <div class="paragraph">
-<p>他のパターンも明記しておきたいですよね。</p>
+<p>他のパターンも明記しておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3157,7 +3205,7 @@ end</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>ついでに <strong>メソッドの抽出</strong> をして重複をなくしておきましょう。</p>
+<p><strong>説明変数</strong> への代入が重複しています。ついでに <strong>メソッドの抽出</strong> をして重複をなくしておきましょう。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -3355,7 +3403,7 @@ Finished in 0.00307s
 </div>
 </div>
 <div class="sect3">
-<h4 id="_コードの不吉な臭い">1.4.5. コードの不吉な臭い</h4>
+<h4 id="_コードの不吉な臭い">1.3.5. コードの不吉な臭い</h4>
 <div class="paragraph">
 <p>終わりが見えてきましたがまだリファクタリングの必要がありそうです。</p>
 </div>
@@ -3424,6 +3472,16 @@ end</code></pre>
 </blockquote>
 <div class="attribution">
 &#8212; <em>リファクタリング(第2版)</em><a href="#rft2">[rft2]</a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>テストは不安を退屈に変える賢者の石だ。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>テスト駆動開発</em><a href="#tdd">[tdd]</a>
 </div>
 </div>
 <div class="quoteblock">
@@ -4024,7 +4082,17 @@ Finished in 0.03285s
 </div>
 </div>
 <div class="paragraph">
-<p>結果を配列にして返したいのですが <code>each</code> メソッドでうまくできませんね。ここは <code>map</code> メソッドを使いましょう。</p>
+<p>結果を配列にして返したいのですが <strong>eachメソッド</strong> でうまくできませんね。Rubyには新しい配列を作成する <strong>mapメソッド</strong> 用意されいるのでそちらを使いましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>mapは配列の要素を画する際によく利用されるメソッドで、ブロックの最後の要素（メモ）で新しい配列を作ります。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>かんたんRuby</em> <a href="#kruby">[kruby]</a>
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4047,7 +4115,7 @@ Finished in 0.00261s
 </div>
 </div>
 <div class="paragraph">
-<p>うまくいきましたね。Rubyではreturn文を省略できるので</p>
+<p>うまくいきましたね。あと、Rubyではreturnを省略できるので</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4069,7 +4137,7 @@ Finished in 0.00238s</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><strong>パイプラインによるループの置き換え</strong>　の適用により <code>each</code> メソッドによる繰り返し処理を <code>map</code> メソッドを使ったイミュータブルな処理に変えることができました。</p>
+<p><strong>パイプラインによるループの置き換え</strong>　の適用により <strong>eachメソッド</strong> による繰り返し処理を <strong>mapメソッド</strong> を使ったイミュータブルな処理に変えることができました。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -4082,6 +4150,16 @@ Finished in 0.00238s</code></pre>
 </blockquote>
 <div class="attribution">
 &#8212; <em>リファクタリング(第2版)</em><a href="#rft2">[rft2]</a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Rubyに限らず、プログラミングの世界ではしばしばミュータブル（mutable)とイミュータブル（imutable）と言う言葉が登場します。ミュータブルは「変更可能な」という意味で、反対にイミュータブルは「変更できない、不変の」という意味です。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>プロを目指す人のためのRuby入門</em> <a href="#pruby">[pruby]</a>
 </div>
 </div>
 <div class="listingblock">
@@ -4107,6 +4185,9 @@ Finished in 0.00238s</code></pre>
 <div class="attribution">
 &#8212; <em>新装版 リファクタリング</em><a href="#rft">[rft]</a>
 </div>
+</div>
+<div class="paragraph">
+<p>Rubyでは定数は英字の大文字で始まる名前をつけると自動的に定数として扱われます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4192,7 +4273,7 @@ end</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_動作するきれいなコード">1.4.6. 動作するきれいなコード</h4>
+<h4 id="_動作するきれいなコード">1.3.6. 動作するきれいなコード</h4>
 <div class="paragraph">
 <p>TODOリスト</p>
 </div>
@@ -4327,6 +4408,58 @@ class FizzBuzzTest &lt; Minitest::Test
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Rubyで別のファイルを読み込むには <strong>require</strong> を使います。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>requireを使う用途は主に三つあります。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>標準添付ライブラリを読み込む</p>
+</li>
+<li>
+<p>第三者が作成しているライブラリを読み込む</p>
+</li>
+<li>
+<p>別ファイルに定義した自分のファイルを読み込む</p>
+</li>
+</ul>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>かんたんRuby</em> <a href="#kruby">[kruby]</a>
+</div>
+</div>
+<div class="paragraph">
+<p>また、<strong>require_relative</strong> という方法も用意されています。どう違うのでしょうか？</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>require_relativeは$LOAD_PATHの参照は行わず「relative」という名称の通り相対的なパスでファイルの読み込みを行います。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>かんたんRuby</em> <a href="#kruby">[kruby]</a>
+</div>
+</div>
+<div class="paragraph">
+<p>ちょっと何言ってるかわからないうちは <strong>require</strong> を上記のフォルダ構成で使っていてください。一応以下の使い分けがありますが今は頭の隅に留めるだけでいいと思います。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>requireは標準添付ライブラリなどの自分が書いていないコードを読み込む時に使い、こちらのrequire_relativeは自分の書いたコードを読み込む時に使うように使い分けるのが良いでしょう。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>かんたんRuby</em> <a href="#kruby">[kruby]</a>
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby test/fizz_buzz_test.rb
@@ -4360,7 +4493,18 @@ puts FizzBuzz.generate_list</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><code>puts</code> は結果を画面に出力するメソッドです。</p>
+<p><strong>puts</strong> は結果を画面に出力するメソッドです。
+先程は <strong>p</strong> メソッドを使って画面に <strong>配列</strong> の中身を１件ずつ表示していましたが今回は <strong>配列</strong> 自体を開業して画面に出力するため <strong>puts</strong> メソッドを使います。機能的にはほどんど変わらないのですが以下の様に使い分けるそうです。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>まず、用途としてはputsメソッドとprintメソッドは一般ユーザ向け、pメソッドは開発者向け、というふうに別かれます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>プロを目指す人のためのRuby入門</em> <a href="#prudy">[prudy]</a>
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4382,6 +4526,15 @@ Fizz
 FizzBuzz
 ...
 Buzz</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ちなみに <strong>print</strong> メソッドを使った場合はこのように出力されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "FizzBuzz", "16", "17", "Fizz", "19", "Buzz", "Fizz", "22", "23", "Fizz", "Buzz", "26", "Fizz", "28", "29", "FizzBuzz", "31", "32", "Fizz", "34", "Buzz", "Fizz", "37", "38", "Fizz", "Buzz", "41", "Fizz", "43", "44", "FizzBuzz", "46", "47", "Fizz", "49", "Buzz", "Fizz", "52", "53", "Fizz", "Buzz", "56", "Fizz", "58", "59", "FizzBuzz", "61", "62", "Fizz", "64", "Buzz", "Fizz", "67", "68", "Fizz", "Buzz", "71", "Fizz", "73", "74", "FizzBuzz", "76", "77", "Fizz", "79", "Buzz", "Fizz", "82", "83", "Fizz", "Buzz", "86", "Fizz", "88", "89", "FizzBuzz", "91", "92", "Fizz", "94", "Buzz", "Fizz", "97", "98", "Fizz", "Buzz"] $</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5005,6 +5158,12 @@ Finished in 0.00135s
 <p><a href="https://backlog.com/ja/git-tutorial/" target="_blank" rel="noopener">サルでもわかるGit入門〜バージョン管理を使いこなそう〜</a></p>
 </li>
 <li>
+<p><a href="https://docs.ruby-lang.org/ja/" target="_blank" rel="noopener">プログラミング言語 Ruby リファレンスマニュアル</a></p>
+</li>
+<li>
+<p><a href="https://qiita.com/jnchito/items/2dc760ee0716ea12bbf0" target="_blank" rel="noopener">検索結果を要チェック！Rubyの公式リファレンスは docs.ruby-lang.org です 〜公式な情報源を調べるクセを付けよう〜</a></p>
+</li>
+<li>
 <p><a href="https://t-wada.hatenablog.jp/entry/clean-code-that-works">動作するきれいなコード: SeleniumConf Tokyo 2019 基調講演文字起こし+α</a></p>
 </li>
 </ul>
@@ -5016,6 +5175,7 @@ Finished in 0.00135s
 <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://rcm-fe.amazon-adsystem.com/e/cm?ref=qf_sp_asin_til&t=k2works0c-22&m=amazon&o=9&p=8&l=as1&IS1=1&detail=1&asins=427405019X&linkId=08e705a5969e20f5129b4d3cefbcdb15&bc1=000000&lt1=_top&fc1=333333&lc1=0066c0&bg1=ffffff&f=ifr"></iframe>
 <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=k2works0c-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4274224546&linkId=5f857b58e988073ce92e0adcf1dd3ebb"></iframe>
 <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=k2works0c-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4873115655&linkId=82416afd8e4042cbfd2dc6d4b80653f1"></iframe>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=k2works0c-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4774198617&linkId=7858ddef815d9a093fcacb3a1208b774"></iframe>
 <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=k2works0c-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4774193976&linkId=fee0d915272172c2e25393dd52537bdc"></iframe>
 </div>
 </div>
@@ -5042,6 +5202,10 @@ Finished in 0.00135s
 オライリージャパン; 初版八刷版 (2012/6/23)</p>
 </li>
 <li>
+<p>かんたん Ruby (プログラミングの教科書)<a id="kruby"></a> すがわらまさのり  (著)
+技術評論社 (2018/6/21)</p>
+</li>
+<li>
 <p>プロを目指す人のためのRuby入門 言語仕様からテスト駆動開発・デバッグ技法まで (Software Design plusシリーズ)<a id="pruby"></a> 伊藤 淳一  (著):
 技術評論社 (2017/11/25)</p>
 </li>
@@ -5052,7 +5216,7 @@ Finished in 0.00135s
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-20 11:51:51 JST
+Last updated 2020-01-20 16:41:32 JST
 </div>
 </div>
 </body>
