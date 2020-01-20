@@ -547,7 +547,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect3">
 <h4 id="_todoリスト">1.1.1. TODOリスト</h4>
 <div class="paragraph">
-<p>アプリケーションを作成するにあたってまず何をすればよいだろうか？私は、まず仕様の確認をして <strong>TODOリスト</strong> を作るところから始めます。</p>
+<p>プログラムを作成するにあたってまず何をすればよいだろうか？私は、まず仕様の確認をして <strong>TODOリスト</strong> を作るところから始めます。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -813,7 +813,17 @@ require 'minitest/autorun'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>テストコードを書いて。</p>
+<p>テストコードを書きます。え、日本語でテストケースを書くの？ですって。開発体制にもよりますが日本人が開発するのであれば無理に英語で書くよりドキュメントとしての可読性が上がるのでテストコードであれば問題は無いと思います。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>テストコードを読みやすくするのは、テスト以外のコードを読みやすくするのと同じくらい大切なことだ。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -849,7 +859,7 @@ Finished in 0.00201s
 </div>
 </div>
 <div class="paragraph">
-<p><code>NameError:         NameError: uninitialized constant FizzBuzzTest::FizzBuzz</code> &#8230;&#8203;FizzBuzzが定義されていない。そうですねまだ作ってないのだから当然ですよね。では <code>FizzBuzz.generate</code> メソッドを作りましょう。どんな振る舞いを書けばいいのでしょうか？とりあえず最初のテストを通すために <strong>仮実装</strong> から始めるとしましょう。</p>
+<p><code>NameError:         NameError: uninitialized constant FizzBuzzTest::FizzBuzz</code> &#8230;&#8203;FizzBuzzが定義されていない。そうですねまだ作ってないのだから当然ですよね。では <code>FizzBuzz::generate</code> メソッドを作りましょう。どんな振る舞いを書けばいいのでしょうか？とりあえず最初のテストを通すために <strong>仮実装</strong> から始めるとしましょう。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -1093,6 +1103,32 @@ Finished in 0.00098s
 </div>
 </div>
 <div class="paragraph">
+<p>あと、テストケースの内容がアサーション一行ですがもっと検証するべきことがあるんじゃない？と思うでしょう。検証したいことがあれば独立したテストケースを追加しましょう。このような書き方はよろしくありません。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+  def test_数字を渡したら文字列を返す
+    assert_equal '1', FizzBuzz.generate(1)
+    assert_equal '2', FizzBuzz.generate(2)
+    assert_equal '3', FizzBuzz.generate(3)
+    assert_equal '4', FizzBuzz.generate(4)
+    assert_equal '5', FizzBuzz.generate(5)
+  end
+...</code></pre>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>テストの本質というのは、「こういう状況と入力から、こういう振る舞いと出力を期待する」のレベルまで要約できる。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
+</div>
+</div>
+<div class="paragraph">
 <p>ここで一段落ついたので、これまでの作業内容をバージョン管理システムにコミットしておきましょう。</p>
 </div>
 <div class="listingblock">
@@ -1259,6 +1295,16 @@ end</code></pre>
 </blockquote>
 <div class="attribution">
 &#8212; <em>リファクタリング(第2版)</em><a href="#rft2">[rft2]</a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>名前は短いコメントだと思えばいい。短くてもいい名前をつければ、それだけ多くの情報を伝えることができる。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
 </div>
 </div>
 <div class="listingblock">
@@ -2175,6 +2221,16 @@ end</code></pre>
 <div class="paragraph">
 <p><strong>if文</strong> の中でさらに <strong>if文</strong> をネストしています。いわゆる <strong>コードの不吉な臭い</strong> がしますね。ここは仕様の文言にある <code>3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。</code> に沿った記述にするとともにネストした部分をわかりやすくするために <strong>アルゴリズムの置き換え</strong> を適用してリファクタリングをしましょう。</p>
 </div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>ネストの深いコードは理解しにくい。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
@@ -3003,7 +3059,7 @@ Finished in 0.03112s
 </div>
 </div>
 <div class="paragraph">
-<p>ですよね、ここは <strong>繰り返し処理</strong> のなかで <code>FizzBuzz::generate</code> を呼び出すように変更しましょう。</p>
+<p>ですよね、ここは <strong>繰り返し処理</strong> の中で <code>FizzBuzz::generate</code> を呼び出すように変更しましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3370,6 +3426,16 @@ end</code></pre>
 &#8212; <em>リファクタリング(第2版)</em><a href="#rft2">[rft2]</a>
 </div>
 </div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>変数や関数などの構成要素の名前は、抽象的ではなく具体的なものにしよう。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -3543,6 +3609,16 @@ end</code></pre>
 end</code></pre>
 </div>
 </div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>人間の脳はグループや階層を１つの単位として考える。コードの概要をすばやく把握してもらうには、このような「単位」を作ればいい。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
+</div>
+</div>
 <div class="paragraph">
 <p>処理の単位ごとに区切りをつけました。次はif分岐ですがこうします。</p>
 </div>
@@ -3608,6 +3684,16 @@ Finished in 0.00296s
 </blockquote>
 <div class="attribution">
 &#8212; <em>新装版 リファクタリング</em><a href="#rft">[rft]</a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>関数で複数のreturn文を使ってはいけないと思っている人がいる。アホくさ。関数から早く返すのはいいことだ。むしろ望ましいときもある。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
 </div>
 </div>
 <div class="listingblock">
@@ -3727,7 +3813,33 @@ Finished in 0.00255s
 </div>
 </div>
 <div class="paragraph">
-<p>３で割り切れる場合の結果を <code>isFizz</code> 変数に 5で割り切れる場合の結果 <code>isBuzz</code> 変数に代入して使えるようにしました。FizzBuzzを返す判定部分にもこの説明用変数を使って壊れていないか確認しましょう。</p>
+<p>３で割り切れる場合の結果を <code>isFizz</code> 変数に 5で割り切れる場合の結果 <code>isBuzz</code> 変数に代入して使えるようにしました。このような変数を <strong>説明変数</strong> と呼びます。また似たようなパターンに <strong>要約変数</strong> というものがあります。FizzBuzzを返す判定部分にこの <strong>説明変数</strong> を適用しました。壊れていないか確認しておきましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>説明変数</p>
+</div>
+<div class="paragraph">
+<p>式を簡単に分割するには、式を表す変数を使えばいい。この変数を「説明変数」と呼ぶこともある。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>要約変数</p>
+</div>
+<div class="paragraph">
+<p>大きなコードをの塊を小さな名前に置き換えて、管理や把握を簡単にする変数のことを要約変数と呼ぶ。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3845,6 +3957,16 @@ Finished in 0.03063s
 &#8212; <em>リファクタリング(第2版)</em><a href="#rft2">[rft2]</a>
 </div>
 </div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>「永続的に変更されない」変数は扱いやすい。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -3902,7 +4024,7 @@ Finished in 0.03285s
 </div>
 </div>
 <div class="paragraph">
-<p>結果を配列にして返したいのですが <code>each</code> メソッドでうまくできませんね。ここは <code>map</code> メソッドをつつかましょう。</p>
+<p>結果を配列にして返したいのですが <code>each</code> メソッドでうまくできませんね。ここは <code>map</code> メソッドを使いましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3999,6 +4121,19 @@ Finished in 0.00238s</code></pre>
 end</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>意味のわかる定数として宣言しました。コードに直接記述された <code>100</code> をといった <strong>リテラル</strong> はマジックナンバーと呼ばれ往々にして後で何を意味するものかわからなくなり変更を難しくする原因となります。早めに意味を表す定数にしておきましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>いい名前というのは、変数の目的や値を表すものだ。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
@@ -4037,6 +4172,16 @@ end</code></pre>
 </blockquote>
 <div class="attribution">
 &#8212; <em>リファクタリング(第2版)</em><a href="#rft2">[rft2]</a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>コメントを書くのであれば、正確に書くべきだ（できるだけ明確で詳細に）。また、コメントには画面の領域を取られるし、読むのにも時間がかかるので、簡潔なものでなければいけない。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
 </div>
 </div>
 <div class="listingblock">
@@ -4695,6 +4840,36 @@ Finished in 0.00135s
 &#8212; <em>リファクタリング(第2版)</em><a href="#rft2">[rft2]</a>
 </div>
 </div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>コードは理解しやすくなければいけない。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em><a href="#rcd">[rcd]</a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>コードは他の人が最短時間で理解できるように書かなければいけない。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em><a href="#rcd">[rcd]</a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>優れたソースコードは「目に優しい」ものでなければいけない。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <em>リーダブルコード</em> <a href="#rcd">[rcd]</a>
+</div>
+</div>
 <div class="paragraph">
 <p>少なくともテスト駆動開発のゴールに良いコードがあるということはいえるでしょう。え？どうやったら良いコードを書けるようになるかって？私が教えてほしいのですがただ言えることは他の分野と同様に練習の積み重ねのむこうにあるのだろうということだけです。</p>
 </div>
@@ -4877,7 +5052,7 @@ Finished in 0.00135s
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-17 17:35:58 JST
+Last updated 2020-01-20 11:51:51 JST
 </div>
 </div>
 </body>
