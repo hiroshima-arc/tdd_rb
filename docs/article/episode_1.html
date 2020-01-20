@@ -4560,15 +4560,15 @@ Buzz</code></pre>
 <div class="listingblock">
 <div class="title">/main.rb</div>
 <div class="content">
-<pre>require './lib/fizz_buzz.rb'
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">require './lib/fizz_buzz.rb'
 
-puts FizzBuzz.generate_list</pre>
+puts FizzBuzz.generate_list</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">/lib/fizz_buzz.rb</div>
 <div class="content">
-<pre>class FizzBuzz
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
   MAX_NUMBER = 100
 
   def self.generate(number)
@@ -4585,13 +4585,13 @@ puts FizzBuzz.generate_list</pre>
     # 1から最大値までのFizzBuzz配列を1発で作る
     (1..MAX_NUMBER).map { |n| generate(n) }
   end
-end</pre>
+end</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">/test/fizz_buzz_test.rb</div>
 <div class="content">
-<pre>require 'minitest/reporters'
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'minitest/reporters'
 Minitest::Reporters.use!
 require 'minitest/autorun'
 require './lib/fizz_buzz'
@@ -4730,7 +4730,7 @@ class FizzBuzzTest &lt; Minitest::Test
       assert_equal 15, result
     end
   end
-end</pre>
+end</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4793,7 +4793,7 @@ end</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>require 'minitest/reporters'
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'minitest/reporters'
 Minitest::Reporters.use!
 require 'minitest/autorun'
 
@@ -4867,7 +4867,7 @@ end
 
     end
   end
-end</pre>
+end</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -4975,7 +4975,7 @@ Finished in 0.00135s
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-20 17:13:08 JST
+Last updated 2020-01-20 18:12:07 JST
 </div>
 </div>
 </body>

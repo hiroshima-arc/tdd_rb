@@ -20,8 +20,14 @@ RUN apt-get update && \
     unzip \
     zip
 
+# asciidoctor
+
+RUN apt-get install asciidoctor -y
+
 # Pandoc
-RUN apt-get install -y pandoc
+
+RUN wget https://github.com/jgm/pandoc/releases/download/2.0.0.1/pandoc-2.0.0.1-1-amd64.deb
+RUN dpkg -i pandoc-2.0.0.1-1-amd64.deb
 
 # PluntUML
 RUN apt-get install -y default-jdk gradle graphviz fonts-takao

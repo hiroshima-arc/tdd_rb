@@ -3019,16 +3019,19 @@ TODOリスト
 以下のコードを作成しました。
 
 ./main.rb
+[source, ruby]
 ----
 include::./code/main.rb[]
 ----
 
 ./lib/fizz_buzz.rb
+[source, ruby]
 ----
 include::./code/lib/fizz_buzz.rb[]
 ----
 
 ./test/fizz_buzz_test.rb
+[source, ruby]
 ----
 include::./code/test/fizz_buzz_test.rb[]
 ----
@@ -3062,6 +3065,7 @@ ____
 ではテストファーストで書けば質の高い良いコードがかけるようになるのでしょうか？以下のコードを見てください。
 
 
+[source, ruby]
 ----
 include::./code/test/fizz_buzz_tfd_test.rb[]
 ----
