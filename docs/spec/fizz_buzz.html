@@ -431,16 +431,42 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_仕様">1. 仕様</a></li>
+<li><a href="#_仕様">1. 仕様</a>
+<ul class="sectlevel2">
+<li><a href="#_api">1.1. Api</a></li>
+<li><a href="#_クライアント">1.2. クライアント</a></li>
+</ul>
+</li>
 <li><a href="#_設計">2. 設計</a>
 <ul class="sectlevel2">
-<li><a href="#_todoリスト">2.1. TODOリスト</a></li>
+<li><a href="#_todoリスト">2.1. TODOリスト</a>
+<ul class="sectlevel3">
+<li><a href="#_api_2">2.1.1. Api</a></li>
+<li><a href="#_クライアント_2">2.1.2. クライアント</a></li>
+</ul>
+</li>
 <li><a href="#_ユースケース図">2.2. ユースケース図</a></li>
 <li><a href="#_クラス図">2.3. クラス図</a></li>
 <li><a href="#_シーケンス図">2.4. シーケンス図</a></li>
 </ul>
 </li>
-<li><a href="#_開発">3. 開発</a></li>
+<li><a href="#_開発">3. 開発</a>
+<ul class="sectlevel2">
+<li><a href="#_application">3.1. Application</a>
+<ul class="sectlevel3">
+<li><a href="#_service">3.1.1. Service</a></li>
+</ul>
+</li>
+<li><a href="#_domain">3.2. Domain</a>
+<ul class="sectlevel3">
+<li><a href="#_modle">3.2.1. Modle</a></li>
+<li><a href="#_type">3.2.2. Type</a></li>
+</ul>
+</li>
+<li><a href="#_presentation">3.3. Presentation</a></li>
+<li><a href="#_test">3.4. Test</a></li>
+</ul>
+</li>
 <li><a href="#_参照">4. 参照</a></li>
 </ul>
 </div>
@@ -449,7 +475,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_仕様">1. 仕様</h2>
 <div class="sectionbody">
-
+<div class="sect2">
+<h3 id="_api">1.1. Api</h3>
+<div class="paragraph">
+<p>1 から 100 までの数をプリントするプログラムを書け。</p>
+</div>
+<div class="paragraph">
+<p>ただし 3 の倍数のときは数の代わりに｢Fizz｣と、5 の倍数のときは｢Buzz｣とプリントし、</p>
+</div>
+<div class="paragraph">
+<p>3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。</p>
+</div>
+<div class="paragraph">
+<p>タイプごとに出力を切り替えることができる。</p>
+</div>
+<div class="paragraph">
+<p>タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz の場合のみをプリントする。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_クライアント">1.2. クライアント</h3>
+<div class="paragraph">
+<p>1から100までを１件ずつ画面に表示できる。</p>
+</div>
+<div class="paragraph">
+<p>1から100まで表示された内容を表示できる。</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -457,7 +509,158 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_todoリスト">2.1. TODOリスト</h3>
-
+<div class="sect3">
+<h4 id="_api_2">2.1.1. Api</h4>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10003; タイプ1の場合</p>
+</li>
+<li>
+<p>&#10003; 数を文字列にして返す</p>
+</li>
+<li>
+<p>&#10003; 1を渡したら文字列"1"を返す</p>
+</li>
+<li>
+<p>&#10003; 2を渡したら文字列"2"を返す</p>
+</li>
+<li>
+<p>&#10003; 3 の倍数のときは数の代わりに｢Fizz｣と返す</p>
+</li>
+<li>
+<p>&#10003; 3を渡したら文字列"Fizz"を返す</p>
+</li>
+<li>
+<p>&#10003; 5 の倍数のときは｢Buzz｣と返す</p>
+</li>
+<li>
+<p>&#10003; 5を渡したら文字列"Buzz"を返す</p>
+</li>
+<li>
+<p>&#10003; 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す</p>
+</li>
+<li>
+<p>&#10003; 15を渡したら文字列"FizzBuzz"を返す</p>
+</li>
+<li>
+<p>&#10003; タイプ2の場合</p>
+</li>
+<li>
+<p>&#10003; 数を文字列にして返す</p>
+</li>
+<li>
+<p>&#10003; 1を渡したら文字列"1"を返す</p>
+</li>
+<li>
+<p>&#10003; 2を渡したら文字列"2"を返す</p>
+</li>
+<li>
+<p>&#10003; 3 の倍数のときは数を文字列にして返す</p>
+</li>
+<li>
+<p>&#10003; 3を渡したら文字列"3"を返す</p>
+</li>
+<li>
+<p>&#10003; 5 の倍数のときは数を文字列にして返す</p>
+</li>
+<li>
+<p>&#10003; 5を渡したら文字列"5"を返す</p>
+</li>
+<li>
+<p>&#10003; 3 と 5 両方の倍数の場合には数を文字列にして返す</p>
+</li>
+<li>
+<p>&#10003; 15を渡したら文字列"15"を返す</p>
+</li>
+<li>
+<p>&#10003; タイプ3の場合</p>
+</li>
+<li>
+<p>&#10003; 数を文字列にして返す</p>
+</li>
+<li>
+<p>&#10003; 1を渡したら文字列"1"を返す</p>
+</li>
+<li>
+<p>&#10003; 2を渡したら文字列"2"を返す</p>
+</li>
+<li>
+<p>&#10003; 3 の倍数のときは数を文字列にして返す</p>
+</li>
+<li>
+<p>&#10003; 3を渡したら文字列"3"を返す</p>
+</li>
+<li>
+<p>&#10003; 5 の倍数のときは数を文字列にして返す</p>
+</li>
+<li>
+<p>&#10003; 5を渡したら文字列"5"を返す</p>
+</li>
+<li>
+<p>&#10003; 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す</p>
+</li>
+<li>
+<p>&#10003; 15を渡したら文字列"FizzBuzz"を返す</p>
+</li>
+<li>
+<p>&#10003; それ以外のタイプの場合</p>
+</li>
+<li>
+<p>&#10003; 例外を返す</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_クライアント_2">2.1.2. クライアント</h4>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10003; カウンター画面</p>
+</li>
+<li>
+<p>&#10003; 画面イメージを作る</p>
+</li>
+<li>
+<p>&#10003; APIサービスを作る</p>
+</li>
+<li>
+<p>&#10003; APIサービスと連携するクライアントサービスを作る</p>
+</li>
+<li>
+<p>&#10003; 正常系を実装する</p>
+</li>
+<li>
+<p>&#10003; UIを作る</p>
+</li>
+<li>
+<p>&#10003; UIとクライアントサービスを連携する</p>
+</li>
+<li>
+<p>&#10003; 一覧表示画面</p>
+</li>
+<li>
+<p>&#10003; 画面イメージを作る</p>
+</li>
+<li>
+<p>&#10003; APIサービスを作る</p>
+</li>
+<li>
+<p>&#10003; APIサービスと連携するクライアントサービスを作る</p>
+</li>
+<li>
+<p>&#10003; 正常系を実装する</p>
+</li>
+<li>
+<p>&#10003; UIを作る</p>
+</li>
+<li>
+<p>&#10003; UIとクライアントサービスを連携する</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_ユースケース図">2.2. ユースケース図</h3>
@@ -465,7 +668,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="sect2">
 <h3 id="_クラス図">2.3. クラス図</h3>
-
+<div class="imageblock">
+<div class="content">
+<img src="diag-e55b473997e9b568992b242402d6ebee.png" alt="diag e55b473997e9b568992b242402d6ebee" width="1439" height="700">
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_シーケンス図">2.4. シーケンス図</h3>
@@ -476,15 +683,151 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_開発">3. 開発</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_application">3.1. Application</h3>
+<div class="sect3">
+<h4 id="_service">3.1.1. Service</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-html" data-lang="html">require 'cowsay'
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'cowsay'
 
-Handler = Proc.new do |req, res|
+Handler =
+  Proc.new do |req, res|
     res.status = 200
     res['Content-Type'] = 'text/plain'
     res.body = Cowsay.say('hello world', 'cow')
+  end
+
+require 'minitest/autorun'
+require 'minitest/reporters'
+Minitest::Reporters.use!
+
+class HelloTest &lt; Minitest::Test
+  def test_greeting
+    assert_equal 'hello world', greeting
+  end
+end
+
+def greeting
+  'hello world'
 end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/generate.rb[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/generate_list.rb[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/fizz_buzz/application/service/fizz_buzz_service.rb[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/fizz_buzz/application/service/fizz_buzz_command.rb[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/fizz_buzz/application/service/fizz_buzz_list_command.rb[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/fizz_buzz/application/service/fizz_buzz_value_command.rb[]</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_domain">3.2. Domain</h3>
+<div class="sect3">
+<h4 id="_modle">3.2.1. Modle</h4>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/fizz_buzz/domain/model/fizz_buzz_list.rb[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/fizz_buzz/domain/model/fizz_buzz_value.rb[]</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_type">3.2.2. Type</h4>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/fizz_buzz/domain/type/fizz_buzz_type.rb[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/fizz_buzz/domain/type/fizz_buzz_type_01.rb[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/fizz_buzz/domain/type/fizz_buzz_type_02.rb[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/fizz_buzz/domain/type/fizz_buzz_type_03.rb[]</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_presentation">3.3. Presentation</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">Unresolved directive in fizz_buzz.adoc - include::../../../src/presentation/FizzBuzzApiService.js[]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../src/presentation/FizzBuzzView.js[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../src/presentation/FizzBuzzCounterComponent.js[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../src/presentation/FizzBuzzTableComponent.js[]</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_test">3.4. Test</h3>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/test/fizz_buzz/fizz_buzz_list_command_test.rb[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/test/fizz_buzz/fizz_buzz_value_command_test.rb[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../api/test/fizz_buzz/fizz_buzz_service_test.rb[]</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Unresolved directive in fizz_buzz.adoc - include::../../../test/FizzBuzzApiService.test.js[]</pre>
+</div>
 </div>
 </div>
 </div>
@@ -495,10 +838,10 @@ end</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://asciidoctor.org/">Asciidoctor</a></p>
+<p><a href="http://asciidoctor.org/" target="_blank" rel="noopener">Asciidoctor</a></p>
 </li>
 <li>
-<p><a href="http://www.plantuml.com">PlantUML</a></p>
+<p><a href="http://www.plantuml.com" target="_blank" rel="noopener">PlantUML</a></p>
 </li>
 </ul>
 </div>
@@ -507,7 +850,7 @@ end</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-07 14:00:21 JST
+Last updated 2020-01-21 16:51:29 JST
 </div>
 </div>
 </body>

@@ -5,25 +5,290 @@
 = Fizz Buzz
 
 == 仕様
+=== Api
+1 から 100 までの数をプリントするプログラムを書け。
+
+ただし 3 の倍数のときは数の代わりに｢Fizz｣と、5 の倍数のときは｢Buzz｣とプリントし、
+
+3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。
+
+タイプごとに出力を切り替えることができる。
+
+タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz の場合のみをプリントする。
+
+=== クライアント
+
+1から100までを１件ずつ画面に表示できる。
+
+1から100まで表示された内容を表示できる。
 
 == 設計
 === TODOリスト
+==== Api
+- [x] タイプ1の場合
+ - [x] 数を文字列にして返す
+    - [x] 1を渡したら文字列"1"を返す
+    - [x] 2を渡したら文字列"2"を返す
+  - [x] 3 の倍数のときは数の代わりに｢Fizz｣と返す
+    - [x] 3を渡したら文字列"Fizz"を返す
+  - [x] 5 の倍数のときは｢Buzz｣と返す
+    - [x] 5を渡したら文字列"Buzz"を返す
+  - [x] 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+    - [x] 15を渡したら文字列"FizzBuzz"を返す
+- [x] タイプ2の場合
+  - [x] 数を文字列にして返す
+    - [x] 1を渡したら文字列"1"を返す
+    - [x] 2を渡したら文字列"2"を返す
+  - [x] 3 の倍数のときは数を文字列にして返す
+    - [x] 3を渡したら文字列"3"を返す
+  - [x] 5 の倍数のときは数を文字列にして返す
+    - [x] 5を渡したら文字列"5"を返す
+  - [x] 3 と 5 両方の倍数の場合には数を文字列にして返す
+    - [x] 15を渡したら文字列"15"を返す
+- [x] タイプ3の場合
+  - [x] 数を文字列にして返す
+    - [x] 1を渡したら文字列"1"を返す
+    - [x] 2を渡したら文字列"2"を返す
+  - [x] 3 の倍数のときは数を文字列にして返す
+    - [x] 3を渡したら文字列"3"を返す
+  - [x] 5 の倍数のときは数を文字列にして返す
+    - [x] 5を渡したら文字列"5"を返す
+  - [x] 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+    - [x] 15を渡したら文字列"FizzBuzz"を返す
+- [x] それ以外のタイプの場合
+  - [x] 例外を返す
+
+==== クライアント
+- [x] カウンター画面
+  - [x] 画面イメージを作る
+  - [x] APIサービスを作る
+  - [x] APIサービスと連携するクライアントサービスを作る
+    - [x] 正常系を実装する
+  - [x] UIを作る
+  - [x] UIとクライアントサービスを連携する
+- [x] 一覧表示画面
+  - [x] 画面イメージを作る
+  - [x] APIサービスを作る
+  - [x] APIサービスと連携するクライアントサービスを作る
+    - [x] 正常系を実装する
+  - [x] UIを作る
+  - [x] UIとクライアントサービスを連携する
 
 === ユースケース図
 
 === クラス図
+[plantuml]
+----
+
+package Application {
+  package Service {
+    class FizzBuzzService {
+      String generate()
+      String generate_list()
+    }
+    interface FizzBuzzCommand {
+      execute()
+    }
+
+    class FizzBuzzValueCommand {
+      FizzBuzzType type
+      FizzBuzzValue execute()
+    }
+
+    class FizzBuzzListCommand {
+      FizzBuzzType type
+      FizzBuzzList execute()
+    }
+  }
+}
+
+package Domain {
+    package Model {
+      class FizzBuzzValue {
+        Integer number
+        String value
+        boolean eql()
+      }
+
+      class FizzBuzzList {
+        MAX_COUNT = 100
+        ArrayList list
+        FizzBuzzList add()
+      }
+    }
+
+    package Type {
+      class FizzBuzzType {
+        TYPE_01 = 1
+        TYPE_02 = 2
+        TYPE_03 = 3
+        FizzBuzzType {static} create()
+        Boolean is_fizz()
+        Boolean is_buzz()
+        String generate()
+      }
+
+      class FizzBuzzType01 {
+        String generate()
+      }
+
+      class FizzBuzzType02 {
+        String generate()
+      }
+
+      class FizzBuzzType03 {
+        String generate()
+      }
+    }
+}
+
+package Presentation {
+  class FizzBuzzApiService {
+    apiUrl
+    generate()
+    generateList()
+  }
+
+  class FizzBuzzView {
+    _service
+    _counterComponent
+    _tableComponent
+    render()
+  }
+
+  class FizzBuzzCounterComponent {
+    _service
+    _conter
+    _value
+    incrementEvent()
+    decrementEvent()
+    render()
+  }
+
+  class FizzBuzzTableComponent {
+    _service
+    _list
+    _type
+    changeEvent()
+    render()
+  }
+}
+
+FizzBuzzService -> FizzBuzzCommand
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzCommand *- FizzBuzzType
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType -> FizzBuzzValue
+FizzBuzzListCommand --> FizzBuzzList
+FizzBuzzService <--- FizzBuzzApiService
+FizzBuzzApiService --* FizzBuzzView
+FizzBuzzView *- FizzBuzzCounterComponent
+FizzBuzzTableComponent -* FizzBuzzView
+----
 
 === シーケンス図
 
 == 開発
 
-[source, html]
+=== Application
+==== Service
+[source, ruby]
 ----
 include::../../../api/index.rb[]
 ----
 
+----
+include::../../../api/generate.rb[]
+----
+
+----
+include::../../../api/generate_list.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/application/service/fizz_buzz_service.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/application/service/fizz_buzz_command.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/application/service/fizz_buzz_list_command.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/application/service/fizz_buzz_value_command.rb[]
+----
+
+=== Domain
+==== Modle
+----
+include::../../../api/fizz_buzz/domain/model/fizz_buzz_list.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/domain/model/fizz_buzz_value.rb[]
+----
+
+==== Type
+----
+include::../../../api/fizz_buzz/domain/type/fizz_buzz_type.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/domain/type/fizz_buzz_type_01.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/domain/type/fizz_buzz_type_02.rb[]
+----
+
+----
+include::../../../api/fizz_buzz/domain/type/fizz_buzz_type_03.rb[]
+----
+
+=== Presentation
+[source, javascript]
+----
+include::../../../src/presentation/FizzBuzzApiService.js[]
+----
+
+----
+include::../../../src/presentation/FizzBuzzView.js[]
+----
+
+----
+include::../../../src/presentation/FizzBuzzCounterComponent.js[]
+----
+
+----
+include::../../../src/presentation/FizzBuzzTableComponent.js[]
+----
+
+=== Test
+----
+include::../../../api/test/fizz_buzz/fizz_buzz_list_command_test.rb[]
+----
+
+----
+include::../../../api/test/fizz_buzz/fizz_buzz_value_command_test.rb[]
+----
+
+----
+include::../../../api/test/fizz_buzz/fizz_buzz_service_test.rb[]
+----
+
+----
+include::../../../test/FizzBuzzApiService.test.js[]
+----
+
+
 == 参照
 
-* http://asciidoctor.org/[Asciidoctor]
+* http://asciidoctor.org/[Asciidoctor^]
 
-* http://www.plantuml.com[PlantUML]
+* http://www.plantuml.com[PlantUML^]
