@@ -4051,7 +4051,7 @@ Finished in 0.03285s
 </div>
 </div>
 <div class="paragraph">
-<p>結果を配列にして返したいのですが <strong>eachメソッド</strong> でうまくできませんね。Rubyには新しい配列を作成する <strong>mapメソッド</strong> 用意されいるのでそちらを使いましょう。</p>
+<p>結果を配列にして返したいのですが <strong>eachメソッド</strong> ではうまくできませんね。Rubyには新しい配列を作成する <strong>mapメソッド</strong> が用意されいるのでそちらを使いましょう。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -4175,7 +4175,7 @@ end</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>意味のわかる定数として宣言しました。コードに直接記述された <code>100</code> をといった <strong>リテラル</strong> はマジックナンバーと呼ばれ往々にして後で何を意味するものかわからなくなり変更を難しくする原因となります。早めに意味を表す定数にしておきましょう。</p>
+<p>意味のわかる定数として宣言しました。コードに直接記述された <code>100</code> をといった <strong>数値:リテラル</strong> はマジックナンバーと呼ばれ往々にして後で何を意味するものかわからなくなり変更を難しくする原因となります。早めに意味を表す定数にしておきましょう。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -4605,8 +4605,10 @@ Buzz</code></pre>
 <div class="sect5">
 <h6 id="_ふりかえり">ふりかえり</h6>
 <div class="paragraph">
-<p><code>FizzBuzz</code> プログラムの最初のバージョンをリリースすることができたのでこれまでのふりかえりをしておきましょう。
-まず <strong>TODOリスト</strong> を作成して <strong>テストファースト</strong> で１つずつ小さなステップで開発を進めていきました。
+<p><code>FizzBuzz</code> プログラムの最初のバージョンをリリースすることができたのでこれまでのふりかえりをしておきましょう。</p>
+</div>
+<div class="paragraph">
+<p>まず <strong>TODOリスト</strong> を作成して <strong>テストファースト</strong> で１つずつ小さなステップで開発を進めていきました。
 <strong>仮実装を経て本実装へ</strong> の過程で Rubyの <strong>クラス</strong> を定義して <strong>文字列リテラル</strong> を返す <strong>メソッド</strong> を作成しました。この時点でRubyの <strong>オブジェクトとメソッド</strong> という概念に触れています。</p>
 </div>
 <div class="quoteblock">
@@ -4683,7 +4685,7 @@ Buzz</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>仕上げは、<strong>コードの不吉な臭い</strong> からさらなる改善を実施しました。 <strong>不思議な名前</strong> の <strong>メソッド</strong> を <strong>自動的テスト</strong> を用意することで自信を持って <strong>リファクタリング</strong> を実施し、<strong>長い関数</strong> に対して <strong>ガード節</strong> を導入し <strong>一時変数</strong> <strong>説明変数</strong> など <strong>変数</strong> バリエーションの取り扱いを学びました。そして、<strong>ループ</strong> と <strong>変更可能なデータ</strong> から <strong>配列でよく使われるメソッド</strong> の使い方と <strong>ミュータブル</strong> <strong>イミュータブル</strong> の概念を学び、<strong>コメント</strong> のやり方と <strong>定数</strong> と <strong>マジックナンバー</strong> の問題を学びました。</p>
+<p>仕上げは、<strong>コードの不吉な臭い</strong> からさらなる改善を実施しました。 <strong>不思議な名前</strong> の <strong>メソッド</strong> を <strong>自動的テスト</strong> を用意することで自信を持って <strong>リファクタリング</strong> を実施し、<strong>長い関数</strong> に対して <strong>ガード節</strong> を導入し <strong>一時変数</strong> <strong>説明変数</strong> など <strong>変数</strong> バリエーションの取り扱いを学びました。そして、<strong>ループ</strong> と <strong>変更可能なデータ</strong> から <strong>コレクションパイプライン</strong> の使い方と <strong>ミュータブル</strong> <strong>イミュータブル</strong> の概念を学び、<strong>コメント</strong> のやり方と <strong>定数</strong> と <strong>マジックナンバー</strong> の問題を学びました。</p>
 </div>
 <div class="paragraph">
 <p>最後に、<strong>require</strong> の使い方を通してファイルの分割方法を学ぶことができました。</p>
@@ -5098,7 +5100,7 @@ Finished in 0.00135s
 </div>
 </div>
 <div class="paragraph">
-<p>少なくともテスト駆動開発のゴールに良いコードがあるということはいえるでしょう。え？どうやったら良いコードを書けるようになるかって？私が教えてほしいのですがただ言えることは他の分野と同様に練習の積み重ねのむこうにあるのだろうということだけです。</p>
+<p>少なくともテスト駆動開発のゴールに良いコードがあるということはいえるでしょう。え？どうやったら良いコードを書けるようになるかって？私が教えてほしいのですがただ言えることは他の分野と同様に規律の習得と絶え間ない練習と実践の積み重ねのむこうにあるのだろうということだけです。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -5110,13 +5112,23 @@ Finished in 0.00135s
 &#8212; テスト駆動開発
 </div>
 </div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>ここで、Kent Beckが自ら語ったセリフを思い出しました。「僕は、偉大なプログラマなんかじゃない。偉大な習慣を身につけた少しましなプログラマなんだ」。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版)
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-21 13:56:58 JST
+Last updated 2020-01-21 15:37:09 JST
 </div>
 </div>
 </body>
