@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>テスト駆動開発から始めるRuby入門</title>
-<date>2020-01-20</date>
+<date>2020-01-21</date>
 </info>
 <simpara>これはとあるプログラマがどのような思考を経てテスト駆動開発でアプリケーションを構築していったかを解説した内容である。隣りに座って話を聞きながらコードを追いかけているイメージで読み進めてみてださい。</simpara>
 <section xml:id="_エピソード1">
@@ -16,7 +16,7 @@
 <simpara>プログラムを作成するにあたってまず何をすればよいだろうか？私は、まず仕様の確認をして <emphasis role="strong">TODOリスト</emphasis> を作るところから始めます。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis> <xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>TODOリスト</simpara>
 <simpara>何をテストすべきだろうか----着手する前に、必要になりそうなテストをリストに書き出しておこう。</simpara>
@@ -68,7 +68,7 @@
 <simpara>最初にプログラムする対象を決めたので早速プロダクトコードを実装・・・ではなく <emphasis role="strong">テストファースト</emphasis> で作業を進めていきましょう。まずはプログラムを実行するための準備作業を進める必要がありますね。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis> <xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>テストファースト</simpara>
 <simpara>いつテストを書くべきだろうか----それはテスト対象のコードを書く前だ。</simpara>
@@ -76,7 +76,7 @@
 <simpara>では、どうやってテストすればいいでしょうか？テスティングフレームワークを使って自動テストを書きましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis> <xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>テスト（名詞）
 どうやってソフトウェアをテストすればよいだろか----自動テストを書こう。</simpara>
@@ -162,7 +162,7 @@ $ git commit -m 'セットアップ'</programlisting>
 <simpara><emphasis role="strong">1を渡したら文字列"1"を返す</emphasis> プログラムを <literal>main.rb</literal> に書きましょう。最初に何を書くのかって？ アサーションを最初に書きましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis> <xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>アサートファースト</simpara>
 <simpara>いつアサーションを書くべきだろうか----最初に書こう</simpara>
@@ -182,10 +182,10 @@ $ git commit -m 'セットアップ'</programlisting>
 <programlisting language="ruby" linenumbering="unnumbered">require 'minitest/reporters'
 Minitest::Reporters.use!
 require 'minitest/autorun'</programlisting>
-<simpara>テストコードを書きます。え、日本語でテストケースを書くの？ですって。開発体制にもよりますが日本人が開発するのであれば無理に英語で書くよりドキュメントとしての可読性が上がるのでテストコードであれば問題は無いと思います。</simpara>
+<simpara>テストコードを書きます。え？日本語でテストケースを書くの？ですかって。開発体制にもよりますが日本人が開発するのであれば無理に英語で書くよりドキュメントとしての可読性が上がるのでテストコードであれば問題は無いと思います。</simpara>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
+リーダブルコード
 </attribution>
 <simpara>テストコードを読みやすくするのは、テスト以外のコードを読みやすくするのと同じくらい大切なことだ。</simpara>
 </blockquote>
@@ -215,7 +215,7 @@ Finished in 0.00201s
 <simpara><literal>NameError:         NameError: uninitialized constant FizzBuzzTest::FizzBuzz</literal> &#8230;&#8203;FizzBuzzが定義されていない。そうですねまだ作ってないのだから当然ですよね。では <literal>FizzBuzz::generate</literal> メソッドを作りましょう。どんな振る舞いを書けばいいのでしょうか？とりあえず最初のテストを通すために <emphasis role="strong">仮実装</emphasis> から始めるとしましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis> <xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>仮実装を経て本実装へ</simpara>
 <simpara>失敗するテストを書いてから、最初に行う実装はどのようなものだろうか----ベタ書きの値を返そう。</simpara>
@@ -318,7 +318,9 @@ Started with run options --seed 62350
 
 Finished in 0.00179s
 2 tests, 2 assertions, 1 failures, 0 errors, 0 skips</programlisting>
-<simpara>テストが失敗しました。それは文字列1しか返さないプログラムなのだから当然ですよね。では1が渡されたら文字列1を返し、2を渡したら文字列2を返すようにプログラムを修正しましょう。 <emphasis role="strong">数値リテラル</emphasis> を <emphasis role="strong">文字列リテラル</emphasis>　に変換する必要があります。公式リファレンスで調べてみましょう。Rubyの公式リファレンスは <link xl:href="https://docs.ruby-lang.org/">https://docs.ruby-lang.org/</link> です。 <link xl:href="https://docs.ruby-lang.org/ja/">日本語リファレンス</link> から <link xl:href="https://docs.ruby-lang.org/ja/search/">るりまサーチ</link>を選択してキーワード検索してみましょう。 <link xl:href="https://docs.ruby-lang.org/ja/search/query:%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B/">文字列 変換</link> キーワードで検索すると <literal>to_s</literal> というキーワードが出てきました。今度は <link xl:href="https://docs.ruby-lang.org/ja/search/query:to_s/">to_s</link> で検索すると色々出てきました、どうやら <literal>to_s</literal> を使えばいいみたいですね。ちなみに検索エンジンから <link xl:href="https://www.google.com/search?hl=ja&amp;sxsrf=ACYBGNRISq_mMHcQ1nGzgT3k_igW82f1Sg%3A1579494685196&amp;source=hp&amp;ei=HS0lXqnSCeeumAXN5ZigCg&amp;q=Ruby+%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B&amp;oq=Ruby+%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B&amp;gs_l=psy-ab.3..0i4i37l2j0i8i30l6.1386.6456..6820&#8230;&#8203;2.0..0.139.2322.1j20&#8230;&#8203;&#8230;&#8203;0&#8230;&#8203;.1..gws-wiz&#8230;&#8203;&#8230;&#8203;.0i131i4j0i4j0i131j35i39j0j0i8i4i30.FfEPbOjPZcw&amp;ved=0ahUKEwjp1IidrJHnAhVnF6YKHc0yBqQQ4dUDCAg&amp;uact=5">Ruby 文字列 変換</link> で検索してもいろいろ出てくるのですがすべてのサイトが必ずしも正確な説明をしているまたは最新のバージョンに対応しているとは限らないので始めは公式リファレンスや市販の書籍から調べる癖をつけておきましょう。</simpara>
+<simpara>テストが失敗しました。それは文字列1しか返さないプログラムなのだから当然ですよね。では1が渡されたら文字列1を返し、2を渡したら文字列2を返すようにプログラムを修正しましょう。 <emphasis role="strong">数値リテラル</emphasis> を <emphasis role="strong">文字列リテラル</emphasis>　に変換する必要があります。公式リファレンスで調べてみましょう。</simpara>
+<simpara>Rubyの公式リファレンスは <link xl:href="https://docs.ruby-lang.org/">https://docs.ruby-lang.org/</link> です。 <link xl:href="https://docs.ruby-lang.org/ja/">日本語リファレンス</link> から <link xl:href="https://docs.ruby-lang.org/ja/search/">るりまサーチ</link>を選択してキーワード検索してみましょう。 <link xl:href="https://docs.ruby-lang.org/ja/search/query:%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B/">文字列 変換</link>キーワードで検索すると <literal>to_s</literal> というキーワードが出てきました。今度は <link xl:href="https://docs.ruby-lang.org/ja/search/query:to_s/">to_s</link> で検索すると色々出てきました、どうやら <literal>to_s</literal> を使えばいいみたいですね。</simpara>
+<simpara>ちなみに検索エンジンから <link xl:href="https://www.google.com/search?hl=ja&amp;sxsrf=ACYBGNRISq_mMHcQ1nGzgT3k_igW82f1Sg%3A1579494685196&amp;source=hp&amp;ei=HS0lXqnSCeeumAXN5ZigCg&amp;q=Ruby+%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B&amp;oq=Ruby+%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B&amp;gs_l=psy-ab.3..0i4i37l2j0i8i30l6.1386.6456..6820&#8230;&#8203;2.0..0.139.2322.1j20&#8230;&#8203;&#8230;&#8203;0&#8230;&#8203;.1..gws-wiz&#8230;&#8203;&#8230;&#8203;.0i131i4j0i4j0i131j35i39j0j0i8i4i30.FfEPbOjPZcw&amp;ved=0ahUKEwjp1IidrJHnAhVnF6YKHc0yBqQQ4dUDCAg&amp;uact=5">Ruby 文字列 変換</link>で検索してもいろいろ出てくるのですがすべてのサイトが必ずしも正確な説明をしているまたは最新のバージョンに対応しているとは限らないので始めは公式リファレンスや市販の書籍から調べる癖をつけておきましょう。</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">...
 class FizzBuzz
   def self.generate(n)
@@ -336,7 +338,7 @@ Finished in 0.00098s
 <simpara>テストが無事通りました。このように２つ目のテストによって <literal>FizzBuzz::generate</literal> メソッドの一般化を実現することができました。このようなアプローチを <emphasis role="strong">三角測量</emphasis> と言います。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>三角測量</simpara>
 <simpara>テストから最も慎重に一般化を引き出すやり方はどのようなものだろうか----２つ以上の例があるときだけ、一般化を行うようにしよう。</simpara>
@@ -373,7 +375,7 @@ Finished in 0.00098s
 <simpara>たかが <emphasis role="strong">数を文字列にして返す</emphasis> プログラムを書くのにこんなに細かいステップを踏んでいくの？と思ったかもしれません。プログラムを書くということは細かいステップを踏んで行くことなのです。そして、細かいステップを踏み続けることが大切なことなのです。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>TDDで大事なのは、細かいステップを踏むことではなく、細かいステップを踏み続けられるようになることだ。</simpara>
 </blockquote>
@@ -389,7 +391,7 @@ Finished in 0.00098s
 ...</programlisting>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
+リーダブルコード
 </attribution>
 <simpara>テストの本質というのは、「こういう状況と入力から、こういう振る舞いと出力を期待する」のレベルまで要約できる。</simpara>
 </blockquote>
@@ -404,7 +406,7 @@ Finished in 0.00098s
 <simpara>ここでテスト駆動開発の流れを確認しておきましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <orderedlist numeration="arabic">
 <listitem>
@@ -422,13 +424,13 @@ Finished in 0.00098s
 <simpara>コードはグリーンの状態ですが <emphasis role="strong">リファクタリング</emphasis> を実施していませんね。重複を除去しましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版)
 </attribution>
 <simpara>リファクタリング(名詞) 外部から見たときの振る舞いを保ちつつ、理解や修正が簡単になるように、ソフトウェアの内部構造を変化させること。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版
 </attribution>
 <simpara>リファクタリングする(動詞) 一連のリファクタリングを適用して、外部から見た振る舞いの変更なしに、ソフトウェアを再構築すること。</simpara>
 </blockquote>
@@ -437,7 +439,7 @@ Finished in 0.00098s
 <simpara>テストコードを見てください。テストを実行するにあたって毎回前準備を実行する必要があります。こうした処理は往々にして同じ処理を実行するものなので <emphasis role="strong">メソッドの抽出</emphasis> を適用して重複を除去しましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>新装版 リファクタリング</emphasis><xref linkend="rft"/>
+新装版 リファクタリング
 </attribution>
 <simpara>メソッドの抽出</simpara>
 <simpara>ひとまとめにできるコードの断片がある。</simpara>
@@ -490,13 +492,13 @@ end</programlisting>
 <simpara>引数の名前が <literal>n</literal> ですね。コンピュータにはわかるかもしれませんが人間が読むコードとして少し不親切です。特にRubyのような動的言語では型が明確に定義されないのでなおさらです。ここは <emphasis role="strong">変数名の変更</emphasis> を適用して人間にとって読みやすいコードにリファクタリングしましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版)
 </attribution>
 <simpara>コンパイラがわかるコードは誰にでも書ける。すぐれたプログラマは人間にとってわかりやすいコードを書く。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
+リーダブルコード
 </attribution>
 <simpara>名前は短いコメントだと思えばいい。短くてもいい名前をつければ、それだけ多くの情報を伝えることができる。</simpara>
 </blockquote>
@@ -545,13 +547,13 @@ Finished in 0.00746s
 <simpara>最初にプロダクトコードを書いて一通りの機能を作ってから動作を確認する進め方だとこの手の間違いはいつどこで作り込んだのかわからなくなるため原因の調査に時間がかかり残念な経験をしたドジっ子プログラマは変更なんてするもんじゃないと思いコードを変更することに不安を持つようになるでしょう。でも、テスト駆動開発ならそんなドジっ子プログラマでも自動テストと小さなステップのおかげで上記のようなしょうもない間違いもすぐに見つけてすぐに対応することができるのでコードを変更する勇気を持つことができるのです。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>テスト駆動開発は、プログラミング中の不安をコントロールする手法だ。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版)
 </attribution>
 <simpara>リファクタリングでは小さなステップでプログラムを変更していく。そのため間違ってもバグを見つけるのは簡単である。</simpara>
 </blockquote>
@@ -559,7 +561,7 @@ Finished in 0.00746s
 <programlisting language="bash" linenumbering="unnumbered">git commit -m 'refactor: 変数名の変更'</programlisting>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版)
 </attribution>
 <simpara>リファクタリングが成功するたびにコミットしておけば、たとえ壊してしまったとしても、動いていた状態に戻すことができます。変更をコミットしておき、意味のある単位としてまとまってから、共有のリポジトリに変更をプッシュすればよいのです。</simpara>
 </blockquote>
@@ -629,7 +631,7 @@ Finished in 0.05129s
 <simpara>さて、失敗するテストを書いたので次はテストを通すためのプロダクトコードを書くわけですがどうしましょうか？　<emphasis role="strong">仮実装</emphasis>　でベタなコードを書きますか？実現したい振る舞いは <literal>もし3を渡したらならば文字列Fizzを返す</literal> です。英語なら <literal>If number is 3, result is Fizz</literal> といったところでしょうか。ここは <emphasis role="strong">明白な実装</emphasis> で片付けた方が早いでしょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>明白な実装</simpara>
 <simpara>シンプルな操作を実現するにはどうすればいいだろうか----そのまま実装しよう。</simpara>
@@ -643,7 +645,7 @@ Finished in 0.05129s
   end
 end</programlisting>
 <simpara>ここでは <emphasis role="strong">if式</emphasis> と <emphasis role="strong">演算子</emphasis> を使ってみましょう。なんかプログラムっぽくなってきましたね。
-3で割で割り切れる場合はFizzを返すということは <emphasis role="strong">数数リテラル</emphasis> 3で割った余りが0の場合は <emphasis role="strong">文字列リテラル</emphasis> Fizzを返すということなので余りを求める <emphasis role="strong">演算子</emphasis> を調べる必要がありますね。公式リファレンスで <emphasis role="strong">算術演算子</emphasis> をキーワードで検索したところ <link xl:href="https://docs.ruby-lang.org/ja/search/query:%E7%AE%97%E8%A1%93%E6%BC%94%E7%AE%97%E5%AD%90/">いろいろ</link> 出てきました。 <link xl:href="https://docs.ruby-lang.org/ja/search/query:%E7%AE%97%E8%A1%93%E6%BC%94%E7%AE%97%E5%AD%90/query:%25/">%</link> を使えばいいみたいですね。</simpara>
+3で割で割り切れる場合はFizzを返すということは <emphasis role="strong">数値リテラル</emphasis> 3で割った余りが0の場合は <emphasis role="strong">文字列リテラル</emphasis> Fizzを返すということなので余りを求める <emphasis role="strong">演算子</emphasis> を調べる必要がありますね。公式リファレンスで <emphasis role="strong">算術演算子</emphasis> をキーワードで検索したところ <link xl:href="https://docs.ruby-lang.org/ja/search/query:%E7%AE%97%E8%A1%93%E6%BC%94%E7%AE%97%E5%AD%90/">いろいろ</link>出てきました。 <link xl:href="https://docs.ruby-lang.org/ja/search/query:%E7%AE%97%E8%A1%93%E6%BC%94%E7%AE%97%E5%AD%90/query:%25/">%</link>を使えばいいみたいですね。</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">class FizzBuzz
   def self.generate(number)
     result = number.to_s
@@ -716,10 +718,10 @@ end</programlisting>
     result
   end
 end</programlisting>
-<simpara>ここでは <emphasis role="strong">アルゴリズムの置き換え</emphasis> を適用してより　<emphasis role="strong">メソッドチェーンと述語メソッド</emphasis> を使ってRubyらしい書き方にリファクタリングしてみました。</simpara>
+<simpara>ここでは <emphasis role="strong">アルゴリズムの置き換え</emphasis> を適用します。 <emphasis role="strong">メソッドチェーンと述語メソッド</emphasis> を使ってRubyらしい書き方にリファクタリングしてみました。</simpara>
 <blockquote>
 <attribution>
-<emphasis>新装版 リファクタリング</emphasis><xref linkend="rft"/>
+新装版 リファクタリング
 </attribution>
 <simpara>アルゴリズムの取り替え</simpara>
 <simpara>アルゴリズムをよりわかりやすいものに置き換えたい。</simpara>
@@ -727,13 +729,13 @@ end</programlisting>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>かんたんRuby</emphasis> <xref linkend="kruby"/>
+かんたんRuby
 </attribution>
 <simpara>メソッドチェーンは言葉の通り、メソッドを繋げて呼び出す方法です。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>かんたんRuby</emphasis> <xref linkend="kruby"/>
+かんたんRuby
 </attribution>
 <simpara>述語メソッドとはメソッド名の末尾に「？」をつけたメソッドのことを指します。</simpara>
 </blockquote>
@@ -901,7 +903,7 @@ end</programlisting>
 <simpara>ここでは、<emphasis role="strong">メソッドのインライン化</emphasis> を適用してしてテストコードを読みやすくすることにしました。テストコードの <emphasis role="strong">自己文書化</emphasis> により動作する仕様書にすることができました。</simpara>
 <blockquote>
 <attribution>
-<emphasis>新装版 リファクタリング</emphasis><xref linkend="rft"/>
+新装版 リファクタリング
 </attribution>
 <simpara>メソッドのインライン化</simpara>
 <simpara>メソッドの本体が、名前をつけて呼ぶまでもなく明らかである。</simpara>
@@ -909,15 +911,15 @@ end</programlisting>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>混乱せずに読めるテストコードを目指すなら（コンピュータではなく人のためにテストを書いていることを忘れてはならない）、テストメソッドの長さは３行を目指そう。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
+リーダブルコード
 </attribution>
-<simpara>この関数名は「自己文書化」されている。関数名はいろんあところで使用されるのだから、優れたコメントよりも名前のほうが大切だ。</simpara>
+<simpara>この関数名は「自己文書化」されている。関数名はいろんなところで使用されるのだから、優れたコメントよりも名前のほうが大切だ。</simpara>
 </blockquote>
 <programlisting language="ruby" linenumbering="unnumbered">$ ruby main.rb
 $ git commit -m 'refactor: メソッドのインライン化'</programlisting>
@@ -1003,7 +1005,7 @@ Finished in 0.00964s
 <simpara>おっと、調子に乗って <emphasis role="strong">明白な実装</emphasis> をしていたら怒られてしまいました。ここは一旦ギアを下げて小さなステップで何が問題かを調べることにしましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>明白な実装はセカンドギアだ。頭で考えていることがうまくコードに落とせないときは、ギアを下げる用意をしよう。</simpara>
 </blockquote>
@@ -1120,7 +1122,7 @@ end</programlisting>
 $ git commit -m 'test: 15を渡したら文字列FizzBuzzを返す'</programlisting>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>私はテスト駆動開発を長年行っているので、他人にミスを気づかれる前に、自分の誤りを修正できるだけなのだ。</simpara>
 </blockquote>
@@ -1142,7 +1144,7 @@ end</programlisting>
 <simpara><emphasis role="strong">if式</emphasis> の中でさらに <emphasis role="strong">if式</emphasis> をネストしています。いわゆる <emphasis role="strong">コードの不吉な臭い</emphasis> がしますね。ここは仕様の文言にある <literal>3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。</literal> に沿った記述にするとともにネストした部分をわかりやすくするために <emphasis role="strong">アルゴリズムの置き換え</emphasis> を適用してリファクタリングをしましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
+リーダブルコード
 </attribution>
 <simpara>ネストの深いコードは理解しにくい。</simpara>
 </blockquote>
@@ -1161,7 +1163,7 @@ end</programlisting>
 end</programlisting>
 <simpara>テストして、コミットです。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
-$ git commit -m 'refactor: アルゴリズムの置き換え:'</programlisting>
+$ git commit -m 'refactor: アルゴリズムの置き換え'</programlisting>
 </section>
 </section>
 <section xml:id="_休憩">
@@ -1213,7 +1215,7 @@ $ git commit -m 'refactor: アルゴリズムの置き換え:'</programlisting>
 <simpara>数を引数にして文字列を返す <literal>FizzBuzz::generate</literal> メソッドはできたみたいですね。次のやることは・・・新しいメソッドを追加する必要がありそうです。気分を切り替えるため少し休憩を取りましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>疲れたり手詰まりになったりしたときはどうすればいいだろうか----休憩を取ろう。</simpara>
 </blockquote>
@@ -1235,17 +1237,19 @@ $ git commit -m 'refactor: アルゴリズムの置き換え:'</programlisting>
 <simpara>プリントする</simpara>
 </listitem>
 </itemizedlist>
-<simpara>どうやら <emphasis role="strong">配列オブジェクト</emphasis> を返すプログラムを書かないといけないようですね。え？ <emphasis role="strong">明白な実装</emphasis> の実装イメージがわかない。そんな時は <emphasis role="strong">仮実装</emphasis> からステップを小さくして始めるとしましょう。</simpara>
+<simpara>どうやら <emphasis role="strong">配列オブジェクト</emphasis> を返すプログラムを書かないといけないようですね。え？ <emphasis role="strong">明白な実装</emphasis> の実装イメージがわかない。そんな時はステップを小さくして <emphasis role="strong">仮実装</emphasis> から始めるとしましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>何を書くべきかわかっているときは、明白な実装を行う。わからないときには仮実装を行う。まだ正しい実装が見えてこないなら、三角測量を行う。それでもまだわからないなら、シャワーを浴びに行こう。</simpara>
 </blockquote>
 </section>
 <section xml:id="_学習用テスト">
 <title>学習用テスト</title>
-<simpara><emphasis role="strong">テストファースト</emphasis> でまずRubyの <emphasis role="strong">配列</emphasis> の振る舞いを確認していきましょう。公式リファレンスによるとRubyではArrayクラスとして定義されているようですね。空の配列を作るには <literal>[]</literal> (配列リテラル)を使えばいいみたいですね。こんな感じかな？</simpara>
+<section xml:id="_配列">
+<title>配列</title>
+<simpara><emphasis role="strong">テストファースト</emphasis> でまずRubyの <emphasis role="strong">配列</emphasis> の振る舞いを確認していきましょう。公式リファレンスによるとRubyでは <link xl:href="https://docs.ruby-lang.org/ja/latest/class/Array.html">Arrayクラスとして定義されている</link>ようですね。空の配列を作るには <literal>[]</literal> (配列リテラル)を使えばいいみたいですね。こんな感じかな？</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">...
     describe '1から100までの数の配列を返す' do
       def test_配列の初めは文字列の1を返す
@@ -1292,7 +1296,7 @@ Started with run options --seed 32701
 
 Finished in 0.04383s
 5 tests, 5 assertions, 1 failures, 0 errors, 0 skips</programlisting>
-<simpara><emphasis role="strong">配列</emphasis> には <link xl:href="https://docs.ruby-lang.org/ja/latest/class/Array.html">要素を操作するメソッドが用意されており</link> 内容を色々操作できそうですね。でも、いちいちテストコードを編集してテストを実行させるのも面倒なのでここはデバッガを使ってみましょう。まずブレークポイントを設定して・・・</simpara>
+<simpara><emphasis role="strong">配列</emphasis> には <link xl:href="https://docs.ruby-lang.org/ja/latest/class/Array.html">要素を操作するメソッドが用意されており</link>内容を色々操作できそうですね。でも、いちいちテストコードを編集してテストを実行させるのも面倒なのでここはデバッガを使ってみましょう。まずブレークポイントを設定して・・・</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">...
     describe '1から100までの数の配列を返す' do
       def test_配列の初めは文字列の1を返す
@@ -1413,7 +1417,7 @@ Started with run options --seed 39118
 
 Finished in 0.00186s
 5 tests, 7 assertions, 0 failures, 0 errors, 0 skips</programlisting>
-<simpara><literal>result</literal> に配列を返すメソッドを作れば良さそうですね。とりあえずメソッド名は今の時点ではあまり考えずに・・・</simpara>
+<simpara><emphasis role="strong">変数</emphasis> <literal>result</literal> に配列を返すメソッドを作れば良さそうですね。とりあえずメソッド名は今の時点ではあまり考えずに・・・</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">...
     describe '1から100までの数の配列を返す' do
       def test_配列の初めは文字列の1を返す
@@ -1482,7 +1486,7 @@ end</programlisting>
 end</programlisting>
 <blockquote>
 <attribution>
-<emphasis>かんたんRuby</emphasis> <xref linkend="kruby"/>
+かんたんRuby
 </attribution>
 <simpara>%記法とは、文字列や正規表現などを定義する際に、%を使った特別な書き方をすることでエスケープ文字を省略するなど、可読性を高めることができる記法です。</simpara>
 </blockquote>
@@ -1496,7 +1500,7 @@ Finished in 0.00195s
 <simpara><emphasis role="strong">TODOリスト</emphasis> の１つ目を <emphasis role="strong">仮実装</emphasis> で片づけことができました。ちなみにテストコードを使ってソフトウェアの振る舞いを検証するテクニックを <emphasis role="strong">学習用テスト</emphasis> と言います。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>学習用テスト</simpara>
 <simpara>チーム外の誰かが書いたソフトウェアのテストを書くのはどのようなときか----そのソフトウェアの新機能を初めて使う際に書いてみよう。</simpara>
@@ -1518,7 +1522,10 @@ Finished in 0.00195s
 <simpara>プリントする</simpara>
 </listitem>
 </itemizedlist>
-<simpara><literal>FizzBuzz::print_1_to_100</literal> メソッドはまだ最後の要素が検証されていませんね。<emphasis role="strong">三角測量</emphasis> で小さなステップで進めていくことにしましょう。</simpara>
+</section>
+<section xml:id="_繰り返し処理">
+<title>繰り返し処理</title>
+<simpara><literal>FizzBuzz::print_1_to_100</literal> メソッドはまだ最後の要素が検証されていませんね。<emphasis role="strong">三角測量</emphasis> を使って小さなステップで進めていくことにしましょう。</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">...
     describe '1から100までの数の配列を返す' do
       def test_配列の初めは文字列の1を返す
@@ -1548,13 +1555,13 @@ Finished in 0.02936s</programlisting>
 <simpara>配列は3までなので想定通りテストは失敗します。さて、1から100までの文字列で構成される配列をどうやって作りましょうか？ 先程は <emphasis role="strong">if式</emphasis> を使って <emphasis role="strong">条件分岐</emphasis> をプログラムで実行しました。今回は <emphasis role="strong">繰り返し処理</emphasis> をプログラムで実行する必要がありそうですね。Rubyの繰り返し処理には <emphasis role="strong">for式</emphasis> <emphasis role="strong">while/until/loop</emphasis> などがありますが実際のところ <emphasis role="strong">eachメソッド</emphasis> を使った繰り返し処理が主流です。とはいえ、実際に動かして振る舞いを確認しないとイメージは難しいですよね。 <emphasis role="strong">学習用テスト</emphasis> を書いてもいいのですが今回は <emphasis>irb上で簡単なコードを動かしてみる</emphasis><xref linkend="pruby"/>ことで振る舞いを検証してみましょう。まずコマンドラインで <literal>irb</literal> を起動します。</simpara>
 <blockquote>
 <attribution>
-<emphasis>プロを目指す人のためのRuby入門</emphasis> <xref linkend="pruby"/>
+プロを目指す人のためのRuby入門
 </attribution>
 <simpara>Rubyにはfor文はあります。ですが、ほとんどのRubyプログラマはfor文を使いません。筆者も5〜6年Rubyを使っていますが、for文を書いたことは一度もありません。Rubyの場合はforのような構文で繰り返し処理をさせるのではなく、配列自身に対して「繰り返せ」という命令を送ります。ここで登場するのがeachメソッドです。</simpara>
 </blockquote>
 <programlisting language="bash" linenumbering="unnumbered">$ irb
 irb(main):001:0&gt;</programlisting>
-<simpara>まず先程デバッガでやった配列の作成をやってみましょう。</simpara>
+<simpara>まず先程デバッガで検証した配列の作成をやってみましょう。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">irb(main):001:0&gt; result = %w[1 2 3]
 =&gt; ["1", "2", "3"]</programlisting>
 <simpara>配列のeachメソッドをつかって配列の中身を繰り返し処理で表示させてみましょう。<literal>p</literal> はプリントメソッドです。</simpara>
@@ -1566,7 +1573,7 @@ irb(main):001:0&gt;</programlisting>
 <simpara>配列の中身を繰り返し処理で取り出す方法はわかりました。あとは100までの配列をどうやって作ればよいのでしょうか？ <literal>['1','2','3'&#8230;&#8203;'100']</literal> と手書きで作りますか？100件ぐらいならまあできなくもないでしょうが1000件,10000件ならどうでしょうか？無理ですね。計算機にやってもらいましょう、調べてみるとRubyには <emphasis role="strong">レンジオブジェクト(Range)</emphasis> というもの用意されいるそうです。説明を読んでもピンと来ないので実際に動作を確認してみましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>かんたんRuby</emphasis> <xref linkend="kruby"/>
+かんたんRuby
 </attribution>
 <simpara>レンジオブジェクト（範囲オブジェクトとも呼ばれます）はRangeクラスのオブジェクトのことで、「..」や「&#8230;&#8203;」演算子を使って定義します。「1..3」のように定義し、主に整数値や文字列を使って範囲を表現します。</simpara>
 </blockquote>
@@ -1591,7 +1598,7 @@ irb(main):009:0&gt; (1...5).each do |n| p n end
 99
 100
 =&gt; 1..100</programlisting>
-<simpara><literal>FizzBuzz::print_1_to_100</literal> メソッドの <emphasis role="strong">明白な実装</emphasis> イメージができましたか？ <literal>irb</literal> を終了させてプロダクトコードを変更しましょう。</simpara>
+<simpara><literal>FizzBuzz::print_1_to_100</literal> <emphasis role="strong">メソッド</emphasis> の <emphasis role="strong">明白な実装</emphasis> イメージができましたか？ <literal>irb</literal> を終了させてプロダクトコードを変更しましょう。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">irb(main):011:0&gt; exit</programlisting>
 <programlisting language="ruby" linenumbering="unnumbered">...
   def self.print_1_to_100
@@ -1639,7 +1646,7 @@ Started with run options --seed 40179
 
 Finished in 0.00196s
 6 tests, 6 assertions, 0 failures, 0 errors, 0 skips</programlisting>
-<simpara>ちなみに、<emphasis>do &#8230;&#8203; endを使う代わりに、{}で囲んでもブロックを作れる</emphasis><xref linkend="pruby"/> のでこのように書き換えれます。</simpara>
+<simpara>ちなみに、<emphasis>do &#8230;&#8203; endを使う代わりに、{}で囲んでもブロックを作れる</emphasis><xref linkend="pruby"/>のでこのように書き換えることができます。</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">...
   def self.print_1_to_100
     result = []
@@ -1666,6 +1673,9 @@ end</programlisting>
 <simpara>プリントする</simpara>
 </listitem>
 </itemizedlist>
+</section>
+<section xml:id="_メソッド呼び出し">
+<title>メソッド呼び出し</title>
 <simpara>1から100までの数の配列を返すメソッドはできました。しかし、このプログラムは1から100までの数を <literal>FizzBuzz::generate</literal> した結果を返すのが正しい振る舞いですよね。 <emphasis role="strong">TODOリスト</emphasis> を追加してテストも追加します。</simpara>
 <simpara>TODOリスト</simpara>
 <itemizedlist>
@@ -1788,7 +1798,7 @@ end</programlisting>
 <simpara><emphasis role="strong">説明変数</emphasis> への代入が重複しています。ついでに <emphasis role="strong">メソッドの抽出</emphasis> をして重複をなくしておきましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>最初のステップ「準備(Arrange)」は、テスト間で重複しがちだ。それとは対象的に「実行(Act)」「アサート(Assert)」は重複しないことが多い。</simpara>
 </blockquote>
@@ -1854,6 +1864,9 @@ Finished in 0.00207s
 <simpara>プリントする</simpara>
 </listitem>
 </itemizedlist>
+</section>
+<section xml:id="_配列や繰り返し処理の理解">
+<title>配列や繰り返し処理の理解</title>
 <simpara>まだリファクタリングが残っているのですがその前にRubyの配列メソッドの理解をもう少し深めたいので <emphasis role="strong">学習用テスト</emphasis> を追加しましょう。</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">...
   describe '配列や繰り返し処理を理解する' do
@@ -1943,12 +1956,13 @@ Finished in 0.00307s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</programlisting>
 <programlisting language="bash" linenumbering="unnumbered">$ git commit -m 'test: 学習用テスト'</programlisting>
 </section>
+</section>
 <section xml:id="_コードの不吉な臭い">
 <title>コードの不吉な臭い</title>
 <simpara>終わりが見えてきましたがまだリファクタリングの必要がありそうです。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>開発を終えるまでに考えつくまでに考えつく限りのテストを書き、テストに支えられたリファクタリングが、網羅性のあるテストに支えられてたリファクタリングになるようにしなければならない。</simpara>
 </blockquote>
@@ -1977,29 +1991,29 @@ end</programlisting>
 <title>不思議な名前</title>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版)
 </attribution>
 <simpara>不思議な名前</simpara>
 <simpara>明快なコードにするために最も重要なのは、適切な名前付けです。</simpara>
 </blockquote>
+<blockquote>
+<attribution>
+リーダブルコード
+</attribution>
+<simpara>変数や関数などの構成要素の名前は、抽象的ではなく具体的なものにしよう。</simpara>
+</blockquote>
 <simpara>まず、気になったのが <literal>print_1_to_100</literal> メソッドです。このメソッドはFizzBuzzの配列を返すメソッドであって1から100までを表示するメソッドではありませんよね。ここは <emphasis role="strong">メソッド名の変更</emphasis> を適用して処理の内容に沿った名前に変更しましょう。え？動いている処理をわざわざ変更してプログラムを壊す危険を犯す必要があるのかですって。確かに自動テストのない状況でドジっ子プログラマがそんなことをすればいずれ残念なことになるでしょうね。でも、すでに自動テストが用意されている今なら自信をもって動いている処理でも変更できますよね。</simpara>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版)
 </attribution>
 <simpara>リファクタリングに入る前に、しっかりとした一連のテスト群を用意しておくこと。これらのテストには自己診断機能が不可欠である。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>テストは不安を退屈に変える賢者の石だ。</simpara>
-</blockquote>
-<blockquote>
-<attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
-</attribution>
-<simpara>変数や関数などの構成要素の名前は、抽象的ではなく具体的なものにしよう。</simpara>
 </blockquote>
 <programlisting language="ruby" linenumbering="unnumbered">...
   def self.print_1_to_100
@@ -2060,7 +2074,7 @@ Finished in 0.00351s
 <programlisting language="bash" linenumbering="unnumbered">$ git commit -m 'refactor:　メソッド名の変更'</programlisting>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>TDDにおけるテストの考え方は実用主義に貫かれている。TDDにおいてテストは目的を達成するための手段であり、その目的は、大きなる自信を伴うコードだ。</simpara>
 </blockquote>
@@ -2069,7 +2083,7 @@ Finished in 0.00351s
 <title>長い関数</title>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版)
 </attribution>
 <simpara>長い関数</simpara>
 <simpara>経験上、長く充実した人生を送るのは、短い関数を持ったプログラムです。</simpara>
@@ -2118,9 +2132,11 @@ end</programlisting>
     result
   end
 end</programlisting>
+<simpara><literal>FizzBuzz</literal> の <emphasis role="strong">メソッド</emphasis> は大きく分けて <emphasis role="strong">変数</emphasis> の初期化 <emphasis role="strong">条件分岐</emphasis> <emphasis role="strong">繰り返し処理</emphasis> による判断、計算そして結果の <emphasis role="strong">代入</emphasis> を行い最後に <emphasis role="strong">代入</emphasis> された <emphasis role="strong">変数</emphasis> を返す流れになっています。
+そこで各単位ごとにスペースを挿入してコードの可読性を上げておきましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
+リーダブルコード
 </attribution>
 <simpara>人間の脳はグループや階層を１つの単位として考える。コードの概要をすばやく把握してもらうには、このような「単位」を作ればいい。</simpara>
 </blockquote>
@@ -2161,7 +2177,7 @@ Finished in 0.00296s
 <simpara>条件に該当した場合は処理を最後まで進めずその場で終了させる書き方を <emphasis role="strong">ガード節</emphasis> と言います。このように書くことで追加ロジックが発生しても既存のコードを編集することなく追加することができるので安全に簡単に変更できるコードにすることができます。</simpara>
 <blockquote>
 <attribution>
-<emphasis>新装版 リファクタリング</emphasis><xref linkend="rft"/>
+新装版 リファクタリング
 </attribution>
 <simpara>ガード節による入れ子条件記述の置き換え</simpara>
 <simpara>メソッド内に正常ルートが不明確な条件つき振る舞いがある。</simpara>
@@ -2169,7 +2185,7 @@ Finished in 0.00296s
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
+リーダブルコード
 </attribution>
 <simpara>関数で複数のreturn文を使ってはいけないと思っている人がいる。アホくさ。関数から早く返すのはいいことだ。むしろ望ましいときもある。</simpara>
 </blockquote>
@@ -2177,7 +2193,7 @@ Finished in 0.00296s
 <simpara>どの条件にも該当しない場合は数字を文字列してかえすのですが <emphasis role="strong">一時変数</emphasis> の <literal>result</literal> は最後でしか使われていませんね。このような場合は <emphasis role="strong">変数のインライン化</emphasis> を適用しましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>新装版 リファクタリング</emphasis><xref linkend="rft"/>
+新装版 リファクタリング
 </attribution>
 <simpara>一時変数のインライン化</simpara>
 <simpara>簡単な式によって一度だけ代入される一時変数があり、それが他のリファクタリングの障害となっている。</simpara>
@@ -2214,7 +2230,7 @@ Finished in 0.00255s
 <simpara>続いて、FizzBuzzを判定する部分ですがもう少しわかりやすくするため <emphasis role="strong">説明用変数の導入</emphasis> を適用します。</simpara>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版)
 </attribution>
 <simpara>説明用変数の導入</simpara>
 <simpara>複雑な式がある。</simpara>
@@ -2242,14 +2258,14 @@ Finished in 0.00255s
 <simpara>３で割り切れる場合の結果を <literal>isFizz</literal> 変数に 5で割り切れる場合の結果 <literal>isBuzz</literal> 変数に代入して使えるようにしました。このような変数を <emphasis role="strong">説明変数</emphasis> と呼びます。また似たようなパターンに <emphasis role="strong">要約変数</emphasis> というものがあります。FizzBuzzを返す判定部分にこの <emphasis role="strong">説明変数</emphasis> を適用しました。壊れていないか確認しておきましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
+リーダブルコード
 </attribution>
 <simpara>説明変数</simpara>
 <simpara>式を簡単に分割するには、式を表す変数を使えばいい。この変数を「説明変数」と呼ぶこともある。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
+リーダブルコード
 </attribution>
 <simpara>要約変数</simpara>
 <simpara>大きなコードをの塊を小さな名前に置き換えて、管理や把握を簡単にする変数のことを要約変数と呼ぶ。</simpara>
@@ -2276,11 +2292,11 @@ Finished in 0.00262s
 <programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
 $ git commit -m 'refactor:　変数の抽出'</programlisting>
 </section>
-<section xml:id="_ループ">
-<title>ループ</title>
+<section xml:id="_ループと変更可能なデータ">
+<title>ループと変更可能なデータ</title>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版)
 </attribution>
 <simpara>ループ</simpara>
 <simpara>プログラミング言語の黎明期から、ループは中心的な存在でした。しかし今ではベルボトムのジーンズやペナントのお土産のように、あまり重要でなくなりつつあります。</simpara>
@@ -2321,14 +2337,14 @@ Finished in 0.03063s
 <simpara>せっかく作った配列を初期化して返してしまいましたね。このようにミュータブルな変数はバグを作り込む原因となる傾向があります。まず一時変数を使わないように変更しましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版)
 </attribution>
 <simpara>変更可能なデータ</simpara>
 <simpara>データの変更はしばしば予期せぬ結果や、厄介なバグを引き起こします。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
+リーダブルコード
 </attribution>
 <simpara>「永続的に変更されない」変数は扱いやすい。</simpara>
 </blockquote>
@@ -2373,7 +2389,7 @@ Finished in 0.03285s
 <simpara>結果を配列にして返したいのですが <emphasis role="strong">eachメソッド</emphasis> でうまくできませんね。Rubyには新しい配列を作成する <emphasis role="strong">mapメソッド</emphasis> 用意されいるのでそちらを使いましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>かんたんRuby</emphasis> <xref linkend="kruby"/>
+かんたんRuby
 </attribution>
 <simpara>mapは配列の要素を画する際によく利用されるメソッドで、ブロックの最後の要素（メモ）で新しい配列を作ります。</simpara>
 </blockquote>
@@ -2401,25 +2417,28 @@ Started with run options --seed 7994
   19/19: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
 Finished in 0.00238s</programlisting>
-<simpara><emphasis role="strong">パイプラインによるループの置き換え</emphasis>　の適用により <emphasis role="strong">eachメソッド</emphasis> による繰り返し処理を <emphasis role="strong">mapメソッド</emphasis> を使ったイミュータブルな処理に変えることができました。</simpara>
+<simpara><emphasis role="strong">パイプラインによるループの置き換え</emphasis> の適用により <emphasis role="strong">eachメソッド</emphasis> による繰り返し処理を <emphasis role="strong">mapメソッド</emphasis> を使ったイミュータブルなコレクションパイプライン処理に変えることができました。</simpara>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版)
 </attribution>
 <simpara>パイプラインによるループの置き換え</simpara>
 <simpara>多くのプログラマと同様に、私もオブジェクトの集合の反復処理にはループを使うように教えられました。しかし言語環境は、よりすぐれた仕組みとしてコレクションのパイプラインを提供するようになりました。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>プロを目指す人のためのRuby入門</emphasis> <xref linkend="pruby"/>
+プロを目指す人のためのRuby入門
 </attribution>
 <simpara>Rubyに限らず、プログラミングの世界ではしばしばミュータブル（mutable)とイミュータブル（imutable）と言う言葉が登場します。ミュータブルは「変更可能な」という意味で、反対にイミュータブルは「変更できない、不変の」という意味です。</simpara>
 </blockquote>
 <programlisting language="bash" linenumbering="unnumbered">$ git commit -m 'refactor: パイプラインによるループの置き換え'</programlisting>
+</section>
+<section xml:id="_マジックナンバー">
+<title>マジックナンバー</title>
 <simpara>最大値は100にしていますが変更することもあるので <emphasis role="strong">マジックナンバーの置き換え</emphasis> を適用してわかりやすくしておきましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>新装版 リファクタリング</emphasis><xref linkend="rft"/>
+新装版 リファクタリング
 </attribution>
 <simpara>シンボル定数によるマジックナンバーの置き換え</simpara>
 <simpara>特別な意味を持った数字のリテラルがある。</simpara>
@@ -2438,7 +2457,13 @@ end</programlisting>
 <simpara>意味のわかる定数として宣言しました。コードに直接記述された <literal>100</literal> をといった <emphasis role="strong">リテラル</emphasis> はマジックナンバーと呼ばれ往々にして後で何を意味するものかわからなくなり変更を難しくする原因となります。早めに意味を表す定数にしておきましょう。</simpara>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
+かんたんRuby
+</attribution>
+<simpara>名前付けされずにプログラム内に直接記述されている数値をマジックナンバーと呼び、一般的には極力避けるようにします。</simpara>
+</blockquote>
+<blockquote>
+<attribution>
+リーダブルコード
 </attribution>
 <simpara>いい名前というのは、変数の目的や値を表すものだ。</simpara>
 </blockquote>
@@ -2449,7 +2474,7 @@ Started with run options --seed 32408
 
 Finished in 0.00241s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</programlisting>
-<simpara>テストは通りました。でもこのコードは初見の人には分かりづらいのでコメントを入れておきましょう。</simpara>
+<simpara>テストは通りました。でもこのコードは初見の人には分かりづらいのでコメントを入れておきましょう。Rubyの <emphasis role="strong">単一行コメントアウト</emphasis> のやり方は行頭に <literal>#</literal> を使います。</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">...
   def self.generate_list
     # 1から最大値までのFizzBuzz配列を1発で作る
@@ -2459,14 +2484,14 @@ end</programlisting>
 <simpara>ここではなぜこのような処理を選択したかをコメントしましたが何でもコメントすればよいというわけではありません。</simpara>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版)
 </attribution>
 <simpara>コメント</simpara>
 <simpara>ここでコメントについて言及しているのは、コメントが消臭剤として使われることがあるからです。コメントが非常に丁寧に書かれているのは、実はわかりにくいコードを補うためだったとうことがよくあるのです。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
+リーダブルコード
 </attribution>
 <simpara>コメントを書くのであれば、正確に書くべきだ（できるだけ明確で詳細に）。また、コメントには画面の領域を取られるし、読むのにも時間がかかるので、簡潔なものでなければいけない。</simpara>
 </blockquote>
@@ -2574,7 +2599,7 @@ class FizzBuzzTest &lt; Minitest::Test
 <simpara>Rubyで別のファイルを読み込むには <emphasis role="strong">require</emphasis> を使います。</simpara>
 <blockquote>
 <attribution>
-<emphasis>かんたんRuby</emphasis> <xref linkend="kruby"/>
+かんたんRuby
 </attribution>
 <simpara>requireを使う用途は主に三つあります。</simpara>
 <itemizedlist>
@@ -2592,14 +2617,14 @@ class FizzBuzzTest &lt; Minitest::Test
 <simpara>また、<emphasis role="strong">require_relative</emphasis> という方法も用意されています。どう違うのでしょうか？</simpara>
 <blockquote>
 <attribution>
-<emphasis>かんたんRuby</emphasis> <xref linkend="kruby"/>
+かんたんRuby
 </attribution>
 <simpara>require_relativeは$LOAD_PATHの参照は行わず「relative」という名称の通り相対的なパスでファイルの読み込みを行います。</simpara>
 </blockquote>
 <simpara>ちょっと何言ってるかわからないうちは <emphasis role="strong">require</emphasis> を上記のフォルダ構成で使っていてください。一応以下の使い分けがありますが今は頭の隅に留めるだけでいいと思います。</simpara>
 <blockquote>
 <attribution>
-<emphasis>かんたんRuby</emphasis> <xref linkend="kruby"/>
+かんたんRuby
 </attribution>
 <simpara>requireは標準添付ライブラリなどの自分が書いていないコードを読み込む時に使い、こちらのrequire_relativeは自分の書いたコードを読み込む時に使うように使い分けるのが良いでしょう。</simpara>
 </blockquote>
@@ -2622,10 +2647,10 @@ Finished in 0.00279s
 
 puts FizzBuzz.generate_list</programlisting>
 <simpara><emphasis role="strong">puts</emphasis> は結果を画面に出力するメソッドです。
-先程は <emphasis role="strong">p</emphasis> メソッドを使って画面に <emphasis role="strong">配列</emphasis> の中身を１件ずつ表示していましたが今回は <emphasis role="strong">配列</emphasis> 自体を開業して画面に出力するため <emphasis role="strong">puts</emphasis> メソッドを使います。機能的にはほどんど変わらないのですが以下の様に使い分けるそうです。</simpara>
+先程は <emphasis role="strong">p</emphasis> メソッドを使って画面に <emphasis role="strong">配列</emphasis> の中身を１件ずつ表示していましたが今回は <emphasis role="strong">配列</emphasis> 自体を改行して画面に出力するため <emphasis role="strong">puts</emphasis> メソッドを使います。機能的にはほどんど変わらないのですが以下の様に使い分けるそうです。</simpara>
 <blockquote>
 <attribution>
-<emphasis>プロを目指す人のためのRuby入門</emphasis> <xref linkend="prudy"/>
+プロを目指す人のためのRuby入門
 </attribution>
 <simpara>まず、用途としてはputsメソッドとprintメソッドは一般ユーザ向け、pメソッドは開発者向け、というふうに別かれます。</simpara>
 </blockquote>
@@ -2713,6 +2738,58 @@ Buzz</programlisting>
 <simpara><emphasis><phrase role="line-through">プリントする</phrase></emphasis></simpara>
 </listitem>
 </itemizedlist>
+<section xml:id="_ふりかえり">
+<title>ふりかえり</title>
+<simpara><literal>FizzBuzz</literal> プログラムの最初のバージョンをリリースすることができたのでこれまでのふりかえりをしておきましょう。
+まず <emphasis role="strong">TODOリスト</emphasis> を作成して <emphasis role="strong">テストファースト</emphasis> で１つずつ小さなステップで開発を進めていきました。
+<emphasis role="strong">仮実装を経て本実装へ</emphasis> の過程で Rubyの <emphasis role="strong">クラス</emphasis> を定義して <emphasis role="strong">文字列リテラル</emphasis> を返す <emphasis role="strong">メソッド</emphasis> を作成しました。この時点でRubyの <emphasis role="strong">オブジェクトとメソッド</emphasis> という概念に触れています。</simpara>
+<blockquote>
+<attribution>
+かんたんRuby
+</attribution>
+<simpara>Rubyの世界では、ほぼどのような値もオブジェクトという概念で表されます。オブジェクトという表現はかなり範囲の広い表現方法で、クラスやインスタンスを含めてオブジェクトと称します。</simpara>
+</blockquote>
+<blockquote>
+<attribution>
+かんたんRuby
+</attribution>
+<simpara>プログラミング言語においてメソッド、あるいは関数と呼ばれるものを簡単に説明すると処理をひとかたまりにまとめたものと言って良いでしょう。</simpara>
+</blockquote>
+<simpara>ちょっと何言ってるかわからないかもしれませんが、今はそういう概念があってこうやって書くのねという程度の理解で十分です。</simpara>
+<simpara>その後 <emphasis role="strong">リファクタリング</emphasis> を通じて多くの概念に触れることになりました。
+まず <emphasis role="strong">変数名の変更</emphasis> でRubyにおける <emphasis role="strong">変数</emphasis> の概念と操作を通じて名前付けの重要性を学びました。</simpara>
+<blockquote>
+<attribution>
+かんたんRuby
+</attribution>
+<simpara>Rubyでは変数を扱うために特別な宣言やキーワードは必要ありません。「=」 の左辺に任意の変数名を記述するだけで変数宣言となります。</simpara>
+</blockquote>
+<simpara>続いて <emphasis role="strong">明白な実装</emphasis> を通して <emphasis role="strong">制御構造</emphasis> のうち <emphasis role="strong">条件分岐</emphasis> のための <emphasis role="strong">if式</emphasis> と <emphasis role="strong">演算子</emphasis> を使いプログラムを制御し判定・計算をする方法を学びました。また、<emphasis role="strong">アルゴリズムの置き換え</emphasis> を適用してコードをよりわかりやすくしました。</simpara>
+<blockquote>
+<attribution>
+かんたんRuby
+</attribution>
+<simpara>Rubyではプログラムを構成する最小の要素を式と呼びます。変数やリテラル、制御構文、演算子などが式として扱われます。</simpara>
+</blockquote>
+<simpara>そして、 <emphasis role="strong">学習用テスト</emphasis> を通して新しい問題を解決するために <emphasis role="strong">配列オブジェクト</emphasis> <emphasis role="strong">レンジオブジェクト</emphasis> といった <emphasis role="strong">文字列リテラル</emphasis> <emphasis role="strong">数値リテラル</emphasis> 以外の <emphasis role="strong">データ構造</emphasis> の使い方を学習して、<emphasis role="strong">配列</emphasis> を操作するための <emphasis role="strong">制御構造</emphasis> として <emphasis role="strong">繰り返し処理</emphasis> を <emphasis role="strong">eachメソッド</emphasis> を使って実現しました。</simpara>
+<blockquote>
+<attribution>
+かんたんRuby
+</attribution>
+<simpara>これら「100」や「3.14」といった部分を数値リテラルと呼びます。</simpara>
+</blockquote>
+<blockquote>
+<attribution>
+かんたんRuby
+</attribution>
+<simpara>このように文字列をシングルクオートやダブルクオートで括っている表記を文字列リテラルと呼びます。</simpara>
+</blockquote>
+<simpara>仕上げは、<emphasis role="strong">コードの不吉な臭い</emphasis> からさらなる改善を実施しました。 <emphasis role="strong">不思議な名前</emphasis> の <emphasis role="strong">メソッド</emphasis> を <emphasis role="strong">自動的テスト</emphasis> を用意することで自信を持って <emphasis role="strong">リファクタリング</emphasis> を実施し、<emphasis role="strong">長い関数</emphasis> に対して <emphasis role="strong">ガード節</emphasis> を導入し <emphasis role="strong">一時変数</emphasis> <emphasis role="strong">説明変数</emphasis> など <emphasis role="strong">変数</emphasis> バリエーションの取り扱いを学びました。そして、<emphasis role="strong">ループ</emphasis> と <emphasis role="strong">変更可能なデータ</emphasis> から <emphasis role="strong">配列でよく使われるメソッド</emphasis> の使い方と <emphasis role="strong">ミュータブル</emphasis> <emphasis role="strong">イミュータブル</emphasis> の概念を学び、<emphasis role="strong">コメント</emphasis> のやり方と <emphasis role="strong">定数</emphasis> と <emphasis role="strong">マジックナンバー</emphasis> の問題を学びました。</simpara>
+<simpara>最後に、<emphasis role="strong">require</emphasis> の使い方を通してファイルの分割方法を学ぶことができました。</simpara>
+<simpara>ちょっと何言ってるかわからない単語ばかり出てきたかもしれませんがこれでRubyの基本の半分は抑えています。自分でFizzBuzzコードが書けて用語の意味が説明できるようになれば技能・学科第一段階の半分ぐらいといったところでしょうか。仮免許取得にはまだ習得しなければならない技術と知識がありますので。</simpara>
+</section>
+<section xml:id="_良いコード">
+<title>良いコード</title>
 <simpara>以下のコードを作成しました。</simpara>
 <formalpara>
 <title>/main.rb</title>
@@ -2917,7 +2994,7 @@ end</programlisting>
 <simpara>次に何をやるかはもうわかりますよね。テスト駆動開発とはただ失敗するテストを１つずつ書いて通していくことではありません。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>TDDは分析技法であり、設計技法であり、実際には開発のすべてのアクティビティを構造化する技法なのだ。</simpara>
 </blockquote>
@@ -3007,54 +3084,55 @@ Finished in 0.00135s
 <simpara>プログラムは動くしテストも通ります。でもこれはテスト駆動開発で作られたと言えるでしょうか？質の高い良いコードでしょうか？何が足りないかはわかりますよね。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発 付録C 訳者解説</emphasis><xref linkend="tdd"/>
+テスト駆動開発 付録C 訳者解説
 </attribution>
 <simpara>テスト駆動開発における質の向上の手段は、リファクタリングによる継続的でインクリメンタルな設計であり、「単なるテストファースト」と「テスト駆動開発」の違いはそこにあります。</simpara>
 </blockquote>
 <simpara>そもそも良いコードは何なのでしょうか？いくつかの見解があるようです。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>TDDは「より良いコードを書けば、よりうまくいく」という素朴で奇妙な仮設によって成り立っている</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>「動作するきれいなコード」。RonJeffriesのこの簡潔な言葉が、テスト駆動開発(TDD)のゴールだ。動作するきれいなコードはあらゆる意味で価値がある。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>リファクタリング(第2版)</emphasis><xref linkend="rft2"/>
+リファクタリング(第2版)
 </attribution>
 <simpara>良いコードかどうかは、変更がどれだけ容易なのかで決まる。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis><xref linkend="rcd"/>
+リーダブルコード
 </attribution>
 <simpara>コードは理解しやすくなければいけない。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis><xref linkend="rcd"/>
+リーダブルコード
 </attribution>
 <simpara>コードは他の人が最短時間で理解できるように書かなければいけない。</simpara>
 </blockquote>
 <blockquote>
 <attribution>
-<emphasis>リーダブルコード</emphasis> <xref linkend="rcd"/>
+リーダブルコード
 </attribution>
 <simpara>優れたソースコードは「目に優しい」ものでなければいけない。</simpara>
 </blockquote>
 <simpara>少なくともテスト駆動開発のゴールに良いコードがあるということはいえるでしょう。え？どうやったら良いコードを書けるようになるかって？私が教えてほしいのですがただ言えることは他の分野と同様に練習の積み重ねのむこうにあるのだろうということだけです。</simpara>
 <blockquote>
 <attribution>
-<emphasis>テスト駆動開発</emphasis><xref linkend="tdd"/>
+テスト駆動開発
 </attribution>
 <simpara>私がかつて発見した、そして多くの人に気づいてもらいたい効果とは、反復可能な振る舞いを規則にまで還元することで、規則の適用は機会的に反復可能になるということだ。</simpara>
 </blockquote>
+</section>
 </section>
 </section>
 </section>
@@ -3192,27 +3270,27 @@ Finished in 0.00135s
 <title>References</title>
 <itemizedlist>
 <listitem>
-<simpara>テスト駆動開発<anchor xml:id="tdd" xreflabel="[tdd]"/> Kent Beck (著), 和田 卓人 (翻訳):
+<simpara>[<anchor xml:id="tdd" xreflabel="1"/>] テスト駆動開発 Kent Beck (著), 和田 卓人 (翻訳):
 オーム社; 新訳版 (2017/10/14)</simpara>
 </listitem>
 <listitem>
-<simpara>新装版 リファクタリング―既存のコードを安全に改善する― (OBJECT TECHNOLOGY SERIES)<anchor xml:id="rft" xreflabel="[rft]"/> Martin Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章  (翻訳), &amp; 1 その他:
+<simpara>[<anchor xml:id="rft" xreflabel="2"/>] 新装版 リファクタリング―既存のコードを安全に改善する― (OBJECT TECHNOLOGY SERIES) Martin Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章  (翻訳), その他:
 オーム社; 新装版 (2014/7/26)</simpara>
 </listitem>
 <listitem>
-<simpara>リファクタリング(第2版): 既存のコードを安全に改善する (OBJECT TECHNOLOGY SERIES)<anchor xml:id="rft2" xreflabel="[rft2]"/> Martin Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章 (翻訳), &amp; 1 その他:
+<simpara>[<anchor xml:id="rft2" xreflabel="3"/>] リファクタリング(第2版): 既存のコードを安全に改善する (OBJECT TECHNOLOGY SERIES) Martin Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章 (翻訳), その他:
 オーム社; 第2版 (2019/12/1)</simpara>
 </listitem>
 <listitem>
-<simpara>リーダブルコード ―より良いコードを書くためのシンプルで実践的なテクニック (Theory in practice)<anchor xml:id="rcd" xreflabel="[rcd]"/> Dustin Boswell (著), Trevor Foucher (著), 須藤 功平 (解説), 角 征典  (翻訳):
+<simpara>[<anchor xml:id="rcd" xreflabel="4"/>] リーダブルコード ―より良いコードを書くためのシンプルで実践的なテクニック (Theory in practice) Dustin Boswell (著), Trevor Foucher (著), 須藤 功平 (解説), 角 征典  (翻訳):
 オライリージャパン; 初版八刷版 (2012/6/23)</simpara>
 </listitem>
 <listitem>
-<simpara>かんたん Ruby (プログラミングの教科書)<anchor xml:id="kruby" xreflabel="[kruby]"/> すがわらまさのり  (著)
+<simpara>[<anchor xml:id="kruby" xreflabel="5"/>] かんたん Ruby (プログラミングの教科書) すがわらまさのり  (著)
 技術評論社 (2018/6/21)</simpara>
 </listitem>
 <listitem>
-<simpara>プロを目指す人のためのRuby入門 言語仕様からテスト駆動開発・デバッグ技法まで (Software Design plusシリーズ)<anchor xml:id="pruby" xreflabel="[pruby]"/> 伊藤 淳一  (著):
+<simpara>[<anchor xml:id="pruby" xreflabel="6"/>] プロを目指す人のためのRuby入門 言語仕様からテスト駆動開発・デバッグ技法まで (Software Design plusシリーズ) 伊藤 淳一  (著):
 技術評論社 (2017/11/25)</simpara>
 </listitem>
 </itemizedlist>
