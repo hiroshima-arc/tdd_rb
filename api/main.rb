@@ -23,7 +23,7 @@ end
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    result = 'Fizz' if number % 3 == 0
+    result = 'Fizz' if number.modulo(3).zero?
     result
   end
 end
