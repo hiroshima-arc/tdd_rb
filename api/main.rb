@@ -35,6 +35,18 @@ class FizzBuzzTest < Minitest::Test
         assert_equal '2', @fizzbuzz.generate(2)
       end
     end
+
+    describe '1から100までの数の配列を返す' do
+      def test_配列の初めは文字列の1を返す
+        result = FizzBuzz.print_1_to_100
+        assert_equal '1', result.first
+      end
+
+      def test_配列の最後は大文字の100を返す
+        result = FizzBuzz.print_1_to_100
+        assert_equal '100', result.last
+      end
+    end
   end
 end
 
@@ -49,6 +61,12 @@ class FizzBuzz
     elsif number.modulo(5).zero?
       result = 'Buzz'
     end
+    result
+  end
+
+  def self.print_1_to_100
+    result = []
+    (1..100).each { |n| result << n.to_s }
     result
   end
 end
