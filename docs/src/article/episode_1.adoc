@@ -1823,7 +1823,7 @@ TODOリスト
 [source, ruby]
 ----
 ...
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Fizz', result[2]
       end
@@ -1837,7 +1837,7 @@ end
 $ ruby main.rb
 Started with run options --seed 50411
 
- FAIL["test_配列の2番目は文字列のをFizz返す", #<Minitest::Reporters::Suite:0x00007fe8a1917dc8 @name="FizzBuzz::1から100までの数の配列を返す">, 0.01608900000428548]
+ FAIL["test_配列の2番目は文字列のFizzを返す", #<Minitest::Reporters::Suite:0x00007fe8a1917dc8 @name="FizzBuzz::1から100までの数の配列を返す">, 0.01608900000428548]
  test_配列の2番目は文字列のをFizz返す#FizzBuzz::1から100までの数の配列を返す (0.02s)
         --- expected
         +++ actual
@@ -1846,7 +1846,7 @@ Started with run options --seed 50411
         +# encoding: US-ASCII
         +#    valid: true
         +"3"
-        main.rb:48:in `test_配列の2番目は文字列のをFizz返す'
+        main.rb:48:in `test_配列の2番目は文字列のFizzを返す'
 
   7/7: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
@@ -1895,7 +1895,7 @@ Finished in 0.00218s
         assert_equal 'Buzz', result.last
       end
 
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Fizz', result[2]
       end
@@ -1931,17 +1931,17 @@ Finished in 0.00217s
         assert_equal 'Buzz', result.last
       end
 
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Fizz', result[2]
       end
 
-      def test_配列の4番目は文字列のをBuzz返す
+      def test_配列の4番目は文字列のBuzzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Buzz', result[4]
       end
 
-      def test_配列の14番目は文字列のをFizzBuzz返す
+      def test_配列の14番目は文字列のFizzBuzzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'FizzBuzz', result[14]
       end
@@ -1973,15 +1973,15 @@ ____
         assert_equal 'Buzz', @result.last
       end
 
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         assert_equal 'Fizz', @result[2]
       end
 
-      def test_配列の4番目は文字列のをBuzz返す
+      def test_配列の4番目は文字列のBuzzを返す
         assert_equal 'Buzz', @result[4]
       end
 
-      def test_配列の14番目は文字列のをFizzBuzz返す
+      def test_配列の14番目は文字列のFizzBuzzを返す
         assert_equal 'FizzBuzz', @result[14]
       end
     end
