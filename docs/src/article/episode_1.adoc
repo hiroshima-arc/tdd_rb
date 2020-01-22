@@ -674,7 +674,7 @@ end
 [source, bash]
 ----
 $ ruby main.rb
-$ git commit -m 'test: 3を渡したら文字列Buzzを返す'
+$ git commit -m 'test: 3を渡したら文字列Fizzを返す'
 ----
 
 ===== アルゴリズムの置き換え
