@@ -712,7 +712,7 @@ end
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    if number.modulo(3).zero? == 0
+    if number.modulo(3).zero?
        result = 'Fizz'
     end
     result
@@ -776,7 +776,7 @@ end
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    if number.modulo(3).zero? == 0
+    if number.modulo(3).zero?
        result = 'Fizz'
     end
     result
