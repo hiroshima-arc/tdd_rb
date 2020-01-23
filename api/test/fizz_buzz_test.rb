@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'minitest/reporters'
 Minitest::Reporters.use!
 require 'minitest/autorun'
-require './lib/fizz_buzz'
+require_relative '../lib/fizz_buzz'
 
 class FizzBuzzTest < Minitest::Test
   describe 'FizzBuzz' do
@@ -41,6 +43,7 @@ class FizzBuzzTest < Minitest::Test
       def setup
         @result = FizzBuzz.generate_list
       end
+
       def test_配列の初めは文字列の1を返す
         assert_equal '1', @result.first
       end
