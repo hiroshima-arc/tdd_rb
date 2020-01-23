@@ -5681,7 +5681,190 @@ end
 </div>
 <div class="sect3">
 <h4 id="_タスクの自動化">2.1.4. タスクの自動化</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
 
+source 'https://rubygems.org'
+
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
+
+gem 'guard'
+gem 'guard-minitest'
+gem 'guard-shell'
+gem 'minitest'
+gem 'minitest-reporters'
+gem 'rubocop', require: false</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ bundle
+$ guard init</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+# Add files and commands to this file, like the example:
+#   watch(%r{file/path}) { `command(s)` }
+#
+guard :shell do
+  watch(/(.*).rb/) { |_m| `rake rubocop:auto_correct` }
+  watch(%r{lib/(.*).rb}) { |_m| `rake test` }
+end
+
+guard :minitest do
+  # with Minitest::Unit
+  watch(%r{test\/*.rb})
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ guard start
+Warning: you have a Gemfile, but you're not using bundler or RUBYGEMS_GEMDEPS
+20:42:15 - INFO -
+&gt; [#] Guard here! It looks like your project has a Gemfile, yet you are running
+&gt; [#] `guard` outside of Bundler. If this is your intent, feel free to ignore this
+&gt; [#] message. Otherwise, consider using `bundle exec guard` to ensure your
+&gt; [#] dependencies are loaded correctly.
+&gt; [#] (You can run `guard` with --no-bundler-warning to get rid of this message.)
+WARN: Unresolved specs during Gem::Specification.reset:
+      rb-inotify (&gt;= 0.9.10, ~&gt; 0.9)
+      minitest (&gt;= 3.0)
+WARN: Clearing out unresolved specs.
+Please report a bug if this causes problems.
+20:42:16 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
+20:42:16 - INFO - Running: all tests
+Started with run options --guard --seed 47998
+
+  19/19: [=======================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00262s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
+
+20:42:16 - INFO - Guard is now watching at '/Users/k2works/Projects/hiroshima-arc/tdd_
+rb/docs/src/article/code'
+[1] guard(main)&gt; exit
+
+20:42:25 - INFO - Bye bye...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+require 'rake/testtask'
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new
+
+task default: [:guard]
+
+Rake::TestTask.new do |test|
+  test.test_files = Dir['./test/fizz_buzz_test.rb']
+  test.verbose = true
+end
+
+desc 'Run Format'
+task :format do
+  sh 'rubocop --fix-layout'
+end
+
+desc 'Run Guard'
+task :guard do
+  sh 'guard start'
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rake
+guard start
+Warning: you have a Gemfile, but you're not using bundler or RUBYGEMS_GEMDEPS
+20:43:17 - INFO -
+&gt; [#] Guard here! It looks like your project has a Gemfile, yet you are running
+&gt; [#] `guard` outside of Bundler. If this is your intent, feel free to ignore this
+&gt; [#] message. Otherwise, consider using `bundle exec guard` to ensure your
+&gt; [#] dependencies are loaded correctly.
+&gt; [#] (You can run `guard` with --no-bundler-warning to get rid of this message.)
+WARN: Unresolved specs during Gem::Specification.reset:
+      rb-inotify (&gt;= 0.9.10, ~&gt; 0.9)
+      minitest (&gt;= 3.0)
+WARN: Clearing out unresolved specs.
+Please report a bug if this causes problems.
+20:43:18 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
+20:43:18 - INFO - Running: all tests
+Started with run options --guard --seed 36344
+
+  19/19: [=======================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00267s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
+
+20:43:18 - INFO - Guard is now watching at '/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code'
+[1] guard(main)&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number)
+    isFizz = number.modulo(3).zero?
+    isBuzz = number.modulo(5).zero?
+
+    return 'FizzBuzzBuzz' if isFizz &amp;&amp; isBuzz
+    return 'Fizz' if isFizz
+    return 'Buzz' if isBuzz
+
+    number.to_s
+  end
+
+  def self.generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">...
+Running RuboCop...
+Inspecting 6 files
+......
+
+6 files inspected, no offenses detected
+Started with run options --seed 48715
+
+
+ FAIL["test_15を渡したら文字列FizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x00007f822b9977f8 @name="FizzBuzz::三と五の倍数の場合"&gt;, 0.0016849999956320971]
+ test_15を渡したら文字列FizzBuzzを返す#FizzBuzz::三と五の倍数の場合 (0.00s)
+        Expected: "FizzBuzz"
+          Actual: "FizzBuzzBuzz"
+        /Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:28:in `test_15を渡したら文字列FizzBuzzを返す'
+
+ FAIL["test_配列の14番目は文字列のFizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x00007f822b984ae0 @name="FizzBuzz::1から100までのFizzBuzzの配列を返す"&gt;, 0.0028389999934006482]
+ test_配列の14番目は文字列のFizzBuzzを返す#FizzBuzz::1から100までのFizzBuzzの配列を返す (0.00s)
+        Expected: "FizzBuzz"
+          Actual: "FizzBuzzBuzz"
+        /Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:60:in `test_配列の14番目は文字列のFizzBuzzを返す'
+
+==========================================================================|
+
+Finished in 0.00361s
+19 tests, 21 assertions, 2 failures, 0 errors, 0 skips
+[1] guard(main)&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'chore: タスクの自動化'</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -5865,7 +6048,7 @@ end
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-23 20:02:05 JST
+Last updated 2020-01-23 20:55:40 JST
 </div>
 </div>
 </body>
