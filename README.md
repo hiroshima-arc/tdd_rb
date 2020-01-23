@@ -22,7 +22,7 @@
 ```bash
 cd api
 gem update bundler
-bundle intsall
+bundle install
 ruby index.rb
 ```
 
