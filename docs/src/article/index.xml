@@ -98,6 +98,28 @@ def greeting
 end</programlisting>
 <simpara>テストを実行します。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
+Traceback (most recent call last):
+        2: from main.rb:2:in `&lt;main&gt;'
+        1: from /home/gitpod/.rvm/rubies/ruby-2.5.5/lib/ruby/site_ruby/2.5.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+/home/gitpod/.rvm/rubies/ruby-2.5.5/lib/ruby/site_ruby/2.5.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- minitest/reporters (LoadError)</programlisting>
+<simpara>おおっと！いきなりエラーが出てきましたね。でも落ち着いてください。まず最初にやることはエラーメッセージの内容を読むことです。ここでは <literal>require': cannot load such file&#8201;&#8212;&#8201;minitest/reporters (LoadError)</literal> と表示されています。取っ掛かりとしては <link xl:href="https://www.google.com/search?sxsrf=ACYBGNTd6_rVoXXOBo2CHgs5vysIRIJaCQ%3A1579765868950&amp;source=hp&amp;ei=bFApXrCCN4Pg-Aa8v6vABw&amp;q=%60require%27%3A+cannot+load+such+file&amp;oq=%60require%27%3A+cannot+load+such+file&amp;gs_l=psy-ab.3..0l2j0i30l6.1644.1644..2069&#8230;&#8203;2.0..0.116.116.0j1&#8230;&#8203;&#8230;&#8203;0&#8230;&#8203;.2j1..gws-wiz&#8230;&#8203;..10..35i362i39.-RXoHriCPZQ&amp;ved=0ahUKEwiw6Ma7npnnAhUDMN4KHbzfCngQ4dUDCAg&amp;uact=5">エラーメッセージをキーワードに検索をする</link> というのがあります。ちなみにここでは <link xl:href="https://github.com/kern/minitest-reporters">minitest/reporters</link> というGemがインストールされていなかったため読み込みエラーが発生していたようです。サイトのInstallationを参考にGemをインストールしておきましょう。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ gem install minitest-reporters
+Fetching minitest-reporters-1.4.2.gem
+Fetching ansi-1.5.0.gem
+Fetching builder-3.2.4.gem
+Successfully installed ansi-1.5.0
+Successfully installed builder-3.2.4
+Successfully installed minitest-reporters-1.4.2
+Parsing documentation for ansi-1.5.0
+Installing ri documentation for ansi-1.5.0
+Parsing documentation for builder-3.2.4
+Installing ri documentation for builder-3.2.4
+Parsing documentation for minitest-reporters-1.4.2
+Installing ri documentation for minitest-reporters-1.4.2
+Done installing documentation for ansi, builder, minitest-reporters after 3 seconds
+3 gems installed</programlisting>
+<simpara>Gemのインストールが完了したので再度実行してみましょう。今度はうまくいったようですね。Gemって何？と思ったかもしれませんがここではRubyの外部プログラム部品のようなものだと思っておいてください。<literal>minitest-reporters</literal> というのはテスト結果の見栄えを良くするための追加外部プログラムです。先程の作業ではそれを <literal>gem install</literal> コマンドでインストールしたのです。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
 Started with run options --seed 9701
 
   1/1: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
@@ -657,7 +679,7 @@ end</programlisting>
 end</programlisting>
 <simpara>テストがグリーンになったのでコミットしておきます。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
-$ git commit -m 'test: 3を渡したら文字列Buzzを返す'</programlisting>
+$ git commit -m 'test: 3を渡したら文字列Fizzを返す'</programlisting>
 <section xml:id="_アルゴリズムの置き換え">
 <title>アルゴリズムの置き換え</title>
 <simpara>TODOリスト</simpara>
@@ -712,7 +734,7 @@ end</programlisting>
 <programlisting language="ruby" linenumbering="unnumbered">class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    if number.modulo(3).zero? == 0
+    if number.modulo(3).zero?
        result = 'Fizz'
     end
     result
@@ -789,7 +811,7 @@ end</programlisting>
 <programlisting language="ruby" linenumbering="unnumbered">class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    if number.modulo(3).zero? == 0
+    if number.modulo(3).zero?
        result = 'Fizz'
     end
     result
@@ -1698,7 +1720,7 @@ end</programlisting>
 </listitem>
 </itemizedlist>
 <programlisting language="ruby" linenumbering="unnumbered">...
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Fizz', result[2]
       end
@@ -1708,7 +1730,7 @@ end</programlisting>
 <programlisting language="ruby" linenumbering="unnumbered">$ ruby main.rb
 Started with run options --seed 50411
 
- FAIL["test_配列の2番目は文字列のをFizz返す", #&lt;Minitest::Reporters::Suite:0x00007fe8a1917dc8 @name="FizzBuzz::1から100までの数の配列を返す"&gt;, 0.01608900000428548]
+ FAIL["test_配列の2番目は文字列のFizzを返す", #&lt;Minitest::Reporters::Suite:0x00007fe8a1917dc8 @name="FizzBuzz::1から100までの数の配列を返す"&gt;, 0.01608900000428548]
  test_配列の2番目は文字列のをFizz返す#FizzBuzz::1から100までの数の配列を返す (0.02s)
         --- expected
         +++ actual
@@ -1717,7 +1739,7 @@ Started with run options --seed 50411
         +# encoding: US-ASCII
         +#    valid: true
         +"3"
-        main.rb:48:in `test_配列の2番目は文字列のをFizz返す'
+        main.rb:48:in `test_配列の2番目は文字列のFizzを返す'
 
   7/7: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
@@ -1751,7 +1773,7 @@ Finished in 0.00218s
         assert_equal 'Buzz', result.last
       end
 
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Fizz', result[2]
       end
@@ -1778,17 +1800,17 @@ Finished in 0.00217s
         assert_equal 'Buzz', result.last
       end
 
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Fizz', result[2]
       end
 
-      def test_配列の4番目は文字列のをBuzz返す
+      def test_配列の4番目は文字列のBuzzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Buzz', result[4]
       end
 
-      def test_配列の14番目は文字列のをFizzBuzz返す
+      def test_配列の14番目は文字列のFizzBuzzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'FizzBuzz', result[14]
       end
@@ -1816,15 +1838,15 @@ end</programlisting>
         assert_equal 'Buzz', @result.last
       end
 
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         assert_equal 'Fizz', @result[2]
       end
 
-      def test_配列の4番目は文字列のをBuzz返す
+      def test_配列の4番目は文字列のBuzzを返す
         assert_equal 'Buzz', @result[4]
       end
 
-      def test_配列の14番目は文字列のをFizzBuzz返す
+      def test_配列の14番目は文字列のFizzBuzzを返す
         assert_equal 'FizzBuzz', @result[14]
       end
     end
@@ -1921,7 +1943,7 @@ Finished in 0.00207s
                    %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
     end
 
-    def test_配列の中から、条件に一致する要素を取得する
+    def test_配列の中から条件に一致する要素を取得する
       result = %w[apple orange pineapple strawberry apricot].grep(/^a/)
       assert_equal %w[apple apricot], result
     end
@@ -2386,7 +2408,7 @@ NoMethodError:         NoMethodError: undefined method `[]' for 1..100:Range
 
 Finished in 0.03285s
 19 tests, 18 assertions, 2 failures, 3 errors, 0 skips</programlisting>
-<simpara>結果を配列にして返したいのですが <emphasis role="strong">eachメソッド</emphasis> でうまくできませんね。Rubyには新しい配列を作成する <emphasis role="strong">mapメソッド</emphasis> 用意されいるのでそちらを使いましょう。</simpara>
+<simpara>結果を配列にして返したいのですが <emphasis role="strong">eachメソッド</emphasis> ではうまくできませんね。Rubyには新しい配列を作成する <emphasis role="strong">mapメソッド</emphasis> が用意されいるのでそちらを使いましょう。</simpara>
 <blockquote>
 <attribution>
 かんたんRuby
@@ -2454,7 +2476,7 @@ Finished in 0.00238s</programlisting>
     (1..MAX_NUMBER).map { |n| generate(n) }
   end
 end</programlisting>
-<simpara>意味のわかる定数として宣言しました。コードに直接記述された <literal>100</literal> をといった <emphasis role="strong">リテラル</emphasis> はマジックナンバーと呼ばれ往々にして後で何を意味するものかわからなくなり変更を難しくする原因となります。早めに意味を表す定数にしておきましょう。</simpara>
+<simpara>意味のわかる定数として宣言しました。コードに直接記述された <literal>100</literal> をといった <emphasis role="strong">数値:リテラル</emphasis> はマジックナンバーと呼ばれ往々にして後で何を意味するものかわからなくなり変更を難しくする原因となります。早めに意味を表す定数にしておきましょう。</simpara>
 <blockquote>
 <attribution>
 かんたんRuby
@@ -2740,8 +2762,8 @@ Buzz</programlisting>
 </itemizedlist>
 <section xml:id="_ふりかえり">
 <title>ふりかえり</title>
-<simpara><literal>FizzBuzz</literal> プログラムの最初のバージョンをリリースすることができたのでこれまでのふりかえりをしておきましょう。
-まず <emphasis role="strong">TODOリスト</emphasis> を作成して <emphasis role="strong">テストファースト</emphasis> で１つずつ小さなステップで開発を進めていきました。
+<simpara><literal>FizzBuzz</literal> プログラムの最初のバージョンをリリースすることができたのでこれまでのふりかえりをしておきましょう。</simpara>
+<simpara>まず <emphasis role="strong">TODOリスト</emphasis> を作成して <emphasis role="strong">テストファースト</emphasis> で１つずつ小さなステップで開発を進めていきました。
 <emphasis role="strong">仮実装を経て本実装へ</emphasis> の過程で Rubyの <emphasis role="strong">クラス</emphasis> を定義して <emphasis role="strong">文字列リテラル</emphasis> を返す <emphasis role="strong">メソッド</emphasis> を作成しました。この時点でRubyの <emphasis role="strong">オブジェクトとメソッド</emphasis> という概念に触れています。</simpara>
 <blockquote>
 <attribution>
@@ -2784,7 +2806,7 @@ Buzz</programlisting>
 </attribution>
 <simpara>このように文字列をシングルクオートやダブルクオートで括っている表記を文字列リテラルと呼びます。</simpara>
 </blockquote>
-<simpara>仕上げは、<emphasis role="strong">コードの不吉な臭い</emphasis> からさらなる改善を実施しました。 <emphasis role="strong">不思議な名前</emphasis> の <emphasis role="strong">メソッド</emphasis> を <emphasis role="strong">自動的テスト</emphasis> を用意することで自信を持って <emphasis role="strong">リファクタリング</emphasis> を実施し、<emphasis role="strong">長い関数</emphasis> に対して <emphasis role="strong">ガード節</emphasis> を導入し <emphasis role="strong">一時変数</emphasis> <emphasis role="strong">説明変数</emphasis> など <emphasis role="strong">変数</emphasis> バリエーションの取り扱いを学びました。そして、<emphasis role="strong">ループ</emphasis> と <emphasis role="strong">変更可能なデータ</emphasis> から <emphasis role="strong">配列でよく使われるメソッド</emphasis> の使い方と <emphasis role="strong">ミュータブル</emphasis> <emphasis role="strong">イミュータブル</emphasis> の概念を学び、<emphasis role="strong">コメント</emphasis> のやり方と <emphasis role="strong">定数</emphasis> と <emphasis role="strong">マジックナンバー</emphasis> の問題を学びました。</simpara>
+<simpara>仕上げは、<emphasis role="strong">コードの不吉な臭い</emphasis> からさらなる改善を実施しました。 <emphasis role="strong">不思議な名前</emphasis> の <emphasis role="strong">メソッド</emphasis> を <emphasis role="strong">自動的テスト</emphasis> を用意することで自信を持って <emphasis role="strong">リファクタリング</emphasis> を実施し、<emphasis role="strong">長い関数</emphasis> に対して <emphasis role="strong">ガード節</emphasis> を導入し <emphasis role="strong">一時変数</emphasis> <emphasis role="strong">説明変数</emphasis> など <emphasis role="strong">変数</emphasis> バリエーションの取り扱いを学びました。そして、<emphasis role="strong">ループ</emphasis> と <emphasis role="strong">変更可能なデータ</emphasis> から <emphasis role="strong">コレクションパイプライン</emphasis> の使い方と <emphasis role="strong">ミュータブル</emphasis> <emphasis role="strong">イミュータブル</emphasis> の概念を学び、<emphasis role="strong">コメント</emphasis> のやり方と <emphasis role="strong">定数</emphasis> と <emphasis role="strong">マジックナンバー</emphasis> の問題を学びました。</simpara>
 <simpara>最後に、<emphasis role="strong">require</emphasis> の使い方を通してファイルの分割方法を学ぶことができました。</simpara>
 <simpara>ちょっと何言ってるかわからない単語ばかり出てきたかもしれませんがこれでRubyの基本の半分は抑えています。自分でFizzBuzzコードが書けて用語の意味が説明できるようになれば技能・学科第一段階の半分ぐらいといったところでしょうか。仮免許取得にはまだ習得しなければならない技術と知識がありますので。</simpara>
 </section>
@@ -3125,12 +3147,18 @@ Finished in 0.00135s
 </attribution>
 <simpara>優れたソースコードは「目に優しい」ものでなければいけない。</simpara>
 </blockquote>
-<simpara>少なくともテスト駆動開発のゴールに良いコードがあるということはいえるでしょう。え？どうやったら良いコードを書けるようになるかって？私が教えてほしいのですがただ言えることは他の分野と同様に練習の積み重ねのむこうにあるのだろうということだけです。</simpara>
+<simpara>少なくともテスト駆動開発のゴールに良いコードがあるということはいえるでしょう。え？どうやったら良いコードを書けるようになるかって？私が教えてほしいのですがただ言えることは他の分野と同様に規律の習得と絶え間ない練習と実践の積み重ねのむこうにあるのだろうということだけです。</simpara>
 <blockquote>
 <attribution>
 テスト駆動開発
 </attribution>
 <simpara>私がかつて発見した、そして多くの人に気づいてもらいたい効果とは、反復可能な振る舞いを規則にまで還元することで、規則の適用は機会的に反復可能になるということだ。</simpara>
+</blockquote>
+<blockquote>
+<attribution>
+リファクタリング(第2版)
+</attribution>
+<simpara>ここで、Kent Beckが自ら語ったセリフを思い出しました。「僕は、偉大なプログラマなんかじゃない。偉大な習慣を身につけた少しましなプログラマなんだ」。</simpara>
 </blockquote>
 </section>
 </section>

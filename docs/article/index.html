@@ -692,6 +692,40 @@ end</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Traceback (most recent call last):
+        2: from main.rb:2:in `&lt;main&gt;'
+        1: from /home/gitpod/.rvm/rubies/ruby-2.5.5/lib/ruby/site_ruby/2.5.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+/home/gitpod/.rvm/rubies/ruby-2.5.5/lib/ruby/site_ruby/2.5.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- minitest/reporters (LoadError)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>おおっと！いきなりエラーが出てきましたね。でも落ち着いてください。まず最初にやることはエラーメッセージの内容を読むことです。ここでは <code>require': cannot load such file&#8201;&#8212;&#8201;minitest/reporters (LoadError)</code> と表示されています。取っ掛かりとしては <a href="https://www.google.com/search?sxsrf=ACYBGNTd6_rVoXXOBo2CHgs5vysIRIJaCQ%3A1579765868950&amp;source=hp&amp;ei=bFApXrCCN4Pg-Aa8v6vABw&amp;q=%60require%27%3A+cannot+load+such+file&amp;oq=%60require%27%3A+cannot+load+such+file&amp;gs_l=psy-ab.3..0l2j0i30l6.1644.1644..2069&#8230;&#8203;2.0..0.116.116.0j1&#8230;&#8203;&#8230;&#8203;0&#8230;&#8203;.2j1..gws-wiz&#8230;&#8203;..10..35i362i39.-RXoHriCPZQ&amp;ved=0ahUKEwiw6Ma7npnnAhUDMN4KHbzfCngQ4dUDCAg&amp;uact=5" target="_blank" rel="noopener">エラーメッセージをキーワードに検索をする</a> というのがあります。ちなみにここでは <a href="https://github.com/kern/minitest-reporters" target="_blank" rel="noopener">minitest/reporters</a> というGemがインストールされていなかったため読み込みエラーが発生していたようです。サイトのInstallationを参考にGemをインストールしておきましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ gem install minitest-reporters
+Fetching minitest-reporters-1.4.2.gem
+Fetching ansi-1.5.0.gem
+Fetching builder-3.2.4.gem
+Successfully installed ansi-1.5.0
+Successfully installed builder-3.2.4
+Successfully installed minitest-reporters-1.4.2
+Parsing documentation for ansi-1.5.0
+Installing ri documentation for ansi-1.5.0
+Parsing documentation for builder-3.2.4
+Installing ri documentation for builder-3.2.4
+Parsing documentation for minitest-reporters-1.4.2
+Installing ri documentation for minitest-reporters-1.4.2
+Done installing documentation for ansi, builder, minitest-reporters after 3 seconds
+3 gems installed</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gemのインストールが完了したので再度実行してみましょう。今度はうまくいったようですね。Gemって何？と思ったかもしれませんがここではRubyの外部プログラム部品のようなものだと思っておいてください。<code>minitest-reporters</code> というのはテスト結果の見栄えを良くするための追加外部プログラムです。先程の作業ではそれを <code>gem install</code> コマンドでインストールしたのです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
 Started with run options --seed 9701
 
   1/1: [======================================================================================================] 100% Time: 00:00:00, Time: 00:00:00
@@ -1555,7 +1589,7 @@ end</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
-$ git commit -m 'test: 3を渡したら文字列Buzzを返す'</code></pre>
+$ git commit -m 'test: 3を渡したら文字列Fizzを返す'</code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -1630,7 +1664,7 @@ end</code></pre>
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    if number.modulo(3).zero? == 0
+    if number.modulo(3).zero?
        result = 'Fizz'
     end
     result
@@ -1749,7 +1783,7 @@ end</code></pre>
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    if number.modulo(3).zero? == 0
+    if number.modulo(3).zero?
        result = 'Fizz'
     end
     result
@@ -3102,7 +3136,7 @@ end</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Fizz', result[2]
       end
@@ -3116,7 +3150,7 @@ end</code></pre>
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">$ ruby main.rb
 Started with run options --seed 50411
 
- FAIL["test_配列の2番目は文字列のをFizz返す", #&lt;Minitest::Reporters::Suite:0x00007fe8a1917dc8 @name="FizzBuzz::1から100までの数の配列を返す"&gt;, 0.01608900000428548]
+ FAIL["test_配列の2番目は文字列のFizzを返す", #&lt;Minitest::Reporters::Suite:0x00007fe8a1917dc8 @name="FizzBuzz::1から100までの数の配列を返す"&gt;, 0.01608900000428548]
  test_配列の2番目は文字列のをFizz返す#FizzBuzz::1から100までの数の配列を返す (0.02s)
         --- expected
         +++ actual
@@ -3125,7 +3159,7 @@ Started with run options --seed 50411
         +# encoding: US-ASCII
         +#    valid: true
         +"3"
-        main.rb:48:in `test_配列の2番目は文字列のをFizz返す'
+        main.rb:48:in `test_配列の2番目は文字列のFizzを返す'
 
   7/7: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
@@ -3175,7 +3209,7 @@ Finished in 0.00218s
         assert_equal 'Buzz', result.last
       end
 
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Fizz', result[2]
       end
@@ -3212,17 +3246,17 @@ Finished in 0.00217s
         assert_equal 'Buzz', result.last
       end
 
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Fizz', result[2]
       end
 
-      def test_配列の4番目は文字列のをBuzz返す
+      def test_配列の4番目は文字列のBuzzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Buzz', result[4]
       end
 
-      def test_配列の14番目は文字列のをFizzBuzz返す
+      def test_配列の14番目は文字列のFizzBuzzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'FizzBuzz', result[14]
       end
@@ -3260,15 +3294,15 @@ end</code></pre>
         assert_equal 'Buzz', @result.last
       end
 
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         assert_equal 'Fizz', @result[2]
       end
 
-      def test_配列の4番目は文字列のをBuzz返す
+      def test_配列の4番目は文字列のBuzzを返す
         assert_equal 'Buzz', @result[4]
       end
 
-      def test_配列の14番目は文字列のをFizzBuzz返す
+      def test_配列の14番目は文字列のFizzBuzzを返す
         assert_equal 'FizzBuzz', @result[14]
       end
     end
@@ -3387,7 +3421,7 @@ Finished in 0.00207s
                    %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
     end
 
-    def test_配列の中から、条件に一致する要素を取得する
+    def test_配列の中から条件に一致する要素を取得する
       result = %w[apple orange pineapple strawberry apricot].grep(/^a/)
       assert_equal %w[apple apricot], result
     end
@@ -5369,7 +5403,7 @@ Finished in 0.00135s
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-21 16:51:29 JST
+Last updated 2020-01-21 18:04:58 JST
 </div>
 </div>
 </body>

@@ -81,6 +81,38 @@ end
 
 [source, bash]
 ----
+$ ruby main.rb 
+Traceback (most recent call last):
+        2: from main.rb:2:in `<main>'
+        1: from /home/gitpod/.rvm/rubies/ruby-2.5.5/lib/ruby/site_ruby/2.5.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+/home/gitpod/.rvm/rubies/ruby-2.5.5/lib/ruby/site_ruby/2.5.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- minitest/reporters (LoadError)
+----
+
+おおっと！いきなりエラーが出てきましたね。でも落ち着いてください。まず最初にやることはエラーメッセージの内容を読むことです。ここでは `require': cannot load such file -- minitest/reporters (LoadError)` と表示されています。取っ掛かりとしては https://www.google.com/search?sxsrf=ACYBGNTd6_rVoXXOBo2CHgs5vysIRIJaCQ%3A1579765868950&source=hp&ei=bFApXrCCN4Pg-Aa8v6vABw&q=+%60require%27%3A+cannot+load+such+file+&oq=+%60require%27%3A+cannot+load+such+file+&gs_l=psy-ab.3..0l2j0i30l6.1644.1644..2069...2.0..0.116.116.0j1......0....2j1..gws-wiz.....10..35i362i39.-RXoHriCPZQ&ved=0ahUKEwiw6Ma7npnnAhUDMN4KHbzfCngQ4dUDCAg&uact=5[エラーメッセージをキーワードに検索をする^] というのがあります。ちなみにここでは https://github.com/kern/minitest-reporters[minitest/reporters^] というGemがインストールされていなかったため読み込みエラーが発生していたようです。サイトのInstallationを参考にGemをインストールしておきましょう。
+
+[source, bash]
+----
+$ gem install minitest-reporters
+Fetching minitest-reporters-1.4.2.gem
+Fetching ansi-1.5.0.gem
+Fetching builder-3.2.4.gem
+Successfully installed ansi-1.5.0
+Successfully installed builder-3.2.4
+Successfully installed minitest-reporters-1.4.2
+Parsing documentation for ansi-1.5.0
+Installing ri documentation for ansi-1.5.0
+Parsing documentation for builder-3.2.4
+Installing ri documentation for builder-3.2.4
+Parsing documentation for minitest-reporters-1.4.2
+Installing ri documentation for minitest-reporters-1.4.2
+Done installing documentation for ansi, builder, minitest-reporters after 3 seconds
+3 gems installed
+----
+
+Gemのインストールが完了したので再度実行してみましょう。今度はうまくいったようですね。Gemって何？と思ったかもしれませんがここではRubyの外部プログラム部品のようなものだと思っておいてください。`minitest-reporters` というのはテスト結果の見栄えを良くするための追加外部プログラムです。先程の作業ではそれを `gem install` コマンドでインストールしたのです。
+
+[source, bash]
+----
 $ ruby main.rb
 Started with run options --seed 9701
 

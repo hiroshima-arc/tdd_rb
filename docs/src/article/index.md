@@ -1,4 +1,6 @@
-# テスト駆動開発から始めるRuby入門
+これはとあるプログラマがどのような思考を経てテスト駆動開発でアプリケーションを構築していったかを解説した内容である。隣りに座って話を聞きながらコードを追いかけているイメージで読み進めてみてださい。
+
+# エピソード1
 
 ## 初めに
 
@@ -17,6 +19,7 @@
 写経するのに環境構築ができない・面倒なひとは[こちら](https://github.com/hiroshima-arc/tdd_rb)でお手軽に始めることができます。
 
 あと、初心者の方で黒い画面でちまちまやっててナウいアプリケーションなんて作れるの？と思う人もいると思いますが最終的には[こんなアプリケーション](https://tddrb.k2works.now.sh/)になります。流石にフロントエンドはRubyではありませんがバックエンドはRubyのサーバレスアプリケーションで構成されているので少しはナウいやつだと思います。
+
 
 ## TODOリストから始めるテスト駆動開発
 
@@ -98,6 +101,37 @@ end
 
 テストを実行します。
 
+```bash
+$ ruby main.rb
+Traceback (most recent call last):
+        2: from main.rb:2:in `<main>'
+        1: from /home/gitpod/.rvm/rubies/ruby-2.5.5/lib/ruby/site_ruby/2.5.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+/home/gitpod/.rvm/rubies/ruby-2.5.5/lib/ruby/site_ruby/2.5.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- minitest/reporters (LoadError)
+```
+
+おおっと！いきなりエラーが出てきましたね。でも落ち着いてください。まず最初にやることはエラーメッセージの内容を読むことです。ここでは `require': cannot load such file — minitest/reporters (LoadError)` と表示されています。取っ掛かりとしては [エラーメッセージをキーワードに検索をする](https://www.google.com/search?sxsrf=ACYBGNTd6_rVoXXOBo2CHgs5vysIRIJaCQ%3A1579765868950&source=hp&ei=bFApXrCCN4Pg-Aa8v6vABw&q=%60require%27%3A+cannot+load+such+file&oq=%60require%27%3A+cannot+load+such+file&gs_l=psy-ab.3..0l2j0i30l6.1644.1644..2069…​2.0..0.116.116.0j1…​…​0…​.2j1..gws-wiz…​..10..35i362i39.-RXoHriCPZQ&ved=0ahUKEwiw6Ma7npnnAhUDMN4KHbzfCngQ4dUDCAg&uact=5) というのがあります。ちなみにここでは [minitest/reporters](https://github.com/kern/minitest-reporters) というGemがインストールされていなかったため読み込みエラーが発生していたようです。サイトのInstallationを参考にGemをインストールしておきましょう。
+
+``` bash
+$ gem install minitest-reporters
+Fetching minitest-reporters-1.4.2.gem
+Fetching ansi-1.5.0.gem
+Fetching builder-3.2.4.gem
+Successfully installed ansi-1.5.0
+Successfully installed builder-3.2.4
+Successfully installed minitest-reporters-1.4.2
+Parsing documentation for ansi-1.5.0
+Installing ri documentation for ansi-1.5.0
+Parsing documentation for builder-3.2.4
+Installing ri documentation for builder-3.2.4
+Parsing documentation for minitest-reporters-1.4.2
+Installing ri documentation for minitest-reporters-1.4.2
+Done installing documentation for ansi, builder, minitest-reporters after 3 seconds
+3 gems installed
+```
+
+Gemのインストールが完了したので再度実行してみましょう。今度はうまくいったようですね。Gemって何？と思ったかもしれませんがここではRubyの外部プログラム部品のようなものだと思っておいてください。`minitest-reporters` というのはテスト結果の見栄えを良くするための追加外部プログラムです。先程の作業ではそれを `gem install` コマンドでインストールしたのです。
+
+
 ``` bash
 $ ruby main.rb
 Started with run options --seed 9701
@@ -108,8 +142,7 @@ Finished in 0.00090s
 1 tests, 1 assertions, 0 failures, 0 errors, 0 skips
 ```
 
-テストは成功しましたね。では続いてテストを失敗させてみましょう。`hello world` を `hello world!!!`
-に書き換えてテストを実行してみるとどうなるでしょうか。
+テストは成功しましたね。では続いてテストを失敗させてみましょう。`hello world` を `hello world!!!` に書き換えてテストを実行してみるとどうなるでしょうか。
 
 ``` ruby
 ...
@@ -690,7 +723,7 @@ end
 
 ``` bash
 $ ruby main.rb
-$ git commit -m 'test: 3を渡したら文字列Buzzを返す'
+$ git commit -m 'test: 3を渡したら文字列Fizzを返す'
 ```
 
 #### アルゴリズムの置き換え
@@ -737,7 +770,7 @@ end
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    if number.modulo(3).zero? == 0
+    if number.modulo(3).zero?
        result = 'Fizz'
     end
     result
@@ -806,7 +839,7 @@ end
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    if number.modulo(3).zero? == 0
+    if number.modulo(3).zero?
        result = 'Fizz'
     end
     result
@@ -1834,7 +1867,7 @@ TODOリスト
 
 ``` ruby
 ...
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Fizz', result[2]
       end
@@ -1848,7 +1881,7 @@ $ ruby main.rb
 Started with run options --seed 50411
 
  FAIL["test_配列の2番目は文字列のをFizz返す", #<Minitest::Reporters::Suite:0x00007fe8a1917dc8 @name="FizzBuzz::1から100までの数の配列を返す">, 0.01608900000428548]
- test_配列の2番目は文字列のをFizz返す#FizzBuzz::1から100までの数の配列を返す (0.02s)
+ test_配列の2番目は文字列のFizzを返す#FizzBuzz::1から100までの数の配列を返す (0.02s)
         --- expected
         +++ actual
         @@ -1 +1,3 @@
@@ -1856,7 +1889,7 @@ Started with run options --seed 50411
         +# encoding: US-ASCII
         +#    valid: true
         +"3"
-        main.rb:48:in `test_配列の2番目は文字列のをFizz返す'
+        main.rb:48:in `test_配列の2番目は文字列のFizzを返す'
 
   7/7: [===================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
@@ -1901,7 +1934,7 @@ Finished in 0.00218s
         assert_equal 'Buzz', result.last
       end
 
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Fizz', result[2]
       end
@@ -1935,17 +1968,17 @@ Finished in 0.00217s
         assert_equal 'Buzz', result.last
       end
 
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Fizz', result[2]
       end
 
-      def test_配列の4番目は文字列のをBuzz返す
+      def test_配列の4番目は文字列のBuzzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'Buzz', result[4]
       end
 
-      def test_配列の14番目は文字列のをFizzBuzz返す
+      def test_配列の14番目は文字列のFizzBuzzを返す
         result = FizzBuzz.print_1_to_100
         assert_equal 'FizzBuzz', result[14]
       end
@@ -1975,15 +2008,15 @@ end
         assert_equal 'Buzz', @result.last
       end
 
-      def test_配列の2番目は文字列のをFizz返す
+      def test_配列の2番目は文字列のFizzを返す
         assert_equal 'Fizz', @result[2]
       end
 
-      def test_配列の4番目は文字列のをBuzz返す
+      def test_配列の4番目は文字列のBuzzを返す
         assert_equal 'Buzz', @result[4]
       end
 
-      def test_配列の14番目は文字列のをFizzBuzz返す
+      def test_配列の14番目は文字列のFizzBuzzを返す
         assert_equal 'FizzBuzz', @result[14]
       end
     end
@@ -2080,7 +2113,7 @@ TODOリスト
                    %w[2 4 13 3 1 10].sort { |b, a| a.to_i <=> b.to_i }
     end
 
-    def test_配列の中から、条件に一致する要素を取得する
+    def test_配列の中から条件に一致する要素を取得する
       result = %w[apple orange pineapple strawberry apricot].grep(/^a/)
       assert_equal %w[apple apricot], result
     end
@@ -3395,4 +3428,96 @@ Finished in 0.00135s
   - \[5] かんたん Ruby (プログラミングの教科書) すがわらまさのり (著) 技術評論社 (2018/6/21)
 
   - \[6] プロを目指す人のためのRuby入門 言語仕様からテスト駆動開発・デバッグ技法まで (Software Design
+    plusシリーズ) 伊藤 淳一 (著): 技術評論社 (2017/11/25)
+
+# エピソード2
+
+## 継続的インテグレーションから始まるテスト駆動開発
+
+## オブジェクト指向から始まるテスト駆動開発
+
+### TODOリスト作成
+
+### タイプ1の場合
+
+### タイプ2の場合
+
+### タイプ3の場合
+
+### フィールドのカプセル化
+
+### ポリモーフィズムによる条件記述の置き換え
+
+### スーパークラスの抽出
+
+### オブジェクトによるプリミティブの置き換え
+
+### アサーションの導入
+
+### 例外によるエラーコードの置き換え
+
+### モジュールの分割
+
+# エピソード3
+
+## クライアント開発から始まるテスト駆動開発
+
+### APIサービスを作る
+
+### APIサービスと連携する
+
+### UIを作る
+
+### UIとAPIサービスを連携する
+
+# エピソード4
+
+## 本番運用から始まるテスト駆動開発
+
+### E2Eテストのセットアップ
+
+### クライアントモジュールの分割
+
+### 本番環境と開発環境で表示を切り返る
+
+### コードレビュー
+
+# 参照
+
+## 参考サイト
+
+  - [50
+    分でわかるテスト駆動開発](https://channel9.msdn.com/Events/de-code/2017/DO03?ocid=player)
+
+  - [サルでもわかるGit入門〜バージョン管理を使いこなそう〜](https://backlog.com/ja/git-tutorial/)
+
+  - [プログラミング言語 Ruby リファレンスマニュアル](https://docs.ruby-lang.org/ja/)
+
+  - [検索結果を要チェック！Rubyの公式リファレンスは docs.ruby-lang.org です
+    〜公式な情報源を調べるクセを付けよう〜](https://qiita.com/jnchito/items/2dc760ee0716ea12bbf0)
+
+  - [動作するきれいなコード: SeleniumConf Tokyo 2019
+    基調講演文字起こし+α](https://t-wada.hatenablog.jp/entry/clean-code-that-works)
+
+## 参考図書
+
+# References
+
+  - \[\] テスト駆動開発 Kent Beck (著), 和田 卓人 (翻訳): オーム社; 新訳版 (2017/10/14)
+
+  - \[\] 新装版 リファクタリング―既存のコードを安全に改善する― (OBJECT TECHNOLOGY SERIES) Martin
+    Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章 (翻訳), その他: オーム社; 新装版
+    (2014/7/26)
+
+  - \[\] リファクタリング(第2版): 既存のコードを安全に改善する (OBJECT TECHNOLOGY SERIES) Martin
+    Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章 (翻訳), その他: オーム社; 第2版
+    (2019/12/1)
+
+  - \[\] リーダブルコード ―より良いコードを書くためのシンプルで実践的なテクニック (Theory in practice)
+    Dustin Boswell (著), Trevor Foucher (著), 須藤 功平 (解説), 角 征典 (翻訳):
+    オライリージャパン; 初版八刷版 (2012/6/23)
+
+  - \[\] かんたん Ruby (プログラミングの教科書) すがわらまさのり (著) 技術評論社 (2018/6/21)
+
+  - \[\] プロを目指す人のためのRuby入門 言語仕様からテスト駆動開発・デバッグ技法まで (Software Design
     plusシリーズ) 伊藤 淳一 (著): 技術評論社 (2017/11/25)

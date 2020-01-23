@@ -696,21 +696,7 @@ Handler =
     res.status = 200
     res['Content-Type'] = 'text/plain'
     res.body = Cowsay.say('hello world', 'cow')
-  end
-
-require 'minitest/autorun'
-require 'minitest/reporters'
-Minitest::Reporters.use!
-
-class HelloTest &lt; Minitest::Test
-  def test_greeting
-    assert_equal 'hello world', greeting
-  end
-end
-
-def greeting
-  'hello world'
-end</code></pre>
+  end</code></pre>
 </div>
 </div>
 <div class="listingblock">
