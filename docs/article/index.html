@@ -488,8 +488,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_エピソード2">2. エピソード2</a>
 <ul class="sectlevel2">
-<li><a href="#_継続的インテグレーションから始まるテスト駆動開発">2.1. 継続的インテグレーションから始まるテスト駆動開発</a></li>
-<li><a href="#_オブジェクト指向から始まるテスト駆動開発">2.2. オブジェクト指向から始まるテスト駆動開発</a>
+<li><a href="#_自動化から始めるテスト駆動開発">2.1. 自動化から始めるテスト駆動開発</a>
+<ul class="sectlevel3">
+<li><a href="#_パッケージマネージャ">2.1.1. パッケージマネージャ</a></li>
+<li><a href="#_静的コード解析">2.1.2. 静的コード解析</a></li>
+<li><a href="#_タスク">2.1.3. タスク</a></li>
+<li><a href="#_タスクの自動化">2.1.4. タスクの自動化</a></li>
+</ul>
+</li>
+<li><a href="#_オブジェクト指向から始めるテスト駆動開発">2.2. オブジェクト指向から始めるテスト駆動開発</a>
 <ul class="sectlevel3">
 <li><a href="#_todoリスト作成">2.2.1. TODOリスト作成</a></li>
 <li><a href="#_タイプ1の場合">2.2.2. タイプ1の場合</a></li>
@@ -508,7 +515,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_エピソード3">3. エピソード3</a>
 <ul class="sectlevel2">
-<li><a href="#_クライアント開発から始まるテスト駆動開発">3.1. クライアント開発から始まるテスト駆動開発</a>
+<li><a href="#_クライアント開発から始めるテスト駆動開発">3.1. クライアント開発から始めるテスト駆動開発</a>
 <ul class="sectlevel3">
 <li><a href="#_apiサービスを作る">3.1.1. APIサービスを作る</a></li>
 <li><a href="#_apiサービスと連携する">3.1.2. APIサービスと連携する</a></li>
@@ -520,7 +527,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_エピソード4">4. エピソード4</a>
 <ul class="sectlevel2">
-<li><a href="#_本番運用から始まるテスト駆動開発">4.1. 本番運用から始まるテスト駆動開発</a>
+<li><a href="#_継続的インテグレーションから始めるテスト駆動開発">4.1. 継続的インテグレーションから始めるテスト駆動開発</a>
 <ul class="sectlevel3">
 <li><a href="#_e2eテストのセットアップ">4.1.1. E2Eテストのセットアップ</a></li>
 <li><a href="#_クライアントモジュールの分割">4.1.2. クライアントモジュールの分割</a></li>
@@ -4802,7 +4809,9 @@ Buzz</code></pre>
 <div class="listingblock">
 <div class="title">/main.rb</div>
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">require './lib/fizz_buzz.rb'
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+require './lib/fizz_buzz.rb'
 
 puts FizzBuzz.generate_list</code></pre>
 </div>
@@ -4810,7 +4819,9 @@ puts FizzBuzz.generate_list</code></pre>
 <div class="listingblock">
 <div class="title">/lib/fizz_buzz.rb</div>
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+class FizzBuzz
   MAX_NUMBER = 100
 
   def self.generate(number)
@@ -4820,6 +4831,7 @@ puts FizzBuzz.generate_list</code></pre>
     return 'FizzBuzz' if isFizz &amp;&amp; isBuzz
     return 'Fizz' if isFizz
     return 'Buzz' if isBuzz
+
     number.to_s
   end
 
@@ -4833,7 +4845,9 @@ end</code></pre>
 <div class="listingblock">
 <div class="title">/test/fizz_buzz_test.rb</div>
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'minitest/reporters'
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+require 'minitest/reporters'
 Minitest::Reporters.use!
 require 'minitest/autorun'
 require './lib/fizz_buzz'
@@ -4940,11 +4954,12 @@ class FizzBuzzTest &lt; Minitest::Test
     end
 
     def test_指定した評価式で並び変えた配列を返す
+      result1 = %w[2 4 13 3 1 10].sort { |a, b| a.to_i &lt;=&gt; b.to_i }
+      result2 = %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
+
       assert_equal %w[1 10 13 2 3 4], %w[2 4 13 3 1 10].sort
-      assert_equal %w[1 2 3 4 10 13],
-                   %w[2 4 13 3 1 10].sort { |a, b| a.to_i &lt;=&gt; b.to_i }
-      assert_equal %w[13 10 4 3 2 1],
-                   %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
+      assert_equal %w[1 2 3 4 10 13], result1
+      assert_equal %w[13 10 4 3 2 1], result2
     end
 
     def test_配列の中から、条件に一致する要素を取得する
@@ -5231,11 +5246,353 @@ Finished in 0.00135s
 <h2 id="_エピソード2">2. エピソード2</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_継続的インテグレーションから始まるテスト駆動開発">2.1. 継続的インテグレーションから始まるテスト駆動開発</h3>
+<h3 id="_自動化から始めるテスト駆動開発">2.1. 自動化から始めるテスト駆動開発</h3>
+<div class="sect3">
+<h4 id="_パッケージマネージャ">2.1.1. パッケージマネージャ</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">gem install bundler
+bundle init</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+source "https://rubygems.org"
+
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+
+# gem "rails"</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+source "https://rubygems.org"
+
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+
+gem 'rubocop', require: false</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ bundle
+Fetching gem metadata from https://rubygems.org/....................
+Resolving dependencies...
+Using ast 2.4.0
+Using bundler 2.1.4
+Using jaro_winkler 1.5.4
+Using parallel 1.19.1
+Fetching parser 2.7.0.2
+Installing parser 2.7.0.2
+Using rainbow 3.0.0
+Using ruby-progressbar 1.10.1
+Fetching unicode-display_width 1.6.1
+Installing unicode-display_width 1.6.1
+Fetching rubocop 0.79.0
+Installing rubocop 0.79.0
+Bundle complete! 1 Gemfile dependency, 9 gems now installed.
+Use `bundle info [gemname]` to see where a bundled gem is installed.</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_静的コード解析">2.1.2. 静的コード解析</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"> $ rubocop
+Inspecting 5 files
+CCCWW
+
+Offenses:
+
+Gemfile:3:8: C: Style/StringLiterals: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+source "https://rubygems.org"
+       ^^^^^^^^^^^^^^^^^^^^^^
+Gemfile:5:21: C: Layout/SpaceInsideBlockBraces: Space between { and | missing.
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+                    ^^
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rubocop --lint
+Inspecting 5 files
+...W.
+
+Offenses:
+
+test/fizz_buzz_test.rb:109:7: : Parenthesize the param %w[2 4 13 3 1 10].sort { |a, b| a.to_i &lt;=&gt; b.to_i } to make sure that the block will be associated with the %w[2 4 13 3 1 10].sort method call.
+      assert_equal %w[1 2 3 4 10 13], ...
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test/fizz_buzz_test.rb:111:7: W: Lint/AmbiguousBlockAssociation: Parenthesize the param %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i } to make sure that the block will be associated with the %w[2 4 13 3 1 10].sort method call.
+      assert_equal %w[13 10 4 3 2 1], ...
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+5 files inspected, 2 offenses detected</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociation">W: Lint/AmbiguousBlockAssociation</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+      def test_指定した評価式で並び変えた配列を返す
+        assert_equal %w[1 10 13 2 3 4], %w[2 4 13 3 1 10].sort
+        assert_equal %w[1 2 3 4 10 13],
+                     %w[2 4 13 3 1 10].sort { |a, b| a.to_i &lt;=&gt; b.to_i }
+        assert_equal %w[13 10 4 3 2 1],
+                     %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
+      end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+    def test_指定した評価式で並び変えた配列を返す
+      result1 = %w[2 4 13 3 1 10].sort { |a, b| a.to_i &lt;=&gt; b.to_i }
+      result2 = %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
+
+      assert_equal %w[1 10 13 2 3 4], %w[2 4 13 3 1 10].sort
+      assert_equal %w[1 2 3 4 10 13], result1
+      assert_equal %w[13 10 4 3 2 1], result2
+    end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"> rubocop --lint
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby test/fizz_buzz_test.rb
+Started with run options --seed 42058
+
+  19/19: [=========================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00257s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rubocop --auto-correct</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rubocop --auto-gen-config
+Added inheritance from `.rubocop_todo.yml` in `.rubocop.yml`.
+Phase 1 of 2: run Layout/LineLength cop
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected
+Created .rubocop_todo.yml.
+Phase 2 of 2: run all cops
+Inspecting 5 files
+.C.CW
+
+5 files inspected, 110 offenses detected
+Created .rubocop_todo.yml.</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"> $ rubocop
+Inspecting 5 files
+...CC
+
+Offenses:
+
+test/fizz_buzz_test.rb:15:11: C: Naming/MethodName: Use snake_case for method names.
+      def test_3を渡したら文字列Fizzを返す
+          ^^^^^^^^^^^^^^^^^^^^^
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yml" data-lang="yml">...
+# Offense count: 32
+# Configuration parameters: IgnoredPatterns.
+# SupportedStyles: snake_case, camelCase
+Naming/MethodName:
+  EnforcedStyle: snake_case
+  Exclude:
+    - 'test/fizz_buzz_test.rb'
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rubocop
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number)
+          isFizz = number.modulo(3).zero?
+    isBuzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if isFizz &amp;&amp; isBuzz
+    return 'Fizz' if isFizz
+    return 'Buzz' if isBuzz
+
+    number.to_s
+  end
+
+  def self.generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rubocop --only Layout
+Inspecting 5 files
+.C...
+
+Offenses:
+
+lib/fizz_buzz.rb:7:3: C: Layout/IndentationWidth: Use 2 (not 8) spaces for indentation.
+          isFizz = number.modulo(3).zero?
+  ^^^^^^^^
+lib/fizz_buzz.rb:8:5: C: Layout/IndentationConsistency: Inconsistent indentation detected.
+    isBuzz = number.modulo(5).zero?
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:10:5: C: Layout/IndentationConsistency: Inconsistent indentation detected.
+    return 'FizzBuzz' if isFizz &amp;&amp; isBuzz
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:11:5: C: Layout/IndentationConsistency: Inconsistent indentation detected.
+    return 'Fizz' if isFizz
+    ^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:12:5: C: Layout/IndentationConsistency: Inconsistent indentation detected.
+    return 'Buzz' if isBuzz
+    ^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:14:5: C: Layout/IndentationConsistency: Inconsistent indentation detected.
+    number.to_s
+    ^^^^^^^^^^^
+
+5 files inspected, 6 offenses detected</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rubocop --fix-layout
+Inspecting 5 files
+.C...
+
+Offenses:
+
+lib/fizz_buzz.rb:7:3: C: [Corrected] Layout/IndentationWidth: Use 2 (not 8) spaces for indentation.
+          isFizz = number.modulo(3).zero?
+  ^^^^^^^^
+lib/fizz_buzz.rb:8:5: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+    isBuzz = number.modulo(5).zero?
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:8:11: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+          isBuzz = number.modulo(5).zero?
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:10:5: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+    return 'FizzBuzz' if isFizz &amp;&amp; isBuzz
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:10:11: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+          return 'FizzBuzz' if isFizz &amp;&amp; isBuzz
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:11:5: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+    return 'Fizz' if isFizz
+    ^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:11:11: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+          return 'Fizz' if isFizz
+          ^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:12:5: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+    return 'Buzz' if isBuzz
+    ^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:12:11: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+          return 'Buzz' if isBuzz
+          ^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:14:5: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+    number.to_s
+    ^^^^^^^^^^^
+lib/fizz_buzz.rb:14:11: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+          number.to_s
+          ^^^^^^^^^^^
+
+5 files inspected, 11 offenses detected, 11 offenses corrected</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number)
+    isFizz = number.modulo(3).zero?
+    isBuzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if isFizz &amp;&amp; isBuzz
+    return 'Fizz' if isFizz
+    return 'Buzz' if isBuzz
+
+    number.to_s
+  end
+
+  def self.generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rubocop --only Layout
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'chore: 静的コード解析セットアップ'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_タスク">2.1.3. タスク</h4>
 
 </div>
+<div class="sect3">
+<h4 id="_タスクの自動化">2.1.4. タスクの自動化</h4>
+
+</div>
+</div>
 <div class="sect2">
-<h3 id="_オブジェクト指向から始まるテスト駆動開発">2.2. オブジェクト指向から始まるテスト駆動開発</h3>
+<h3 id="_オブジェクト指向から始めるテスト駆動開発">2.2. オブジェクト指向から始めるテスト駆動開発</h3>
 <div class="sect3">
 <h4 id="_todoリスト作成">2.2.1. TODOリスト作成</h4>
 
@@ -5287,7 +5644,7 @@ Finished in 0.00135s
 <h2 id="_エピソード3">3. エピソード3</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_クライアント開発から始まるテスト駆動開発">3.1. クライアント開発から始まるテスト駆動開発</h3>
+<h3 id="_クライアント開発から始めるテスト駆動開発">3.1. クライアント開発から始めるテスト駆動開発</h3>
 <div class="sect3">
 <h4 id="_apiサービスを作る">3.1.1. APIサービスを作る</h4>
 
@@ -5311,7 +5668,7 @@ Finished in 0.00135s
 <h2 id="_エピソード4">4. エピソード4</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_本番運用から始まるテスト駆動開発">4.1. 本番運用から始まるテスト駆動開発</h3>
+<h3 id="_継続的インテグレーションから始めるテスト駆動開発">4.1. 継続的インテグレーションから始めるテスト駆動開発</h3>
 <div class="sect3">
 <h4 id="_e2eテストのセットアップ">4.1.1. E2Eテストのセットアップ</h4>
 
@@ -5352,6 +5709,12 @@ Finished in 0.00135s
 </li>
 <li>
 <p><a href="https://t-wada.hatenablog.jp/entry/clean-code-that-works">動作するきれいなコード: SeleniumConf Tokyo 2019 基調講演文字起こし+α</a></p>
+</li>
+<li>
+<p><a href="https://github.com/rubocop-hq/rubocop">RuboCop</a></p>
+</li>
+<li>
+<p><a href="https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b">RuboCop is 何？</a></p>
 </li>
 </ul>
 </div>
@@ -5403,7 +5766,7 @@ Finished in 0.00135s
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-21 18:04:58 JST
+Last updated 2020-01-23 19:22:06 JST
 </div>
 </div>
 </body>

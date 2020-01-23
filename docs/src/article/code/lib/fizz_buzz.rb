@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FizzBuzz
   MAX_NUMBER = 100
 
@@ -8,6 +10,7 @@ class FizzBuzz
     return 'FizzBuzz' if isFizz && isBuzz
     return 'Fizz' if isFizz
     return 'Buzz' if isBuzz
+
     number.to_s
   end
 
