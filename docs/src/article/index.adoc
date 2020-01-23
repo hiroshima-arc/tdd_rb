@@ -341,8 +341,175 @@ $ git add .
 $ git commit -m 'chore: 静的コード解析セットアップ'
 ----
 
-
 ==== タスク
+[source, bash]
+----
+$ ruby test/fizz_buzz_test.rb 
+Started with run options --seed 21943
+
+  19/19: [=======================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00261s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ rake init
+----
+
+[source, ruby]
+----
+require 'rake/testtask'
+
+task default: [:test]
+
+Rake::TestTask.new do |test|
+  test.test_files = Dir['./test/fizz_buzz_test.rb']
+  test.verbose = true
+end
+----
+
+[source, bash]
+----
+$ rake -T
+rake test  # Run tests
+----
+
+[source, bash]
+----
+$ rake test
+/Users/k2works/.rbenv/versions/2.5.5/bin/ruby -w -I"lib" -I"/Users/k2works/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/rake-13.0.1/lib" "/Users/k2works/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:79: warning: method redefined; discarding old test_特定の条件を満たす要素だけを配列に入れて返す
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:74: warning: previous definition of test_特定の条件を満たす要素だけを配列に入れて返す was here
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:94: warning: method redefined; discarding old test_新しい要素の配列を返す
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:89: warning: previous definition of test_新しい要素の配列を返す was here
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:104: warning: method redefined; discarding old test_配列の中から条件に一致する要素を取得する
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:99: warning: previous definition of test_配列の中から条件に一致する要素を取得する was here
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:138: warning: method redefined; discarding old test_畳み込み演算を行う
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:133: warning: previous definition of test_畳み込み演算を行う was here
+Started with run options --seed 5886
+
+  19/19: [=======================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00271s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, ruby]
+----
+require 'rake/testtask'
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new
+
+task default: [:test]
+
+Rake::TestTask.new do |test|
+  test.test_files = Dir['./test/fizz_buzz_test.rb']
+  test.verbose = true
+end
+----
+
+[source, bash]
+----
+$ rake -T
+rake rubocop               # Run RuboCop
+rake rubocop:auto_correct  # Auto-correct RuboCop offenses
+rake test                  # Run tests
+----
+
+[source, bash]
+----
+$ rake rubocop
+Running RuboCop...
+Inspecting 5 files
+.C...
+
+Offenses:
+
+Rakefile:1:1: C: Style/FrozenStringLiteralComment: Missing magic comment # frozen_string_literal: true.
+require 'rake/testtask'
+^
+
+5 files inspected, 1 offense detected
+RuboCop failed!
+----
+
+[source, bash]
+----
+$ rake rubocop:auto_correct
+Running RuboCop...
+Inspecting 5 files
+.C...
+
+Offenses:
+
+Rakefile:1:1: C: [Corrected] Style/FrozenStringLiteralComment: Missing magic comment # frozen_string_literal: true.
+require 'rake/testtask'
+^
+Rakefile:2:1: C: [Corrected] Layout/EmptyLineAfterMagicComment: Add an empty line after magic comments.
+require 'rake/testtask'
+^
+
+5 files inspected, 2 offenses detected, 2 offenses corrected
+----
+
+[source, ruby]
+----
+$ rake rubocop
+Running RuboCop...
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require 'rake/testtask'
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new
+
+task default: [:test]
+
+Rake::TestTask.new do |test|
+  test.test_files = Dir['./test/fizz_buzz_test.rb']
+  test.verbose = true
+end
+
+desc "Run Format"
+task :format do
+  sh "rubocop --fix-layout"
+end
+----
+
+[source, bash]
+----
+$ rake -T
+rake format                # Run Format
+rake rubocop               # Run RuboCop
+rake rubocop:auto_correct  # Auto-correct RuboCop offenses
+rake test                  # Run tests
+----
+
+[source, bash]
+----
+$ rake format
+rubocop --fix-layout
+Inspecting 5 files
+.C...
+
+Offenses:
+
+Rakefile:17:4: C: [Corrected] Layout/TrailingEmptyLines: Final newline missing.
+end
+
+
+5 files inspected, 1 offense detected, 1 offense corrected
+----
+
 ==== タスクの自動化
 
 === オブジェクト指向から始めるテスト駆動開発
@@ -384,6 +551,8 @@ $ git commit -m 'chore: 静的コード解析セットアップ'
 
 - https://github.com/rubocop-hq/rubocop[RuboCop]
 - https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b[RuboCop is 何？]
+- https://qiita.com/abcb2/items/9905449ab3fcf5d27ace[ruby rake の使い方]
+- https://qiita.com/tbpgr/items/443fe45f0dbe02aa768a[RuboCopのrake taskを使う]
 
 === 参考図書
 

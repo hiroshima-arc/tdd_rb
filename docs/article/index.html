@@ -5050,81 +5050,7 @@ end</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'minitest/reporters'
-Minitest::Reporters.use!
-require 'minitest/autorun'
-
-class FizzBuzz
-  # fizz_buzzメソッドを実行する
-  def self.fizz_buzz(n)
-  a = n.to_s
-    if n % 3 == 0
-      a = 'Fizz'
-    if n % 15 == 0
-      a = 'FizzBuzz'
-    end
-        elsif n % 5 == 0
-          a = 'Buzz'
-        end
-           a
-  end
-
-# 1から100までをプリントする
-  def self.print_1_to_100
-              n = []
-    (1..100).each do |i|
-  n &lt;&lt; fizz_buzz(i)
-                        end
-  n
-  end
-end
-
-class FizzBuzzTest &lt; Minitest::Test
-  describe 'FizzBuzz' do
-    def setup
-      @p = FizzBuzz
-    end
-
-      def test_15を渡したら文字列pを返す
-        assert_equal 'FizzBuzz', FizzBuzz.fizz_buzz(15)
-      end
-      def test_3を渡したら文字列3を返す
-        assert_equal 'Fizz', FizzBuzz.fizz_buzz(3)
-      end
-      def test_1を渡したら文字列1を返す
-        assert_equal '1', @p.fizz_buzz(1)
-      end
-      def test_5を渡したら文字列Buzzを返す
-        assert_equal 'Buzz', FizzBuzz.fizz_buzz(5)
-      end
-
-    describe '1から100までプリントする' do
-  def setup
-    @x = FizzBuzz.print_1_to_100
-  end
-
-  def test_配列の4番目は文字列のをBuzz返す
-    assert_equal 'Buzz', @x[4]
-  end
-
-      def test_配列の初めは文字列の1を返す
-        assert_equal '1', @x.first
-      end
-
-      def test_配列の最後は文字列のBuzzを返す
-        assert_equal 'Buzz', FizzBuzz.print_1_to_100.last
-      end
-
-def test_配列の14番目は文字列のFizzBuzz返す
-  assert_equal 'FizzBuzz', @x[14]
-end
-  def test_配列の2番目は文字列の2を返す
-    assert_equal 'Fizz', @x[2]
-  end
-
-    end
-  end
-end</code></pre>
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">Unresolved directive in episode_1.adoc - include::./code/test/fizz_buzz_tfd_test.rb[]</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -5584,7 +5510,174 @@ $ git commit -m 'chore: 静的コード解析セットアップ'</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_タスク">2.1.3. タスク</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby test/fizz_buzz_test.rb
+Started with run options --seed 21943
 
+  19/19: [=======================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00261s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rake init</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'rake/testtask'
+
+task default: [:test]
+
+Rake::TestTask.new do |test|
+  test.test_files = Dir['./test/fizz_buzz_test.rb']
+  test.verbose = true
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rake -T
+rake test  # Run tests</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rake test
+/Users/k2works/.rbenv/versions/2.5.5/bin/ruby -w -I"lib" -I"/Users/k2works/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/rake-13.0.1/lib" "/Users/k2works/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb"
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:79: warning: method redefined; discarding old test_特定の条件を満たす要素だけを配列に入れて返す
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:74: warning: previous definition of test_特定の条件を満たす要素だけを配列に入れて返す was here
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:94: warning: method redefined; discarding old test_新しい要素の配列を返す
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:89: warning: previous definition of test_新しい要素の配列を返す was here
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:104: warning: method redefined; discarding old test_配列の中から条件に一致する要素を取得する
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:99: warning: previous definition of test_配列の中から条件に一致する要素を取得する was here
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:138: warning: method redefined; discarding old test_畳み込み演算を行う
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:133: warning: previous definition of test_畳み込み演算を行う was here
+Started with run options --seed 5886
+
+  19/19: [=======================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00271s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'rake/testtask'
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new
+
+task default: [:test]
+
+Rake::TestTask.new do |test|
+  test.test_files = Dir['./test/fizz_buzz_test.rb']
+  test.verbose = true
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rake -T
+rake rubocop               # Run RuboCop
+rake rubocop:auto_correct  # Auto-correct RuboCop offenses
+rake test                  # Run tests</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rake rubocop
+Running RuboCop...
+Inspecting 5 files
+.C...
+
+Offenses:
+
+Rakefile:1:1: C: Style/FrozenStringLiteralComment: Missing magic comment # frozen_string_literal: true.
+require 'rake/testtask'
+^
+
+5 files inspected, 1 offense detected
+RuboCop failed!</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rake rubocop:auto_correct
+Running RuboCop...
+Inspecting 5 files
+.C...
+
+Offenses:
+
+Rakefile:1:1: C: [Corrected] Style/FrozenStringLiteralComment: Missing magic comment # frozen_string_literal: true.
+require 'rake/testtask'
+^
+Rakefile:2:1: C: [Corrected] Layout/EmptyLineAfterMagicComment: Add an empty line after magic comments.
+require 'rake/testtask'
+^
+
+5 files inspected, 2 offenses detected, 2 offenses corrected</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">$ rake rubocop
+Running RuboCop...
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+require 'rake/testtask'
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new
+
+task default: [:test]
+
+Rake::TestTask.new do |test|
+  test.test_files = Dir['./test/fizz_buzz_test.rb']
+  test.verbose = true
+end
+
+desc "Run Format"
+task :format do
+  sh "rubocop --fix-layout"
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rake -T
+rake format                # Run Format
+rake rubocop               # Run RuboCop
+rake rubocop:auto_correct  # Auto-correct RuboCop offenses
+rake test                  # Run tests</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rake format
+rubocop --fix-layout
+Inspecting 5 files
+.C...
+
+Offenses:
+
+Rakefile:17:4: C: [Corrected] Layout/TrailingEmptyLines: Final newline missing.
+end
+
+
+5 files inspected, 1 offense detected, 1 offense corrected</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_タスクの自動化">2.1.4. タスクの自動化</h4>
@@ -5716,6 +5809,12 @@ $ git commit -m 'chore: 静的コード解析セットアップ'</code></pre>
 <li>
 <p><a href="https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b">RuboCop is 何？</a></p>
 </li>
+<li>
+<p><a href="https://qiita.com/abcb2/items/9905449ab3fcf5d27ace">ruby rake の使い方</a></p>
+</li>
+<li>
+<p><a href="https://qiita.com/tbpgr/items/443fe45f0dbe02aa768a">RuboCopのrake taskを使う</a></p>
+</li>
 </ul>
 </div>
 </div>
@@ -5766,7 +5865,7 @@ $ git commit -m 'chore: 静的コード解析セットアップ'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-23 19:22:06 JST
+Last updated 2020-01-23 20:02:05 JST
 </div>
 </div>
 </body>
