@@ -1,0 +1,685 @@
+=== 自動化から始めるテスト駆動開発
+==== パッケージマネージャ
+[source, bash]
+----
+gem install bundler
+bundle init
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+
+# gem "rails"
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+
+gem 'rubocop', require: false
+----
+
+[source, bash]
+----
+$ bundle
+Fetching gem metadata from https://rubygems.org/....................
+Resolving dependencies...
+Using ast 2.4.0
+Using bundler 2.1.4
+Using jaro_winkler 1.5.4
+Using parallel 1.19.1
+Fetching parser 2.7.0.2
+Installing parser 2.7.0.2
+Using rainbow 3.0.0
+Using ruby-progressbar 1.10.1
+Fetching unicode-display_width 1.6.1
+Installing unicode-display_width 1.6.1
+Fetching rubocop 0.79.0
+Installing rubocop 0.79.0
+Bundle complete! 1 Gemfile dependency, 9 gems now installed.
+Use `bundle info [gemname]` to see where a bundled gem is installed.
+----
+
+==== 静的コード解析
+[source, bash]
+----
+ $ rubocop
+Inspecting 5 files
+CCCWW
+
+Offenses:
+
+Gemfile:3:8: C: Style/StringLiterals: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+source "https://rubygems.org"
+       ^^^^^^^^^^^^^^^^^^^^^^
+Gemfile:5:21: C: Layout/SpaceInsideBlockBraces: Space between { and | missing.
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+                    ^^
+...
+----
+
+[source, bash]
+----
+$ rubocop --lint
+Inspecting 5 files
+...W.
+
+Offenses:
+
+test/fizz_buzz_test.rb:109:7: : Parenthesize the param %w[2 4 13 3 1 10].sort { |a, b| a.to_i <=> b.to_i } to make sure that the block will be associated with the %w[2 4 13 3 1 10].sort method call.
+      assert_equal %w[1 2 3 4 10 13], ...
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test/fizz_buzz_test.rb:111:7: W: Lint/AmbiguousBlockAssociation: Parenthesize the param %w[2 4 13 3 1 10].sort { |b, a| a.to_i <=> b.to_i } to make sure that the block will be associated with the %w[2 4 13 3 1 10].sort method call.
+      assert_equal %w[13 10 4 3 2 1], ...
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+5 files inspected, 2 offenses detected
+----
+
+https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociation[W: Lint/AmbiguousBlockAssociation]
+
+[source, ruby]
+----
+...
+      def test_指定した評価式で並び変えた配列を返す
+        assert_equal %w[1 10 13 2 3 4], %w[2 4 13 3 1 10].sort
+        assert_equal %w[1 2 3 4 10 13],
+                     %w[2 4 13 3 1 10].sort { |a, b| a.to_i <=> b.to_i }
+        assert_equal %w[13 10 4 3 2 1],
+                     %w[2 4 13 3 1 10].sort { |b, a| a.to_i <=> b.to_i }
+      end
+...
+----
+
+[source, ruby]
+----
+...
+    def test_指定した評価式で並び変えた配列を返す
+      result1 = %w[2 4 13 3 1 10].sort { |a, b| a.to_i <=> b.to_i }
+      result2 = %w[2 4 13 3 1 10].sort { |b, a| a.to_i <=> b.to_i }
+
+      assert_equal %w[1 10 13 2 3 4], %w[2 4 13 3 1 10].sort
+      assert_equal %w[1 2 3 4 10 13], result1
+      assert_equal %w[13 10 4 3 2 1], result2
+    end
+...
+----
+
+[source, bash]
+----
+ rubocop --lint
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected
+----
+
+[source, bash]
+----
+$ ruby test/fizz_buzz_test.rb 
+Started with run options --seed 42058
+
+  19/19: [=========================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00257s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ rubocop --auto-correct
+----
+
+[source, bash]
+----
+$ rubocop --auto-gen-config 
+Added inheritance from `.rubocop_todo.yml` in `.rubocop.yml`.
+Phase 1 of 2: run Layout/LineLength cop
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected
+Created .rubocop_todo.yml.
+Phase 2 of 2: run all cops
+Inspecting 5 files
+.C.CW
+
+5 files inspected, 110 offenses detected
+Created .rubocop_todo.yml.
+----
+
+[source, bash]
+----
+ $ rubocop
+Inspecting 5 files
+...CC
+
+Offenses:
+
+test/fizz_buzz_test.rb:15:11: C: Naming/MethodName: Use snake_case for method names.
+      def test_3を渡したら文字列Fizzを返す
+          ^^^^^^^^^^^^^^^^^^^^^
+...
+----
+
+[source, yml]
+----
+...
+# Offense count: 32
+# Configuration parameters: IgnoredPatterns.
+# SupportedStyles: snake_case, camelCase
+Naming/MethodName:
+  EnforcedStyle: snake_case
+  Exclude:
+    - 'test/fizz_buzz_test.rb'
+...
+----
+
+[source, bash]
+----
+$ rubocop
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number)
+          isFizz = number.modulo(3).zero?
+    isBuzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if isFizz && isBuzz
+    return 'Fizz' if isFizz
+    return 'Buzz' if isBuzz
+
+    number.to_s
+  end
+
+  def self.generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end
+----
+
+[source, bash]
+----
+$ rubocop --only Layout
+Inspecting 5 files
+.C...
+
+Offenses:
+
+lib/fizz_buzz.rb:7:3: C: Layout/IndentationWidth: Use 2 (not 8) spaces for indentation.
+          isFizz = number.modulo(3).zero?
+  ^^^^^^^^
+lib/fizz_buzz.rb:8:5: C: Layout/IndentationConsistency: Inconsistent indentation detected.
+    isBuzz = number.modulo(5).zero?
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:10:5: C: Layout/IndentationConsistency: Inconsistent indentation detected.
+    return 'FizzBuzz' if isFizz && isBuzz
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:11:5: C: Layout/IndentationConsistency: Inconsistent indentation detected.
+    return 'Fizz' if isFizz
+    ^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:12:5: C: Layout/IndentationConsistency: Inconsistent indentation detected.
+    return 'Buzz' if isBuzz
+    ^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:14:5: C: Layout/IndentationConsistency: Inconsistent indentation detected.
+    number.to_s
+    ^^^^^^^^^^^
+
+5 files inspected, 6 offenses detected
+----
+
+[source, bash]
+----
+$ rubocop --fix-layout
+Inspecting 5 files
+.C...
+
+Offenses:
+
+lib/fizz_buzz.rb:7:3: C: [Corrected] Layout/IndentationWidth: Use 2 (not 8) spaces for indentation.
+          isFizz = number.modulo(3).zero?
+  ^^^^^^^^
+lib/fizz_buzz.rb:8:5: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+    isBuzz = number.modulo(5).zero?
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:8:11: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+          isBuzz = number.modulo(5).zero?
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:10:5: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+    return 'FizzBuzz' if isFizz && isBuzz
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:10:11: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+          return 'FizzBuzz' if isFizz && isBuzz
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:11:5: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+    return 'Fizz' if isFizz
+    ^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:11:11: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+          return 'Fizz' if isFizz
+          ^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:12:5: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+    return 'Buzz' if isBuzz
+    ^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:12:11: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+          return 'Buzz' if isBuzz
+          ^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:14:5: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+    number.to_s
+    ^^^^^^^^^^^
+lib/fizz_buzz.rb:14:11: C: [Corrected] Layout/IndentationConsistency: Inconsistent indentation detected.
+          number.to_s
+          ^^^^^^^^^^^
+
+5 files inspected, 11 offenses detected, 11 offenses corrected
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number)
+    isFizz = number.modulo(3).zero?
+    isBuzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if isFizz && isBuzz
+    return 'Fizz' if isFizz
+    return 'Buzz' if isBuzz
+
+    number.to_s
+  end
+
+  def self.generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end
+----
+
+[source, bash]
+----
+$ rubocop --only Layout
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'chore: 静的コード解析セットアップ'
+----
+
+==== タスク
+[source, bash]
+----
+$ ruby test/fizz_buzz_test.rb 
+Started with run options --seed 21943
+
+  19/19: [=======================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00261s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ rake init
+----
+
+[source, ruby]
+----
+require 'rake/testtask'
+
+task default: [:test]
+
+Rake::TestTask.new do |test|
+  test.test_files = Dir['./test/fizz_buzz_test.rb']
+  test.verbose = true
+end
+----
+
+[source, bash]
+----
+$ rake -T
+rake test  # Run tests
+----
+
+[source, bash]
+----
+$ rake test
+/Users/k2works/.rbenv/versions/2.5.5/bin/ruby -w -I"lib" -I"/Users/k2works/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/rake-13.0.1/lib" "/Users/k2works/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:79: warning: method redefined; discarding old test_特定の条件を満たす要素だけを配列に入れて返す
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:74: warning: previous definition of test_特定の条件を満たす要素だけを配列に入れて返す was here
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:94: warning: method redefined; discarding old test_新しい要素の配列を返す
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:89: warning: previous definition of test_新しい要素の配列を返す was here
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:104: warning: method redefined; discarding old test_配列の中から条件に一致する要素を取得する
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:99: warning: previous definition of test_配列の中から条件に一致する要素を取得する was here
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:138: warning: method redefined; discarding old test_畳み込み演算を行う
+/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:133: warning: previous definition of test_畳み込み演算を行う was here
+Started with run options --seed 5886
+
+  19/19: [=======================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00271s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, ruby]
+----
+require 'rake/testtask'
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new
+
+task default: [:test]
+
+Rake::TestTask.new do |test|
+  test.test_files = Dir['./test/fizz_buzz_test.rb']
+  test.verbose = true
+end
+----
+
+[source, bash]
+----
+$ rake -T
+rake rubocop               # Run RuboCop
+rake rubocop:auto_correct  # Auto-correct RuboCop offenses
+rake test                  # Run tests
+----
+
+[source, bash]
+----
+$ rake rubocop
+Running RuboCop...
+Inspecting 5 files
+.C...
+
+Offenses:
+
+Rakefile:1:1: C: Style/FrozenStringLiteralComment: Missing magic comment # frozen_string_literal: true.
+require 'rake/testtask'
+^
+
+5 files inspected, 1 offense detected
+RuboCop failed!
+----
+
+[source, bash]
+----
+$ rake rubocop:auto_correct
+Running RuboCop...
+Inspecting 5 files
+.C...
+
+Offenses:
+
+Rakefile:1:1: C: [Corrected] Style/FrozenStringLiteralComment: Missing magic comment # frozen_string_literal: true.
+require 'rake/testtask'
+^
+Rakefile:2:1: C: [Corrected] Layout/EmptyLineAfterMagicComment: Add an empty line after magic comments.
+require 'rake/testtask'
+^
+
+5 files inspected, 2 offenses detected, 2 offenses corrected
+----
+
+[source, ruby]
+----
+$ rake rubocop
+Running RuboCop...
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require 'rake/testtask'
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new
+
+task default: [:test]
+
+Rake::TestTask.new do |test|
+  test.test_files = Dir['./test/fizz_buzz_test.rb']
+  test.verbose = true
+end
+
+desc "Run Format"
+task :format do
+  sh "rubocop --fix-layout"
+end
+----
+
+[source, bash]
+----
+$ rake -T
+rake format                # Run Format
+rake rubocop               # Run RuboCop
+rake rubocop:auto_correct  # Auto-correct RuboCop offenses
+rake test                  # Run tests
+----
+
+[source, bash]
+----
+$ rake format
+rubocop --fix-layout
+Inspecting 5 files
+.C...
+
+Offenses:
+
+Rakefile:17:4: C: [Corrected] Layout/TrailingEmptyLines: Final newline missing.
+end
+
+
+5 files inspected, 1 offense detected, 1 offense corrected
+----
+
+==== タスクの自動化
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
+
+gem 'guard'
+gem 'guard-minitest'
+gem 'guard-shell'
+gem 'minitest'
+gem 'minitest-reporters'
+gem 'rubocop', require: false
+----
+
+[source, bash]
+----
+$ bundle
+$ guard init
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+# Add files and commands to this file, like the example:
+#   watch(%r{file/path}) { `command(s)` }
+#
+guard :shell do
+  watch(/(.*).rb/) { |_m| `rake rubocop:auto_correct` }
+  watch(%r{lib/(.*).rb}) { |_m| `rake test` }
+end
+
+guard :minitest do
+  # with Minitest::Unit
+  watch(%r{test\/*.rb})
+end
+----
+
+[source, bash]
+----
+$ guard start
+Warning: you have a Gemfile, but you're not using bundler or RUBYGEMS_GEMDEPS
+20:42:15 - INFO -
+> [#] Guard here! It looks like your project has a Gemfile, yet you are running
+> [#] `guard` outside of Bundler. If this is your intent, feel free to ignore this
+> [#] message. Otherwise, consider using `bundle exec guard` to ensure your
+> [#] dependencies are loaded correctly.
+> [#] (You can run `guard` with --no-bundler-warning to get rid of this message.)
+WARN: Unresolved specs during Gem::Specification.reset:
+      rb-inotify (>= 0.9.10, ~> 0.9)
+      minitest (>= 3.0)
+WARN: Clearing out unresolved specs.
+Please report a bug if this causes problems.
+20:42:16 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
+20:42:16 - INFO - Running: all tests
+Started with run options --guard --seed 47998
+
+  19/19: [=======================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00262s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
+
+20:42:16 - INFO - Guard is now watching at '/Users/k2works/Projects/hiroshima-arc/tdd_
+rb/docs/src/article/code'
+[1] guard(main)> exit
+
+20:42:25 - INFO - Bye bye...
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require 'rake/testtask'
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new
+
+task default: [:guard]
+
+Rake::TestTask.new do |test|
+  test.test_files = Dir['./test/fizz_buzz_test.rb']
+  test.verbose = true
+end
+
+desc 'Run Format'
+task :format do
+  sh 'rubocop --fix-layout'
+end
+
+desc 'Run Guard'
+task :guard do
+  sh 'guard start'
+end
+----
+
+[source, bash]
+----
+$ rake
+guard start
+Warning: you have a Gemfile, but you're not using bundler or RUBYGEMS_GEMDEPS
+20:43:17 - INFO -
+> [#] Guard here! It looks like your project has a Gemfile, yet you are running
+> [#] `guard` outside of Bundler. If this is your intent, feel free to ignore this
+> [#] message. Otherwise, consider using `bundle exec guard` to ensure your
+> [#] dependencies are loaded correctly.
+> [#] (You can run `guard` with --no-bundler-warning to get rid of this message.)
+WARN: Unresolved specs during Gem::Specification.reset:
+      rb-inotify (>= 0.9.10, ~> 0.9)
+      minitest (>= 3.0)
+WARN: Clearing out unresolved specs.
+Please report a bug if this causes problems.
+20:43:18 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
+20:43:18 - INFO - Running: all tests
+Started with run options --guard --seed 36344
+
+  19/19: [=======================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00267s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
+
+20:43:18 - INFO - Guard is now watching at '/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code'
+[1] guard(main)> 
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number)
+    isFizz = number.modulo(3).zero?
+    isBuzz = number.modulo(5).zero?
+
+    return 'FizzBuzzBuzz' if isFizz && isBuzz
+    return 'Fizz' if isFizz
+    return 'Buzz' if isBuzz
+
+    number.to_s
+  end
+
+  def self.generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end
+----
+
+[source, bash]
+----
+...
+Running RuboCop...
+Inspecting 6 files
+......
+
+6 files inspected, no offenses detected
+Started with run options --seed 48715
+
+
+ FAIL["test_15を渡したら文字列FizzBuzzを返す", #<Minitest::Reporters::Suite:0x00007f822b9977f8 @name="FizzBuzz::三と五の倍数の場合">, 0.0016849999956320971]
+ test_15を渡したら文字列FizzBuzzを返す#FizzBuzz::三と五の倍数の場合 (0.00s)
+        Expected: "FizzBuzz"
+          Actual: "FizzBuzzBuzz"
+        /Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:28:in `test_15を渡したら文字列FizzBuzzを返す'
+
+ FAIL["test_配列の14番目は文字列のFizzBuzzを返す", #<Minitest::Reporters::Suite:0x00007f822b984ae0 @name="FizzBuzz::1から100までのFizzBuzzの配列を返す">, 0.0028389999934006482]
+ test_配列の14番目は文字列のFizzBuzzを返す#FizzBuzz::1から100までのFizzBuzzの配列を返す (0.00s)
+        Expected: "FizzBuzz"
+          Actual: "FizzBuzzBuzz"
+        /Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:60:in `test_配列の14番目は文字列のFizzBuzzを返す'
+
+==========================================================================|
+
+Finished in 0.00361s
+19 tests, 21 assertions, 2 failures, 0 errors, 0 skips
+[1] guard(main)> 
+----
+
+[source, bash]
+----
+$ git commit -m 'chore: タスクの自動化'
+----
