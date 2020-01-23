@@ -2075,7 +2075,7 @@ TODOリスト
                    %w[2 4 13 3 1 10].sort { |b, a| a.to_i <=> b.to_i }
     end
 
-    def test_配列の中から、条件に一致する要素を取得する
+    def test_配列の中から条件に一致する要素を取得する
       result = %w[apple orange pineapple strawberry apricot].grep(/^a/)
       assert_equal %w[apple apricot], result
     end
