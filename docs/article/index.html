@@ -5782,6 +5782,22 @@ $ git commit -m 'chore: 静的コード解析セットアップ'</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_コードカバレッジ">2.1.5. コードカバレッジ</h4>
+<div class="paragraph">
+<p>静的コードコード解析による品質の確認はできました。では動的なテストに関してはどうでしょうか？ <strong>コードカバレッジ</strong> を確認する必要あります。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>コード網羅率（コードもうらりつ、英: Code coverage ）コードカバレッジは、ソフトウェアテストで用いられる尺度の1つである。プログラムのソースコードがテストされた割合を意味する。この場合のテストはコードを見ながら行うもので、ホワイトボックステストに分類される。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; ウィキペディア
+</div>
+</div>
+<div class="paragraph">
+<p>Ruby用 <strong>コードカバレッジ</strong> 検出プログラムとして <a href="https://github.com/colszowka/simplecov" target="_blank" rel="noopener">SimpleCov</a> を使います。Gemfileに追加して <strong>Bundler</strong> でインストールをしましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
@@ -5826,6 +5842,9 @@ Bundle complete! 4 Gemfile dependencies, 17 gems now installed.
 Use `bundle info [gemname]` to see where a bundled gem is installed.</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>サイトの説明に従ってテストコードの先頭に以下のコードを追加します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
@@ -5838,6 +5857,9 @@ require './lib/fizz_buzz'
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストを実施します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby test/fizz_buzz_test.rb
@@ -5847,6 +5869,14 @@ Started with run options --seed 10538
 
 Finished in 0.00297s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テスト実行後に <code>coverage</code> というフォルダが作成されているのでその中の <code>index.html</code> を開くとカバレッジ状況を確認できます。セットアップが完了したらコミットしておきましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'chore: コードカバレッジセットアップ'</code></pre>
 </div>
 </div>
 </div>

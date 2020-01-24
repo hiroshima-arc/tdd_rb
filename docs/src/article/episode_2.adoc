@@ -449,6 +449,15 @@ $ git commit -m 'chore: 静的コード解析セットアップ'
 
 ==== コードカバレッジ
 
+静的コードコード解析による品質の確認はできました。では動的なテストに関してはどうでしょうか？ *コードカバレッジ* を確認する必要あります。
+
+[quote, ウィキペディア]
+____
+コード網羅率（コードもうらりつ、英: Code coverage ）コードカバレッジは、ソフトウェアテストで用いられる尺度の1つである。プログラムのソースコードがテストされた割合を意味する。この場合のテストはコードを見ながら行うもので、ホワイトボックステストに分類される。
+____
+
+Ruby用 *コードカバレッジ* 検出プログラムとして https://github.com/colszowka/simplecov[SimpleCov^] を使います。Gemfileに追加して *Bundler* でインストールをしましょう。
+
 [source, ruby]
 ----
 # frozen_string_literal: true
@@ -493,6 +502,8 @@ Bundle complete! 4 Gemfile dependencies, 17 gems now installed.
 Use `bundle info [gemname]` to see where a bundled gem is installed.
 ----
 
+サイトの説明に従ってテストコードの先頭に以下のコードを追加します。
+
 [source, ruby]
 ----
 # frozen_string_literal: true
@@ -505,6 +516,8 @@ require './lib/fizz_buzz'
 ...
 ----
 
+テストを実施します。
+
 [source, bash]
 ----
 $ ruby test/fizz_buzz_test.rb 
@@ -516,6 +529,12 @@ Finished in 0.00297s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+テスト実行後に `coverage` というフォルダが作成されているのでその中の `index.html` を開くとカバレッジ状況を確認できます。セットアップが完了したらコミットしておきましょう。
+
+[source, bash]
+----
+$ git commit -m 'chore: コードカバレッジセットアップ'
+----
 
 ==== タスクランナー
 [source, bash]
