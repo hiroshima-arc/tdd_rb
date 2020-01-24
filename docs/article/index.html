@@ -492,8 +492,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#_パッケージマネージャ">2.1.1. パッケージマネージャ</a></li>
 <li><a href="#_静的コード解析">2.1.2. 静的コード解析</a></li>
-<li><a href="#_タスク">2.1.3. タスク</a></li>
-<li><a href="#_タスクの自動化">2.1.4. タスクの自動化</a></li>
+<li><a href="#_コードフォーマッタ">2.1.3. コードフォーマッタ</a></li>
+<li><a href="#_タスクランナー">2.1.4. タスクランナー</a></li>
+<li><a href="#_タスクの自動化">2.1.5. タスクの自動化</a></li>
 </ul>
 </li>
 </ul>
@@ -5472,6 +5473,9 @@ Inspecting 5 files
 end</code></pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_コードフォーマッタ">2.1.3. コードフォーマッタ</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ rubocop --only Layout
@@ -5587,7 +5591,7 @@ $ git commit -m 'chore: 静的コード解析セットアップ'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_タスク">2.1.3. タスク</h4>
+<h4 id="_タスクランナー">2.1.4. タスクランナー</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby test/fizz_buzz_test.rb
@@ -5758,7 +5762,7 @@ end
 </div>
 </div>
 <div class="sect3">
-<h4 id="_タスクの自動化">2.1.4. タスクの自動化</h4>
+<h4 id="_タスクの自動化">2.1.5. タスクの自動化</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
@@ -6131,7 +6135,7 @@ Finished in 0.00361s
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-23 21:08:01 JST
+Last updated 2020-01-24 10:15:47 JST
 </div>
 </div>
 </body>

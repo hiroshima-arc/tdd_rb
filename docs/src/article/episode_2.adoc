@@ -216,6 +216,8 @@ class FizzBuzz
 end
 ----
 
+==== コードフォーマッタ
+
 [source, bash]
 ----
 $ rubocop --only Layout
@@ -329,7 +331,7 @@ $ git add .
 $ git commit -m 'chore: 静的コード解析セットアップ'
 ----
 
-==== タスク
+==== タスクランナー
 [source, bash]
 ----
 $ ruby test/fizz_buzz_test.rb 
