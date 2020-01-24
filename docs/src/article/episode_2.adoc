@@ -1,10 +1,91 @@
 === 自動化から始めるテスト駆動開発
+
+エピソード1ではテスト駆動開発のゴールが *動作するきれいなコード* であることを学びました。
+では、良いコードを書き続けるためには何が必要になるでしょうか？それは https://t-wada.hatenablog.jp/entry/clean-code-that-works[ソフトウェア開発の三種の神器^] と呼ばれるものです。
+
+[quote, https://t-wada.hatenablog.jp/entry/clean-code-that-works]
+____
+今日のソフトウェア開発の世界において絶対になければならない3つの技術的な柱があります。 三本柱と言ったり、三種の神器と言ったりしていますが、それらは
+
+* バージョン管理
+* テスティング
+* 自動化
+の3つです。
+____
+
+*バージョン管理* と *テスティング* に関してはエピソード1で触れました。本エピソードでは最後の *自動化* に関しての解説と次のエピソードに備えたセットアップ作業を実施しておきたいと思います。ですがその前に *バージョン管理* で1つだけ解説しておきたいことがありますのでそちらから進めて行きたいと思います。
+
+==== コミットメッセージのフォーマット
+
+これまで作業の区切りにごとにレポジトリにコミットしていましたがその際に以下のような書式でメッセージを書いていました。
+
+[source, bash]
+----
+git commit -m 'refactor: メソッドの抽出'
+----
+
+この書式は https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type[Angularルール^]に従っています。
+
+
+それぞれのコミットメッセージはヘッダ、ボディ、フッタで構成されています。ヘッダはタイプ、スコープ、タイトルというフォーマットで構成されています。
+
+```
+<タイプ>(<スコープ>): <タイトル>
+<空行>
+<ボディ>
+<空行>
+<フッタ>
+```
+
+ヘッダは必須です。
+ヘッダのスコープは任意です。
+コミットメッセージの長さは50文字までにしてください。(そうすることでその他のGitツールと同様にGitHub上で読みやすくなります。)
+
+コミットのタイプは次を用いて下さい。
+
+- feat: A new feature (新しい機能)
+- fix: A bug fix (バグ修正)
+- docs: Documentation only changes (ドキュメント変更のみ)
+- style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) (コードに影響を与えない変更)
+- refactor: A code change that neither fixes a bug nor adds a feature (機能追加でもバグ修正でもないコード変更)
+- perf: A code change that improves performance (パフォーマンスを改善するコード変更)
+- test: Adding missing or correcting existing tests (存在しないテストの追加、または既存のテストの修正)
+- chore: Changes to the build process or auxiliary tools and libraries such as documentation generation (ドキュメント生成のような、補助ツールやライブラリやビルドプロセスの変更)
+
+コミットメッセージにつけるプリフィックスに関しては https://qiita.com/numanomanu/items/45dd285b286a1f7280ed[【今日からできる】コミットメッセージに 「プレフィックス」 をつけるだけで、開発効率が上がった話^] を参照ください。
+
 ==== パッケージマネージャ
+
+では *自動化* の準備に入りたいのですがそのためにはいくつかの外部プログラムを利用する必要があります。そのためのツールが *RubyGems* です。
+
+[quote, かんたんRuby]
+____
+RubyGemsとは、Rubyで記述されたサードパーティ製のライブラリを管理するためのツールで、RubyGemsで扱うライブラリをgemパッケージと呼びます。
+____
+
+*RubyGems* はすでに何度か使っています。例えばエピソード1の初めの `minitest-reporters` のインストールなどです。
+
+[source, bash]
+----
+$ gem install minitest-reporters
+----
+
+では、これからこのようにして必要な外部プログラムを一つ一つインストールしていくのでしょうか？また、新しい開発環境になったときにも同じことを繰り返さないといけないのでしょうか？面倒ですよね。そのような面倒なことをしないで済む仕組みがRubyには用意されています。それが *Bundler* です。
+
+[quote, かんたんRuby]
+____
+Bundlerとは、作成したアプリケーションがどのgemパッケージに依存しているか、そしてインストールしているバージョンはいくつかという情報を管理するためのgemパッケージです。
+____
+
+*Bundler* をインストールしてgemパッケージを束ねましょう。
+
 [source, bash]
 ----
 gem install bundler
 bundle init
 ----
+
+`Gemfile` が作成されます。
 
 [source, ruby]
 ----
@@ -17,6 +98,8 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 # gem "rails"
 ----
 
+`# gem "rails"` の部分を以下の様に書き換えます。
+
 [source, ruby]
 ----
 # frozen_string_literal: true
@@ -28,9 +111,11 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 gem 'rubocop', require: false
 ----
 
+書き換えたら `bundle install` でgemパッケージをインストールします。
+
 [source, bash]
 ----
-$ bundle
+$ bundle install
 Fetching gem metadata from https://rubygems.org/....................
 Resolving dependencies...
 Using ast 2.4.0
@@ -49,7 +134,12 @@ Bundle complete! 1 Gemfile dependency, 9 gems now installed.
 Use `bundle info [gemname]` to see where a bundled gem is installed.
 ----
 
+これで次の準備ができました。
+
 ==== 静的コード解析
+
+良いコードを書き続けれるためにはコードの品質を維持していく必要があります。エピソード1では *テスト駆動開発* によりプログラムを動かしながら品質の改善していきました。出来上がったコードに対する品質チェック方法として *静的コード解析* があります。Ruby用 *静的コード解析* ツール https://github.com/rubocop-hq/rubocop[RuboCop] を使って確認してみましょう。プログラムは先程 *Bundler* を使ってインストールしたので以下のコマンドを実行します。
+
 [source, bash]
 ----
  $ rubocop
@@ -66,6 +156,8 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
                     ^^
 ...
 ----
+
+なにかいろいろ出てきましたね。RuboCopの詳細に関しては https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b[RuboCop is 何？] を参照ください。`--lint` オプションをつけて実施してみましょう。
 
 [source, bash]
 ----
@@ -85,7 +177,7 @@ test/fizz_buzz_test.rb:111:7: W: Lint/AmbiguousBlockAssociation: Parenthesize th
 5 files inspected, 2 offenses detected
 ----
 
-https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociation[W: Lint/AmbiguousBlockAssociation]
+また何やら出てきましたね。 https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociation[W: Lint/AmbiguousBlockAssociation] メッセージを調べたところ、`fizz_buzz_test.rb` の以下の学習用テストコードは書き方がよろしくないようですね。
 
 [source, ruby]
 ----
@@ -99,6 +191,8 @@ https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociatio
       end
 ...
 ----
+
+*説明用変数の導入* を使ってテストコードをリファクタリングしておきましょう。
 
 [source, ruby]
 ----
@@ -114,6 +208,8 @@ https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociatio
 ...
 ----
 
+再度確認します。チェックは通りましたね。
+
 [source, bash]
 ----
  rubocop --lint
@@ -122,6 +218,8 @@ Inspecting 5 files
 
 5 files inspected, no offenses detected
 ----
+
+テストも実行して壊れていないかも確認しておきます。
 
 [source, bash]
 ----
@@ -134,10 +232,30 @@ Finished in 0.00257s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+いちいち調べるのも手間なので自動で修正できるところは修正してもらいましょう。
+
 [source, bash]
 ----
 $ rubocop --auto-correct
 ----
+
+再度確認します。
+
+[source, bash]
+----
+ $ rubocop
+Inspecting 5 files
+...CC
+
+Offenses:
+
+test/fizz_buzz_test.rb:15:11: C: Naming/MethodName: Use snake_case for method names.
+      def test_3を渡したら文字列Fizzを返す
+          ^^^^^^^^^^^^^^^^^^^^^
+...
+----
+
+まだ、自動修正できなかった部分があるようですね。この部分はチェック対象から外すことにしましょう。
 
 [source, bash]
 ----
@@ -157,19 +275,7 @@ Inspecting 5 files
 Created .rubocop_todo.yml.
 ----
 
-[source, bash]
-----
- $ rubocop
-Inspecting 5 files
-...CC
-
-Offenses:
-
-test/fizz_buzz_test.rb:15:11: C: Naming/MethodName: Use snake_case for method names.
-      def test_3を渡したら文字列Fizzを返す
-          ^^^^^^^^^^^^^^^^^^^^^
-...
-----
+`.rubocop_todo.yml` の以下の部分を変更します。
 
 [source, yml]
 ----
@@ -184,6 +290,8 @@ Naming/MethodName:
 ...
 ----
 
+再度チェックを実行します。
+
 [source, bash]
 ----
 $ rubocop
@@ -192,6 +300,10 @@ Inspecting 5 files
 
 5 files inspected, no offenses detected
 ----
+
+==== コードフォーマッタ
+
+良いコードであるためにはフォーマットも大切な要素です。Rubyにはいくつかフォーマットアプリケーションはあるのですがここは `RuboCop` の機能を使って実現することにしましょう。以下のコードのフォーマットをわざと崩してみます。
 
 [source, ruby]
 ----
@@ -216,7 +328,7 @@ class FizzBuzz
 end
 ----
 
-==== コードフォーマッタ
+フォーマットをオプションをつけてチェックしてみます。
 
 [source, bash]
 ----
@@ -247,6 +359,8 @@ lib/fizz_buzz.rb:14:5: C: Layout/IndentationConsistency: Inconsistent indentatio
 
 5 files inspected, 6 offenses detected
 ----
+
+編集した部分が `Use 2 (not 8) spaces for indentation.` と指摘されています。 `--fix-layout` オプションで自動保存しておきましょう。
 
 [source, bash]
 ----
@@ -325,11 +439,16 @@ Inspecting 5 files
 5 files inspected, no offenses detected
 ----
 
+フォーマットが修正されたことが確認できましたね。ちなみに `--auto-correct` オプションでもフォーマットをしてくれるので通常はこちらのオプションで問題ないと思います。ここまでの作業をコミットしておきましょう。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'chore: 静的コード解析セットアップ'
 ----
+
+==== コードカバレッジ
+
 
 ==== タスクランナー
 [source, bash]

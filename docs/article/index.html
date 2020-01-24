@@ -490,11 +490,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_自動化から始めるテスト駆動開発">2.1. 自動化から始めるテスト駆動開発</a>
 <ul class="sectlevel3">
-<li><a href="#_パッケージマネージャ">2.1.1. パッケージマネージャ</a></li>
-<li><a href="#_静的コード解析">2.1.2. 静的コード解析</a></li>
-<li><a href="#_コードフォーマッタ">2.1.3. コードフォーマッタ</a></li>
-<li><a href="#_タスクランナー">2.1.4. タスクランナー</a></li>
-<li><a href="#_タスクの自動化">2.1.5. タスクの自動化</a></li>
+<li><a href="#_コミットメッセージのフォーマット">2.1.1. コミットメッセージのフォーマット</a></li>
+<li><a href="#_パッケージマネージャ">2.1.2. パッケージマネージャ</a></li>
+<li><a href="#_静的コード解析">2.1.3. 静的コード解析</a></li>
+<li><a href="#_コードフォーマッタ">2.1.4. コードフォーマッタ</a></li>
+<li><a href="#_コードカバレッジ">2.1.5. コードカバレッジ</a></li>
+<li><a href="#_タスクランナー">2.1.6. タスクランナー</a></li>
+<li><a href="#_タスクの自動化">2.1.7. タスクの自動化</a></li>
 </ul>
 </li>
 </ul>
@@ -5252,13 +5254,149 @@ Finished in 0.00135s
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_自動化から始めるテスト駆動開発">2.1. 自動化から始めるテスト駆動開発</h3>
+<div class="paragraph">
+<p>エピソード1ではテスト駆動開発のゴールが <strong>動作するきれいなコード</strong> であることを学びました。
+では、良いコードを書き続けるためには何が必要になるでしょうか？それは <a href="https://t-wada.hatenablog.jp/entry/clean-code-that-works" target="_blank" rel="noopener">ソフトウェア開発の三種の神器</a> と呼ばれるものです。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>今日のソフトウェア開発の世界において絶対になければならない3つの技術的な柱があります。 三本柱と言ったり、三種の神器と言ったりしていますが、それらは</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>バージョン管理</p>
+</li>
+<li>
+<p>テスティング</p>
+</li>
+<li>
+<p>自動化
+の3つです。</p>
+</li>
+</ul>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; https://t-wada.hatenablog.jp/entry/clean-code-that-works
+</div>
+</div>
+<div class="paragraph">
+<p><strong>バージョン管理</strong> と <strong>テスティング</strong> に関してはエピソード1で触れました。本エピソードでは最後の <strong>自動化</strong> に関しての解説と次のエピソードに備えたセットアップ作業を実施しておきたいと思います。ですがその前に <strong>バージョン管理</strong> で1つだけ解説しておきたいことがありますのでそちらから進めて行きたいと思います。</p>
+</div>
 <div class="sect3">
-<h4 id="_パッケージマネージャ">2.1.1. パッケージマネージャ</h4>
+<h4 id="_コミットメッセージのフォーマット">2.1.1. コミットメッセージのフォーマット</h4>
+<div class="paragraph">
+<p>これまで作業の区切りにごとにレポジトリにコミットしていましたがその際に以下のような書式でメッセージを書いていました。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">git commit -m 'refactor: メソッドの抽出'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>この書式は <a href="https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type" target="_blank" rel="noopener">Angularルール</a>に従っています。</p>
+</div>
+<div class="paragraph">
+<p>それぞれのコミットメッセージはヘッダ、ボディ、フッタで構成されています。ヘッダはタイプ、スコープ、タイトルというフォーマットで構成されています。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>&lt;タイプ&gt;(&lt;スコープ&gt;): &lt;タイトル&gt;
+&lt;空行&gt;
+&lt;ボディ&gt;
+&lt;空行&gt;
+&lt;フッタ&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ヘッダは必須です。
+ヘッダのスコープは任意です。
+コミットメッセージの長さは50文字までにしてください。(そうすることでその他のGitツールと同様にGitHub上で読みやすくなります。)</p>
+</div>
+<div class="paragraph">
+<p>コミットのタイプは次を用いて下さい。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>feat: A new feature (新しい機能)</p>
+</li>
+<li>
+<p>fix: A bug fix (バグ修正)</p>
+</li>
+<li>
+<p>docs: Documentation only changes (ドキュメント変更のみ)</p>
+</li>
+<li>
+<p>style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) (コードに影響を与えない変更)</p>
+</li>
+<li>
+<p>refactor: A code change that neither fixes a bug nor adds a feature (機能追加でもバグ修正でもないコード変更)</p>
+</li>
+<li>
+<p>perf: A code change that improves performance (パフォーマンスを改善するコード変更)</p>
+</li>
+<li>
+<p>test: Adding missing or correcting existing tests (存在しないテストの追加、または既存のテストの修正)</p>
+</li>
+<li>
+<p>chore: Changes to the build process or auxiliary tools and libraries such as documentation generation (ドキュメント生成のような、補助ツールやライブラリやビルドプロセスの変更)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>コミットメッセージにつけるプリフィックスに関しては <a href="https://qiita.com/numanomanu/items/45dd285b286a1f7280ed" target="_blank" rel="noopener">【今日からできる】コミットメッセージに 「プレフィックス」 をつけるだけで、開発効率が上がった話</a> を参照ください。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_パッケージマネージャ">2.1.2. パッケージマネージャ</h4>
+<div class="paragraph">
+<p>では <strong>自動化</strong> の準備に入りたいのですがそのためにはいくつかの外部プログラムを利用する必要があります。そのためのツールが <strong>RubyGems</strong> です。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>RubyGemsとは、Rubyで記述されたサードパーティ製のライブラリを管理するためのツールで、RubyGemsで扱うライブラリをgemパッケージと呼びます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; かんたんRuby
+</div>
+</div>
+<div class="paragraph">
+<p><strong>RubyGems</strong> はすでに何度か使っています。例えばエピソード1の初めの <code>minitest-reporters</code> のインストールなどです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ gem install minitest-reporters</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>では、これからこのようにして必要な外部プログラムを一つ一つインストールしていくのでしょうか？また、新しい開発環境になったときにも同じことを繰り返さないといけないのでしょうか？面倒ですよね。そのような面倒なことをしないで済む仕組みがRubyには用意されています。それが <strong>Bundler</strong> です。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Bundlerとは、作成したアプリケーションがどのgemパッケージに依存しているか、そしてインストールしているバージョンはいくつかという情報を管理するためのgemパッケージです。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; かんたんRuby
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Bundler</strong> をインストールしてgemパッケージを束ねましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">gem install bundler
 bundle init</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>Gemfile</code> が作成されます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5271,6 +5409,9 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 # gem "rails"</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><code># gem "rails"</code> の部分を以下の様に書き換えます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
@@ -5282,9 +5423,12 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 gem 'rubocop', require: false</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>書き換えたら <code>bundle install</code> でgemパッケージをインストールします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ bundle
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ bundle install
 Fetching gem metadata from https://rubygems.org/....................
 Resolving dependencies...
 Using ast 2.4.0
@@ -5303,9 +5447,15 @@ Bundle complete! 1 Gemfile dependency, 9 gems now installed.
 Use `bundle info [gemname]` to see where a bundled gem is installed.</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>これで次の準備ができました。</p>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_静的コード解析">2.1.2. 静的コード解析</h4>
+<h4 id="_静的コード解析">2.1.3. 静的コード解析</h4>
+<div class="paragraph">
+<p>良いコードを書き続けれるためにはコードの品質を維持していく必要があります。エピソード1では <strong>テスト駆動開発</strong> によりプログラムを動かしながら品質の改善していきました。出来上がったコードに対する品質チェック方法として <strong>静的コード解析</strong> があります。Ruby用 <strong>静的コード解析</strong> ツール <a href="https://github.com/rubocop-hq/rubocop">RuboCop</a> を使って確認してみましょう。プログラムは先程 <strong>Bundler</strong> を使ってインストールしたので以下のコマンドを実行します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash"> $ rubocop
@@ -5322,6 +5472,9 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
                     ^^
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>なにかいろいろ出てきましたね。RuboCopの詳細に関しては <a href="https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b">RuboCop is 何？</a> を参照ください。<code>--lint</code> オプションをつけて実施してみましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5342,7 +5495,7 @@ test/fizz_buzz_test.rb:111:7: W: Lint/AmbiguousBlockAssociation: Parenthesize th
 </div>
 </div>
 <div class="paragraph">
-<p><a href="https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociation">W: Lint/AmbiguousBlockAssociation</a></p>
+<p>また何やら出てきましたね。 <a href="https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociation">W: Lint/AmbiguousBlockAssociation</a> メッセージを調べたところ、<code>fizz_buzz_test.rb</code> の以下の学習用テストコードは書き方がよろしくないようですね。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5356,6 +5509,9 @@ test/fizz_buzz_test.rb:111:7: W: Lint/AmbiguousBlockAssociation: Parenthesize th
       end
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><strong>説明用変数の導入</strong> を使ってテストコードをリファクタリングしておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5371,6 +5527,9 @@ test/fizz_buzz_test.rb:111:7: W: Lint/AmbiguousBlockAssociation: Parenthesize th
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>再度確認します。チェックは通りましたね。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash"> rubocop --lint
@@ -5379,6 +5538,9 @@ Inspecting 5 files
 
 5 files inspected, no offenses detected</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストも実行して壊れていないかも確認しておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5391,10 +5553,33 @@ Finished in 0.00257s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>いちいち調べるのも手間なので自動で修正できるところは修正してもらいましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ rubocop --auto-correct</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>再度確認します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"> $ rubocop
+Inspecting 5 files
+...CC
+
+Offenses:
+
+test/fizz_buzz_test.rb:15:11: C: Naming/MethodName: Use snake_case for method names.
+      def test_3を渡したら文字列Fizzを返す
+          ^^^^^^^^^^^^^^^^^^^^^
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>まだ、自動修正できなかった部分があるようですね。この部分はチェック対象から外すことにしましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5414,19 +5599,8 @@ Inspecting 5 files
 Created .rubocop_todo.yml.</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash"> $ rubocop
-Inspecting 5 files
-...CC
-
-Offenses:
-
-test/fizz_buzz_test.rb:15:11: C: Naming/MethodName: Use snake_case for method names.
-      def test_3を渡したら文字列Fizzを返す
-          ^^^^^^^^^^^^^^^^^^^^^
-...</code></pre>
-</div>
+<div class="paragraph">
+<p><code>.rubocop_todo.yml</code> の以下の部分を変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5441,6 +5615,9 @@ Naming/MethodName:
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>再度チェックを実行します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ rubocop
@@ -5449,6 +5626,12 @@ Inspecting 5 files
 
 5 files inspected, no offenses detected</code></pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_コードフォーマッタ">2.1.4. コードフォーマッタ</h4>
+<div class="paragraph">
+<p>良いコードであるためにはフォーマットも大切な要素です。Rubyにはいくつかフォーマットアプリケーションはあるのですがここは <code>RuboCop</code> の機能を使って実現することにしましょう。以下のコードのフォーマットをわざと崩してみます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5473,9 +5656,9 @@ Inspecting 5 files
 end</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>フォーマットをオプションをつけてチェックしてみます。</p>
 </div>
-<div class="sect3">
-<h4 id="_コードフォーマッタ">2.1.3. コードフォーマッタ</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ rubocop --only Layout
@@ -5505,6 +5688,9 @@ lib/fizz_buzz.rb:14:5: C: Layout/IndentationConsistency: Inconsistent indentatio
 
 5 files inspected, 6 offenses detected</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>編集した部分が <code>Use 2 (not 8) spaces for indentation.</code> と指摘されています。 <code>--fix-layout</code> オプションで自動保存しておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5583,6 +5769,9 @@ Inspecting 5 files
 5 files inspected, no offenses detected</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>フォーマットが修正されたことが確認できましたね。ちなみに <code>--auto-correct</code> オプションでもフォーマットをしてくれるので通常はこちらのオプションで問題ないと思います。ここまでの作業をコミットしておきましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
@@ -5591,7 +5780,11 @@ $ git commit -m 'chore: 静的コード解析セットアップ'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_タスクランナー">2.1.4. タスクランナー</h4>
+<h4 id="_コードカバレッジ">2.1.5. コードカバレッジ</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_タスクランナー">2.1.6. タスクランナー</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby test/fizz_buzz_test.rb
@@ -5762,7 +5955,7 @@ end
 </div>
 </div>
 <div class="sect3">
-<h4 id="_タスクの自動化">2.1.5. タスクの自動化</h4>
+<h4 id="_タスクの自動化">2.1.7. タスクの自動化</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
