@@ -4773,7 +4773,8 @@ end</code></pre>
 <div class="title">/test/fizz_buzz_test.rb</div>
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
-
+require 'simplecov'
+SimpleCov.start
 require 'minitest/reporters'
 Minitest::Reporters.use!
 require 'minitest/autorun'

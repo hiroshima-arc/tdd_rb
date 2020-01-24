@@ -10,3 +10,4 @@ gem 'guard-shell'
 gem 'minitest'
 gem 'minitest-reporters'
 gem 'rubocop', require: false
+gem 'simplecov', require: false, group: :test

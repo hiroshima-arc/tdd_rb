@@ -449,6 +449,73 @@ $ git commit -m 'chore: 静的コード解析セットアップ'
 
 ==== コードカバレッジ
 
+[source, ruby]
+----
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
+
+gem 'minitest'
+gem 'minitest-reporters'
+gem 'rubocop', require: false
+gem 'simplecov', require: false, group: :test
+----
+
+[source, bash]
+----
+$ bundle install
+Fetching gem metadata from https://rubygems.org/..................
+Resolving dependencies...
+Fetching ansi 1.5.0
+Installing ansi 1.5.0
+Using ast 2.4.0
+Fetching builder 3.2.4
+Installing builder 3.2.4
+Using bundler 2.1.4
+Using docile 1.3.2
+Using jaro_winkler 1.5.4
+Using json 2.3.0
+Fetching minitest 5.14.0
+Installing minitest 5.14.0
+Using ruby-progressbar 1.10.1
+Fetching minitest-reporters 1.4.2
+Installing minitest-reporters 1.4.2
+Using parallel 1.19.1
+Using parser 2.7.0.2
+Using rainbow 3.0.0
+Using unicode-display_width 1.6.1
+Using rubocop 0.79.0
+Using simplecov-html 0.10.2
+Using simplecov 0.17.1
+Bundle complete! 4 Gemfile dependencies, 17 gems now installed.
+Use `bundle info [gemname]` to see where a bundled gem is installed.
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+...
+----
+
+[source, bash]
+----
+$ ruby test/fizz_buzz_test.rb 
+Started with run options --seed 10538
+
+  19/19: [===============================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00297s
+19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
+----
+
 
 ==== タスクランナー
 [source, bash]
