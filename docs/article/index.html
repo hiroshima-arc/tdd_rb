@@ -5882,6 +5882,9 @@ Finished in 0.00297s
 </div>
 <div class="sect3">
 <h4 id="_タスクランナー">2.1.6. タスクランナー</h4>
+<div class="paragraph">
+<p>ここまででテストの実行、静的コード解析、コードフォーマット、コードカバレッジを事項することができるようになりました。でもコマンドを実行するのにそれぞれコマンドを覚えておくのは面倒ですよね。例えばテストの実行は</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby test/fizz_buzz_test.rb
@@ -5893,9 +5896,25 @@ Finished in 0.00261s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>このようにしていました。では静的コードの解析はどうやりましっけ？フォーマットはどうやりましたっけ？そんな面倒なことは全部タスクランナーにやらせるようにしましょう。Rubyのタスクランナーは <code>Rake</code> です。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>RakeはRubyにおけるタスクランナーです。rakeコマンドと起点となるRakefileというタスクを記述するファイルを用意することで、タスクの実行や登録されたタスクの一覧表示を行えます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; かんたんRuby
+</div>
+</div>
+<div class="paragraph">
+<p>早速、テストのタスクから作成しましょう。以下の <code>Rakefile</code> を作ります。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ rake init</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ touch Rakefile</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -5910,11 +5929,17 @@ Rake::TestTask.new do |test|
 end</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>タスクが登録されたか確認してみましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ rake -T
 rake test  # Run tests</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>タスクが登録されたことが確認できたのでタスクを実行します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5936,6 +5961,9 @@ Finished in 0.00271s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストタスクが実行されたことが確認できたので引き続き静的コードの解析タスクを追加します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'rake/testtask'
@@ -5950,6 +5978,9 @@ Rake::TestTask.new do |test|
 end</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>タスクが登録されたことを確認します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ rake -T
@@ -5957,6 +5988,9 @@ rake rubocop               # Run RuboCop
 rake rubocop:auto_correct  # Auto-correct RuboCop offenses
 rake test                  # Run tests</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>続いてタスクを実行してみましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5974,6 +6008,9 @@ require 'rake/testtask'
 5 files inspected, 1 offense detected
 RuboCop failed!</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>いろいろ出てきましたので自動修正しましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6003,6 +6040,9 @@ Inspecting 5 files
 
 5 files inspected, no offenses detected</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>うまく修正されたようですね。後、フォーマットコマンドもタスクとして追加してみましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6048,6 +6088,14 @@ end
 
 
 5 files inspected, 1 offense detected, 1 offense corrected</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>フォーマットは <code>rake rubocop:auto_correct</code> で一緒にやってくれるので特に必要は無いのですがプログラムが標準提供していないタスクを作りたい場合はこのように追加します。セットアップができたのでコミットしておきましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'chore: タスクランナーセットアップ'</code></pre>
 </div>
 </div>
 </div>

@@ -537,6 +537,8 @@ $ git commit -m 'chore: コードカバレッジセットアップ'
 ----
 
 ==== タスクランナー
+ここまででテストの実行、静的コード解析、コードフォーマット、コードカバレッジを事項することができるようになりました。でもコマンドを実行するのにそれぞれコマンドを覚えておくのは面倒ですよね。例えばテストの実行は
+
 [source, bash]
 ----
 $ ruby test/fizz_buzz_test.rb 
@@ -548,10 +550,20 @@ Finished in 0.00261s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+このようにしていました。では静的コードの解析はどうやりましっけ？フォーマットはどうやりましたっけ？そんな面倒なことは全部タスクランナーにやらせるようにしましょう。Rubyのタスクランナーは `Rake` です。
+
+[quote, かんたんRuby]
+____
+RakeはRubyにおけるタスクランナーです。rakeコマンドと起点となるRakefileというタスクを記述するファイルを用意することで、タスクの実行や登録されたタスクの一覧表示を行えます。
+____
+
+早速、テストのタスクから作成しましょう。以下の `Rakefile` を作ります。
+
 [source, bash]
 ----
-$ rake init
+$ touch Rakefile
 ----
+
 
 [source, ruby]
 ----
@@ -565,11 +577,15 @@ Rake::TestTask.new do |test|
 end
 ----
 
+タスクが登録されたか確認してみましょう。
+
 [source, bash]
 ----
 $ rake -T
 rake test  # Run tests
 ----
+
+タスクが登録されたことが確認できたのでタスクを実行します。
 
 [source, bash]
 ----
@@ -591,6 +607,8 @@ Finished in 0.00271s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+テストタスクが実行されたことが確認できたので引き続き静的コードの解析タスクを追加します。
+
 [source, ruby]
 ----
 require 'rake/testtask'
@@ -605,6 +623,8 @@ Rake::TestTask.new do |test|
 end
 ----
 
+タスクが登録されたことを確認します。
+
 [source, bash]
 ----
 $ rake -T
@@ -612,6 +632,8 @@ rake rubocop               # Run RuboCop
 rake rubocop:auto_correct  # Auto-correct RuboCop offenses
 rake test                  # Run tests
 ----
+
+続いてタスクを実行してみましょう。
 
 [source, bash]
 ----
@@ -629,6 +651,8 @@ require 'rake/testtask'
 5 files inspected, 1 offense detected
 RuboCop failed!
 ----
+
+いろいろ出てきましたので自動修正しましょう。
 
 [source, bash]
 ----
@@ -658,6 +682,8 @@ Inspecting 5 files
 
 5 files inspected, no offenses detected
 ----
+
+うまく修正されたようですね。後、フォーマットコマンドもタスクとして追加してみましょう。
 
 [source, ruby]
 ----
@@ -703,6 +729,13 @@ end
 
 
 5 files inspected, 1 offense detected, 1 offense corrected
+----
+
+フォーマットは `rake rubocop:auto_correct` で一緒にやってくれるので特に必要は無いのですがプログラムが標準提供していないタスクを作りたい場合はこのように追加します。セットアップができたのでコミットしておきましょう。
+
+[source, bash]
+----
+$ git commit -m 'chore: タスクランナーセットアップ'
 ----
 
 ==== タスクの自動化
