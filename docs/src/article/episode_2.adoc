@@ -740,6 +740,13 @@ $ git commit -m 'chore: タスクランナーセットアップ'
 
 ==== タスクの自動化
 
+良いコードを書くためのタスクをまとめることができましたがどうせなら自動で実行できるようにしたいですよね。
+タスクを自動実行するためのgemを追加します。https://github.com/guard/guard[Guard^] とプラグインの https://github.com/guard/guard-shell[Guard::Shell^] https://github.com/guard/guard-minitest[Guard::Minitest^] をインストールします。それぞれの詳細は以下を参照してください。
+
+* https://qiita.com/tbpgr/items/f5be21d8e19dd852d9b7[Ruby | Guard gem を利用してファイルの変更を検出し、任意のタスクを自動実行する^]
+* https://qiita.com/emergent/items/0a38909206844265e0b5[guard-shellでソースコードの変更を監視して自動でmake＆実行させる^]
+* https://forest-valley17.hatenablog.com/entry/2018/10/05/183521[Rails - Guardを使い、ファイル変更時にMinitestやRspecを自動実行する^]
+
 [source, ruby]
 ----
 # frozen_string_literal: true
@@ -753,14 +760,20 @@ gem 'guard-minitest'
 gem 'guard-shell'
 gem 'minitest'
 gem 'minitest-reporters'
+gem 'rake'
 gem 'rubocop', require: false
+gem 'simplecov', require: false, group: :test
 ----
+
+`bundle install` は `bundle` でもできます。
 
 [source, bash]
 ----
 $ bundle
 $ guard init
 ----
+
+`Guardfile` が生成されるので以下の内容に変更します。 
 
 [source, ruby]
 ----
@@ -779,6 +792,8 @@ guard :minitest do
   watch(%r{test\/*.rb})
 end
 ----
+
+`guard` が起動するか確認して一旦終了します。
 
 [source, bash]
 ----
@@ -811,6 +826,8 @@ rb/docs/src/article/code'
 20:42:25 - INFO - Bye bye...
 ----
 
+続いて `Rakefile` にguardタスクを追加します。あと、guardタスクをデフォルトにして `rake` を実行すると呼び出されるようにしておきます。
+
 [source, ruby]
 ----
 # frozen_string_literal: true
@@ -836,6 +853,8 @@ task :guard do
   sh 'guard start'
 end
 ----
+
+自動実行タスクを起動しましょう。
 
 [source, bash]
 ----
@@ -865,6 +884,8 @@ Finished in 0.00267s
 20:43:18 - INFO - Guard is now watching at '/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code'
 [1] guard(main)> 
 ----
+
+起動したら `fizz_buzz.rb` を編集したらテストが実行されるか確認しましょう。
 
 [source, ruby]
 ----
@@ -919,7 +940,11 @@ Finished in 0.00361s
 [1] guard(main)> 
 ----
 
+変更を感知してテストが実行されるた結果失敗していましました。コードをもとに戻してテストをパスするようにしておきましょう。テストがパスすることが確認できたらコミットしておきます。
+
 [source, bash]
 ----
 $ git commit -m 'chore: タスクの自動化'
 ----
+
+これで https://t-wada.hatenablog.jp/entry/clean-code-that-works[ソフトウェア開発の三種の神器^] の最後のアイテムの準備ができました。次回の開発からはまずコマンドラインで `rake` を実行すれば良いコードを書くためのタスクを自動でやってくるようになるのでコードを書くことに集中できるようになりました。では、次のエピソードに進むとしましょう。

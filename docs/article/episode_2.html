@@ -1277,6 +1277,23 @@ end
 </div>
 <div class="sect3">
 <h4 id="_タスクの自動化">タスクの自動化</h4>
+<div class="paragraph">
+<p>良いコードを書くためのタスクをまとめることができましたがどうせなら自動で実行できるようにしたいですよね。
+タスクを自動実行するためのgemを追加します。https://github.com/guard/guard[Guard^] とプラグインの <a href="https://github.com/guard/guard-shell" target="_blank" rel="noopener">Guard::Shell</a> <a href="https://github.com/guard/guard-minitest" target="_blank" rel="noopener">Guard::Minitest</a> をインストールします。それぞれの詳細は以下を参照してください。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://qiita.com/tbpgr/items/f5be21d8e19dd852d9b7" target="_blank" rel="noopener">Ruby | Guard gem を利用してファイルの変更を検出し、任意のタスクを自動実行する</a></p>
+</li>
+<li>
+<p><a href="https://qiita.com/emergent/items/0a38909206844265e0b5" target="_blank" rel="noopener">guard-shellでソースコードの変更を監視して自動でmake＆実行させる</a></p>
+</li>
+<li>
+<p><a href="https://forest-valley17.hatenablog.com/entry/2018/10/05/183521" target="_blank" rel="noopener">Rails - Guardを使い、ファイル変更時にMinitestやRspecを自動実行する</a></p>
+</li>
+</ul>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
@@ -1290,14 +1307,22 @@ gem 'guard-minitest'
 gem 'guard-shell'
 gem 'minitest'
 gem 'minitest-reporters'
-gem 'rubocop', require: false</code></pre>
+gem 'rake'
+gem 'rubocop', require: false
+gem 'simplecov', require: false, group: :test</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>bundle install</code> は <code>bundle</code> でもできます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ bundle
 $ guard init</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>Guardfile</code> が生成されるので以下の内容に変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1316,6 +1341,9 @@ guard :minitest do
   watch(%r{test\/*.rb})
 end</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>guard</code> が起動するか確認して一旦終了します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1348,6 +1376,9 @@ rb/docs/src/article/code'
 20:42:25 - INFO - Bye bye...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>続いて <code>Rakefile</code> にguardタスクを追加します。あと、guardタスクをデフォルトにして <code>rake</code> を実行すると呼び出されるようにしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
@@ -1373,6 +1404,9 @@ task :guard do
   sh 'guard start'
 end</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>自動実行タスクを起動しましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1402,6 +1436,9 @@ Finished in 0.00267s
 20:43:18 - INFO - Guard is now watching at '/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code'
 [1] guard(main)&gt;</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>起動したら <code>fizz_buzz.rb</code> を編集したらテストが実行されるか確認しましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1456,17 +1493,23 @@ Finished in 0.00361s
 [1] guard(main)&gt;</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>変更を感知してテストが実行されるた結果失敗していましました。コードをもとに戻してテストをパスするようにしておきましょう。テストがパスすることが確認できたらコミットしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'chore: タスクの自動化'</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>これで <a href="https://t-wada.hatenablog.jp/entry/clean-code-that-works" target="_blank" rel="noopener">ソフトウェア開発の三種の神器</a> の最後のアイテムの準備ができました。次回の開発からはまずコマンドラインで <code>rake</code> を実行すれば良いコードを書くためのタスクを自動でやってくるようになるのでコードを書くことに集中できるようになりました。では、次のエピソードに進むとしましょう。</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-24 14:17:30 JST
+Last updated 2020-01-24 14:45:55 JST
 </div>
 </div>
 </body>
