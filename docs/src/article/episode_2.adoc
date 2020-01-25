@@ -25,10 +25,7 @@ ____
 git commit -m 'refactor: メソッドの抽出'
 ----
 
-この書式は https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type[Angularルール^]に従っています。
-
-
-それぞれのコミットメッセージはヘッダ、ボディ、フッタで構成されています。ヘッダはタイプ、スコープ、タイトルというフォーマットで構成されています。
+この書式は https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type[Angularルール^]に従っています。具体的には、それぞれのコミットメッセージはヘッダ、ボディ、フッタで構成されています。ヘッダはタイプ、スコープ、タイトルというフォーマットで構成されています。
 
 ```
 <タイプ>(<スコープ>): <タイトル>
@@ -40,7 +37,9 @@ git commit -m 'refactor: メソッドの抽出'
 
 ヘッダは必須です。
 ヘッダのスコープは任意です。
-コミットメッセージの長さは50文字までにしてください。(そうすることでその他のGitツールと同様にGitHub上で読みやすくなります。)
+コミットメッセージの長さは50文字までにしてください。
+
+(そうすることでその他のGitツールと同様にGitHub上で読みやすくなります。)
 
 コミットのタイプは次を用いて下さい。
 
@@ -71,7 +70,7 @@ ____
 $ gem install minitest-reporters
 ----
 
-では、これからこのようにして必要な外部プログラムを一つ一つインストールしていくのでしょうか？また、新しい開発環境になったときにも同じことを繰り返さないといけないのでしょうか？面倒ですよね。そのような面倒なことをしないで済む仕組みがRubyには用意されています。それが *Bundler* です。
+では、これからもこのようにして必要な外部プログラムを一つ一つインストールしていくのでしょうか？また、開発用マシンを変えた時にも同じことを繰り返さないといけないのでしょうか？面倒ですよね。そのような面倒なことをしないで済む仕組みがRubyには用意されています。それが *Bundler* です。
 
 [quote, かんたんRuby]
 ____
@@ -139,7 +138,7 @@ Use `bundle info [gemname]` to see where a bundled gem is installed.
 
 ==== 静的コード解析
 
-良いコードを書き続けれるためにはコードの品質を維持していく必要があります。エピソード1では *テスト駆動開発* によりプログラムを動かしながら品質の改善していきました。出来上がったコードに対する品質チェック方法として *静的コード解析* があります。Ruby用 *静的コード解析* ツール https://github.com/rubocop-hq/rubocop[RuboCop] を使って確認してみましょう。プログラムは先程 *Bundler* を使ってインストールしたので以下のコマンドを実行します。
+良いコードを書き続けるためにはコードの品質を維持していく必要があります。エピソード1では *テスト駆動開発* によりプログラムを動かしながら品質の改善していきました。出来上がったコードに対する品質チェックの方法として *静的コード解析* があります。Ruby用 *静的コード解析* ツール https://github.com/rubocop-hq/rubocop[RuboCop^] を使って確認してみましょう。プログラムは先程 *Bundler* を使ってインストールしたので以下のコマンドを実行します。
 
 [source, bash]
 ----
@@ -158,7 +157,7 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 ...
 ----
 
-なにかいろいろ出てきましたね。RuboCopの詳細に関しては https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b[RuboCop is 何？] を参照ください。`--lint` オプションをつけて実施してみましょう。
+なにかいろいろ出てきましたね。RuboCopの詳細に関しては https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b[RuboCop is 何？^]を参照ください。`--lint` オプションをつけて実施してみましょう。
 
 [source, bash]
 ----
@@ -178,7 +177,7 @@ test/fizz_buzz_test.rb:111:7: W: Lint/AmbiguousBlockAssociation: Parenthesize th
 5 files inspected, 2 offenses detected
 ----
 
-また何やら出てきましたね。 https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociation[W: Lint/AmbiguousBlockAssociation] メッセージを調べたところ、`fizz_buzz_test.rb` の以下の学習用テストコードは書き方がよろしくないようですね。
+また何やら出てきましたね。 https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociation[W: Lint/AmbiguousBlockAssociation^]のメッセージを調べたところ、`fizz_buzz_test.rb` の以下の学習用テストコードは書き方がよろしくないようですね。
 
 [source, ruby]
 ----
@@ -199,12 +198,13 @@ test/fizz_buzz_test.rb:111:7: W: Lint/AmbiguousBlockAssociation: Parenthesize th
 ----
 ...
     def test_指定した評価式で並び変えた配列を返す
-      result1 = %w[2 4 13 3 1 10].sort { |a, b| a.to_i <=> b.to_i }
-      result2 = %w[2 4 13 3 1 10].sort { |b, a| a.to_i <=> b.to_i }
+      result1 = %w[2 4 13 3 1 10].sort
+      result2 = %w[2 4 13 3 1 10].sort { |a, b| a.to_i <=> b.to_i }
+      result3 = %w[2 4 13 3 1 10].sort { |b, a| a.to_i <=> b.to_i }
 
-      assert_equal %w[1 10 13 2 3 4], %w[2 4 13 3 1 10].sort
-      assert_equal %w[1 2 3 4 10 13], result1
-      assert_equal %w[13 10 4 3 2 1], result2
+      assert_equal %w[1 10 13 2 3 4], result1
+      assert_equal %w[1 2 3 4 10 13], result2
+      assert_equal %w[13 10 4 3 2 1], result3
     end
 ...
 ----
@@ -213,7 +213,7 @@ test/fizz_buzz_test.rb:111:7: W: Lint/AmbiguousBlockAssociation: Parenthesize th
 
 [source, bash]
 ----
- rubocop --lint
+$ rubocop --lint
 Inspecting 5 files
 .....
 
@@ -276,7 +276,7 @@ Inspecting 5 files
 Created .rubocop_todo.yml.
 ----
 
-`.rubocop_todo.yml` の以下の部分を変更します。
+生成された `.rubocop_todo.yml` の以下の部分を変更します。
 
 [source, yml]
 ----
@@ -304,7 +304,14 @@ Inspecting 5 files
 
 ==== コードフォーマッタ
 
-良いコードであるためにはフォーマットも大切な要素です。Rubyにはいくつかフォーマットアプリケーションはあるのですがここは `RuboCop` の機能を使って実現することにしましょう。以下のコードのフォーマットをわざと崩してみます。
+良いコードであるためにはフォーマットも大切な要素です。
+
+[quote, リーダブルコード]
+____
+優れたソースコードは「目に優しい」ものでなければいけない。
+____
+
+Rubyにはいくつかフォーマットアプリケーションはあるのですがここは `RuboCop` の機能を使って実現することにしましょう。以下のコードのフォーマットをわざと崩してみます。
 
 [source, ruby]
 ----
@@ -329,7 +336,7 @@ class FizzBuzz
 end
 ----
 
-フォーマットをオプションをつけてチェックしてみます。
+スタイルオプションをつけてチェックしてみます。
 
 [source, bash]
 ----
@@ -457,7 +464,7 @@ ____
 コード網羅率（コードもうらりつ、英: Code coverage ）コードカバレッジは、ソフトウェアテストで用いられる尺度の1つである。プログラムのソースコードがテストされた割合を意味する。この場合のテストはコードを見ながら行うもので、ホワイトボックステストに分類される。
 ____
 
-Ruby用 *コードカバレッジ* 検出プログラムとして https://github.com/colszowka/simplecov[SimpleCov^] を使います。Gemfileに追加して *Bundler* でインストールをしましょう。
+Ruby用 *コードカバレッジ* 検出プログラムとして https://github.com/colszowka/simplecov[SimpleCov^]を使います。Gemfileに追加して *Bundler* でインストールをしましょう。
 
 [source, ruby]
 ----
@@ -530,7 +537,7 @@ Finished in 0.00297s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
 ----
 
-テスト実行後に `coverage` というフォルダが作成されているのでその中の `index.html` を開くとカバレッジ状況を確認できます。セットアップが完了したらコミットしておきましょう。
+テスト実行後に `coverage` というフォルダが作成されます。その中の `index.html` を開くとカバレッジ状況を確認できます。セットアップが完了したらコミットしておきましょう。
 
 [source, bash]
 ----
@@ -538,7 +545,7 @@ $ git commit -m 'chore: コードカバレッジセットアップ'
 ----
 
 ==== タスクランナー
-ここまででテストの実行、静的コード解析、コードフォーマット、コードカバレッジを事項することができるようになりました。でもコマンドを実行するのにそれぞれコマンドを覚えておくのは面倒ですよね。例えばテストの実行は
+ここまででテストの実行、静的コード解析、コードフォーマット、コードカバレッジを実施することができるようになりました。でもコマンドを実行するのにそれぞれコマンドを覚えておくのは面倒ですよね。例えばテストの実行は
 
 [source, bash]
 ----
@@ -551,20 +558,26 @@ Finished in 0.00261s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
 ----
 
-このようにしていました。では静的コードの解析はどうやりましっけ？フォーマットはどうやりましたっけ？そんな面倒なことは全部タスクランナーにやらせるようにしましょう。Rubyのタスクランナーは `Rake` です。
+このようにしていました。では静的コードの解析はどうやりましたか？フォーマットはどうやりましたか？調べるのも面倒ですよね。いちいち調べるのが面倒なことは全部 *タスクランナー* にやらせるようにしましょう。
+
+[quote, かんたんRuby]
+____
+タスクランナーとは、アプリケーションのビルドなど、一定の手順で行う作業をコマンド一つで実行できるように予めタスクとして定義したものです。
+____
+
+Rubyの *タスクランナー* は `Rake` です。
 
 [quote, かんたんRuby]
 ____
 RakeはRubyにおけるタスクランナーです。rakeコマンドと起点となるRakefileというタスクを記述するファイルを用意することで、タスクの実行や登録されたタスクの一覧表示を行えます。
 ____
 
-早速、テストのタスクから作成しましょう。以下の `Rakefile` を作ります。
+早速、テストタスクから作成しましょう。まず `Rakefile` を作ります。
 
 [source, bash]
 ----
 $ touch Rakefile
 ----
-
 
 [source, ruby]
 ----
@@ -608,7 +621,7 @@ Finished in 0.00271s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
 ----
 
-テストタスクが実行されたことが確認できたので引き続き静的コードの解析タスクを追加します。
+テストタスクが実行されたことが確認できたので引き続き静的コードの解析タスクを追加します。こちらも開発元がタスクを用意しているのでそちらを使うことにします。
 
 [source, ruby]
 ----
@@ -684,7 +697,7 @@ Inspecting 5 files
 5 files inspected, no offenses detected
 ----
 
-うまく修正されたようですね。後、フォーマットコマンドもタスクとして追加してみましょう。
+うまく修正されたようですね。後、フォーマットコマンドもタスクとして追加しておきましょう。こちらは開発元が用意していないタスクなので以下のように追加します。
 
 [source, ruby]
 ----
@@ -732,7 +745,7 @@ end
 5 files inspected, 1 offense detected, 1 offense corrected
 ----
 
-フォーマットは `rake rubocop:auto_correct` で一緒にやってくれるので特に必要は無いのですがプログラムが標準提供していないタスクを作りたい場合はこのように追加します。セットアップができたのでコミットしておきましょう。
+フォーマットは `rake rubocop:auto_correct` で一緒にやってくれるので特に必要は無いのですがプログラムの開発元が提供していないタスクを作りたい場合はこのように追加します。セットアップができたのでコミットしておきましょう。
 
 [source, bash]
 ----
@@ -741,8 +754,8 @@ $ git commit -m 'chore: タスクランナーセットアップ'
 
 ==== タスクの自動化
 
-良いコードを書くためのタスクをまとめることができましたがどうせなら自動で実行できるようにしたいですよね。
-タスクを自動実行するためのgemを追加します。https://github.com/guard/guard[Guard^] とプラグインの https://github.com/guard/guard-shell[Guard::Shell^] https://github.com/guard/guard-minitest[Guard::Minitest^] をインストールします。それぞれの詳細は以下を参照してください。
+良いコードを書くためのタスクをまとめることができました。でも、どうせなら自動で実行できるようにしたいですよね。
+タスクを自動実行するためのgemを追加します。 https://github.com/guard/guard[Guard^]とそのプラグインの https://github.com/guard/guard-shell[Guard::Shell^] https://github.com/guard/guard-minitest[Guard::Minitest^]をインストールします。それぞれの詳細は以下を参照してください。
 
 * https://qiita.com/tbpgr/items/f5be21d8e19dd852d9b7[Ruby | Guard gem を利用してファイルの変更を検出し、任意のタスクを自動実行する^]
 * https://qiita.com/emergent/items/0a38909206844265e0b5[guard-shellでソースコードの変更を監視して自動でmake＆実行させる^]
@@ -766,7 +779,7 @@ gem 'rubocop', require: false
 gem 'simplecov', require: false, group: :test
 ----
 
-`bundle install` は `bundle` でもできます。
+`bundle install` は `bundle` に省略できます。
 
 [source, bash]
 ----
@@ -886,7 +899,7 @@ Finished in 0.00267s
 [1] guard(main)> 
 ----
 
-起動したら `fizz_buzz.rb` を編集したらテストが実行されるか確認しましょう。
+起動したら `fizz_buzz.rb` を編集してテストが自動実行されるか確認しましょう。
 
 [source, ruby]
 ----
@@ -941,11 +954,11 @@ Finished in 0.00361s
 [1] guard(main)> 
 ----
 
-変更を感知してテストが実行されるた結果失敗していましました。コードをもとに戻してテストをパスするようにしておきましょう。テストがパスすることが確認できたらコミットしておきます。
+変更を感知してテストが実行されるた結果失敗していましました。コードを元に戻してテストをパスするようにしておきましょう。テストがパスすることが確認できたらコミットしておきます。
 
 [source, bash]
 ----
 $ git commit -m 'chore: タスクの自動化'
 ----
 
-これで https://t-wada.hatenablog.jp/entry/clean-code-that-works[ソフトウェア開発の三種の神器^] の最後のアイテムの準備ができました。次回の開発からはまずコマンドラインで `rake` を実行すれば良いコードを書くためのタスクを自動でやってくるようになるのでコードを書くことに集中できるようになりました。では、次のエピソードに進むとしましょう。
+これで https://t-wada.hatenablog.jp/entry/clean-code-that-works[ソフトウェア開発の三種の神器^]の最後のアイテムの準備ができました。次回の開発からは最初にコマンドラインで `rake` を実行すれば良いコードを書くためのタスクを自動でやってくるようになるのでコードを書くことに集中できるようになりました。では、次のエピソードに進むとしましょう。

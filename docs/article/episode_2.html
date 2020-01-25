@@ -475,10 +475,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>この書式は <a href="https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type" target="_blank" rel="noopener">Angularルール</a>に従っています。</p>
-</div>
-<div class="paragraph">
-<p>それぞれのコミットメッセージはヘッダ、ボディ、フッタで構成されています。ヘッダはタイプ、スコープ、タイトルというフォーマットで構成されています。</p>
+<p>この書式は <a href="https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type" target="_blank" rel="noopener">Angularルール</a>に従っています。具体的には、それぞれのコミットメッセージはヘッダ、ボディ、フッタで構成されています。ヘッダはタイプ、スコープ、タイトルというフォーマットで構成されています。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -492,7 +489,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>ヘッダは必須です。
 ヘッダのスコープは任意です。
-コミットメッセージの長さは50文字までにしてください。(そうすることでその他のGitツールと同様にGitHub上で読みやすくなります。)</p>
+コミットメッセージの長さは50文字までにしてください。</p>
+</div>
+<div class="paragraph">
+<p>(そうすることでその他のGitツールと同様にGitHub上で読みやすくなります。)</p>
 </div>
 <div class="paragraph">
 <p>コミットのタイプは次を用いて下さい。</p>
@@ -553,7 +553,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>では、これからこのようにして必要な外部プログラムを一つ一つインストールしていくのでしょうか？また、新しい開発環境になったときにも同じことを繰り返さないといけないのでしょうか？面倒ですよね。そのような面倒なことをしないで済む仕組みがRubyには用意されています。それが <strong>Bundler</strong> です。</p>
+<p>では、これからもこのようにして必要な外部プログラムを一つ一つインストールしていくのでしょうか？また、開発用マシンを変えた時にも同じことを繰り返さないといけないのでしょうか？面倒ですよね。そのような面倒なことをしないで済む仕組みがRubyには用意されています。それが <strong>Bundler</strong> です。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -633,7 +633,7 @@ Use `bundle info [gemname]` to see where a bundled gem is installed.</code></pre
 <div class="sect3">
 <h4 id="_静的コード解析">静的コード解析</h4>
 <div class="paragraph">
-<p>良いコードを書き続けれるためにはコードの品質を維持していく必要があります。エピソード1では <strong>テスト駆動開発</strong> によりプログラムを動かしながら品質の改善していきました。出来上がったコードに対する品質チェック方法として <strong>静的コード解析</strong> があります。Ruby用 <strong>静的コード解析</strong> ツール <a href="https://github.com/rubocop-hq/rubocop">RuboCop</a> を使って確認してみましょう。プログラムは先程 <strong>Bundler</strong> を使ってインストールしたので以下のコマンドを実行します。</p>
+<p>良いコードを書き続けるためにはコードの品質を維持していく必要があります。エピソード1では <strong>テスト駆動開発</strong> によりプログラムを動かしながら品質の改善していきました。出来上がったコードに対する品質チェックの方法として <strong>静的コード解析</strong> があります。Ruby用 <strong>静的コード解析</strong> ツール <a href="https://github.com/rubocop-hq/rubocop" target="_blank" rel="noopener">RuboCop</a> を使って確認してみましょう。プログラムは先程 <strong>Bundler</strong> を使ってインストールしたので以下のコマンドを実行します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -653,7 +653,7 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 </div>
 </div>
 <div class="paragraph">
-<p>なにかいろいろ出てきましたね。RuboCopの詳細に関しては <a href="https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b">RuboCop is 何？</a> を参照ください。<code>--lint</code> オプションをつけて実施してみましょう。</p>
+<p>なにかいろいろ出てきましたね。RuboCopの詳細に関しては <a href="https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b" target="_blank" rel="noopener">RuboCop is 何？</a>を参照ください。<code>--lint</code> オプションをつけて実施してみましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -674,7 +674,7 @@ test/fizz_buzz_test.rb:111:7: W: Lint/AmbiguousBlockAssociation: Parenthesize th
 </div>
 </div>
 <div class="paragraph">
-<p>また何やら出てきましたね。 <a href="https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociation">W: Lint/AmbiguousBlockAssociation</a> メッセージを調べたところ、<code>fizz_buzz_test.rb</code> の以下の学習用テストコードは書き方がよろしくないようですね。</p>
+<p>また何やら出てきましたね。 <a href="https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociation" target="_blank" rel="noopener">W: Lint/AmbiguousBlockAssociation</a>のメッセージを調べたところ、<code>fizz_buzz_test.rb</code> の以下の学習用テストコードは書き方がよろしくないようですね。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -696,12 +696,13 @@ test/fizz_buzz_test.rb:111:7: W: Lint/AmbiguousBlockAssociation: Parenthesize th
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
     def test_指定した評価式で並び変えた配列を返す
-      result1 = %w[2 4 13 3 1 10].sort { |a, b| a.to_i &lt;=&gt; b.to_i }
-      result2 = %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
+      result1 = %w[2 4 13 3 1 10].sort
+      result2 = %w[2 4 13 3 1 10].sort { |a, b| a.to_i &lt;=&gt; b.to_i }
+      result3 = %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
 
-      assert_equal %w[1 10 13 2 3 4], %w[2 4 13 3 1 10].sort
-      assert_equal %w[1 2 3 4 10 13], result1
-      assert_equal %w[13 10 4 3 2 1], result2
+      assert_equal %w[1 10 13 2 3 4], result1
+      assert_equal %w[1 2 3 4 10 13], result2
+      assert_equal %w[13 10 4 3 2 1], result3
     end
 ...</code></pre>
 </div>
@@ -711,7 +712,7 @@ test/fizz_buzz_test.rb:111:7: W: Lint/AmbiguousBlockAssociation: Parenthesize th
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash"> rubocop --lint
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ rubocop --lint
 Inspecting 5 files
 .....
 
@@ -779,7 +780,7 @@ Created .rubocop_todo.yml.</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><code>.rubocop_todo.yml</code> の以下の部分を変更します。</p>
+<p>生成された <code>.rubocop_todo.yml</code> の以下の部分を変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -810,7 +811,20 @@ Inspecting 5 files
 <div class="sect3">
 <h4 id="_コードフォーマッタ">コードフォーマッタ</h4>
 <div class="paragraph">
-<p>良いコードであるためにはフォーマットも大切な要素です。Rubyにはいくつかフォーマットアプリケーションはあるのですがここは <code>RuboCop</code> の機能を使って実現することにしましょう。以下のコードのフォーマットをわざと崩してみます。</p>
+<p>良いコードであるためにはフォーマットも大切な要素です。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>優れたソースコードは「目に優しい」ものでなければいけない。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リーダブルコード
+</div>
+</div>
+<div class="paragraph">
+<p>Rubyにはいくつかフォーマットアプリケーションはあるのですがここは <code>RuboCop</code> の機能を使って実現することにしましょう。以下のコードのフォーマットをわざと崩してみます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -836,7 +850,7 @@ end</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>フォーマットをオプションをつけてチェックしてみます。</p>
+<p>スタイルオプションをつけてチェックしてみます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -974,7 +988,7 @@ $ git commit -m 'chore: 静的コード解析セットアップ'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Ruby用 <strong>コードカバレッジ</strong> 検出プログラムとして <a href="https://github.com/colszowka/simplecov" target="_blank" rel="noopener">SimpleCov</a> を使います。Gemfileに追加して <strong>Bundler</strong> でインストールをしましょう。</p>
+<p>Ruby用 <strong>コードカバレッジ</strong> 検出プログラムとして <a href="https://github.com/colszowka/simplecov" target="_blank" rel="noopener">SimpleCov</a>を使います。Gemfileに追加して <strong>Bundler</strong> でインストールをしましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1050,7 +1064,7 @@ Finished in 0.00297s
 </div>
 </div>
 <div class="paragraph">
-<p>テスト実行後に <code>coverage</code> というフォルダが作成されているのでその中の <code>index.html</code> を開くとカバレッジ状況を確認できます。セットアップが完了したらコミットしておきましょう。</p>
+<p>テスト実行後に <code>coverage</code> というフォルダが作成されます。その中の <code>index.html</code> を開くとカバレッジ状況を確認できます。セットアップが完了したらコミットしておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1061,7 +1075,7 @@ Finished in 0.00297s
 <div class="sect3">
 <h4 id="_タスクランナー">タスクランナー</h4>
 <div class="paragraph">
-<p>ここまででテストの実行、静的コード解析、コードフォーマット、コードカバレッジを事項することができるようになりました。でもコマンドを実行するのにそれぞれコマンドを覚えておくのは面倒ですよね。例えばテストの実行は</p>
+<p>ここまででテストの実行、静的コード解析、コードフォーマット、コードカバレッジを実施することができるようになりました。でもコマンドを実行するのにそれぞれコマンドを覚えておくのは面倒ですよね。例えばテストの実行は</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1075,7 +1089,20 @@ Finished in 0.00261s
 </div>
 </div>
 <div class="paragraph">
-<p>このようにしていました。では静的コードの解析はどうやりましっけ？フォーマットはどうやりましたっけ？そんな面倒なことは全部タスクランナーにやらせるようにしましょう。Rubyのタスクランナーは <code>Rake</code> です。</p>
+<p>このようにしていました。では静的コードの解析はどうやりましたか？フォーマットはどうやりましたか？調べるのも面倒ですよね。いちいち調べるのが面倒なことは全部 <strong>タスクランナー</strong> にやらせるようにしましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>タスクランナーとは、アプリケーションのビルドなど、一定の手順で行う作業をコマンド一つで実行できるように予めタスクとして定義したものです。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; かんたんRuby
+</div>
+</div>
+<div class="paragraph">
+<p>Rubyの <strong>タスクランナー</strong> は <code>Rake</code> です。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -1088,7 +1115,7 @@ Finished in 0.00261s
 </div>
 </div>
 <div class="paragraph">
-<p>早速、テストのタスクから作成しましょう。以下の <code>Rakefile</code> を作ります。</p>
+<p>早速、テストタスクから作成しましょう。まず <code>Rakefile</code> を作ります。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1140,7 +1167,7 @@ Finished in 0.00271s
 </div>
 </div>
 <div class="paragraph">
-<p>テストタスクが実行されたことが確認できたので引き続き静的コードの解析タスクを追加します。</p>
+<p>テストタスクが実行されたことが確認できたので引き続き静的コードの解析タスクを追加します。こちらも開発元がタスクを用意しているのでそちらを使うことにします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1220,7 +1247,7 @@ Inspecting 5 files
 </div>
 </div>
 <div class="paragraph">
-<p>うまく修正されたようですね。後、フォーマットコマンドもタスクとして追加してみましょう。</p>
+<p>うまく修正されたようですね。後、フォーマットコマンドもタスクとして追加しておきましょう。こちらは開発元が用意していないタスクなので以下のように追加します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1269,7 +1296,7 @@ end
 </div>
 </div>
 <div class="paragraph">
-<p>フォーマットは <code>rake rubocop:auto_correct</code> で一緒にやってくれるので特に必要は無いのですがプログラムが標準提供していないタスクを作りたい場合はこのように追加します。セットアップができたのでコミットしておきましょう。</p>
+<p>フォーマットは <code>rake rubocop:auto_correct</code> で一緒にやってくれるので特に必要は無いのですがプログラムの開発元が提供していないタスクを作りたい場合はこのように追加します。セットアップができたのでコミットしておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1280,8 +1307,8 @@ end
 <div class="sect3">
 <h4 id="_タスクの自動化">タスクの自動化</h4>
 <div class="paragraph">
-<p>良いコードを書くためのタスクをまとめることができましたがどうせなら自動で実行できるようにしたいですよね。
-タスクを自動実行するためのgemを追加します。https://github.com/guard/guard[Guard^] とプラグインの <a href="https://github.com/guard/guard-shell" target="_blank" rel="noopener">Guard::Shell</a> <a href="https://github.com/guard/guard-minitest" target="_blank" rel="noopener">Guard::Minitest</a> をインストールします。それぞれの詳細は以下を参照してください。</p>
+<p>良いコードを書くためのタスクをまとめることができました。でも、どうせなら自動で実行できるようにしたいですよね。
+タスクを自動実行するためのgemを追加します。 <a href="https://github.com/guard/guard" target="_blank" rel="noopener">Guard</a>とそのプラグインの <a href="https://github.com/guard/guard-shell" target="_blank" rel="noopener">Guard::Shell</a> <a href="https://github.com/guard/guard-minitest" target="_blank" rel="noopener">Guard::Minitest</a>をインストールします。それぞれの詳細は以下を参照してください。</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1315,7 +1342,7 @@ gem 'simplecov', require: false, group: :test</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><code>bundle install</code> は <code>bundle</code> でもできます。</p>
+<p><code>bundle install</code> は <code>bundle</code> に省略できます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1440,7 +1467,7 @@ Finished in 0.00267s
 </div>
 </div>
 <div class="paragraph">
-<p>起動したら <code>fizz_buzz.rb</code> を編集したらテストが実行されるか確認しましょう。</p>
+<p>起動したら <code>fizz_buzz.rb</code> を編集してテストが自動実行されるか確認しましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1496,7 +1523,7 @@ Finished in 0.00361s
 </div>
 </div>
 <div class="paragraph">
-<p>変更を感知してテストが実行されるた結果失敗していましました。コードをもとに戻してテストをパスするようにしておきましょう。テストがパスすることが確認できたらコミットしておきます。</p>
+<p>変更を感知してテストが実行されるた結果失敗していましました。コードを元に戻してテストをパスするようにしておきましょう。テストがパスすることが確認できたらコミットしておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1504,14 +1531,14 @@ Finished in 0.00361s
 </div>
 </div>
 <div class="paragraph">
-<p>これで <a href="https://t-wada.hatenablog.jp/entry/clean-code-that-works" target="_blank" rel="noopener">ソフトウェア開発の三種の神器</a> の最後のアイテムの準備ができました。次回の開発からはまずコマンドラインで <code>rake</code> を実行すれば良いコードを書くためのタスクを自動でやってくるようになるのでコードを書くことに集中できるようになりました。では、次のエピソードに進むとしましょう。</p>
+<p>これで <a href="https://t-wada.hatenablog.jp/entry/clean-code-that-works" target="_blank" rel="noopener">ソフトウェア開発の三種の神器</a>の最後のアイテムの準備ができました。次回の開発からは最初にコマンドラインで <code>rake</code> を実行すれば良いコードを書くためのタスクを自動でやってくるようになるのでコードを書くことに集中できるようになりました。では、次のエピソードに進むとしましょう。</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-24 14:49:32 JST
+Last updated 2020-01-25 10:13:28 JST
 </div>
 </div>
 </body>
