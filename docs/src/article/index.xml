@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>テスト駆動開発から始めるRuby入門</title>
-<date>2020-01-24</date>
+<date>2020-01-25</date>
 </info>
 <simpara>これはとあるプログラマがどのような思考を経てテスト駆動開発でアプリケーションを構築していったかを解説した内容である。隣りに座って話を聞きながらコードを追いかけているイメージで読み進めてみてださい。</simpara>
 <section xml:id="_エピソード1">
@@ -147,10 +147,10 @@ Started with run options --seed 18217
 
 Finished in 0.00101s
 1 tests, 1 assertions, 1 failures, 0 errors, 0 skips</programlisting>
-<simpara>オッケー、テスティングフレームワークが正常に読み込まれて動作することが確認できました。続いてバージョン管理システムのセットアップをしておきましょう。バージョン管理システム何それ？だって！？君はセーブしないでロールプレイングゲームをクリアできるのか？できないならまず <link xl:href="https://backlog.com/ja/git-tutorial/intro/01/">ここ</link> でGitを使ったバージョン管理の基本を学んでおきましょう。</simpara>
+<simpara>オッケー、テスティングフレームワークが正常に読み込まれて動作することが確認できました。テストが正常に通るように戻しておきましょう。続いてバージョン管理システムのセットアップをしておきましょう。バージョン管理システム何それ？だって！？君はセーブしないでロールプレイングゲームをクリアできるのか？できないならまず <link xl:href="https://backlog.com/ja/git-tutorial/intro/01/">ここ</link> でGitを使ったバージョン管理の基本を学んでおきましょう。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">$ git init
 $ git add .
-$ git commit -m 'セットアップ'</programlisting>
+$ git commit -m 'test: セットアップ'</programlisting>
 <simpara>これで <link xl:href="https://t-wada.hatenablog.jp/entry/clean-code-that-works">ソフトウェア開発の三種の神器</link>のうち <emphasis role="strong">バージョン管理</emphasis> と <emphasis role="strong">テスティング</emphasis> の準備が整いましたので <emphasis role="strong">TODOリスト</emphasis> の最初の作業に取り掛かかるとしましょう。</simpara>
 </section>
 <section xml:id="_仮実装">
@@ -418,7 +418,8 @@ Finished in 0.00098s
 <simpara>テストの本質というのは、「こういう状況と入力から、こういう振る舞いと出力を期待する」のレベルまで要約できる。</simpara>
 </blockquote>
 <simpara>ここで一段落ついたので、これまでの作業内容をバージョン管理システムにコミットしておきましょう。</simpara>
-<programlisting language="bash" linenumbering="unnumbered">git commit -m 'test: 数を文字列にして返す'</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
+$ git commit -m 'test: 数を文字列にして返す'</programlisting>
 </section>
 </section>
 <section xml:id="_リファクタリングから始めるテスト駆動開発">
@@ -500,7 +501,8 @@ Started with run options --seed 33356
 Finished in 0.00083s
 2 tests, 2 assertions, 0 failures, 0 errors, 0 skips</programlisting>
 <simpara>オッケー、前回コミットした時と同じグリーンの状態のままですよね。区切りが良いのでここでコミットしておきましょう。</simpara>
-<programlisting language="bash" linenumbering="unnumbered">git commit -m 'refactor: メソッドの抽出'</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
+$ git commit -m 'refactor: メソッドの抽出'</programlisting>
 </section>
 <section xml:id="_変数名の変更">
 <title>変数名の変更</title>
@@ -580,7 +582,8 @@ Finished in 0.00746s
 <simpara>リファクタリングでは小さなステップでプログラムを変更していく。そのため間違ってもバグを見つけるのは簡単である。</simpara>
 </blockquote>
 <simpara>このグリーンの状態にいつでも戻れるようにコミットして次の <emphasis role="strong">TODOリスト</emphasis> の内容に取り掛かるとしましょう。</simpara>
-<programlisting language="bash" linenumbering="unnumbered">git commit -m 'refactor: 変数名の変更'</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
+$ git commit -m 'refactor: 変数名の変更'</programlisting>
 <blockquote>
 <attribution>
 リファクタリング(第2版)
@@ -677,8 +680,15 @@ end</programlisting>
     result
   end
 end</programlisting>
-<simpara>テストがグリーンになったのでコミットしておきます。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
+Started with run options --seed 37722
+
+  3/3: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00256s
+3 tests, 3 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>テストがグリーンになったのでコミットしておきます。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
 $ git commit -m 'test: 3を渡したら文字列Fizzを返す'</programlisting>
 <section xml:id="_アルゴリズムの置き換え">
 <title>アルゴリズムの置き換え</title>
@@ -761,7 +771,15 @@ end</programlisting>
 </attribution>
 <simpara>述語メソッドとはメソッド名の末尾に「？」をつけたメソッドのことを指します。</simpara>
 </blockquote>
+<simpara>リファクタリングによりコードが壊れていないかを確認したらコミットしておきましょう。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
+Started with run options --seed 42180
+
+  3/3: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00501s
+3 tests, 3 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
 $ git commit -m 'refactor: アルゴリズムの置き換え'</programlisting>
 <simpara>だんだんとリズムに乗ってきました。ここはギアを上げて <emphasis role="strong">明白な実装</emphasis> で引き続き <emphasis role="strong">TODOリスト</emphasis> の内容を片付けていきましょう。</simpara>
 <simpara>TODOリスト</simpara>
@@ -803,11 +821,30 @@ $ git commit -m 'refactor: アルゴリズムの置き換え'</programlisting>
 <simpara>プリントする</simpara>
 </listitem>
 </itemizedlist>
+<simpara><emphasis role="strong">テストファースト</emphasis> <emphasis role="strong">アサートファースト</emphasis> で最初に失敗するテストを書いて</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">...
   def test_5を渡したら文字列Buzzを返す
     assert_equal 'Buzz', @fizzbuzz.generate(5)
   end
 end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
+Started with run options --seed 46876
+
+ FAIL["test_5を渡したら文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x0000560f86b93700 @name="FizzBuzzTest"&gt;, 0.007562776008853689]
+ test_5を渡したら文字列Buzzを返す#FizzBuzzTest (0.01s)
+        --- expected
+        +++ actual
+        @@ -1 +1,2 @@
+        -"Buzz"
+        +# encoding: US-ASCII
+        +"5"
+        main.rb:23:in `test_5を渡したら文字列Buzzを返す'
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00849s
+4 tests, 4 assertions, 1 failures, 0 errors, 0 skips</programlisting>
+<simpara><emphasis role="strong">if/elsif/else式</emphasis> を使って条件分岐を追加しましょう。</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">class FizzBuzz
   def self.generate(number)
     result = number.to_s
@@ -829,6 +866,14 @@ end</programlisting>
   end
 end</programlisting>
 <programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
+Started with run options --seed 31468
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00158s
+4 tests, 4 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>テストが通ったのでコミットしておきます。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
 $ git commit -m 'test: 5を渡したら文字列Buzzを返す'</programlisting>
 </section>
 <section xml:id="_メソッドのインライン化">
@@ -893,6 +938,107 @@ $ git commit -m 'test: 5を渡したら文字列Buzzを返す'</programlisting>
     assert_equal 'Buzz', @fizzbuzz.generate(5)
   end
 end</programlisting>
+<simpara>まずグループのアウトラインを作ってテストが壊れないかを確認します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class FizzBuzzTest &lt; Minitest::Test
+  describe 'FizzBuzz' do
+    describe '三の倍数の場合' do
+    end
+
+    describe '五の倍数の場合' do
+    end
+
+    describe 'その他の場合' do
+    end
+  end
+
+  def setup
+    @fizzbuzz = FizzBuzz
+  end
+
+  def test_1を渡したら文字列1を返す
+    assert_equal '1', @fizzbuzz.generate(1)
+  end
+
+  def test_2を渡したら文字列2を返す
+    assert_equal '2', @fizzbuzz.generate(2)
+  end
+
+  def test_3を渡したら文字列Fizzを返す
+    assert_equal 'Fizz', @fizzbuzz.generate(3)
+  end
+
+  def test_5を渡したら文字列Buzzを返す
+    assert_equal 'Buzz', @fizzbuzz.generate(5)
+  end
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
+Started with run options --seed 39239
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00195s
+4 tests, 4 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>壊れいないことを確認したらセットアップメソッドをまず移動してテストします。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class FizzBuzzTest &lt; Minitest::Test
+  describe 'FizzBuzz' do
+    def setup
+      @fizzbuzz = FizzBuzz
+    end
+
+    describe '三の倍数の場合' do
+    end
+
+    describe '五の倍数の場合' do
+    end
+
+    describe 'その他の場合' do
+    end
+  end
+
+  def test_1を渡したら文字列1を返す
+    assert_equal '1', @fizzbuzz.generate(1)
+  end
+
+  def test_2を渡したら文字列2を返す
+    assert_equal '2', @fizzbuzz.generate(2)
+  end
+
+  def test_3を渡したら文字列Fizzを返す
+    assert_equal 'Fizz', @fizzbuzz.generate(3)
+  end
+
+  def test_5を渡したら文字列Buzzを返す
+    assert_equal 'Buzz', @fizzbuzz.generate(5)
+  end
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
+Started with run options --seed 53111
+
+ERROR["test_1を渡したら文字列1を返す", #&lt;Minitest::Reporters::Suite:0x00005603cac658f8 @name="FizzBuzzTest"&gt;, 0.0027922230074182153]
+ test_1を渡したら文字列1を返す#FizzBuzzTest (0.00s)
+NoMethodError:         NoMethodError: undefined method `generate' for nil:NilClass
+            main.rb:22:in `test_1を渡したら文字列1を返す'
+
+ERROR["test_3を渡したら文字列Fizzを返す", #&lt;Minitest::Reporters::Suite:0x00005603cac83e98 @name="FizzBuzzTest"&gt;, 0.00590475500212051]
+ test_3を渡したら文字列Fizzを返す#FizzBuzzTest (0.01s)
+NoMethodError:         NoMethodError: undefined method `generate' for nil:NilClass
+            main.rb:30:in `test_3を渡したら文字列Fizzを返す'
+
+ERROR["test_5を渡したら文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00005603cac85ec8 @name="FizzBuzzTest"&gt;, 0.008002811024198309]
+ test_5を渡したら文字列Buzzを返す#FizzBuzzTest (0.01s)
+NoMethodError:         NoMethodError: undefined method `generate' for nil:NilClass
+            main.rb:34:in `test_5を渡したら文字列Buzzを返す'
+
+ERROR["test_2を渡したら文字列2を返す", #&lt;Minitest::Reporters::Suite:0x00005603cac97e20 @name="FizzBuzzTest"&gt;, 0.010200971009908244]
+ test_2を渡したら文字列2を返す#FizzBuzzTest (0.01s)
+NoMethodError:         NoMethodError: undefined method `generate' for nil:NilClass
+            main.rb:26:in `test_2を渡したら文字列2を返す'
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01247s
+4 tests, 0 assertions, 0 failures, 4 errors, 0 skips</programlisting>
+<simpara>テストが失敗しました。これは <emphasis role="strong">インスタンス変数</emphasis> <literal>@fizzbuzz</literal> のスコープから外れたため <literal>FizzBuzz::generate</literal> メソッド呼び出しに失敗したようです。テストメソッドを移動して変数のスコープ範囲に入れましょう。</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">class FizzBuzzTest &lt; Minitest::Test
   describe 'FizzBuzz' do
     def setup
@@ -922,6 +1068,14 @@ end</programlisting>
     end
   end
 end</programlisting>
+<simpara>すべてのメソッドを移動したら確認しましょう。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
+Started with run options --seed 20627
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00212s
+4 tests, 4 assertions, 0 failures, 0 errors, 0 skips</programlisting>
 <simpara>ここでは、<emphasis role="strong">メソッドのインライン化</emphasis> を適用してしてテストコードを読みやすくすることにしました。テストコードの <emphasis role="strong">自己文書化</emphasis> により動作する仕様書にすることができました。</simpara>
 <blockquote>
 <attribution>
@@ -943,7 +1097,8 @@ end</programlisting>
 </attribution>
 <simpara>この関数名は「自己文書化」されている。関数名はいろんなところで使用されるのだから、優れたコメントよりも名前のほうが大切だ。</simpara>
 </blockquote>
-<programlisting language="ruby" linenumbering="unnumbered">$ ruby main.rb
+<simpara>テストも無事通るようになったのでコミットしておきます。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">$ git add main.rb
 $ git commit -m 'refactor: メソッドのインライン化'</programlisting>
 <simpara>さあ、<emphasis role="strong">TODOリスト</emphasis> もだいぶ消化されてきましたね。もうひと踏ん張りです。</simpara>
 <simpara>TODOリスト</simpara>
@@ -990,6 +1145,7 @@ $ git commit -m 'refactor: メソッドのインライン化'</programlisting>
 <simpara>プリントする</simpara>
 </listitem>
 </itemizedlist>
+<simpara>初めに失敗するテストを書きます。</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">...
     describe '三と五の倍数の場合' do
       def test_15を渡したら文字列FizzBuzzを返す
@@ -997,7 +1153,22 @@ $ git commit -m 'refactor: メソッドのインライン化'</programlisting>
       end
     end
 ...</programlisting>
-<programlisting language="ruby" linenumbering="unnumbered">class FizzBuzz
+<programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
+Started with run options --seed 16335
+
+ FAIL["test_15を渡したら文字列FizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x000056344a3be2a8 @name="FizzBuzz::三と五の倍数の場合"&gt;, 0.006737435003742576]
+ test_15を渡したら文字列FizzBuzzを返す#FizzBuzz::三と五の倍数の場合 (0.01s)
+        Expected: "FizzBuzz"
+          Actual: "Fizz"
+        main.rb:25:in `test_15を渡したら文字列FizzBuzzを返す'
+
+  5/5: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01347s
+5 tests, 5 assertions, 1 failures, 0 errors, 0 skips</programlisting>
+<simpara>続いて先程と同様に条件分岐を追加しましょう。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FizzBuzz
   def self.generate(number)
     result = number.to_s
     if number.modulo(3).zero?
@@ -1109,7 +1280,7 @@ Finished in 0.00964s
    44:     elsif number.modulo(5).zero?
    45:       result = 'Buzz'
    46:     elsif number.modulo(15).zero?
-(byebug)
+(byebug) s
    38:
    39: class FizzBuzz
    40:   def self.generate(number)
@@ -1125,7 +1296,8 @@ Finished in 0.00964s
 "15"
 (byebug) q!</programlisting>
 <simpara>15は3で割り切れるから最初の判定で処理されますよね。まあ、常にコードに注意を払って頭の中で処理しながらコードを書いていればこんなミスすることは無いのでしょうが私はドジっ子プログラマなので計算機ができることは計算機にやらせて間違いがあれば原因を調べて解決するようにしています。とりあえず、テストを通るようにしておきましょう。</simpara>
-<programlisting language="ruby" linenumbering="unnumbered">class FizzBuzz
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FizzBuzz
   def self.generate(number)
     result = number.to_s
     if number.modulo(3).zero?
@@ -1139,8 +1311,15 @@ Finished in 0.00964s
     result
   end
 end</programlisting>
-<simpara>テストが通ったのでコミットしておきます。コミットログにバグは残らないのですが作業の合間ではバグを作り込んでいましたよね。でも、テストがすぐに教えてくれるのですぐに修正することができました。結果として私のようなドジっ子プログラマでもバグの無いコードを書いているかのように見えるんですよ。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
+Started with run options --seed 24862
+
+  5/5: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00279s
+5 tests, 5 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>テストが通ったのでコミットしておきます。コミットログにバグは残らないのですが作業の合間ではバグを作り込んでいましたよね。でも、テストがすぐに教えてくれるのですぐに修正することができました。結果として私のようなドジっ子プログラマでもバグの無いコードを書いているかのように見えるんですよ。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
 $ git commit -m 'test: 15を渡したら文字列FizzBuzzを返す'</programlisting>
 <blockquote>
 <attribution>
@@ -1149,7 +1328,8 @@ $ git commit -m 'test: 15を渡したら文字列FizzBuzzを返す'</programlist
 <simpara>私はテスト駆動開発を長年行っているので、他人にミスを気づかれる前に、自分の誤りを修正できるだけなのだ。</simpara>
 </blockquote>
 <simpara>先程のコードですが・・・</simpara>
-<programlisting language="ruby" linenumbering="unnumbered">class FizzBuzz
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FizzBuzz
   def self.generate(number)
     result = number.to_s
     if number.modulo(3).zero?
@@ -1170,7 +1350,8 @@ end</programlisting>
 </attribution>
 <simpara>ネストの深いコードは理解しにくい。</simpara>
 </blockquote>
-<programlisting language="ruby" linenumbering="unnumbered">class FizzBuzz
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FizzBuzz
   def self.generate(number)
     result = number.to_s
     if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
@@ -1183,8 +1364,16 @@ end</programlisting>
     result
   end
 end</programlisting>
-<simpara>テストして、コミットです。</simpara>
+<simpara>テストして、</simpara>
 <programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
+Started with run options --seed 48529
+
+  5/5: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00329s
+5 tests, 5 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>コミットです。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
 $ git commit -m 'refactor: アルゴリズムの置き換え'</programlisting>
 </section>
 </section>
@@ -1676,8 +1865,17 @@ Finished in 0.00196s
     result
   end
 end</programlisting>
+<simpara>変更したらテストして確認します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
+Started with run options --seed 59102
+
+  7/7: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00236s
+7 tests, 7 assertions, 0 failures, 0 errors, 0 skips</programlisting>
 <simpara>ここで、一旦コミットしておきましょう。</simpara>
-<programlisting language="bash" linenumbering="unnumbered">$ git commit -m 'test: 1から100までの数を返す'</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
+$ git commit -m 'test: 1から100までの数を返す'</programlisting>
 <simpara>TODOリスト</simpara>
 <itemizedlist>
 <listitem>
@@ -1859,7 +2057,8 @@ Started with run options --seed 17460
 Finished in 0.00207s
 9 tests, 9 assertions, 0 failures, 0 errors, 0 skips</programlisting>
 <simpara>とりあえず、現時点で仕様を満たすプログラムにはなったみたいですね。</simpara>
-<programlisting language="bash" linenumbering="unnumbered">$ git commit -m 'test: 1から100までのFizzBuzzの配列を返す'</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
+$ git commit -m 'test: 1から100までのFizzBuzzの配列を返す'</programlisting>
 <simpara>TODOリスト</simpara>
 <itemizedlist>
 <listitem>
@@ -1890,7 +2089,11 @@ Finished in 0.00207s
 <section xml:id="_配列や繰り返し処理の理解">
 <title>配列や繰り返し処理の理解</title>
 <simpara>まだリファクタリングが残っているのですがその前にRubyの配列メソッドの理解をもう少し深めたいので <emphasis role="strong">学習用テスト</emphasis> を追加しましょう。</simpara>
-<programlisting language="ruby" linenumbering="unnumbered">...
+<programlisting language="ruby" linenumbering="unnumbered">class FizzBuzzTest &lt; Minitest::Test
+  describe 'FizzBuzz' do
+...
+  end
+
   describe '配列や繰り返し処理を理解する' do
     def test_繰り返し処理
       $stdout = StringIO.new
@@ -1976,7 +2179,8 @@ Started with run options --seed 18136
 
 Finished in 0.00307s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</programlisting>
-<programlisting language="bash" linenumbering="unnumbered">$ git commit -m 'test: 学習用テスト'</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
+$ git commit -m 'test: 学習用テスト'</programlisting>
 </section>
 </section>
 <section xml:id="_コードの不吉な臭い">
@@ -2093,7 +2297,8 @@ Started with run options --seed 54699
 Finished in 0.00351s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</programlisting>
 <simpara>プロダクトコードは壊れていなことが確認できたので自信を持ってコミットしておきましょう。</simpara>
-<programlisting language="bash" linenumbering="unnumbered">$ git commit -m 'refactor:　メソッド名の変更'</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
+$ git commit -m 'refactor:　メソッド名の変更'</programlisting>
 <blockquote>
 <attribution>
 テスト駆動開発
@@ -2211,7 +2416,8 @@ Finished in 0.00296s
 </attribution>
 <simpara>関数で複数のreturn文を使ってはいけないと思っている人がいる。アホくさ。関数から早く返すのはいいことだ。むしろ望ましいときもある。</simpara>
 </blockquote>
-<programlisting language="bash" linenumbering="unnumbered">$ git commit -m 'refactor: ガード節による入れ子条件の置き換え'</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
+$ git commit -m 'refactor: ガード節による入れ子条件の置き換え'</programlisting>
 <simpara>どの条件にも該当しない場合は数字を文字列してかえすのですが <emphasis role="strong">一時変数</emphasis> の <literal>result</literal> は最後でしか使われていませんね。このような場合は <emphasis role="strong">変数のインライン化</emphasis> を適用しましょう。</simpara>
 <blockquote>
 <attribution>
@@ -2237,6 +2443,7 @@ Finished in 0.00296s
     return 'FizzBuzz' if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
     return 'Fizz' if number.modulo(3).zero?
     return 'Buzz' if number.modulo(5).zero?
+
     number.to_s
   end
 ...</programlisting>
@@ -2248,7 +2455,8 @@ Started with run options --seed 2528
 Finished in 0.00255s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips</programlisting>
 <simpara>変更によって壊れていないことが確認できたのでコミットします。</simpara>
-<programlisting language="bash" linenumbering="unnumbered">$ git commit -m 'refactor:　変数のインライン化'</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
+$ git commit -m 'refactor:　変数のインライン化'</programlisting>
 <simpara>続いて、FizzBuzzを判定する部分ですがもう少しわかりやすくするため <emphasis role="strong">説明用変数の導入</emphasis> を適用します。</simpara>
 <blockquote>
 <attribution>
@@ -2263,17 +2471,19 @@ Finished in 0.00255s
     return 'FizzBuzz' if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
     return 'Fizz' if number.modulo(3).zero?
     return 'Buzz' if number.modulo(5).zero?
+
     number.to_s
   end
 ...</programlisting>
 <programlisting language="ruby" linenumbering="unnumbered">class FizzBuzz
   def self.generate(number)
-    isFizz = number.modulo(3).zero?
-    isBuzz = number.modulo(5).zero?
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
 
     return 'FizzBuzz' if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
-    return 'Fizz' if isFizz
-    return 'Buzz' if isBuzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+
     number.to_s
   end
 ...</programlisting>
@@ -2290,16 +2500,17 @@ Finished in 0.00255s
 リーダブルコード
 </attribution>
 <simpara>要約変数</simpara>
-<simpara>大きなコードをの塊を小さな名前に置き換えて、管理や把握を簡単にする変数のことを要約変数と呼ぶ。</simpara>
+<simpara>大きなコードの塊を小さな名前に置き換えて、管理や把握を簡単にする変数のことを要約変数と呼ぶ。</simpara>
 </blockquote>
 <programlisting language="ruby" linenumbering="unnumbered">class FizzBuzz
   def self.generate(number)
-    isFizz = number.modulo(3).zero?
-    isBuzz = number.modulo(5).zero?
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
 
-    return 'FizzBuzz' if isFizz &amp;&amp; isBuzz
-    return 'Fizz' if isFizz
-    return 'Buzz' if isBuzz
+    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+
     number.to_s
   end
 ...</programlisting>
@@ -2453,7 +2664,8 @@ Finished in 0.00238s</programlisting>
 </attribution>
 <simpara>Rubyに限らず、プログラミングの世界ではしばしばミュータブル（mutable)とイミュータブル（imutable）と言う言葉が登場します。ミュータブルは「変更可能な」という意味で、反対にイミュータブルは「変更できない、不変の」という意味です。</simpara>
 </blockquote>
-<programlisting language="bash" linenumbering="unnumbered">$ git commit -m 'refactor: パイプラインによるループの置き換え'</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
+$ git commit -m 'refactor: パイプラインによるループの置き換え'</programlisting>
 </section>
 <section xml:id="_マジックナンバー">
 <title>マジックナンバー</title>
@@ -2517,7 +2729,8 @@ end</programlisting>
 </attribution>
 <simpara>コメントを書くのであれば、正確に書くべきだ（できるだけ明確で詳細に）。また、コメントには画面の領域を取られるし、読むのにも時間がかかるので、簡潔なものでなければいけない。</simpara>
 </blockquote>
-<programlisting language="bash" linenumbering="unnumbered">$ git commit -m 'refactor: マジックナンバーの置き換え'</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ git add main.rb
+$ git commit -m 'refactor: マジックナンバーの置き換え'</programlisting>
 </section>
 </section>
 <section xml:id="_動作するきれいなコード">
@@ -2698,7 +2911,7 @@ Buzz</programlisting>
 <programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
 ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "FizzBuzz", "16", "17", "Fizz", "19", "Buzz", "Fizz", "22", "23", "Fizz", "Buzz", "26", "Fizz", "28", "29", "FizzBuzz", "31", "32", "Fizz", "34", "Buzz", "Fizz", "37", "38", "Fizz", "Buzz", "41", "Fizz", "43", "44", "FizzBuzz", "46", "47", "Fizz", "49", "Buzz", "Fizz", "52", "53", "Fizz", "Buzz", "56", "Fizz", "58", "59", "FizzBuzz", "61", "62", "Fizz", "64", "Buzz", "Fizz", "67", "68", "Fizz", "Buzz", "71", "Fizz", "73", "74", "FizzBuzz", "76", "77", "Fizz", "79", "Buzz", "Fizz", "82", "83", "Fizz", "Buzz", "86", "Fizz", "88", "89", "FizzBuzz", "91", "92", "Fizz", "94", "Buzz", "Fizz", "97", "98", "Fizz", "Buzz"] $</programlisting>
 <simpara>プログラムの完成です。コミットしておきましょう。</simpara>
-<programlisting language="bash" linenumbering="unnumbered">$ git commit -m 'feat: FizzBuzz'</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ git commit -m 'feat: プリントする'</programlisting>
 <simpara>TODOリスト</simpara>
 <itemizedlist>
 <listitem>
@@ -2816,9 +3029,7 @@ Buzz</programlisting>
 <formalpara>
 <title>/main.rb</title>
 <para>
-<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
-
-require './lib/fizz_buzz.rb'
+<programlisting language="ruby" linenumbering="unnumbered">require './lib/fizz_buzz.rb'
 
 puts FizzBuzz.generate_list</programlisting>
 </para>
@@ -2826,18 +3037,16 @@ puts FizzBuzz.generate_list</programlisting>
 <formalpara>
 <title>/lib/fizz_buzz.rb</title>
 <para>
-<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
-
-class FizzBuzz
+<programlisting language="ruby" linenumbering="unnumbered">class FizzBuzz
   MAX_NUMBER = 100
 
   def self.generate(number)
-    isFizz = number.modulo(3).zero?
-    isBuzz = number.modulo(5).zero?
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
 
-    return 'FizzBuzz' if isFizz &amp;&amp; isBuzz
-    return 'Fizz' if isFizz
-    return 'Buzz' if isBuzz
+    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
 
     number.to_s
   end
@@ -2852,10 +3061,7 @@ end</programlisting>
 <formalpara>
 <title>/test/fizz_buzz_test.rb</title>
 <para>
-<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
-require 'simplecov'
-SimpleCov.start
-require 'minitest/reporters'
+<programlisting language="ruby" linenumbering="unnumbered">require 'minitest/reporters'
 Minitest::Reporters.use!
 require 'minitest/autorun'
 require './lib/fizz_buzz'
@@ -2887,6 +3093,10 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'その他の場合' do
       def test_1を渡したら文字列1を返す
         assert_equal '1', @fizzbuzz.generate(1)
+      end
+
+      def test_2を渡したら文字列2を返す
+        assert_equal '2', @fizzbuzz.generate(2)
       end
     end
 
@@ -2962,15 +3172,14 @@ class FizzBuzzTest &lt; Minitest::Test
     end
 
     def test_指定した評価式で並び変えた配列を返す
-      result1 = %w[2 4 13 3 1 10].sort { |a, b| a.to_i &lt;=&gt; b.to_i }
-      result2 = %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
-
       assert_equal %w[1 10 13 2 3 4], %w[2 4 13 3 1 10].sort
-      assert_equal %w[1 2 3 4 10 13], result1
-      assert_equal %w[13 10 4 3 2 1], result2
+      assert_equal %w[1 2 3 4 10 13],
+                  %w[2 4 13 3 1 10].sort { |a, b| a.to_i &lt;=&gt; b.to_i }
+      assert_equal %w[13 10 4 3 2 1],
+                  %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
     end
 
-    def test_配列の中から、条件に一致する要素を取得する
+    def test_配列の中から条件に一致する要素を取得する
       result = %w[apple orange pineapple strawberry apricot].grep(/^a/)
       assert_equal %w[apple apricot], result
     end
