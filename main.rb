@@ -145,19 +145,19 @@ end
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    if number.modulo(3).zero? && number.modulo(5).zero?
-      result = 'FizzBuzz'
-    elsif number.modulo(3).zero?
-      result = 'Fizz'
-    elsif number.modulo(5).zero?
-      result = 'Buzz'
-    end
+
+    return 'FizzBuzz' if number.modulo(3).zero? && number.modulo(5).zero?
+    return 'Fizz' if number.modulo(3).zero?
+    return 'Buzz' if number.modulo(5).zero?
+
     result
   end
 
   def self.generate_list
     result = []
+
     (1..100).each { |n| result << generate(n) }
+
     result
   end
 end
