@@ -3646,10 +3646,7 @@ Finished in 0.00135s
 
 ## 自動化から始めるテスト駆動開発
 
-エピソード1ではテスト駆動開発のゴールが **動作するきれいなコード** であることを学びました。
-では、良いコードを書き続けるためには何が必要になるでしょうか？それは
-[ソフトウェア開発の三種の神器](https://t-wada.hatenablog.jp/entry/clean-code-that-works)
-と呼ばれるものです。
+エピソード1ではテスト駆動開発のゴールが **動作するきれいなコード** であることを学びました。では、良いコードを書き続けるためには何が必要になるでしょうか？それは[ソフトウェア開発の三種の神器](https://t-wada.hatenablog.jp/entry/clean-code-that-works)と呼ばれるものです。
 
 > 今日のソフトウェア開発の世界において絶対になければならない3つの技術的な柱があります。
 > 三本柱と言ったり、三種の神器と言ったりしていますが、それらは
@@ -3664,16 +3661,14 @@ Finished in 0.00135s
 > 
 > —  https://t-wada.hatenablog.jp/entry/clean-code-that-works 
 
-**バージョン管理** と **テスティング** に関してはエピソード1で触れました。本エピソードでは最後の **自動化**
-に関しての解説と次のエピソードに備えたセットアップ作業を実施しておきたいと思います。ですがその前に
-**バージョン管理** で1つだけ解説しておきたいことがありますのでそちらから進めて行きたいと思います。
+**バージョン管理** と **テスティング** に関してはエピソード1で触れました。本エピソードでは最後の **自動化** に関しての解説と次のエピソードに備えたセットアップ作業を実施しておきたいと思います。ですがその前に **バージョン管理** で1つだけ解説しておきたいことがありますのでそちらから進めて行きたいと思います。
 
 ### コミットメッセージ
 
 これまで作業の区切りにごとにレポジトリにコミットしていましたがその際に以下のような書式でメッセージを書いていました。
 
 ``` bash
-git commit -m 'refactor: メソッドの抽出'
+$ git commit -m 'refactor: メソッドの抽出'
 ```
 
 この書式は
@@ -3712,15 +3707,11 @@ git commit -m 'refactor: メソッドの抽出'
     such as documentation generation
     (ドキュメント生成のような、補助ツールやライブラリやビルドプロセスの変更)
 
-コミットメッセージにつけるプリフィックスに関しては [【今日からできる】コミットメッセージに 「プレフィックス」
-をつけるだけで、開発効率が上がった話](https://qiita.com/numanomanu/items/45dd285b286a1f7280ed)
-を参照ください。
+コミットメッセージにつけるプリフィックスに関しては [【今日からできる】コミットメッセージに 「プレフィックス」をつけるだけで、開発効率が上がった話](https://qiita.com/numanomanu/items/45dd285b286a1f7280ed)を参照ください。
 
 ### パッケージマネージャ
 
-では **自動化** の準備に入りたいのですがそのためにはいくつかの外部プログラムを利用する必要があります。そのためのツールが
-**RubyGems**
-> です。
+では **自動化** の準備に入りたいのですがそのためにはいくつかの外部プログラムを利用する必要があります。そのためのツールが **RubyGems** です。
 
 > RubyGemsとは、Rubyで記述されたサードパーティ製のライブラリを管理するためのツールで、RubyGemsで扱うライブラリをgemパッケージと呼びます。
 > 
@@ -3733,9 +3724,7 @@ git commit -m 'refactor: メソッドの抽出'
 $ gem install minitest-reporters
 ```
 
-では、これからもこのようにして必要な外部プログラムを一つ一つインストールしていくのでしょうか？また、開発用マシンを変えた時にも同じことを繰り返さないといけないのでしょうか？面倒ですよね。そのような面倒なことをしないで済む仕組みがRubyには用意されています。それが
-**Bundler**
-> です。
+では、これからもこのようにして必要な外部プログラムを一つ一つインストールしていくのでしょうか？また、開発用マシンを変えた時にも同じことを繰り返さないといけないのでしょうか？面倒ですよね。そのような面倒なことをしないで済む仕組みがRubyには用意されています。それが **Bundler** です。
 
 > Bundlerとは、作成したアプリケーションがどのgemパッケージに依存しているか、そしてインストールしているバージョンはいくつかという情報を管理するためのgemパッケージです。
 > 
@@ -3744,8 +3733,8 @@ $ gem install minitest-reporters
 **Bundler** をインストールしてgemパッケージを束ねましょう。
 
 ``` bash
-gem install bundler
-bundle init
+$ gem install bundler
+$ bundle init
 ```
 
 `Gemfile` が作成されます。
@@ -3798,11 +3787,7 @@ Use `bundle info [gemname]` to see where a bundled gem is installed.
 
 ### 静的コード解析
 
-良いコードを書き続けるためにはコードの品質を維持していく必要があります。エピソード1では **テスト駆動開発**
-によりプログラムを動かしながら品質の改善していきました。出来上がったコードに対する品質チェックの方法として
-**静的コード解析** があります。Ruby用 **静的コード解析** ツール
-[RuboCop](https://github.com/rubocop-hq/rubocop) を使って確認してみましょう。プログラムは先程
-**Bundler** を使ってインストールしたので以下のコマンドを実行します。
+良いコードを書き続けるためにはコードの品質を維持していく必要があります。エピソード1では **テスト駆動開発** によりプログラムを動かしながら品質の改善していきました。出来上がったコードに対する品質チェックの方法として **静的コード解析** があります。Ruby用 **静的コード解析** ツール[RuboCop](https://github.com/rubocop-hq/rubocop) を使って確認してみましょう。プログラムは先程 **Bundler** を使ってインストールしたので以下のコマンドを実行します。
 
 ``` bash
  $ rubocop
@@ -3820,9 +3805,7 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 ...
 ```
 
-なにかいろいろ出てきましたね。RuboCopの詳細に関しては [RuboCop is
-何？](https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b)を参照ください。`--lint`
-オプションをつけて実施してみましょう。
+なにかいろいろ出てきましたね。RuboCopの詳細に関しては [RuboCop is 何？](https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b)を参照ください。`--lint` オプションをつけて実施してみましょう。
 
 ``` bash
 $ rubocop --lint
@@ -3841,9 +3824,7 @@ test/fizz_buzz_test.rb:111:7: W: Lint/AmbiguousBlockAssociation: Parenthesize th
 5 files inspected, 2 offenses detected
 ```
 
-また何やら出てきましたね。 [W:
-Lint/AmbiguousBlockAssociation](https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociation)のメッセージを調べたところ、`fizz_buzz_test.rb`
-の以下の学習用テストコードは書き方がよろしくないようですね。
+また何やら出てきましたね。 [W:Lint/AmbiguousBlockAssociation](https://rubocop.readthedocs.io/en/latest/cops_lint/#lintambiguousblockassociation)のメッセージを調べたところ、`fizz_buzz_test.rb` の以下の学習用テストコードは書き方がよろしくないようですね。
 
 ``` ruby
 ...
@@ -3959,6 +3940,13 @@ Inspecting 5 files
 5 files inspected, no offenses detected
 ```
 
+セットアップができたのでここでコミットしておきましょう。
+
+``` bash
+$ git add .
+$ git commit -m 'chore: 静的コード解析セットアップ'
+```
+
 ### コードフォーマッタ
 
 良いコードであるためにはフォーマットも大切な要素です。
@@ -3967,8 +3955,7 @@ Inspecting 5 files
 > 
 > —  リーダブルコード 
 
-Rubyにはいくつかフォーマットアプリケーションはあるのですがここは `RuboCop`
-の機能を使って実現することにしましょう。以下のコードのフォーマットをわざと崩してみます。
+Rubyにはいくつかフォーマットアプリケーションはあるのですがここは `RuboCop` の機能を使って実現することにしましょう。以下のコードのフォーマットをわざと崩してみます。
 
 ``` ruby
 class FizzBuzz
@@ -4023,8 +4010,7 @@ lib/fizz_buzz.rb:14:5: C: Layout/IndentationConsistency: Inconsistent indentatio
 5 files inspected, 6 offenses detected
 ```
 
-編集した部分が `Use 2 (not 8) spaces for indentation.` と指摘されています。
-`--fix-layout` オプションで自動保存しておきましょう。
+編集した部分が `Use 2 (not 8) spaces for indentation.` と指摘されています。`--fix-layout` オプションで自動保存しておきましょう。
 
 ``` bash
 $ rubocop --fix-layout
@@ -4100,13 +4086,7 @@ Inspecting 5 files
 5 files inspected, no offenses detected
 ```
 
-フォーマットが修正されたことが確認できましたね。ちなみに `--auto-correct`
-オプションでもフォーマットをしてくれるので通常はこちらのオプションで問題ないと思います。ここまでの作業をコミットしておきましょう。
-
-``` bash
-$ git add .
-$ git commit -m 'chore: 静的コード解析セットアップ'
-```
+フォーマットが修正されたことが確認できましたね。ちなみに `--auto-correct` オプションでもフォーマットをしてくれるので通常はこちらのオプションで問題ないと思います。
 
 ### コードカバレッジ
 
@@ -4117,9 +4097,7 @@ $ git commit -m 'chore: 静的コード解析セットアップ'
 > 
 > —  ウィキペディア 
 
-Ruby用 **コードカバレッジ** 検出プログラムとして
-[SimpleCov](https://github.com/colszowka/simplecov)を使います。Gemfileに追加して
-**Bundler** でインストールをしましょう。
+Ruby用 **コードカバレッジ** 検出プログラムとして [SimpleCov](https://github.com/colszowka/simplecov)を使います。Gemfileに追加して **Bundler** でインストールをしましょう。
 
 ``` ruby
 # frozen_string_literal: true
@@ -4188,10 +4166,10 @@ Finished in 0.00297s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
 ```
 
-テスト実行後に `coverage` というフォルダが作成されます。その中の `index.html`
-を開くとカバレッジ状況を確認できます。セットアップが完了したらコミットしておきましょう。
+テスト実行後に `coverage` というフォルダが作成されます。その中の `index.html` を開くとカバレッジ状況を確認できます。セットアップが完了したらコミットしておきましょう。
 
 ``` bash
+$ git add .
 $ git commit -m 'chore: コードカバレッジセットアップ'
 ```
 
@@ -4209,21 +4187,20 @@ Finished in 0.00261s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
 ```
 
-このようにしていました。では静的コードの解析はどうやりましたか？フォーマットはどうやりましたか？調べるのも面倒ですよね。いちいち調べるのが面倒なことは全部
-**タスクランナー** にやらせるようにしましょう。
+このようにしていました。では静的コードの解析はどうやりましたか？フォーマットはどうやりましたか？調べるのも面倒ですよね。いちいち調べるのが面倒なことは全部 **タスクランナー** にやらせるようにしましょう。
 
 > タスクランナーとは、アプリケーションのビルドなど、一定の手順で行う作業をコマンド一つで実行できるように予めタスクとして定義したものです。
 > 
 > —  かんたんRuby 
 
-Rubyの **タスクランナー** は `Rake`
-> です。
+Rubyの **タスクランナー** は `Rake` です。
 
 > RakeはRubyにおけるタスクランナーです。rakeコマンドと起点となるRakefileというタスクを記述するファイルを用意することで、タスクの実行や登録されたタスクの一覧表示を行えます。
 > 
 > —  かんたんRuby 
 
-早速、テストタスクから作成しましょう。まず `Rakefile` を作ります。
+早速、テストタスクから作成しましょう。まず `Rakefile` を作ります。Mac/Linuxでは `touch`
+コマンドでファイルを作れます。Windowsの場合は手作業で追加してください。
 
 ``` bash
 $ touch Rakefile
@@ -4268,6 +4245,199 @@ Finished in 0.00271s
 19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
 ```
 
+テストは実施されたのですが警告メッセージが表示されるようになりました。メッセージの内容としては **学習用テスト** のテストメソッド名が重複していることが理由のようです。せっかくなので修正しておきましょう。
+
+``` ruby
+class FizzBuzzTest < Minitest::Test
+  describe 'FizzBuzz' do
+  ...
+  end
+
+  describe '配列や繰り返し処理を理解する' do
+    def test_繰り返し処理
+      $stdout = StringIO.new
+      [1, 2, 3].each { |i| p i * i }
+      output = $stdout.string
+
+      assert_equal "1\n" + "4\n" + "9\n", output
+    end
+
+    def test_特定の条件を満たす要素だけを配列に入れて返す
+      result = [1.1, 2, 3.3, 4].select(&:integer?)
+      assert_equal [2, 4], result
+    end
+
+    def test_特定の条件を満たす要素だけを配列に入れて返す
+      result = [1.1, 2, 3.3, 4].find_all(&:integer?)
+      assert_equal [2, 4], result
+    end
+
+    def test_特定の条件を満たさない要素だけを配列に入れて返す
+      result = [1.1, 2, 3.3, 4].reject(&:integer?)
+      assert_equal [1.1, 3.3], result
+    end
+
+    def test_新しい要素の配列を返す
+      result = %w[apple orange pineapple strawberry].map(&:size)
+      assert_equal [5, 6, 9, 10], result
+    end
+
+    def test_新しい要素の配列を返す
+      result = %w[apple orange pineapple strawberry].collect(&:size)
+      assert_equal [5, 6, 9, 10], result
+    end
+
+    def test_配列の中から条件に一致する要素を取得する
+      result = %w[apple orange pineapple strawberry].find(&:size)
+      assert_equal 'apple', result
+    end
+
+    def test_配列の中から条件に一致する要素を取得する
+      result = %w[apple orange pineapple strawberry].detect(&:size)
+      assert_equal 'apple', result
+    end
+
+    def test_指定した評価式で並び変えた配列を返す
+      result1 = %w[2 4 13 3 1 10].sort
+      result2 = %w[2 4 13 3 1 10].sort { |a, b| a.to_i <=> b.to_i }
+      result3 = %w[2 4 13 3 1 10].sort { |b, a| a.to_i <=> b.to_i }
+
+      assert_equal %w[1 10 13 2 3 4], result1
+      assert_equal %w[1 2 3 4 10 13], result2
+      assert_equal %w[13 10 4 3 2 1], result3
+    end
+
+    def test_配列の中から条件に一致する要素を取得する
+      result = %w[apple orange pineapple strawberry apricot].grep(/^a/)
+      assert_equal %w[apple apricot], result
+    end
+
+    def test_ブロック内の条件式が真である間までの要素を返す
+      result = [1, 2, 3, 4, 5, 6, 7, 8, 9].take_while { |item| item < 6 }
+      assert_equal [1, 2, 3, 4, 5], result
+    end
+
+    def test_ブロック内の条件式が真である以降の要素を返す
+      result = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].drop_while { |item| item < 6 }
+      assert_equal [6, 7, 8, 9, 10], result
+    end
+
+    def test_畳み込み演算を行う
+      result = [1, 2, 3, 4, 5].inject(0) { |total, n| total + n }
+      assert_equal 15, result
+    end
+
+    def test_畳み込み演算を行う
+      result = [1, 2, 3, 4, 5].reduce { |total, n| total + n }
+      assert_equal 15, result
+    end
+  end
+end
+```
+
+**メソッド名の変更** を適用してリファクタリングしましょう。
+
+``` ruby
+class FizzBuzzTest < Minitest::Test
+  describe 'FizzBuzz' do
+  ...
+  end
+
+  describe '配列や繰り返し処理を理解する' do
+    def test_繰り返し処理
+      $stdout = StringIO.new
+      [1, 2, 3].each { |i| p i * i }
+      output = $stdout.string
+
+      assert_equal "1\n" + "4\n" + "9\n", output
+    end
+
+    def test_selectメソッドで特定の条件を満たす要素だけを配列に入れて返す
+      result = [1.1, 2, 3.3, 4].select(&:integer?)
+      assert_equal [2, 4], result
+    end
+
+    def test_find_allメソッドで特定の条件を満たす要素だけを配列に入れて返す
+      result = [1.1, 2, 3.3, 4].find_all(&:integer?)
+      assert_equal [2, 4], result
+    end
+
+    def test_特定の条件を満たさない要素だけを配列に入れて返す
+      result = [1.1, 2, 3.3, 4].reject(&:integer?)
+      assert_equal [1.1, 3.3], result
+    end
+
+    def test_mapメソッドで新しい要素の配列を返す
+      result = %w[apple orange pineapple strawberry].map(&:size)
+      assert_equal [5, 6, 9, 10], result
+    end
+
+    def test_collectメソッドで新しい要素の配列を返す
+      result = %w[apple orange pineapple strawberry].collect(&:size)
+      assert_equal [5, 6, 9, 10], result
+    end
+
+    def test_findメソッドで配列の中から条件に一致する要素を取得する
+      result = %w[apple orange pineapple strawberry].find(&:size)
+      assert_equal 'apple', result
+    end
+
+    def test_detectメソッドで配列の中から条件に一致する要素を取得する
+      result = %w[apple orange pineapple strawberry].detect(&:size)
+      assert_equal 'apple', result
+    end
+
+    def test_指定した評価式で並び変えた配列を返す
+      result1 = %w[2 4 13 3 1 10].sort
+      result2 = %w[2 4 13 3 1 10].sort { |a, b| a.to_i <=> b.to_i }
+      result3 = %w[2 4 13 3 1 10].sort { |b, a| a.to_i <=> b.to_i }
+
+      assert_equal %w[1 10 13 2 3 4], result1
+      assert_equal %w[1 2 3 4 10 13], result2
+      assert_equal %w[13 10 4 3 2 1], result3
+    end
+
+    def test_配列の中から条件に一致する要素を取得する
+      result = %w[apple orange pineapple strawberry apricot].grep(/^a/)
+      assert_equal %w[apple apricot], result
+    end
+
+    def test_ブロック内の条件式が真である間までの要素を返す
+      result = [1, 2, 3, 4, 5, 6, 7, 8, 9].take_while { |item| item < 6 }
+      assert_equal [1, 2, 3, 4, 5], result
+    end
+
+    def test_ブロック内の条件式が真である以降の要素を返す
+      result = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].drop_while { |item| item < 6 }
+      assert_equal [6, 7, 8, 9, 10], result
+    end
+
+    def test_injectメソッドで畳み込み演算を行う
+      result = [1, 2, 3, 4, 5].inject(0) { |total, n| total + n }
+      assert_equal 15, result
+    end
+
+    def test_reduceメソッドで畳み込み演算を行う
+      result = [1, 2, 3, 4, 5].reduce { |total, n| total + n }
+      assert_equal 15, result
+    end
+  end
+end
+```
+
+テストを再実行して警告メッセージが消えたこと確認します。
+
+``` bash
+$ rake test
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/home/gitpod/.rvm/rubies/ruby-2.6.3/lib/ruby/gems/2.6.0/gems/rake-12.3.2/lib" "/home/gitpod/.rvm/rubies/ruby-2.6.3/lib/ruby/gems/2.6.0/gems/rake-12.3.2/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb"
+Started with run options --seed 10674
+
+  24/24: [=========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00396s
+24 tests, 26 assertions, 0 failures, 0 errors, 0 skips
+```
+
 テストタスクが実行されたことが確認できたので引き続き静的コードの解析タスクを追加します。こちらも開発元がタスクを用意しているのでそちらを使うことにします。
 
 ``` ruby
@@ -4298,16 +4468,24 @@ rake test                  # Run tests
 $ rake rubocop
 Running RuboCop...
 Inspecting 5 files
-.C...
+.C..C
 
 Offenses:
 
 Rakefile:1:1: C: Style/FrozenStringLiteralComment: Missing magic comment # frozen_string_literal: true.
 require 'rake/testtask'
 ^
+Rakefile:10:4: C: Layout/TrailingEmptyLines: Final newline missing.
+end
 
-5 files inspected, 1 offense detected
-RuboCop failed!
+test/fizz_buzz_test.rb:2:1: C: Layout/EmptyLineAfterMagicComment: Add an empty line after magic comments.
+require 'simplecov'
+^
+test/fizz_buzz_test.rb:148:6: C: Layout/TrailingWhitespace: Trailing whitespace detected.
+  end
+     ^^
+
+5 files inspected,
 ```
 
 いろいろ出てきましたので自動修正しましょう。
@@ -4316,7 +4494,7 @@ RuboCop failed!
 $ rake rubocop:auto_correct
 Running RuboCop...
 Inspecting 5 files
-.C...
+.C..C
 
 Offenses:
 
@@ -4326,8 +4504,17 @@ require 'rake/testtask'
 Rakefile:2:1: C: [Corrected] Layout/EmptyLineAfterMagicComment: Add an empty line after magic comments.
 require 'rake/testtask'
 ^
+Rakefile:10:4: C: [Corrected] Layout/TrailingEmptyLines: Final newline missing.
+end
 
-5 files inspected, 2 offenses detected, 2 offenses corrected
+test/fizz_buzz_test.rb:2:1: C: [Corrected] Layout/EmptyLineAfterMagicComment: Add an empty line after magic comments.
+require 'simplecov'
+^
+test/fizz_buzz_test.rb:148:6: C: [Corrected] Layout/TrailingWhitespace: Trailing whitespace detected.
+  end
+     ^^
+
+5 files inspected, 5 offenses detected, 5 offenses corrected
 ```
 
 ``` ruby
@@ -4384,20 +4571,16 @@ end
 5 files inspected, 1 offense detected, 1 offense corrected
 ```
 
-フォーマットは `rake rubocop:auto_correct`
-で一緒にやってくれるので特に必要は無いのですがプログラムの開発元が提供していないタスクを作りたい場合はこのように追加します。セットアップができたのでコミットしておきましょう。
+フォーマットは `rake rubocop:auto_correct` で一緒にやってくれるので特に必要は無いのですがプログラムの開発元が提供していないタスクを作りたい場合はこのように追加します。セットアップができたのでコミットしておきましょう。
 
 ``` bash
+$ git add .
 $ git commit -m 'chore: タスクランナーセットアップ'
 ```
 
 ### タスクの自動化
 
-良いコードを書くためのタスクをまとめることができました。でも、どうせなら自動で実行できるようにしたいですよね。
-タスクを自動実行するためのgemを追加します。
-[Guard](https://github.com/guard/guard)とそのプラグインの
-[Guard::Shell](https://github.com/guard/guard-shell)
-[Guard::Minitest](https://github.com/guard/guard-minitest)をインストールします。それぞれの詳細は以下を参照してください。
+良いコードを書くためのタスクをまとめることができました。でも、どうせなら自動で実行できるようにしたいですよね。タスクを自動実行するためのgemを追加します。[Guard](https://github.com/guard/guard)とそのプラグインの[Guard::Shell](https://github.com/guard/guard-shell) [Guard::Minitest](https://github.com/guard/guard-minitest) をインストールします。それぞれの詳細は以下を参照してください。
 
   - [Ruby | Guard gem
     を利用してファイルの変更を検出し、任意のタスクを自動実行する](https://qiita.com/tbpgr/items/f5be21d8e19dd852d9b7)
@@ -4456,36 +4639,22 @@ end
 
 ``` bash
 $ guard start
-Warning: you have a Gemfile, but you're not using bundler or RUBYGEMS_GEMDEPS
-20:42:15 - INFO -
-> [#] Guard here! It looks like your project has a Gemfile, yet you are running
-> [#] `guard` outside of Bundler. If this is your intent, feel free to ignore this
-> [#] message. Otherwise, consider using `bundle exec guard` to ensure your
-> [#] dependencies are loaded correctly.
-> [#] (You can run `guard` with --no-bundler-warning to get rid of this message.)
-WARN: Unresolved specs during Gem::Specification.reset:
-      rb-inotify (>= 0.9.10, ~> 0.9)
-      minitest (>= 3.0)
-WARN: Clearing out unresolved specs.
-Please report a bug if this causes problems.
-20:42:16 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
-20:42:16 - INFO - Running: all tests
-Started with run options --guard --seed 47998
+10:18:32 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
+10:18:32 - INFO - Running: all tests
+Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 11 LOC (36.36%
+) covered.
+Started with run options --guard --seed 53002
 
-  19/19: [=======================================] 100% Time: 00:00:00, Time: 00:00:00
+  24/24: [=========================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00262s
-19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
+Finished in 0.00696s
+24 tests, 26 assertions, 0 failures, 0 errors, 0 skips
 
-20:42:16 - INFO - Guard is now watching at '/Users/k2works/Projects/hiroshima-arc/tdd_
-rb/docs/src/article/code'
-[1] guard(main)> exit
-
-20:42:25 - INFO - Bye bye...
+10:18:33 - INFO - Guard is now watching at '/workspace/tdd_rb'
+[1] guard(main)>
 ```
 
-続いて `Rakefile` にguardタスクを追加します。あと、guardタスクをデフォルトにして `rake`
-を実行すると呼び出されるようにしておきます。
+続いて `Rakefile` にguardタスクを追加します。あと、guardタスクをデフォルトにして `rake` を実行すると呼び出されるようにしておきます。
 
 ``` ruby
 # frozen_string_literal: true
@@ -4517,32 +4686,22 @@ end
 ``` bash
 $ rake
 guard start
-Warning: you have a Gemfile, but you're not using bundler or RUBYGEMS_GEMDEPS
-20:43:17 - INFO -
-> [#] Guard here! It looks like your project has a Gemfile, yet you are running
-> [#] `guard` outside of Bundler. If this is your intent, feel free to ignore this
-> [#] message. Otherwise, consider using `bundle exec guard` to ensure your
-> [#] dependencies are loaded correctly.
-> [#] (You can run `guard` with --no-bundler-warning to get rid of this message.)
-WARN: Unresolved specs during Gem::Specification.reset:
-      rb-inotify (>= 0.9.10, ~> 0.9)
-      minitest (>= 3.0)
-WARN: Clearing out unresolved specs.
-Please report a bug if this causes problems.
-20:43:18 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
-20:43:18 - INFO - Running: all tests
-Started with run options --guard --seed 36344
+10:18:58 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
+10:18:58 - INFO - Running: all tests
+Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 11 LOC (36.36%
+) covered.
+Started with run options --guard --seed 2641
 
-  19/19: [=======================================] 100% Time: 00:00:00, Time: 00:00:00
+  24/24: [=========================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00267s
-19 tests, 21 assertions, 0 failures, 0 errors, 0 skips
+Finished in 0.00372s
+24 tests, 26 assertions, 0 failures, 0 errors, 0 skips
 
-20:43:18 - INFO - Guard is now watching at '/Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code'
+10:18:59 - INFO - Guard is now watching at '/workspace/tdd_rb'
 [1] guard(main)>
 ```
 
-起動したら `fizz_buzz.rb` を編集してテストが自動実行されるか確認しましょう。
+起動したら `fizz_buzz.rb` を編集してテストが自動実行されるか確認しましょう。ここでは3と5で割り切れる場合は `FizBuzzBuzz` を返すように変更しています。
 
 ``` ruby
 class FizzBuzz
@@ -4567,44 +4726,87 @@ end
 ```
 
 ``` bash
-...
+$ rake
+guard start
+10:21:16 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
+10:21:16 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 11 / 1
+1 LOC (100.0%) covered.
+Started with run options --guard --seed 8830
+
+  24/24: [=========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00718s
+24 tests, 26 assertions, 0 failures, 0 errors, 0 skips
+
+10:21:17 - INFO - Guard is now watching at '/workspace/tdd_rb'
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.
+0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_bu
+zz_test.rb"
+SimpleCov failed with exit 1rake aborted!
+Command failed with status (1): [ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib
+" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test
+.rb" ]
+/workspace/.rvm/gems/rake-13.0.1/exe/rake:27:in `<top (required)>'
+/workspace/.rvm/bin/ruby_executable_hooks:24:in `eval'
+/workspace/.rvm/bin/ruby_executable_hooks:24:in `<main>'
+Tasks: TOP => test
+(See full trace by running task with --trace)
 Running RuboCop...
 Inspecting 6 files
 ......
 
 6 files inspected, no offenses detected
-Started with run options --seed 48715
+Started with run options --seed 20590
 
 
- FAIL["test_15を渡したら文字列FizzBuzzを返す", #<Minitest::Reporters::Suite:0x00007f822b9977f8 @name="FizzBuzz::三と五の倍数の場合">, 0.0016849999956320971]
+ FAIL["test_15を渡したら文字列FizzBuzzを返す", #<Minitest::Reporters::Suite:0x000055d0ed2b22a8 @name="FizzBuzz::三と五の倍数の場合">, 0.002640306978719309]
  test_15を渡したら文字列FizzBuzzを返す#FizzBuzz::三と五の倍数の場合 (0.00s)
         Expected: "FizzBuzz"
           Actual: "FizzBuzzBuzz"
-        /Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:28:in `test_15を渡したら文字列FizzBuzzを返す'
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:30:in `test_15を渡したら文字列FizzBuzzを返す'
 
- FAIL["test_配列の14番目は文字列のFizzBuzzを返す", #<Minitest::Reporters::Suite:0x00007f822b984ae0 @name="FizzBuzz::1から100までのFizzBuzzの配列を返す">, 0.0028389999934006482]
+ FAIL["test_配列の14番目は文字列のFizzBuzzを返す", #<Minitest::Reporters::Suite:0x000055d0ed2c0f60 @name="FizzBuzz::1から100までのFizzBuzzの配列を返す">, 0.0035449959977995604]
  test_配列の14番目は文字列のFizzBuzzを返す#FizzBuzz::1から100までのFizzBuzzの配列を返す (0.00s)
         Expected: "FizzBuzz"
           Actual: "FizzBuzzBuzz"
-        /Users/k2works/Projects/hiroshima-arc/tdd_rb/docs/src/article/code/test/fizz_buzz_test.rb:60:in `test_配列の14番目は文字列のFizzBuzzを返す'
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:66:in `test_配列の14番目は文字列のFizzBuzzを返す'
 
-==========================================================================|
+============================================================================|
 
-Finished in 0.00361s
-19 tests, 21 assertions, 2 failures, 0 errors, 0 skips
+Finished in 0.00434s
+24 tests, 26 assertions, 2 failures, 0 errors, 0 skips
+Running RuboCop...
+Inspecting 6 files
+......
+
+6 files inspected, no offenses detected
+Running RuboCop...
+Inspecting 6 files
+......
+
+6 files inspected, no offenses detected
+Running RuboCop...
+Inspecting 6 files
+......
+
+6 files inspected, no offenses detected
+Running RuboCop...
+Inspecting 6 files
+......
+
+6 files inspected, no offenses detected
 [1] guard(main)>
 ```
 
-変更を感知してテストが実行されるた結果失敗していましました。コードを元に戻してテストをパスするようにしておきましょう。テストがパスすることが確認できたらコミットしておきます。
+変更を感知してテストが実行されるた結果失敗していましました。コードを元に戻してテストをパスするようにしておきましょう。テストがパスすることが確認できたらコミットしておきましょう。このときターミナルでは `guard` が動いているので別ターミナルを開いてコミットを実施すると良いでしょう。
 
 ``` bash
+$ git add .
 $ git commit -m 'chore: タスクの自動化'
 ```
 
-これで
-[ソフトウェア開発の三種の神器](https://t-wada.hatenablog.jp/entry/clean-code-that-works)の最後のアイテムの準備ができました。次回の開発からは最初にコマンドラインで
-`rake`
-を実行すれば良いコードを書くためのタスクを自動でやってくるようになるのでコードを書くことに集中できるようになりました。では、次のエピソードに進むとしましょう。
+これで [ソフトウェア開発の三種の神器](https://t-wada.hatenablog.jp/entry/clean-code-that-works) の最後のアイテムの準備ができました。次回の開発からは最初にコマンドラインで `rake` を実行すれば良いコードを書くためのタスクを自動でやってくるようになるのでコードを書くことに集中できるようになりました。では、次のエピソードに進むとしましょう。
 
 # エピソード3
 
