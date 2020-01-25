@@ -18,6 +18,10 @@ class FizzBuzzTest < Minitest::Test
   def test_3を渡したら文字列Fizzを返す
     assert_equal 'Fizz', @fizzbuzz.generate(3)
   end
+
+  def test_5を渡したら文字列Buzzを返す
+    assert_equal 'Buzz', @fizzbuzz.generate(5)
+  end
 end
 
 class FizzBuzz
@@ -25,6 +29,8 @@ class FizzBuzz
     result = number.to_s
     if number.modulo(3).zero?
       result = 'Fizz'
+    elsif number.modulo(5).zero?
+      result = 'Buzz'
     end
     result
   end
