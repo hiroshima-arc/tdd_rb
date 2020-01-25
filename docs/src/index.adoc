@@ -2,10 +2,9 @@
 :toclevels: 5
 :sectnums:
 
-= Pragmatic Programing
+= TDD Ruby
 
 == 目的
-開発ドキュメントの管理
 
 == 前提
 |===
@@ -15,16 +14,16 @@
 
 == 構成
 
-=== 開発ガイド
-* <<anchor-1-1,HelloWorld>>
-* <<anchor-1-2,FizzBuzz>>
+=== テスト駆動開発から始めるRuby入門
+* <<anchor-1-1,エピソード1>>
+* <<anchor-1-2,エピソード2>>
 
 == 詳細
 
-=== link:./spec/index.html[開発ガイド]
+=== link:./article/index.html[テスト駆動開発開発始めるRuby入門]
 
-==== link:./spec/hello_world.html[HelloWorld][[anchor-1-1]]
-==== link:./spec/fizz_buzz.html[FizzBuzz][[anchor-1-2]]
+==== link:./article/episode_1.html[エピソード1][[anchor-1-1]]
+==== link:./article/episode_2.html[エピソード2][[anchor-1-2]]
 
 == 参照
 * http://asciidoctor.org/[Asciidoctor^]

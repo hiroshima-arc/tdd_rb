@@ -22,10 +22,10 @@ apply plugin: 'org.kordamp.gradle.livereload'
 
 asciidoctor {
     dependsOn 'clean'
-    sourceDir = file('./docs/src')
+    sourceDir = file('./src')
     requires = ['asciidoctor-diagram']
     backends = ['html5']
-    outputDir = file('docs')
+    outputDir = file('./')
     separateOutputDirs = false
 }
 
