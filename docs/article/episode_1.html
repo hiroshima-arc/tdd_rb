@@ -700,13 +700,13 @@ Finished in 0.00101s
 </div>
 </div>
 <div class="paragraph">
-<p>オッケー、テスティングフレームワークが正常に読み込まれて動作することが確認できました。続いてバージョン管理システムのセットアップをしておきましょう。バージョン管理システム何それ？だって！？君はセーブしないでロールプレイングゲームをクリアできるのか？できないならまず <a href="https://backlog.com/ja/git-tutorial/intro/01/" target="_blank" rel="noopener">ここ</a> でGitを使ったバージョン管理の基本を学んでおきましょう。</p>
+<p>オッケー、テスティングフレームワークが正常に読み込まれて動作することが確認できました。テストが正常に通るように戻しておきましょう。続いてバージョン管理システムのセットアップをしておきましょう。バージョン管理システム何それ？だって！？君はセーブしないでロールプレイングゲームをクリアできるのか？できないならまず <a href="https://backlog.com/ja/git-tutorial/intro/01/" target="_blank" rel="noopener">ここ</a> でGitを使ったバージョン管理の基本を学んでおきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git init
 $ git add .
-$ git commit -m 'セットアップ'</code></pre>
+$ git commit -m 'test: セットアップ'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1110,7 +1110,8 @@ Finished in 0.00098s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">git commit -m 'test: 数を文字列にして返す'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
+$ git commit -m 'test: 数を文字列にして返す'</code></pre>
 </div>
 </div>
 </div>
@@ -1242,7 +1243,8 @@ Finished in 0.00083s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">git commit -m 'refactor: メソッドの抽出'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
+$ git commit -m 'refactor: メソッドの抽出'</code></pre>
 </div>
 </div>
 </div>
@@ -1374,7 +1376,8 @@ Finished in 0.00746s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">git commit -m 'refactor: 変数名の変更'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
+$ git commit -m 'refactor: 変数名の変更'</code></pre>
 </div>
 </div>
 <div class="quoteblock">
@@ -1517,12 +1520,23 @@ end</code></pre>
 end</code></pre>
 </div>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 37722
+
+  3/3: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00256s
+3 tests, 3 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>テストがグリーンになったのでコミットしておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
 $ git commit -m 'test: 3を渡したら文字列Fizzを返す'</code></pre>
 </div>
 </div>
@@ -1645,9 +1659,23 @@ end</code></pre>
 &#8212; かんたんRuby
 </div>
 </div>
+<div class="paragraph">
+<p>リファクタリングによりコードが壊れていないかを確認したらコミットしておきましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 42180
+
+  3/3: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00501s
+3 tests, 3 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
 $ git commit -m 'refactor: アルゴリズムの置き換え'</code></pre>
 </div>
 </div>
@@ -1703,6 +1731,9 @@ $ git commit -m 'refactor: アルゴリズムの置き換え'</code></pre>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p><strong>テストファースト</strong> <strong>アサートファースト</strong> で最初に失敗するテストを書いて</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -1711,6 +1742,30 @@ $ git commit -m 'refactor: アルゴリズムの置き換え'</code></pre>
   end
 end</code></pre>
 </div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 46876
+
+ FAIL["test_5を渡したら文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x0000560f86b93700 @name="FizzBuzzTest"&gt;, 0.007562776008853689]
+ test_5を渡したら文字列Buzzを返す#FizzBuzzTest (0.01s)
+        --- expected
+        +++ actual
+        @@ -1 +1,2 @@
+        -"Buzz"
+        +# encoding: US-ASCII
+        +"5"
+        main.rb:23:in `test_5を渡したら文字列Buzzを返す'
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00849s
+4 tests, 4 assertions, 1 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>if/elsif/else式</strong> を使って条件分岐を追加しましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1743,6 +1798,20 @@ end</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 31468
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00158s
+4 tests, 4 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストが通ったのでコミットしておきます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
 $ git commit -m 'test: 5を渡したら文字列Buzzを返す'</code></pre>
 </div>
 </div>
@@ -1823,6 +1892,129 @@ $ git commit -m 'test: 5を渡したら文字列Buzzを返す'</code></pre>
 end</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>まずグループのアウトラインを作ってテストが壊れないかを確認します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzTest &lt; Minitest::Test
+  describe 'FizzBuzz' do
+    describe '三の倍数の場合' do
+    end
+
+    describe '五の倍数の場合' do
+    end
+
+    describe 'その他の場合' do
+    end
+  end
+
+  def setup
+    @fizzbuzz = FizzBuzz
+  end
+
+  def test_1を渡したら文字列1を返す
+    assert_equal '1', @fizzbuzz.generate(1)
+  end
+
+  def test_2を渡したら文字列2を返す
+    assert_equal '2', @fizzbuzz.generate(2)
+  end
+
+  def test_3を渡したら文字列Fizzを返す
+    assert_equal 'Fizz', @fizzbuzz.generate(3)
+  end
+
+  def test_5を渡したら文字列Buzzを返す
+    assert_equal 'Buzz', @fizzbuzz.generate(5)
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 39239
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00195s
+4 tests, 4 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>壊れいないことを確認したらセットアップメソッドをまず移動してテストします。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzTest &lt; Minitest::Test
+  describe 'FizzBuzz' do
+    def setup
+      @fizzbuzz = FizzBuzz
+    end
+
+    describe '三の倍数の場合' do
+    end
+
+    describe '五の倍数の場合' do
+    end
+
+    describe 'その他の場合' do
+    end
+  end
+
+  def test_1を渡したら文字列1を返す
+    assert_equal '1', @fizzbuzz.generate(1)
+  end
+
+  def test_2を渡したら文字列2を返す
+    assert_equal '2', @fizzbuzz.generate(2)
+  end
+
+  def test_3を渡したら文字列Fizzを返す
+    assert_equal 'Fizz', @fizzbuzz.generate(3)
+  end
+
+  def test_5を渡したら文字列Buzzを返す
+    assert_equal 'Buzz', @fizzbuzz.generate(5)
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 53111
+
+ERROR["test_1を渡したら文字列1を返す", #&lt;Minitest::Reporters::Suite:0x00005603cac658f8 @name="FizzBuzzTest"&gt;, 0.0027922230074182153]
+ test_1を渡したら文字列1を返す#FizzBuzzTest (0.00s)
+NoMethodError:         NoMethodError: undefined method `generate' for nil:NilClass
+            main.rb:22:in `test_1を渡したら文字列1を返す'
+
+ERROR["test_3を渡したら文字列Fizzを返す", #&lt;Minitest::Reporters::Suite:0x00005603cac83e98 @name="FizzBuzzTest"&gt;, 0.00590475500212051]
+ test_3を渡したら文字列Fizzを返す#FizzBuzzTest (0.01s)
+NoMethodError:         NoMethodError: undefined method `generate' for nil:NilClass
+            main.rb:30:in `test_3を渡したら文字列Fizzを返す'
+
+ERROR["test_5を渡したら文字列Buzzを返す", #&lt;Minitest::Reporters::Suite:0x00005603cac85ec8 @name="FizzBuzzTest"&gt;, 0.008002811024198309]
+ test_5を渡したら文字列Buzzを返す#FizzBuzzTest (0.01s)
+NoMethodError:         NoMethodError: undefined method `generate' for nil:NilClass
+            main.rb:34:in `test_5を渡したら文字列Buzzを返す'
+
+ERROR["test_2を渡したら文字列2を返す", #&lt;Minitest::Reporters::Suite:0x00005603cac97e20 @name="FizzBuzzTest"&gt;, 0.010200971009908244]
+ test_2を渡したら文字列2を返す#FizzBuzzTest (0.01s)
+NoMethodError:         NoMethodError: undefined method `generate' for nil:NilClass
+            main.rb:26:in `test_2を渡したら文字列2を返す'
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01247s
+4 tests, 0 assertions, 0 failures, 4 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストが失敗しました。これは <strong>インスタンス変数</strong> <code>@fizzbuzz</code> のスコープから外れたため <code>FizzBuzz::generate</code> メソッド呼び出しに失敗したようです。テストメソッドを移動して変数のスコープ範囲に入れましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzTest &lt; Minitest::Test
@@ -1854,6 +2046,20 @@ end</code></pre>
     end
   end
 end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>すべてのメソッドを移動したら確認しましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 20627
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00212s
+4 tests, 4 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1895,9 +2101,12 @@ end</code></pre>
 &#8212; リーダブルコード
 </div>
 </div>
+<div class="paragraph">
+<p>テストも無事通るようになったのでコミットしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">$ ruby main.rb
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">$ git add main.rb
 $ git commit -m 'refactor: メソッドのインライン化'</code></pre>
 </div>
 </div>
@@ -1960,6 +2169,9 @@ $ git commit -m 'refactor: メソッドのインライン化'</code></pre>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>初めに失敗するテストを書きます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -1973,7 +2185,28 @@ $ git commit -m 'refactor: メソッドのインライン化'</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 16335
+
+ FAIL["test_15を渡したら文字列FizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x000056344a3be2a8 @name="FizzBuzz::三と五の倍数の場合"&gt;, 0.006737435003742576]
+ test_15を渡したら文字列FizzBuzzを返す#FizzBuzz::三と五の倍数の場合 (0.01s)
+        Expected: "FizzBuzz"
+          Actual: "Fizz"
+        main.rb:25:in `test_15を渡したら文字列FizzBuzzを返す'
+
+  5/5: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01347s
+5 tests, 5 assertions, 1 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>続いて先程と同様に条件分岐を追加しましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzz
   def self.generate(number)
     result = number.to_s
     if number.modulo(3).zero?
@@ -2139,7 +2372,7 @@ Finished in 0.00964s
    44:     elsif number.modulo(5).zero?
    45:       result = 'Buzz'
    46:     elsif number.modulo(15).zero?
-(byebug)
+(byebug) s
    38:
    39: class FizzBuzz
    40:   def self.generate(number)
@@ -2167,7 +2400,8 @@ Finished in 0.00964s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzz
   def self.generate(number)
     result = number.to_s
     if number.modulo(3).zero?
@@ -2183,12 +2417,23 @@ Finished in 0.00964s
 end</code></pre>
 </div>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 24862
+
+  5/5: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00279s
+5 tests, 5 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>テストが通ったのでコミットしておきます。コミットログにバグは残らないのですが作業の合間ではバグを作り込んでいましたよね。でも、テストがすぐに教えてくれるのですぐに修正することができました。結果として私のようなドジっ子プログラマでもバグの無いコードを書いているかのように見えるんですよ。</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
 $ git commit -m 'test: 15を渡したら文字列FizzBuzzを返す'</code></pre>
 </div>
 </div>
@@ -2207,7 +2452,8 @@ $ git commit -m 'test: 15を渡したら文字列FizzBuzzを返す'</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzz
   def self.generate(number)
     result = number.to_s
     if number.modulo(3).zero?
@@ -2238,7 +2484,8 @@ end</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzz
   def self.generate(number)
     result = number.to_s
     if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
@@ -2254,11 +2501,25 @@ end</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>テストして、コミットです。</p>
+<p>テストして、</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 48529
+
+  5/5: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00329s
+5 tests, 5 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>コミットです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
 $ git commit -m 'refactor: アルゴリズムの置き換え'</code></pre>
 </div>
 </div>
@@ -3005,11 +3266,26 @@ end</code></pre>
 </div>
 </div>
 <div class="paragraph">
+<p>変更したらテストして確認します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ ruby main.rb
+Started with run options --seed 59102
+
+  7/7: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00236s
+7 tests, 7 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>ここで、一旦コミットしておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'test: 1から100までの数を返す'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
+$ git commit -m 'test: 1から100までの数を返す'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3259,7 +3535,8 @@ Finished in 0.00207s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'test: 1から100までのFizzBuzzの配列を返す'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
+$ git commit -m 'test: 1から100までのFizzBuzzの配列を返す'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3302,7 +3579,11 @@ Finished in 0.00207s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzTest &lt; Minitest::Test
+  describe 'FizzBuzz' do
+...
+  end
+
   describe '配列や繰り返し処理を理解する' do
     def test_繰り返し処理
       $stdout = StringIO.new
@@ -3396,7 +3677,8 @@ Finished in 0.00307s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'test: 学習用テスト'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
+$ git commit -m 'test: 学習用テスト'</code></pre>
 </div>
 </div>
 </div>
@@ -3581,7 +3863,8 @@ Finished in 0.00351s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'refactor:　メソッド名の変更'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
+$ git commit -m 'refactor:　メソッド名の変更'</code></pre>
 </div>
 </div>
 <div class="quoteblock">
@@ -3759,7 +4042,8 @@ Finished in 0.00296s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'refactor: ガード節による入れ子条件の置き換え'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
+$ git commit -m 'refactor: ガード節による入れ子条件の置き換え'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3803,6 +4087,7 @@ Finished in 0.00296s
     return 'FizzBuzz' if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
     return 'Fizz' if number.modulo(3).zero?
     return 'Buzz' if number.modulo(5).zero?
+
     number.to_s
   end
 ...</code></pre>
@@ -3824,7 +4109,8 @@ Finished in 0.00255s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'refactor:　変数のインライン化'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
+$ git commit -m 'refactor:　変数のインライン化'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3853,6 +4139,7 @@ Finished in 0.00255s
     return 'FizzBuzz' if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
     return 'Fizz' if number.modulo(3).zero?
     return 'Buzz' if number.modulo(5).zero?
+
     number.to_s
   end
 ...</code></pre>
@@ -3862,12 +4149,13 @@ Finished in 0.00255s
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
   def self.generate(number)
-    isFizz = number.modulo(3).zero?
-    isBuzz = number.modulo(5).zero?
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
 
     return 'FizzBuzz' if number.modulo(3).zero? &amp;&amp; number.modulo(5).zero?
-    return 'Fizz' if isFizz
-    return 'Buzz' if isBuzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+
     number.to_s
   end
 ...</code></pre>
@@ -3895,7 +4183,7 @@ Finished in 0.00255s
 <p>要約変数</p>
 </div>
 <div class="paragraph">
-<p>大きなコードをの塊を小さな名前に置き換えて、管理や把握を簡単にする変数のことを要約変数と呼ぶ。</p>
+<p>大きなコードの塊を小さな名前に置き換えて、管理や把握を簡単にする変数のことを要約変数と呼ぶ。</p>
 </div>
 </blockquote>
 <div class="attribution">
@@ -3906,12 +4194,13 @@ Finished in 0.00255s
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
   def self.generate(number)
-    isFizz = number.modulo(3).zero?
-    isBuzz = number.modulo(5).zero?
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
 
-    return 'FizzBuzz' if isFizz &amp;&amp; isBuzz
-    return 'Fizz' if isFizz
-    return 'Buzz' if isBuzz
+    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+
     number.to_s
   end
 ...</code></pre>
@@ -4167,7 +4456,8 @@ Finished in 0.00238s</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'refactor: パイプラインによるループの置き換え'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
+$ git commit -m 'refactor: パイプラインによるループの置き換え'</code></pre>
 </div>
 </div>
 </div>
@@ -4283,7 +4573,8 @@ end</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add main.rb
+$ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
 </div>
 </div>
 </div>
@@ -4558,7 +4849,7 @@ Buzz</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'feat: FizzBuzz'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git commit -m 'feat: プリントする'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4736,9 +5027,7 @@ Buzz</code></pre>
 <div class="listingblock">
 <div class="title">/main.rb</div>
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
-
-require './lib/fizz_buzz.rb'
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">require './lib/fizz_buzz.rb'
 
 puts FizzBuzz.generate_list</code></pre>
 </div>
@@ -4746,18 +5035,16 @@ puts FizzBuzz.generate_list</code></pre>
 <div class="listingblock">
 <div class="title">/lib/fizz_buzz.rb</div>
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
-
-class FizzBuzz
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
   MAX_NUMBER = 100
 
   def self.generate(number)
-    isFizz = number.modulo(3).zero?
-    isBuzz = number.modulo(5).zero?
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
 
-    return 'FizzBuzz' if isFizz &amp;&amp; isBuzz
-    return 'Fizz' if isFizz
-    return 'Buzz' if isBuzz
+    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
 
     number.to_s
   end
@@ -4772,10 +5059,7 @@ end</code></pre>
 <div class="listingblock">
 <div class="title">/test/fizz_buzz_test.rb</div>
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
-require 'simplecov'
-SimpleCov.start
-require 'minitest/reporters'
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'minitest/reporters'
 Minitest::Reporters.use!
 require 'minitest/autorun'
 require './lib/fizz_buzz'
@@ -4807,6 +5091,10 @@ class FizzBuzzTest &lt; Minitest::Test
     describe 'その他の場合' do
       def test_1を渡したら文字列1を返す
         assert_equal '1', @fizzbuzz.generate(1)
+      end
+
+      def test_2を渡したら文字列2を返す
+        assert_equal '2', @fizzbuzz.generate(2)
       end
     end
 
@@ -4882,15 +5170,14 @@ class FizzBuzzTest &lt; Minitest::Test
     end
 
     def test_指定した評価式で並び変えた配列を返す
-      result1 = %w[2 4 13 3 1 10].sort { |a, b| a.to_i &lt;=&gt; b.to_i }
-      result2 = %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
-
       assert_equal %w[1 10 13 2 3 4], %w[2 4 13 3 1 10].sort
-      assert_equal %w[1 2 3 4 10 13], result1
-      assert_equal %w[13 10 4 3 2 1], result2
+      assert_equal %w[1 2 3 4 10 13],
+                  %w[2 4 13 3 1 10].sort { |a, b| a.to_i &lt;=&gt; b.to_i }
+      assert_equal %w[13 10 4 3 2 1],
+                  %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
     end
 
-    def test_配列の中から、条件に一致する要素を取得する
+    def test_配列の中から条件に一致する要素を取得する
       result = %w[apple orange pineapple strawberry apricot].grep(/^a/)
       assert_equal %w[apple apricot], result
     end
@@ -5171,7 +5458,7 @@ Finished in 0.00135s
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-25 10:27:11 JST
+Last updated 2020-01-25 17:32:22 JST
 </div>
 </div>
 </body>

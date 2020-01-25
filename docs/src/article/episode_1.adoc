@@ -152,13 +152,13 @@ Finished in 0.00101s
 1 tests, 1 assertions, 1 failures, 0 errors, 0 skips
 ----
 
-オッケー、テスティングフレームワークが正常に読み込まれて動作することが確認できました。続いてバージョン管理システムのセットアップをしておきましょう。バージョン管理システム何それ？だって！？君はセーブしないでロールプレイングゲームをクリアできるのか？できないならまず https://backlog.com/ja/git-tutorial/intro/01/[ここ^] でGitを使ったバージョン管理の基本を学んでおきましょう。
+オッケー、テスティングフレームワークが正常に読み込まれて動作することが確認できました。テストが正常に通るように戻しておきましょう。続いてバージョン管理システムのセットアップをしておきましょう。バージョン管理システム何それ？だって！？君はセーブしないでロールプレイングゲームをクリアできるのか？できないならまず https://backlog.com/ja/git-tutorial/intro/01/[ここ^] でGitを使ったバージョン管理の基本を学んでおきましょう。
 
 [source, bash]
 ----
 $ git init
 $ git add .
-$ git commit -m 'セットアップ'
+$ git commit -m 'test: セットアップ'
 ----
 
 これで https://t-wada.hatenablog.jp/entry/clean-code-that-works[ソフトウェア開発の三種の神器^]のうち *バージョン管理* と *テスティング* の準備が整いましたので *TODOリスト* の最初の作業に取り掛かかるとしましょう。
@@ -408,7 +408,8 @@ ____
 
 [source, bash]
 ----
-git commit -m 'test: 数を文字列にして返す'
+$ git add main.rb
+$ git commit -m 'test: 数を文字列にして返す'
 ----
 
 === リファクタリングから始めるテスト駆動開発
@@ -501,7 +502,8 @@ Finished in 0.00083s
 
 [source, bash]
 ----
-git commit -m 'refactor: メソッドの抽出'
+$ git add main.rb
+$ git commit -m 'refactor: メソッドの抽出'
 ----
 
 ===== 変数名の変更
@@ -606,7 +608,8 @@ ____
 
 [source, bash]
 ----
-git commit -m 'refactor: 変数名の変更'
+$ git add main.rb
+$ git commit -m 'refactor: 変数名の変更'
 ----
 
 [quote, リファクタリング(第2版)]
@@ -701,11 +704,22 @@ class FizzBuzz
 end
 ----
 
+[source, bash]
+----
+$ ruby main.rb 
+Started with run options --seed 37722
+
+  3/3: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00256s
+3 tests, 3 assertions, 0 failures, 0 errors, 0 skips
+----
+
 テストがグリーンになったのでコミットしておきます。
 
 [source, bash]
 ----
-$ ruby main.rb
+$ git add main.rb
 $ git commit -m 'test: 3を渡したら文字列Fizzを返す'
 ----
 
@@ -773,9 +787,21 @@ ____
 述語メソッドとはメソッド名の末尾に「？」をつけたメソッドのことを指します。
 ____
 
+リファクタリングによりコードが壊れていないかを確認したらコミットしておきましょう。
 [source, bash]
 ----
-$ ruby main.rb
+$ ruby main.rb 
+Started with run options --seed 42180
+
+  3/3: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00501s
+3 tests, 3 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add main.rb
 $ git commit -m 'refactor: アルゴリズムの置き換え'
 ----
 
@@ -794,6 +820,8 @@ TODOリスト
 * 1 から 100 までの数
 * プリントする
 
+*テストファースト* *アサートファースト* で最初に失敗するテストを書いて
+
 [source, ruby]
 ----
 ...
@@ -802,6 +830,29 @@ TODOリスト
   end
 end
 ----
+
+[source, bash]
+----
+$ ruby main.rb 
+Started with run options --seed 46876
+
+ FAIL["test_5を渡したら文字列Buzzを返す", #<Minitest::Reporters::Suite:0x0000560f86b93700 @name="FizzBuzzTest">, 0.007562776008853689]
+ test_5を渡したら文字列Buzzを返す#FizzBuzzTest (0.01s)
+        --- expected
+        +++ actual
+        @@ -1 +1,2 @@
+        -"Buzz"
+        +# encoding: US-ASCII
+        +"5"
+        main.rb:23:in `test_5を渡したら文字列Buzzを返す'
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00849s
+4 tests, 4 assertions, 1 failures, 0 errors, 0 skips
+----
+
+*if/elsif/else式* を使って条件分岐を追加しましょう。
 
 [source, ruby]
 ----
@@ -833,7 +884,20 @@ end
 
 [source, bash]
 ----
-$ ruby main.rb
+$ ruby main.rb 
+Started with run options --seed 31468
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00158s
+4 tests, 4 assertions, 0 failures, 0 errors, 0 skips
+----
+
+テストが通ったのでコミットしておきます。
+
+[source, bash]
+----
+$ git add main.rb
 $ git commit -m 'test: 5を渡したら文字列Buzzを返す'
 ----
 
@@ -877,6 +941,126 @@ class FizzBuzzTest < Minitest::Test
 end
 ----
 
+まずグループのアウトラインを作ってテストが壊れないかを確認します。
+
+[source, ruby]
+----
+class FizzBuzzTest < Minitest::Test
+  describe 'FizzBuzz' do
+    describe '三の倍数の場合' do
+    end
+
+    describe '五の倍数の場合' do
+    end
+
+    describe 'その他の場合' do
+    end
+  end
+
+  def setup
+    @fizzbuzz = FizzBuzz
+  end
+
+  def test_1を渡したら文字列1を返す
+    assert_equal '1', @fizzbuzz.generate(1)
+  end
+
+  def test_2を渡したら文字列2を返す
+    assert_equal '2', @fizzbuzz.generate(2)
+  end
+
+  def test_3を渡したら文字列Fizzを返す
+    assert_equal 'Fizz', @fizzbuzz.generate(3)
+  end
+
+  def test_5を渡したら文字列Buzzを返す
+    assert_equal 'Buzz', @fizzbuzz.generate(5)
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb 
+Started with run options --seed 39239
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00195s
+4 tests, 4 assertions, 0 failures, 0 errors, 0 skips
+----
+
+壊れいないことを確認したらセットアップメソッドをまず移動してテストします。
+
+[source, ruby]
+----
+class FizzBuzzTest < Minitest::Test
+  describe 'FizzBuzz' do     
+    def setup
+      @fizzbuzz = FizzBuzz
+    end
+    
+    describe '三の倍数の場合' do
+    end
+
+    describe '五の倍数の場合' do
+    end
+
+    describe 'その他の場合' do
+    end
+  end
+
+  def test_1を渡したら文字列1を返す
+    assert_equal '1', @fizzbuzz.generate(1)
+  end
+
+  def test_2を渡したら文字列2を返す
+    assert_equal '2', @fizzbuzz.generate(2)
+  end
+
+  def test_3を渡したら文字列Fizzを返す
+    assert_equal 'Fizz', @fizzbuzz.generate(3)
+  end
+
+  def test_5を渡したら文字列Buzzを返す
+    assert_equal 'Buzz', @fizzbuzz.generate(5)
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby main.rb 
+Started with run options --seed 53111
+
+ERROR["test_1を渡したら文字列1を返す", #<Minitest::Reporters::Suite:0x00005603cac658f8 @name="FizzBuzzTest">, 0.0027922230074182153]
+ test_1を渡したら文字列1を返す#FizzBuzzTest (0.00s)
+NoMethodError:         NoMethodError: undefined method `generate' for nil:NilClass
+            main.rb:22:in `test_1を渡したら文字列1を返す'
+
+ERROR["test_3を渡したら文字列Fizzを返す", #<Minitest::Reporters::Suite:0x00005603cac83e98 @name="FizzBuzzTest">, 0.00590475500212051]
+ test_3を渡したら文字列Fizzを返す#FizzBuzzTest (0.01s)
+NoMethodError:         NoMethodError: undefined method `generate' for nil:NilClass
+            main.rb:30:in `test_3を渡したら文字列Fizzを返す'
+
+ERROR["test_5を渡したら文字列Buzzを返す", #<Minitest::Reporters::Suite:0x00005603cac85ec8 @name="FizzBuzzTest">, 0.008002811024198309]
+ test_5を渡したら文字列Buzzを返す#FizzBuzzTest (0.01s)
+NoMethodError:         NoMethodError: undefined method `generate' for nil:NilClass
+            main.rb:34:in `test_5を渡したら文字列Buzzを返す'
+
+ERROR["test_2を渡したら文字列2を返す", #<Minitest::Reporters::Suite:0x00005603cac97e20 @name="FizzBuzzTest">, 0.010200971009908244]
+ test_2を渡したら文字列2を返す#FizzBuzzTest (0.01s)
+NoMethodError:         NoMethodError: undefined method `generate' for nil:NilClass
+            main.rb:26:in `test_2を渡したら文字列2を返す'
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01247s
+4 tests, 0 assertions, 0 failures, 4 errors, 0 skips
+----
+
+テストが失敗しました。これは *インスタンス変数* `@fizzbuzz` のスコープから外れたため `FizzBuzz::generate` メソッド呼び出しに失敗したようです。テストメソッドを移動して変数のスコープ範囲に入れましょう。
+
 [source, ruby]
 ----
 class FizzBuzzTest < Minitest::Test
@@ -910,6 +1094,19 @@ class FizzBuzzTest < Minitest::Test
 end
 ----
 
+すべてのメソッドを移動したら確認しましょう。
+
+[source, bash]
+----
+$ ruby main.rb 
+Started with run options --seed 20627
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00212s
+4 tests, 4 assertions, 0 failures, 0 errors, 0 skips
+----
+
 ここでは、*メソッドのインライン化* を適用してしてテストコードを読みやすくすることにしました。テストコードの *自己文書化* により動作する仕様書にすることができました。
 
 [quote, 新装版 リファクタリング]
@@ -931,9 +1128,11 @@ ____
 この関数名は「自己文書化」されている。関数名はいろんなところで使用されるのだから、優れたコメントよりも名前のほうが大切だ。
 ____
 
+テストも無事通るようになったのでコミットしておきます。
+
 [source, ruby]
 ----
-$ ruby main.rb
+$ git add main.rb
 $ git commit -m 'refactor: メソッドのインライン化'
 ----
 
@@ -953,6 +1152,8 @@ TODOリスト
 * 1 から 100 までの数
 * プリントする
 
+初めに失敗するテストを書きます。
+
 [source, ruby]
 ----
 ...
@@ -964,8 +1165,28 @@ TODOリスト
 ...
 ----
 
+[source, bash]
+----
+$ ruby main.rb 
+Started with run options --seed 16335
+
+ FAIL["test_15を渡したら文字列FizzBuzzを返す", #<Minitest::Reporters::Suite:0x000056344a3be2a8 @name="FizzBuzz::三と五の倍数の場合">, 0.006737435003742576]
+ test_15を渡したら文字列FizzBuzzを返す#FizzBuzz::三と五の倍数の場合 (0.01s)
+        Expected: "FizzBuzz"
+          Actual: "Fizz"
+        main.rb:25:in `test_15を渡したら文字列FizzBuzzを返す'
+
+  5/5: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01347s
+5 tests, 5 assertions, 1 failures, 0 errors, 0 skips
+----
+
+続いて先程と同様に条件分岐を追加しましょう。
+
 [source, ruby]
 ----
+...
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
@@ -1116,7 +1337,7 @@ $ byebug main.rb
    44:     elsif number.modulo(5).zero?
    45:       result = 'Buzz'
    46:     elsif number.modulo(15).zero?
-(byebug)
+(byebug) s
    38:
    39: class FizzBuzz
    40:   def self.generate(number)
@@ -1141,6 +1362,7 @@ $ byebug main.rb
 
 [source, ruby]
 ----
+...
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
@@ -1157,11 +1379,22 @@ class FizzBuzz
 end
 ----
 
+[source, bash]
+----
+$ ruby main.rb 
+Started with run options --seed 24862
+
+  5/5: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00279s
+5 tests, 5 assertions, 0 failures, 0 errors, 0 skips
+----
+
 テストが通ったのでコミットしておきます。コミットログにバグは残らないのですが作業の合間ではバグを作り込んでいましたよね。でも、テストがすぐに教えてくれるのですぐに修正することができました。結果として私のようなドジっ子プログラマでもバグの無いコードを書いているかのように見えるんですよ。
 
 [source, bash]
 ----
-$ ruby main.rb
+$ git add main.rb
 $ git commit -m 'test: 15を渡したら文字列FizzBuzzを返す'
 ----
 
@@ -1174,6 +1407,7 @@ ____
 
 [source, ruby]
 ----
+...
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
@@ -1199,6 +1433,7 @@ ____
 
 [source, ruby]
 ----
+...
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
@@ -1214,11 +1449,24 @@ class FizzBuzz
 end
 ----
 
-テストして、コミットです。
+テストして、
 
 [source, bash]
 ----
-$ ruby main.rb
+$ ruby main.rb 
+Started with run options --seed 48529
+
+  5/5: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00329s
+5 tests, 5 assertions, 0 failures, 0 errors, 0 skips
+----
+
+コミットです。
+
+[source, bash]
+----
+$ git add main.rb
 $ git commit -m 'refactor: アルゴリズムの置き換え'
 ----
 
@@ -1826,10 +2074,24 @@ Finished in 0.00196s
 end
 ----
 
+変更したらテストして確認します。
+
+[source, bash]
+----
+$ ruby main.rb 
+Started with run options --seed 59102
+
+  7/7: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00236s
+7 tests, 7 assertions, 0 failures, 0 errors, 0 skips
+----
+
 ここで、一旦コミットしておきましょう。
 
 [source, bash]
 ----
+$ git add main.rb
 $ git commit -m 'test: 1から100までの数を返す'
 ----
 
@@ -2035,6 +2297,7 @@ Finished in 0.00207s
 
 [source, bash]
 ----
+$ git add main.rb
 $ git commit -m 'test: 1から100までのFizzBuzzの配列を返す'
 ----
 
@@ -2054,7 +2317,11 @@ TODOリスト
 
 [source, ruby]
 ----
+class FizzBuzzTest < Minitest::Test
+  describe 'FizzBuzz' do
 ...
+  end
+
   describe '配列や繰り返し処理を理解する' do
     def test_繰り返し処理
       $stdout = StringIO.new
@@ -2148,6 +2415,7 @@ Finished in 0.00307s
 
 [source, bash]
 ----
+$ git add main.rb
 $ git commit -m 'test: 学習用テスト'
 ----
 
@@ -2298,6 +2566,7 @@ Finished in 0.00351s
 
 [source, bash]
 ----
+$ git add main.rb
 $ git commit -m 'refactor:　メソッド名の変更'
 ----
 
@@ -2440,9 +2709,9 @@ ____
 関数で複数のreturn文を使ってはいけないと思っている人がいる。アホくさ。関数から早く返すのはいいことだ。むしろ望ましいときもある。
 ____
 
-
 [source, bash]
 ----
+$ git add main.rb
 $ git commit -m 'refactor: ガード節による入れ子条件の置き換え'
 ----
 
@@ -2473,7 +2742,6 @@ class FizzBuzz
 ...
 ----
 
-
 [source, ruby]
 ----
 class FizzBuzz
@@ -2481,6 +2749,7 @@ class FizzBuzz
     return 'FizzBuzz' if number.modulo(3).zero? && number.modulo(5).zero?
     return 'Fizz' if number.modulo(3).zero?
     return 'Buzz' if number.modulo(5).zero?
+
     number.to_s
   end
 ...
@@ -2501,6 +2770,7 @@ Finished in 0.00255s
 
 [source, bash]
 ----
+$ git add main.rb
 $ git commit -m 'refactor:　変数のインライン化'
 ----
 
@@ -2522,6 +2792,7 @@ class FizzBuzz
     return 'FizzBuzz' if number.modulo(3).zero? && number.modulo(5).zero?
     return 'Fizz' if number.modulo(3).zero?
     return 'Buzz' if number.modulo(5).zero?
+
     number.to_s
   end
 ...
@@ -2531,12 +2802,13 @@ class FizzBuzz
 ----
 class FizzBuzz
   def self.generate(number)
-    isFizz = number.modulo(3).zero?
-    isBuzz = number.modulo(5).zero?
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
 
     return 'FizzBuzz' if number.modulo(3).zero? && number.modulo(5).zero?
-    return 'Fizz' if isFizz
-    return 'Buzz' if isBuzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+
     number.to_s
   end
 ...
@@ -2555,19 +2827,20 @@ ____
 ____
 要約変数
 
-大きなコードをの塊を小さな名前に置き換えて、管理や把握を簡単にする変数のことを要約変数と呼ぶ。
+大きなコードの塊を小さな名前に置き換えて、管理や把握を簡単にする変数のことを要約変数と呼ぶ。
 ____
 
 [source, ruby]
 ----
 class FizzBuzz
   def self.generate(number)
-    isFizz = number.modulo(3).zero?
-    isBuzz = number.modulo(5).zero?
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
 
-    return 'FizzBuzz' if isFizz && isBuzz
-    return 'Fizz' if isFizz
-    return 'Buzz' if isBuzz
+    return 'FizzBuzz' if is_fizz && is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+
     number.to_s
   end
 ...
@@ -2781,6 +3054,7 @@ ____
 
 [source, bash]
 ----
+$ git add main.rb
 $ git commit -m 'refactor: パイプラインによるループの置き換え'
 ----
 
@@ -2863,6 +3137,7 @@ ____
 
 [source, bash]
 ----
+$ git add main.rb
 $ git commit -m 'refactor: マジックナンバーの置き換え'
 ----
 
@@ -3031,7 +3306,7 @@ $ ruby main.rb
 
 [source, bash]
 ----
-$ git commit -m 'feat: FizzBuzz'
+$ git commit -m 'feat: プリントする'
 ----
 
 TODOリスト
@@ -3112,19 +3387,19 @@ ____
 ./main.rb
 [source, ruby]
 ----
-include::./code/main.rb[]
+include::./code/episode_1/main.rb[]
 ----
 
 ./lib/fizz_buzz.rb
 [source, ruby]
 ----
-include::./code/lib/fizz_buzz.rb[]
+include::./code/episode_1/lib/fizz_buzz.rb[]
 ----
 
 ./test/fizz_buzz_test.rb
 [source, ruby]
 ----
-include::./code/test/fizz_buzz_test.rb[]
+include::./code/episode_1/test/fizz_buzz_test.rb[]
 ----
 
 どうでしょう、学習用テストは除くとしてプロダクトコードに対して倍以上のテストコードを作っていますよね。テストコードを作らず一発で `fizz_buzz.rb` のようなコードを書くことはできますか？ たしかに `https://www.google.com/search?hl=ja&sxsrf=ACYBGNRC-UwZUT1OMCdicC984bdIxzeG0A%3A1579161119693&source=hp&ei=HxYgXsCsJ4qF0wS3k5e4Ag&q=fizz+buzz+ruby&oq=fizz+buzz+ruby&gs_l=psy-ab.3..0.1369.4308..4714...0.0..0.140.1446.6j8......0....1..gws-wiz.......0i131j0i131i4j0i4j35i39j0i4i3j0i10i203j0i203j0i30j0i10i30j0i8i30.PLE9lL0CGmo&ved=0ahUKEwiAuNHM0YfnAhWKwpQKHbfJBScQ4dUDCAg&uact=5[fizz buzz ruby^]` といったキーワードで検索すればサンプルコードは見つかるのでコピーして同じ振る舞いをするコードをすぐに書くことはできるでしょう。でも仕様が追加された場合はどうしましょう。

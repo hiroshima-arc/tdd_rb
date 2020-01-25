@@ -16,7 +16,7 @@ module.exports = {
         "port": 3001
     },
     "files": [
-        'src/**'
+        'article/**'
     ],
     "watchEvents": [
         "change"
