@@ -41,11 +41,10 @@ end
 class FizzBuzz
   def self.generate(number)
     result = number.to_s
-    if number.modulo(3).zero?
+    if number.modulo(3).zero? && number.modulo(5).zero?
+      result = 'FizzBuzz'
+    elsif number.modulo(3).zero?
       result = 'Fizz'
-      if number.modulo(15).zero?
-        result = 'FizzBuzz'
-      end
     elsif number.modulo(5).zero?
       result = 'Buzz'
     end
