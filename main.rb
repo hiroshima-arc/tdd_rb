@@ -147,7 +147,7 @@ class FizzBuzz
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 
-    return 'FizzBuzz' if number.modulo(3).zero? && number.modulo(5).zero?
+    return 'FizzBuzz' if is_fizz && is_buzz
     return 'Fizz' if is_fizz
     return 'Buzz' if is_buzz
 
