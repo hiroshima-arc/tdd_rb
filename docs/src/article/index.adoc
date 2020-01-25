@@ -10,9 +10,10 @@
 include::episode_1.adoc[]
 
 == エピソード2
-=== 継続的インテグレーションから始まるテスト駆動開発
+include::episode_2.adoc[]
 
-=== オブジェクト指向から始まるテスト駆動開発
+== エピソード3
+=== オブジェクト指向から始めるテスト駆動開発
 ==== TODOリスト作成
 ==== タイプ1の場合
 ==== タイプ2の場合
@@ -25,18 +26,19 @@ include::episode_1.adoc[]
 ==== 例外によるエラーコードの置き換え
 ==== モジュールの分割
 
-== エピソード3
-=== クライアント開発から始まるテスト駆動開発
+== エピソード4
+=== クライアント開発から始めるテスト駆動開発
 ==== APIサービスを作る
 ==== APIサービスと連携する
 ==== UIを作る
 ==== UIとAPIサービスを連携する
 
-== エピソード4
-=== 本番運用から始まるテスト駆動開発
+== エピソード5
+=== 継続的インテグレーションから始めるテスト駆動開発
 ==== E2Eテストのセットアップ
 ==== クライアントモジュールの分割
 ==== 本番環境と開発環境で表示を切り返る
+==== クライアントタスクの自動化
 ==== コードレビュー
 
 == 参照
@@ -48,6 +50,11 @@ include::episode_1.adoc[]
 - https://docs.ruby-lang.org/ja/[プログラミング言語 Ruby リファレンスマニュアル^]
 - https://qiita.com/jnchito/items/2dc760ee0716ea12bbf0[検索結果を要チェック！Rubyの公式リファレンスは docs.ruby-lang.org です 〜公式な情報源を調べるクセを付けよう〜^]
 - https://t-wada.hatenablog.jp/entry/clean-code-that-works[動作するきれいなコード: SeleniumConf Tokyo 2019 基調講演文字起こし+α]
+
+- https://github.com/rubocop-hq/rubocop[RuboCop]
+- https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b[RuboCop is 何？]
+- https://qiita.com/abcb2/items/9905449ab3fcf5d27ace[ruby rake の使い方]
+- https://qiita.com/tbpgr/items/443fe45f0dbe02aa768a[RuboCopのrake taskを使う]
 
 === 参考図書
 
