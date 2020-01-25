@@ -144,9 +144,12 @@ end
 
 class FizzBuzz
   def self.generate(number)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
     return 'FizzBuzz' if number.modulo(3).zero? && number.modulo(5).zero?
-    return 'Fizz' if number.modulo(3).zero?
-    return 'Buzz' if number.modulo(5).zero?
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
 
     number.to_s
   end
