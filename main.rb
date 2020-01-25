@@ -155,10 +155,6 @@ class FizzBuzz
   end
 
   def self.generate_list
-    result = []
-
-    (1..100).each { |n| result << generate(n) }
-
-    result
+    (1..100).map { |n| generate(n) }
   end
 end
