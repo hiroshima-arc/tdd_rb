@@ -5108,7 +5108,9 @@ Buzz</code></pre>
 <div class="listingblock">
 <div class="title">/main.rb</div>
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">require './lib/fizz_buzz.rb'
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+require './lib/fizz_buzz.rb'
 
 puts FizzBuzz.generate_list</code></pre>
 </div>
@@ -5116,7 +5118,9 @@ puts FizzBuzz.generate_list</code></pre>
 <div class="listingblock">
 <div class="title">/lib/fizz_buzz.rb</div>
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+class FizzBuzz
   MAX_NUMBER = 100
 
   def self.generate(number)
@@ -5140,7 +5144,9 @@ end</code></pre>
 <div class="listingblock">
 <div class="title">/test/fizz_buzz_test.rb</div>
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'minitest/reporters'
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+require 'minitest/reporters'
 Minitest::Reporters.use!
 require 'minitest/autorun'
 require './lib/fizz_buzz'
@@ -5253,9 +5259,9 @@ class FizzBuzzTest &lt; Minitest::Test
     def test_指定した評価式で並び変えた配列を返す
       assert_equal %w[1 10 13 2 3 4], %w[2 4 13 3 1 10].sort
       assert_equal %w[1 2 3 4 10 13],
-                  %w[2 4 13 3 1 10].sort { |a, b| a.to_i &lt;=&gt; b.to_i }
+                   %w[2 4 13 3 1 10].sort { |a, b| a.to_i &lt;=&gt; b.to_i }
       assert_equal %w[13 10 4 3 2 1],
-                  %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
+                   %w[2 4 13 3 1 10].sort { |b, a| a.to_i &lt;=&gt; b.to_i }
     end
 
     def test_配列の中から条件に一致する要素を取得する

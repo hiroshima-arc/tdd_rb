@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FizzBuzz
   MAX_NUMBER = 100
 

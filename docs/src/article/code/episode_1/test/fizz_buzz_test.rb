@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'minitest/reporters'
 Minitest::Reporters.use!
 require 'minitest/autorun'
@@ -111,9 +113,9 @@ class FizzBuzzTest < Minitest::Test
     def test_指定した評価式で並び変えた配列を返す
       assert_equal %w[1 10 13 2 3 4], %w[2 4 13 3 1 10].sort
       assert_equal %w[1 2 3 4 10 13],
-                  %w[2 4 13 3 1 10].sort { |a, b| a.to_i <=> b.to_i }
+                   %w[2 4 13 3 1 10].sort { |a, b| a.to_i <=> b.to_i }
       assert_equal %w[13 10 4 3 2 1],
-                  %w[2 4 13 3 1 10].sort { |b, a| a.to_i <=> b.to_i }
+                   %w[2 4 13 3 1 10].sort { |b, a| a.to_i <=> b.to_i }
     end
 
     def test_配列の中から条件に一致する要素を取得する
