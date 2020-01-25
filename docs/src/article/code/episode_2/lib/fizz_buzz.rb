@@ -4,12 +4,12 @@ class FizzBuzz
   MAX_NUMBER = 100
 
   def self.generate(number)
-    isFizz = number.modulo(3).zero?
-    isBuzz = number.modulo(5).zero?
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
 
-    return 'FizzBuzz' if isFizz && isBuzz
-    return 'Fizz' if isFizz
-    return 'Buzz' if isBuzz
+    return 'FizzBuzz' if is_fizz && is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
 
     number.to_s
   end
