@@ -95,3 +95,14 @@
 
     - name: change ~/.rbenv owner to vagrant
       file: path={{ vagrant_home }}/.rbenv state=directory owner=vagrant group=vagrant recurse=yes
+
+    - name: install nvm
+      git: repo=https://github.com/nvm-sh/nvm.git
+           dest={{ vagrant_home }}/.nvm
+           version=master
+
+    - name: add nvm path to bash_profile
+      copy: src=files/nvm.sh dest=/etc/profile.d/nvm.sh
+
+    - name: change ~/.nvm owner to vagrant
+      file: path={{ vagrant_home }}/.nvm state=directory owner=vagrant group=vagrant recurse=yes
