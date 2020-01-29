@@ -1,5 +1,5 @@
 ---
-- hosts: vagrants
+- hosts: all
   become: yes
   user: vagrant
   vars:
