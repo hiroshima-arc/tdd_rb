@@ -20,6 +20,8 @@ class FizzBuzz
       return 'FizzBuzz' if is_fizz && is_buzz
 
       number.to_s
+    else
+      raise '該当するタイプは存在しません'
     end
   end
 
