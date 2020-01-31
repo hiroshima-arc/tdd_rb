@@ -80,9 +80,11 @@ class FizzBuzzValue
 end
 
 class FizzBuzzList
+  include Assertions
   attr_reader :value
 
   def initialize(list)
+    assert { list.count <= 100 }
     @value = list
   end
 

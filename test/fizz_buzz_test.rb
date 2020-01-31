@@ -146,6 +146,14 @@ class FizzBuzzTest < Minitest::Test
             ).execute(-1)
           end
         end
+
+        def test_100より多い数を許可しない
+          assert_raises Assertions::AssertionFailedError do
+            FizzBuzzListCommand.new(
+              FizzBuzzType.create(FizzBuzzType::TYPE_01)
+            ).execute(101)
+          end
+        end
       end
     end
   end
@@ -255,11 +263,11 @@ class FizzBuzzTest < Minitest::Test
     end
 
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.execute(100)
+      list1 = @fizzbuzz.execute(50)
       list2 = list1.add(list1.value)
 
-      assert_equal 100, list1.value.count
-      assert_equal 200, list2.value.count
+      assert_equal 50, list1.value.count
+      assert_equal 100, list2.value.count
     end
   end
 end
