@@ -5,20 +5,7 @@ class FizzBuzz
   attr_reader :list
 
   def initialize(type)
-    @type = FizzBuzz.create(type)
-  end
-
-  def self.create(type)
-    case type
-    when 1
-      FizzBuzzType01.new
-    when 2
-      FizzBuzzType02.new
-    when 3
-      FizzBuzzType03.new
-    else
-      raise '該当するタイプは存在しません'
-    end
+    @type = FizzBuzzType.create(type)
   end
 
   def generate(number)
@@ -32,6 +19,19 @@ class FizzBuzz
 end
 
 class FizzBuzzType
+  def self.create(type)
+    case type
+    when 1
+      FizzBuzzType01.new
+    when 2
+      FizzBuzzType02.new
+    when 3
+      FizzBuzzType03.new
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
   def fizz?(number)
     number.modulo(3).zero?
   end
