@@ -4,11 +4,15 @@ class FizzBuzz
   MAX_NUMBER = 100
   attr_accessor :list
 
-  def generate(number, type = 1)
+  def initialize(type)
+    @type = type
+  end
+
+  def generate(number)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 
-    case type
+    case @type
     when 1
       return 'FizzBuzz' if is_fizz && is_buzz
       return 'Fizz' if is_fizz
