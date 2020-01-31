@@ -19,13 +19,17 @@ class FizzBuzz
 end
 
 class FizzBuzzType
+  TYPE_01 = 1
+  TYPE_02 = 2
+  TYPE_03 = 3
+
   def self.create(type)
     case type
-    when 1
+    when FizzBuzzType::TYPE_01
       FizzBuzzType01.new
-    when 2
+    when FizzBuzzType::TYPE_02
       FizzBuzzType02.new
-    when 3
+    when FizzBuzzType::TYPE_03
       FizzBuzzType03.new
     else
       raise '該当するタイプは存在しません'
