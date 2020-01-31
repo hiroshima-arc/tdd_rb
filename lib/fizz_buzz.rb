@@ -47,24 +47,43 @@ end
 
 class FizzBuzzType01 < FizzBuzzType
   def generate(number)
-    return 'FizzBuzz' if fizz?(number) && buzz?(number)
-    return 'Fizz' if fizz?(number)
-    return 'Buzz' if buzz?(number)
+    return FizzBuzzValue.new(number, 'FizzBuzz') if fizz?(number) && buzz?(number)
+    return FizzBuzzValue.new(number, 'Fizz') if fizz?(number)
+    return FizzBuzzValue.new(number, 'Buzz') if buzz?(number)
 
-    number.to_s
+    FizzBuzzValue.new(number, number.to_s)
   end
 end
 
 class FizzBuzzType02 < FizzBuzzType
   def generate(number)
-    number.to_s
+    FizzBuzzValue.new(number, number.to_s)
   end
 end
 
 class FizzBuzzType03 < FizzBuzzType
   def generate(number)
-    return 'FizzBuzz' if fizz?(number) && buzz?(number)
+    return FizzBuzzValue.new(number, 'FizzBuzz') if fizz?(number) && buzz?(number)
 
-    number.to_s
+    FizzBuzzValue.new(number, number.to_s)
   end
+end
+
+class FizzBuzzValue
+  attr_reader :number, :value
+
+  def initialize(number, value)
+    @number = number
+    @value = value
+  end
+
+  def to_s
+    "#{@number}:#{@value}"
+  end
+
+  def ==(other)
+    @number == other.number && @value == other.value
+  end
+
+  alias eql? ==
 end

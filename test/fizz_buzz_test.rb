@@ -17,25 +17,25 @@ class FizzBuzzTest < Minitest::Test
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列Fizzを返す
-            assert_equal 'Fizz', @fizzbuzz.generate(3)
+            assert_equal 'Fizz', @fizzbuzz.generate(3).value
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列Buzzを返す
-            assert_equal 'Buzz', @fizzbuzz.generate(5)
+            assert_equal 'Buzz', @fizzbuzz.generate(5).value
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.generate(15)
+            assert_equal 'FizzBuzz', @fizzbuzz.generate(15).value
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1)
+            assert_equal '1', @fizzbuzz.generate(1).value
           end
         end
 
@@ -46,23 +46,23 @@ class FizzBuzzTest < Minitest::Test
           end
 
           def test_配列の初めは文字列の1を返す
-            assert_equal '1', @result.first
+            assert_equal '1', @result.first.value
           end
 
           def test_配列の最後は文字列のBuzzを返す
-            assert_equal 'Buzz', @result.last
+            assert_equal 'Buzz', @result.last.value
           end
 
           def test_配列の2番目は文字列のFizzを返す
-            assert_equal 'Fizz', @result[2]
+            assert_equal 'Fizz', @result[2].value
           end
 
           def test_配列の4番目は文字列のBuzzを返す
-            assert_equal 'Buzz', @result[4]
+            assert_equal 'Buzz', @result[4].value
           end
 
           def test_配列の14番目は文字列のFizzBuzzを返す
-            assert_equal 'FizzBuzz', @result[14]
+            assert_equal 'FizzBuzz', @result[14].value
           end
         end
       end
@@ -74,25 +74,25 @@ class FizzBuzzTest < Minitest::Test
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.generate(3)
+            assert_equal '3', @fizzbuzz.generate(3).value
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.generate(5)
+            assert_equal '5', @fizzbuzz.generate(5).value
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列15を返す
-            assert_equal '15', @fizzbuzz.generate(15)
+            assert_equal '15', @fizzbuzz.generate(15).value
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1)
+            assert_equal '1', @fizzbuzz.generate(1).value
           end
         end
       end
@@ -104,25 +104,25 @@ class FizzBuzzTest < Minitest::Test
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.generate(3)
+            assert_equal '3', @fizzbuzz.generate(3).value
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.generate(5)
+            assert_equal '5', @fizzbuzz.generate(5).value
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.generate(15)
+            assert_equal 'FizzBuzz', @fizzbuzz.generate(15).value
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1)
+            assert_equal '1', @fizzbuzz.generate(1).value
           end
         end
 
