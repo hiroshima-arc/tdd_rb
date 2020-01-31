@@ -50,7 +50,7 @@ class FizzBuzz
 end
 
 class FizzBuzzType01
-  def generate(_numbber)
+  def generate(number)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 
@@ -69,7 +69,7 @@ class FizzBuzzType02
 end
 
 class FizzBuzzType03
-  def generate(_numbber)
+  def generate(number)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 

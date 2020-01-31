@@ -12,7 +12,7 @@ class FizzBuzzTest < Minitest::Test
     describe '数を文字列にして返す' do
       describe 'タイプ1の場合' do
         def setup
-          @fizzbuzz = FizzBuzz.new(1)
+          @fizzbuzz = FizzBuzz.create(1)
         end
 
         describe '三の倍数の場合' do
@@ -69,7 +69,7 @@ class FizzBuzzTest < Minitest::Test
 
       describe 'タイプ2の場合' do
         def setup
-          @fizzbuzz = FizzBuzz.new(2)
+          @fizzbuzz = FizzBuzz.create(2)
         end
 
         describe '三の倍数の場合' do
@@ -99,7 +99,7 @@ class FizzBuzzTest < Minitest::Test
 
       describe 'タイプ3の場合' do
         def setup
-          @fizzbuzz = FizzBuzz.new(3)
+          @fizzbuzz = FizzBuzz.create(3)
         end
 
         describe '三の倍数の場合' do
@@ -127,13 +127,9 @@ class FizzBuzzTest < Minitest::Test
         end
 
         describe 'それ以外のタイプの場合' do
-          def setup
-            @fizzbuzz = FizzBuzz.new(4)
-          end
-
           def test_例外を返す
             e = assert_raises RuntimeError do
-              @fizzbuzz.generate(1)
+              @fizzbuzz = FizzBuzz.create(4)
             end
 
             assert_equal '該当するタイプは存在しません', e.message
