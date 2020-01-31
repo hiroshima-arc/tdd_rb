@@ -3,7 +3,7 @@
 class FizzBuzz
   MAX_NUMBER = 100
 
-  def self.generate(number)
+  def self.generate(number, _type = 1)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 

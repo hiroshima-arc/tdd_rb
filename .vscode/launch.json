@@ -9,6 +9,12 @@
             "type": "Ruby",
             "request": "launch",
             "program": "${workspaceRoot}/main.rb"
+        },
+        {
+            "name": "Debug FizzBuzz File",
+            "type": "Ruby",
+            "request": "launch",
+            "program": "${workspaceRoot}/test/fizz_buzz_test.rb"
         }
     ]
 }
