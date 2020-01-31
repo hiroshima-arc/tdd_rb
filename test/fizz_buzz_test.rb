@@ -126,14 +126,24 @@ class FizzBuzzTest < Minitest::Test
             assert_equal '1', @fizzbuzz.execute(1).value
           end
         end
+      end
 
-        describe 'それ以外のタイプの場合' do
-          def test_例外を返す
-            e = assert_raises RuntimeError do
-              @fizzbuzz = FizzBuzzType.create(4)
-            end
+      describe 'それ以外のタイプの場合' do
+        def test_例外を返す
+          e = assert_raises RuntimeError do
+            @fizzbuzz = FizzBuzzType.create(4)
+          end
 
-            assert_equal '該当するタイプは存在しません', e.message
+          assert_equal '該当するタイプは存在しません', e.message
+        end
+      end
+
+      describe '例外ケース' do
+        def test_値は正の値のみ許可する
+          assert_raises Assertions::AssertionFailedError do
+            FizzBuzzValueCommand.new(
+              FizzBuzzType.create(FizzBuzzType::TYPE_01)
+            ).execute(-1)
           end
         end
       end
