@@ -238,4 +238,18 @@ class FizzBuzzTest < Minitest::Test
       assert_equal '3:Fizz', value.to_s
     end
   end
+
+  describe 'FizzBuzzValueList' do
+    def setup
+      @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    end
+
+    def test_新しいインスタンスが作られる
+      list1 = @fizzbuzz.generate_list
+      list2 = list1.add(list1.value)
+
+      assert_equal 100, list1.value.count
+      assert_equal 200, list2.value.count
+    end
+  end
 end
