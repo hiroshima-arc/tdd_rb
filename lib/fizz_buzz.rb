@@ -2,7 +2,7 @@
 
 class FizzBuzz
   MAX_NUMBER = 100
-  attr_accessor :list
+  attr_reader :list
 
   def initialize(type)
     @type = type
