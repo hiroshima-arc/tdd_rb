@@ -51,19 +51,12 @@ class FizzBuzzType03 < FizzBuzzType
   end
 end
 
-module Assertions
-  class AssertionFailedError < StandardError; end
-
-  def assert(&condition)
-    raise AssertionFailedError, 'Assertion Failed' unless condition.call
-  end
-end
 class FizzBuzzValue
-  include Assertions
   attr_reader :number, :value
 
   def initialize(number, value)
-    assert { number >= 0 }
+    raise '正の値のみ有効です' if number < 0
+
     @number = number
     @value = value
   end
@@ -80,11 +73,11 @@ class FizzBuzzValue
 end
 
 class FizzBuzzList
-  include Assertions
   attr_reader :value
 
   def initialize(list)
-    assert { list.count <= 100 }
+    raise '上限は100件までです' if list.count > 100
+
     @value = list
   end
 

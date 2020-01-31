@@ -140,19 +140,23 @@ class FizzBuzzTest < Minitest::Test
 
       describe '例外ケース' do
         def test_値は正の値のみ許可する
-          assert_raises Assertions::AssertionFailedError do
+          e = assert_raises RuntimeError do
             FizzBuzzValueCommand.new(
               FizzBuzzType.create(FizzBuzzType::TYPE_01)
             ).execute(-1)
           end
+
+          assert_equal '正の値のみ有効です', e.message
         end
 
         def test_100より多い数を許可しない
-          assert_raises Assertions::AssertionFailedError do
+          e = assert_raises RuntimeError do
             FizzBuzzListCommand.new(
               FizzBuzzType.create(FizzBuzzType::TYPE_01)
             ).execute(101)
           end
+
+          assert_equal '上限は100件までです', e.message
         end
       end
     end
