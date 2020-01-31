@@ -20,3 +20,13 @@ desc 'Run Guard'
 task :guard do
   sh 'guard start'
 end
+
+desc 'Show Rubocop Report'
+task :linter_report do
+  sh 'launchy ./tmp/rubocop_results.html'
+end
+
+desc 'Show Coverate Report'
+task :coverage_report do
+  sh 'launchy ./coverage/index.html'
+end
