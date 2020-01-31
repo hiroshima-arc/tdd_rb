@@ -5,7 +5,7 @@ class FizzBuzz
   attr_reader :list
 
   def initialize(type)
-    @type = type
+    @type = FizzBuzz.create(type)
   end
 
   def self.create(type)
@@ -45,7 +45,7 @@ class FizzBuzz
 
   def generate_list
     # 1から最大値までのFizzBuzz配列を1発で作る
-    @list = (1..MAX_NUMBER).map { |n| generate(n) }
+    @list = (1..MAX_NUMBER).map { |n| @type.generate(n) }
   end
 end
 
