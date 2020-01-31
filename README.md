@@ -30,9 +30,9 @@
 #### 仮想マシン使用の場合
 
 ```bash
-$ vagrant up
-$ vagrant ssh
-$ cd /vagrant
+vagrant up
+vagrant ssh
+cd /vagrant
 ```
 
 シンボルリンクを作成してデバッガを使えるようにする
@@ -53,4 +53,3 @@ Node.jsをインストールする
 nvm install --lts
 node -v
 ```
-
