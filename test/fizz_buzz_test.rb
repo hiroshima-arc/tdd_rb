@@ -12,30 +12,30 @@ class FizzBuzzTest < Minitest::Test
     describe '数を文字列にして返す' do
       describe 'タイプ1の場合' do
         def setup
-          @fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+          @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType01.new)
         end
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列Fizzを返す
-            assert_equal 'Fizz', @fizzbuzz.generate(3).value
+            assert_equal 'Fizz', @fizzbuzz.execute(3).value
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列Buzzを返す
-            assert_equal 'Buzz', @fizzbuzz.generate(5).value
+            assert_equal 'Buzz', @fizzbuzz.execute(5).value
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.generate(15).value
+            assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1).value
+            assert_equal '1', @fizzbuzz.execute(1).value
           end
         end
 
@@ -70,60 +70,60 @@ class FizzBuzzTest < Minitest::Test
 
       describe 'タイプ2の場合' do
         def setup
-          @fizzbuzz = FizzBuzz.new(FizzBuzzType02.new)
+          @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType02.new)
         end
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.generate(3).value
+            assert_equal '3', @fizzbuzz.execute(3).value
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.generate(5).value
+            assert_equal '5', @fizzbuzz.execute(5).value
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列15を返す
-            assert_equal '15', @fizzbuzz.generate(15).value
+            assert_equal '15', @fizzbuzz.execute(15).value
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1).value
+            assert_equal '1', @fizzbuzz.execute(1).value
           end
         end
       end
 
       describe 'タイプ3の場合' do
         def setup
-          @fizzbuzz = FizzBuzz.new(FizzBuzzType03.new)
+          @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType03.new)
         end
 
         describe '三の倍数の場合' do
           def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.generate(3).value
+            assert_equal '3', @fizzbuzz.execute(3).value
           end
         end
 
         describe '五の倍数の場合' do
           def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.generate(5).value
+            assert_equal '5', @fizzbuzz.execute(5).value
           end
         end
 
         describe '三と五の倍数の場合' do
           def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.generate(15).value
+            assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
           end
         end
 
         describe 'その他の場合' do
           def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1).value
+            assert_equal '1', @fizzbuzz.execute(1).value
           end
         end
 

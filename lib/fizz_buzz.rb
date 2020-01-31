@@ -104,3 +104,15 @@ class FizzBuzzList
     FizzBuzzList.new(@value + value)
   end
 end
+
+class FizzBuzzCommand; end
+
+class FizzBuzzValueCommand < FizzBuzzCommand
+  def initialize(type)
+    @type = type
+  end
+
+  def execute(number)
+    @type.generate(number)
+  end
+end
