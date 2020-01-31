@@ -41,8 +41,8 @@ class FizzBuzzTest < Minitest::Test
 
         describe '1から100までのFizzBuzzの配列を返す' do
           def setup
-            fizz_buzz = FizzBuzz.new(FizzBuzzType01.new)
-            fizz_buzz_list = fizz_buzz.generate_list
+            fizz_buzz = FizzBuzzListCommand.new(FizzBuzzType01.new)
+            fizz_buzz_list = fizz_buzz.execute(100)
             @result = fizz_buzz_list.value
           end
 
