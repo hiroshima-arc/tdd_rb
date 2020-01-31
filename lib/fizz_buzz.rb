@@ -55,7 +55,7 @@ class FizzBuzzValue
   attr_reader :number, :value
 
   def initialize(number, value)
-    raise '正の値のみ有効です' if number < 0
+    raise '正の値のみ有効です' if number.negative?
 
     @number = number
     @value = value
