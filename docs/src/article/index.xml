@@ -4165,7 +4165,7 @@ $ git commit -m 'chore: タスクランナーセットアップ'</programlisting
 <section xml:id="_タスクの自動化">
 <title>タスクの自動化</title>
 <simpara>良いコードを書くためのタスクをまとめることができました。でも、どうせなら自動で実行できるようにしたいですよね。
-タスクを自動実行するためのgemを追加します。 <link xl:href="https://github.com/guard/guard">Guard</link>とそのプラグインの <link xl:href="https://github.com/guard/guard-shell">Guard::Shell</link> <link xl:href="https://github.com/guard/guard-minitest">Guard::Minitest</link>をインストールします。それぞれの詳細は以下を参照してください。</simpara>
+タスクを自動実行するためのgemを追加します。 <link xl:href="https://github.com/guard/guard">Guard</link>とそのプラグインの <link xl:href="https://github.com/guard/guard-shell">Guard::Shell</link> <link xl:href="https://github.com/guard/guard-minitest">Guard::Minitest</link> <link xl:href="https://github.com/yujinakayama/guard-rubocop">guard-rubocop</link> をインストールします。それぞれの詳細は以下を参照してください。</simpara>
 <itemizedlist>
 <listitem>
 <simpara><link xl:href="https://qiita.com/tbpgr/items/f5be21d8e19dd852d9b7">Ruby | Guard gem を利用してファイルの変更を検出し、任意のタスクを自動実行する</link></simpara>
@@ -4185,6 +4185,7 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gem 'guard'
 gem 'guard-minitest'
+gem 'guard-rubocop'
 gem 'guard-shell'
 gem 'minitest'
 gem 'minitest-reporters'
@@ -4201,29 +4202,43 @@ $ guard init</programlisting>
 #   watch(%r{file/path}) { `command(s)` }
 #
 guard :shell do
-  watch(/(.*).rb/) { |_m| `rake rubocop:auto_correct` }
-  watch(%r{lib/(.*).rb}) { |_m| `rake test` }
 end
 
 guard :minitest do
   # with Minitest::Unit
   watch(%r{test\/*.rb})
+end
+
+guard :rubocop, cli: %w[--auto-correct --format fuubar --format html -o ./tmp/rubocop_results.html] do
+  watch(/(.*).rb/)
 end</programlisting>
 <simpara><literal>guard</literal> が起動するか確認して一旦終了します。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">$ guard start
-10:18:32 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
-10:18:32 - INFO - Running: all tests
-Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 11 LOC (36.36%
-) covered.
-Started with run options --guard --seed 53002
+Warning: the running version of Bundler (2.1.3) is older than the version that created the lockfile (2.1.4). We suggest you to upgrade to the version that created the lockfile by running `gem install bundler:2.1.4`.
+03:49:28 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
+03:49:28 - INFO - Running: all tests
+Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 11 LOC (36.36%) covered.
+Started with run options --guard --seed 1256
 
-  24/24: [=========================================] 100% Time: 00:00:00, Time: 00:00:00
+  24/24: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00696s
+Finished in 0.00363s
 24 tests, 26 assertions, 0 failures, 0 errors, 0 skips
 
-10:18:33 - INFO - Guard is now watching at '/workspace/tdd_rb'
-[1] guard(main)&gt;</programlisting>
+03:49:28 - INFO - Inspecting Ruby code style of all files
+Gemfile:15:46: C: [Corrected] Layout/TrailingEmptyLines: Final newline missing.
+gem 'simplecov', require: false, group: :test
+
+Guardfile:17:4: C: [Corrected] Layout/TrailingEmptyLines: Final newline missing.
+end
+
+ 7/7 files |====================================== 100 =======================================&gt;| Time: 00:00:00
+
+7 files inspected, 2 offenses detected, 2 offenses corrected
+03:49:30 - INFO - Guard is now watching at '/workspace/tdd_rb'
+[1] guard(main)&gt; exit
+
+03:50:31 - INFO - Bye bye...</programlisting>
 <simpara>続いて <literal>Rakefile</literal> にguardタスクを追加します。あと、guardタスクをデフォルトにして <literal>rake</literal> を実行すると呼び出されるようにしておきます。</simpara>
 <programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
 
@@ -4250,109 +4265,59 @@ end</programlisting>
 <simpara>自動実行タスクを起動しましょう。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">$ rake
 guard start
-10:18:58 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
-10:18:58 - INFO - Running: all tests
-Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 11 LOC (36.36%
-) covered.
-Started with run options --guard --seed 2641
+03:52:01 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
+03:52:01 - INFO - Running: all tests
+Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 11 LOC (36.36%) covered.
+Started with run options --guard --seed 3219
 
-  24/24: [=========================================] 100% Time: 00:00:00, Time: 00:00:00
+  24/24: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00372s
+Finished in 0.00844s
 24 tests, 26 assertions, 0 failures, 0 errors, 0 skips
 
-10:18:59 - INFO - Guard is now watching at '/workspace/tdd_rb'
+03:52:01 - INFO - Inspecting Ruby code style of all files
+ 7/7 files |====================================== 100 =======================================&gt;| Time: 00:00:00
+
+7 files inspected, no offenses detected
+03:52:03 - INFO - Guard is now watching at '/workspace/tdd_rb'
 [1] guard(main)&gt;</programlisting>
-<simpara>起動したら <literal>fizz_buzz.rb</literal> を編集してテストが自動実行されるか確認しましょう。ここでは3と5で割り切れる場合は <literal>FizBuzzBuzz</literal> を返すように変更しています。</simpara>
-<programlisting language="ruby" linenumbering="unnumbered">class FizzBuzz
-  MAX_NUMBER = 100
+<simpara>起動したら <literal>fizz_buzz_test.rb</literal> を編集してテストが自動実行されるか確認しましょう。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FizzBuzzTest &lt; Minitest::Test
+  describe 'FizzBuzz' do
+    def setup
+      @fizzbuzz = FizzBuzz
+    end
 
-  def self.generate(number)
-    isFizz = number.modulo(3).zero?
-    isBuzz = number.modulo(5).zero?
+    describe '三の倍数の場合' do
+      def test_3を渡したら文字列Fizzを返す
+        assert_equal 'FizzFizz', @fizzbuzz.generate(3)
+      end
+    end
+...</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">05:00:34 - INFO - Running: all tests
+Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 11 LOC (36.36%) covered.
+Started with run options --guard --seed 16292
 
-    return 'FizzBuzzBuzz' if isFizz &amp;&amp; isBuzz
-    return 'Fizz' if isFizz
-    return 'Buzz' if isBuzz
+ FAIL["test_3を渡したら文字列Fizzを返す", #&lt;Minitest::Reporters::Suite:0x000055640e99f080 @name="FizzBuzz::三の倍数の場合"&gt;, 0.005698626991943456]
+ test_3を渡したら文字列Fizzを返す#FizzBuzz::三の倍数の場合 (0.01s)
+        Expected: "FizzFizz"
+          Actual: "Fizz"
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:18:in `test_3を渡したら文字列Fizzを返す'
 
-    number.to_s
-  end
+  24/24: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-  def self.generate_list
-    # 1から最大値までのFizzBuzz配列を1発で作る
-    (1..MAX_NUMBER).map { |n| generate(n) }
-  end
-end</programlisting>
-<programlisting language="bash" linenumbering="unnumbered">$ rake
-guard start
-10:21:16 - INFO - Guard::Minitest 2.4.6 is running, with Minitest::Unit 5.14.0!
-10:21:16 - INFO - Running: all tests
-Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 11 / 1
-1 LOC (100.0%) covered.
-Started with run options --guard --seed 8830
+Finished in 0.00742s
+24 tests, 26 assertions, 1 failures, 0 errors, 0 skips
 
-  24/24: [=========================================] 100% Time: 00:00:00, Time: 00:00:00
+05:00:35 - INFO - Inspecting Ruby code style: test/fizz_buzz_test.rb
+ 1/1 file |======================================= 100 =======================================&gt;| Time: 00:00:00
 
-Finished in 0.00718s
-24 tests, 26 assertions, 0 failures, 0 errors, 0 skips
+1 file inspected, no offenses detected
+05:00:36 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/border.png coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/controls.png
+ 0/0 files |====================================== 100 =======================================&gt;| Time: 00:00:00
 
-10:21:17 - INFO - Guard is now watching at '/workspace/tdd_rb'
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.
-0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_bu
-zz_test.rb"
-SimpleCov failed with exit 1rake aborted!
-Command failed with status (1): [ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib
-" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test
-.rb" ]
-/workspace/.rvm/gems/rake-13.0.1/exe/rake:27:in `&lt;top (required)&gt;'
-/workspace/.rvm/bin/ruby_executable_hooks:24:in `eval'
-/workspace/.rvm/bin/ruby_executable_hooks:24:in `&lt;main&gt;'
-Tasks: TOP =&gt; test
-(See full trace by running task with --trace)
-Running RuboCop...
-Inspecting 6 files
-......
-
-6 files inspected, no offenses detected
-Started with run options --seed 20590
-
-
- FAIL["test_15を渡したら文字列FizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x000055d0ed2b22a8 @name="FizzBuzz::三と五の倍数の場合"&gt;, 0.002640306978719309]
- test_15を渡したら文字列FizzBuzzを返す#FizzBuzz::三と五の倍数の場合 (0.00s)
-        Expected: "FizzBuzz"
-          Actual: "FizzBuzzBuzz"
-        /workspace/tdd_rb/test/fizz_buzz_test.rb:30:in `test_15を渡したら文字列FizzBuzzを返す'
-
- FAIL["test_配列の14番目は文字列のFizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x000055d0ed2c0f60 @name="FizzBuzz::1から100までのFizzBuzzの配列を返す"&gt;, 0.0035449959977995604]
- test_配列の14番目は文字列のFizzBuzzを返す#FizzBuzz::1から100までのFizzBuzzの配列を返す (0.00s)
-        Expected: "FizzBuzz"
-          Actual: "FizzBuzzBuzz"
-        /workspace/tdd_rb/test/fizz_buzz_test.rb:66:in `test_配列の14番目は文字列のFizzBuzzを返す'
-
-============================================================================|
-
-Finished in 0.00434s
-24 tests, 26 assertions, 2 failures, 0 errors, 0 skips
-Running RuboCop...
-Inspecting 6 files
-......
-
-6 files inspected, no offenses detected
-Running RuboCop...
-Inspecting 6 files
-......
-
-6 files inspected, no offenses detected
-Running RuboCop...
-Inspecting 6 files
-......
-
-6 files inspected, no offenses detected
-Running RuboCop...
-Inspecting 6 files
-......
-
-6 files inspected, no offenses detected
+0 files inspected, no offenses detected
 [1] guard(main)&gt;</programlisting>
 <simpara>変更を感知してテストが実行されるた結果失敗していましました。コードを元に戻してテストをパスするようにしておきましょう。テストがパスすることが確認できたらコミットしておきましょう。このときターミナルでは <literal>guard</literal> が動いているので別ターミナルを開いてコミットを実施すると良いでしょう。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">$ git add .
