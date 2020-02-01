@@ -1673,6 +1673,379 @@ $ git commit -m 'refactor: 移譲の隠蔽'
 ----
 
 ==== スーパークラスの抽出
+[source, ruby]
+----
+class FizzBuzz
+...
+end
+
+class FizzBuzzType; end
+
+class FizzBuzzType01
+...
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzType; end
+
+class FizzBuzzType01 < FizzBuzzType
+...
+end
+
+class FizzBuzzType02 < FizzBuzzType
+...
+end
+
+class FizzBuzzType03 < FizzBuzzType
+...
+end
+----
+
+[source, bash]
+----
+08:42:24 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 33 / 33 LOC (100.0%) covered.
+Started with run options --guard --seed 43548
+
+  32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00860s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+
+08:42:25 - INFO - Inspecting Ruby code style of all files
+ 7/7 files |====================================== 100 =======================================>| Time: 00:00:00 
+
+7 files inspected, no offenses detected
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzType; end
+
+class FizzBuzzType01 < FizzBuzzType
+  def generate(number)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if is_fizz && is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+
+    number.to_s
+  end
+end
+
+class FizzBuzzType02 < FizzBuzzType
+  def generate(number)
+    number.to_s
+  end
+end
+
+class FizzBuzzType03 < FizzBuzzType
+  def generate(number)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if is_fizz && is_buzz
+
+    number.to_s
+  end
+end
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzType
+  def is_fizz(number)
+    number.modulo(3).zero?
+  end
+
+  def is_buzz(number)
+    number.modulo(5).zero?
+  end
+end
+
+class FizzBuzzType01 < FizzBuzzType
+  def generate(number)
+    return 'FizzBuzz' if is_fizz(number) && is_buzz(number)
+    return 'Fizz' if is_fizz(number)
+    return 'Buzz' if is_buzz(number)
+
+    number.to_s
+  end
+end
+
+class FizzBuzzType02 < FizzBuzzType
+  def generate(number)
+    number.to_s
+  end
+end
+
+class FizzBuzzType03 < FizzBuzzType
+  def generate(number)
+    return 'FizzBuzz' if is_fizz(number) && is_buzz(number)
+
+    number.to_s
+  end
+end
+----
+
+[source, bash]
+----
+08:50:16 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 33 / 33 LOC (100.0%) covered.
+Started with run options --guard --seed 45685
+
+  32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01073s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+
+08:50:17 - INFO - Inspecting Ruby code style of all files
+lib/fizz_buzz.rb:35:7: C: Naming/PredicateName: Rename is_fizz to fizz?.                                        
+  def is_fizz(number)
+      ^^^^^^^
+lib/fizz_buzz.rb:39:7: C: Naming/PredicateName: Rename is_buzz to buzz?.
+  def is_buzz(number)
+      ^^^^^^^
+ 7/7 files |====================================== 100 =======================================>| Time: 00:00:00 
+
+7 files inspected, 2 offenses detected
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: スーパークラスの抽出'
+----
+
+[source, bash]
+----
+08:50:19 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png lib/fizz_buzz.rb
+lib/fizz_buzz.rb:35:7: C: Naming/PredicateName: Rename is_fizz to fizz?.                                        
+  def is_fizz(number)
+      ^^^^^^^
+lib/fizz_buzz.rb:39:7: C: Naming/PredicateName: Rename is_buzz to buzz?.
+  def is_buzz(number)
+      ^^^^^^^
+ 1/1 file |======================================= 100 =======================================>| Time: 00:00:00 
+
+1 file inspected, 2 offenses detected
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzType
+  def is_fizz(number)
+    number.modulo(3).zero?
+  end
+
+  def is_buzz(number)
+    number.modulo(5).zero?
+  end
+end
+
+class FizzBuzzType01 < FizzBuzzType
+  def generate(number)
+    return 'FizzBuzz' if is_fizz(number) && is_buzz(number)
+    return 'Fizz' if is_fizz(number)
+    return 'Buzz' if is_buzz(number)
+
+    number.to_s
+  end
+end
+
+class FizzBuzzType02 < FizzBuzzType
+  def generate(number)
+    number.to_s
+  end
+end
+
+class FizzBuzzType03 < FizzBuzzType
+  def generate(number)
+    return 'FizzBuzz' if is_fizz(number) && is_buzz(number)
+
+    number.to_s
+  end
+end
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzType
+  def fizz?(number)
+    number.modulo(3).zero?
+  end
+
+  def buzz?(number)
+    number.modulo(5).zero?
+  end
+end
+
+class FizzBuzzType01 < FizzBuzzType
+  def generate(number)
+    return 'FizzBuzz' if fizz?(number) && buzz?(number)
+    return 'Fizz' if fizz?(number)
+    return 'Buzz' if buzz?(number)
+
+    number.to_s
+  end
+end
+
+class FizzBuzzType02 < FizzBuzzType
+  def generate(number)
+    number.to_s
+  end
+end
+
+class FizzBuzzType03 < FizzBuzzType
+  def generate(number)
+    return 'FizzBuzz' if fizz?(number) && buzz?(number)
+
+    number.to_s
+  end
+end
+----
+
+[source, bash]
+----
+Progress: |====================================================================================================|
+
+Finished in 0.01144s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+08:53:35 - INFO - Inspecting Ruby code style: lib/fizz_buzz.rb
+ 1/1 file |======================================= 100 =======================================>| Time: 00:00:00 
+
+1 file inspected, no offenses detected
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: メソッド名の変更'
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = FizzBuzz.create(type)
+  end
+
+  def self.create(type)
+    case type
+    when 1
+      FizzBuzzType01.new
+    when 2
+      FizzBuzzType02.new
+    when 3
+      FizzBuzzType03.new
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
+  def generate(number)
+    @type.generate(number)
+  end
+
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end
+
+class FizzBuzzType
+  def fizz?(number)
+    number.modulo(3).zero?
+  end
+
+  def buzz?(number)
+    number.modulo(5).zero?
+  end
+end
+...
+----
+
+[source, ruby]
+----
+
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = FizzBuzzType.create(type)
+  end
+
+  def generate(number)
+    @type.generate(number)
+  end
+
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end
+
+class FizzBuzzType
+  def self.create(type)
+    case type
+    when 1
+      FizzBuzzType01.new
+    when 2
+      FizzBuzzType02.new
+    when 3
+      FizzBuzzType03.new
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
+  def fizz?(number)
+    number.modulo(3).zero?
+  end
+
+  def buzz?(number)
+    number.modulo(5).zero?
+  end
+end
+...
+----
+
+[source, bash]
+----
+08:59:27 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 33 / 33 LOC (100.0%) covered.
+Started with run options --guard --seed 19583
+
+  32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00688s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+
+08:59:28 - INFO - Inspecting Ruby code style of all files
+ 7/7 files |====================================== 100 =======================================>| Time: 00:00:00 
+
+7 files inspected, no offenses detected
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: メソッドの移動'
+----
+
+
 ==== オブジェクトによるプリミティブの置き換え
 ==== アサーションの導入
 ==== 例外によるエラーコードの置き換え
