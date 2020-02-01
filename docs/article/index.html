@@ -8511,7 +8511,451 @@ $ git commit -m 'refactor: setterの削除'</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_ポリモーフィズムによる条件記述の置き換え">3.1.7. ポリモーフィズムによる条件記述の置き換え</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">...
+07:53:29 - INFO - Inspecting Ruby code style: test/fizz_buzz_test.rb lib/fizz_buzz.rb
+lib/fizz_buzz.rb:11:3: C: Metrics/CyclomaticComplexity: Cyclomatic complexity for generate is too high. [10/8]
+  def generate(number) ...
+  ^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:11:3: C: Metrics/PerceivedComplexity: Perceived complexity for generate is too high. [8/7]
+  def generate(number) ...
+  ^^^^^^^^^^^^^^^^^^^^
+ 2/2 files |====================================== 100 =======================================&gt;| Time: 00:00:00
 
+2 files inspected, 2 offenses detected
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+  def generate(number)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    case @type
+    when 1
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+      return 'Fizz' if is_fizz
+      return 'Buzz' if is_buzz
+
+      number.to_s
+    when 2
+      number.to_s
+    when 3
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+
+      number.to_s
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+...
+end
+
+class FizzBuzzType01; end
+class FizzBuzzType02; end
+class FizzBuzzType03; end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = type
+  end
+
+  def self.create(type)
+    case type
+    when 1
+      FizzBuzzType01.new
+    when 2
+      FizzBuzzType02.new
+    when 3
+      FizzBuzzType03.new
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'refactor(WIP): ポリモーフィズムによる条件記述の置き換え'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+...
+end
+
+class FizzBuzzType01; end
+class FizzBuzzType02; end
+class FizzBuzzType03; end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzzType01
+  def generate(numbber)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+
+    number.to_s
+  end
+end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzzType02
+  def generate(number)
+    number.to_s
+  end
+end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzzType03
+  def generate(number)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+
+    number.to_s
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'refactor(WIP): ポリモーフィズムによる条件記述の置き換え'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzzTest &lt; Minitest::Test
+  describe '数を文字列にして返す' do
+    describe 'タイプ1の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.create(1)
+      end
+...
+    describe 'タイプ2の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.create(2)
+      end
+...
+    describe 'タイプ3の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.create(3)
+      end
+...
+    describe 'それ以外のタイプの場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.create(4)
+      end
+
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          @fizzbuzz.generate(1)
+        end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
+  end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">...
+08:14:14 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 26 / 42 LOC (61.9%) covered.
+Started with run options --guard --seed 37585
+
+ERROR["test_例外を返す", #&lt;Minitest::Reporters::Suite:0x000056317940fa28 @name="数を文字列にして返す::それ以外のタイプの場合"&gt;, 0.0037079370085848495]
+ test_例外を返す#数を文字列にして返す::それ以外のタイプの場合 (0.00s)
+Minitest::UnexpectedError:         RuntimeError: 該当するタイプは存在しません
+            /workspace/tdd_rb/lib/fizz_buzz.rb:20:in `create'
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:132:in `setup'
+
+  32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00685s
+32 tests, 33 assertions, 0 failures, 1 errors, 0 skips
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+    describe 'それ以外のタイプの場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.create(4)
+      end
+
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          @fizzbuzz.generate(1)
+        end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+    describe 'それ以外のタイプの場合' do
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          FizzBuzz.create(4)
+        end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">08:18:08 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 37 / 42 LOC (88.1%) covered.
+Started with run options --guard --seed 40171
+
+  32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00559s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'refactor: ポリモーフィズムによる条件記述の置き換え'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = type
+  end
+...
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = FizzBuzz.create(type)
+  end
+...
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = (1..MAX_NUMBER).map { |n| @type.generate(n) }
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'refactor: サブクラスによるタイプコードの置き換え'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = FizzBuzz.create(type)
+  end
+
+  def self.create(type)
+    case type
+    when 1
+      FizzBuzzType01.new
+    when 2
+      FizzBuzzType02.new
+    when 3
+      FizzBuzzType03.new
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
+  def generate(number)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    case @type
+    when 1
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+      return 'Fizz' if is_fizz
+      return 'Buzz' if is_buzz
+
+      number.to_s
+    when 2
+      number.to_s
+    when 3
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+
+      number.to_s
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = (1..MAX_NUMBER).map { |n| @type.generate(n) }
+  end
+end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = FizzBuzz.create(type)
+  end
+
+  def self.create(type)
+    case type
+    when 1
+      FizzBuzzType01.new
+    when 2
+      FizzBuzzType02.new
+    when 3
+      FizzBuzzType03.new
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
+  def generate(number)
+    @type.generate(number)
+  end
+
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzzTest &lt; Minitest::Test
+  describe '数を文字列にして返す' do
+    describe 'タイプ1の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(1)
+      end
+...
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          fizzbuzz = FizzBuzz.new(1)
+          fizzbuzz.generate_list
+          @result = fizzbuzz.list
+        end
+...
+    describe 'タイプ2の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(2)
+      end
+...
+    describe 'タイプ3の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(3)
+      end
+...
+    describe 'それ以外のタイプの場合' do
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          FizzBuzz.new(4)
+        end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">08:32:17 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 32 / 32 LOC (100.0%) covered.
+Started with run options --guard --seed 63863
+
+  32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00564s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+
+08:32:18 - INFO - Inspecting Ruby code style of all files
+ 7/7 files |====================================== 100 =======================================&gt;| Time: 00:00:00
+
+7 files inspected, no offenses detected</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'refactor: 移譲の隠蔽'</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_スーパークラスの抽出">3.1.8. スーパークラスの抽出</h4>
@@ -8672,7 +9116,7 @@ $ git commit -m 'refactor: setterの削除'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-01 16:54:36 JST
+Last updated 2020-02-01 17:37:22 JST
 </div>
 </div>
 </body>
