@@ -14,8 +14,272 @@ include::episode_2.adoc[]
 
 == エピソード3
 === オブジェクト指向から始めるテスト駆動開発
+仕様
+
+  1 から 100 までの数をプリントするプログラムを書け。
+  ただし 3 の倍数のときは数の代わりに｢Fizz｣と、5 の倍数のときは｢Buzz｣とプリントし、
+  3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。
+  タイプごとに出力を切り替えることができる。
+  タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz の場合のみをプリントする。
+
+[source, bash]
+----
+$ rake
+----
+
 ==== TODOリスト作成
+TODOリスト
+
+* タイプ1の場合
+** 数を文字列にして返す
+*** 1を渡したら文字列"1"を返す
+
 ==== タイプ1の場合
+[source, ruby]
+----
+...
+  end
+
+  describe 'タイプごとに出力を切り替えることができる' do
+    describe 'タイプ1の場合' do
+      def test_1を渡したら文字列1を返す
+        assert_equal '1', FizzBuzz.generate(1, 1)
+      end
+    end
+  end
+
+  describe '配列や繰り返し処理を理解する' do
+...
+----
+
+[source, bash]
+----
+05:32:51 - INFO - Running: all tests
+Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 11 LOC (36.36%) covered.
+Started with run options --guard --seed 37049
+
+ERROR["test_1を渡したら文字列1を返す", #<Minitest::Reporters::Suite:0x00005623e6a24260 @name="タイプごとに出力を切り替えることができる::タイプ1の場合">, 0.0019176720088580623]
+ test_1を渡したら文字列1を返す#タイプごとに出力を切り替えることができる::タイプ1の場合 (0.00s)
+Minitest::UnexpectedError:         ArgumentError: wrong number of arguments (given 2, expected 1)
+            /workspace/tdd_rb/lib/fizz_buzz.rb:6:in `generate'
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:74:in `test_1を渡したら文字列1を返す'
+
+  25/25: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00796s
+25 tests, 26 assertions, 0 failures, 1 errors, 0 skips
+----
+
+[source, bash]
+----
+...
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number, _type = 1)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if is_fizz && is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+
+    number.to_s
+  end
+...
+----
+
+[source, bash]
+----
+05:32:52 - INFO - Inspecting Ruby code style: test/fizz_buzz_test.rb Guardfile
+ 2/2 files |====================================== 100 =======================================>| Time: 00:00:00 
+
+2 files inspected, no offenses detected
+05:32:54 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
+ 0/0 files |====================================== 100 =======================================>| Time: 00:00:00 
+
+0 files inspected, no offenses detected
+05:37:29 - INFO - Inspecting Ruby code style: lib/fizz_buzz.rb
+lib/fizz_buzz.rb:6:29: W: [Corrected] Lint/UnusedMethodArgument: Unused method argument - type. If it's necessary, use _ or _type as an argument name to indicate that it won't be used.
+  def self.generate(number, type = 1)
+                            ^^^^
+ 1/1 file |======================================= 100 =======================================>| Time: 00:00:00 
+
+1 file inspected, 1 offense detected, 1 offense corrected
+05:37:31 - INFO - Inspecting Ruby code style: lib/fizz_buzz.rb
+ 1/1 file |======================================= 100 =======================================>| Time: 00:00:00 
+
+1 file inspected, no offenses detected
+[1] guard(main)> 
+05:39:37 - INFO - Run all
+05:39:37 - INFO - Running: all tests
+Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 11 LOC (36.36%) covered.
+Started with run options --guard --seed 8607
+
+  25/25: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00723s
+25 tests, 27 assertions, 0 failures, 0 errors, 0 skips
+...
+----
+
+[source, ruby]
+----
+...
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number, type = 1)
+    case type
+    when 1
+      is_fizz = number.modulo(3).zero?
+      is_buzz = number.modulo(5).zero?
+
+      return 'FizzBuzz' if is_fizz && is_buzz
+      return 'Fizz' if is_fizz
+      return 'Buzz' if is_buzz
+
+      number.to_s
+    end
+  end
+...
+----
+
+[source, bash]
+----
+1] guard(main)> 
+06:00:10 - INFO - Run all
+06:00:10 - INFO - Running: all tests
+Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 12 LOC (33.33%) covered.
+Started with run options --guard --seed 3988
+
+  25/25: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00756s
+25 tests, 27 assertions, 0 failures, 0 errors, 0 skips
+
+06:00:11 - INFO - Inspecting Ruby code style of all files
+ 7/7 files |====================================== 100 =======================================>| Time: 00:00:00 
+
+7 files inspected, no offenses detected
+06:00:12 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
+ 0/0 files |====================================== 100 =======================================>| Time: 00:00:00 
+
+0 files inspected, no offenses detected
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'test: タイプ1の場合'
+----
+
+[source, ruby]
+----
+...
+
+class FizzBuzzTest < Minitest::Test
+  describe '数を文字列にして返す' do
+    describe 'タイプ1の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列Fizzを返す
+          assert_equal 'Fizz', @fizzbuzz.generate(3)
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列Buzzを返す
+          assert_equal 'Buzz', @fizzbuzz.generate(5)
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列FizzBuzzを返す
+          assert_equal 'FizzBuzz', @fizzbuzz.generate(15)
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.generate(1)
+        end
+
+        def test_2を渡したら文字列2を返す
+          assert_equal '2', @fizzbuzz.generate(2)
+        end
+      end
+
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          @result = FizzBuzz.generate_list
+        end
+
+        def test_配列の初めは文字列の1を返す
+          assert_equal '1', @result.first
+        end
+
+        def test_配列の最後は文字列のBuzzを返す
+          assert_equal 'Buzz', @result.last
+        end
+
+        def test_配列の2番目は文字列のFizzを返す
+          assert_equal 'Fizz', @result[2]
+        end
+
+        def test_配列の4番目は文字列のBuzzを返す
+          assert_equal 'Buzz', @result[4]
+        end
+
+        def test_配列の14番目は文字列のFizzBuzzを返す
+          assert_equal 'FizzBuzz', @result[14]
+        end
+      end
+    end
+  end
+...
+----
+
+[source, bash]
+----
+$ git add .
+$ $ git commit -m 'refactor: メソッドのインライン化'
+----
+
+TODOリスト
+
+* タイプ1の場合
+** 数を文字列にして返す
+*** [line-through]_1を渡したら文字列"1"を返す_
+** 3 の倍数のときは数の代わりに｢Fizz｣と返す_
+*** [line-through]_3を渡したら文字列"Fizz"を返す_
+** 5 の倍数のときは｢Buzz｣と返す_
+*** [line-through]_5を渡したら文字列"Buzz"を返す_
+** 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す_
+*** [line-through]_15を渡したら文字列"FizzBuzz"を返す_
+* タイプ2の場合
+** 数を文字列にして返す
+*** 1を渡したら文字列"1"を返す
+** 3 の倍数のときは数を文字列にして返す
+*** 3を渡したら文字列"3"を返す
+** 5 の倍数のときは数を文字列にして返す
+*** 5を渡したら文字列"5"を返す
+** 3 と 5 両方の倍数の場合には数を文字列にして返す
+*** 15を渡したら文字列"15"を返す
+* タイプ3の場合
+** 数を文字列にして返す
+*** 1を渡したら文字列"1"を返す
+** 3 の倍数のときは数を文字列にして返す
+*** 3を渡したら文字列"3"を返す
+** 5 の倍数のときは数を文字列にして返す
+*** 5を渡したら文字列"5"を返す
+** 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+*** 15を渡したら文字列"FizzBuzz"を返す
+
+
 ==== タイプ2の場合
 ==== タイプ3の場合
 ==== フィールドのカプセル化
