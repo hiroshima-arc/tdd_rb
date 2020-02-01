@@ -509,13 +509,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_タイプ1の場合">3.1.2. タイプ1の場合</a></li>
 <li><a href="#_タイプ2の場合">3.1.3. タイプ2の場合</a></li>
 <li><a href="#_タイプ3の場合">3.1.4. タイプ3の場合</a></li>
-<li><a href="#_フィールドのカプセル化">3.1.5. フィールドのカプセル化</a></li>
-<li><a href="#_ポリモーフィズムによる条件記述の置き換え">3.1.6. ポリモーフィズムによる条件記述の置き換え</a></li>
-<li><a href="#_スーパークラスの抽出">3.1.7. スーパークラスの抽出</a></li>
-<li><a href="#_オブジェクトによるプリミティブの置き換え">3.1.8. オブジェクトによるプリミティブの置き換え</a></li>
-<li><a href="#_アサーションの導入">3.1.9. アサーションの導入</a></li>
-<li><a href="#_例外によるエラーコードの置き換え">3.1.10. 例外によるエラーコードの置き換え</a></li>
-<li><a href="#_モジュールの分割">3.1.11. モジュールの分割</a></li>
+<li><a href="#_例外ケース">3.1.5. 例外ケース</a></li>
+<li><a href="#_フィールドのカプセル化">3.1.6. フィールドのカプセル化</a></li>
+<li><a href="#_ポリモーフィズムによる条件記述の置き換え">3.1.7. ポリモーフィズムによる条件記述の置き換え</a></li>
+<li><a href="#_スーパークラスの抽出">3.1.8. スーパークラスの抽出</a></li>
+<li><a href="#_オブジェクトによるプリミティブの置き換え">3.1.9. オブジェクトによるプリミティブの置き換え</a></li>
+<li><a href="#_アサーションの導入">3.1.10. アサーションの導入</a></li>
+<li><a href="#_例外によるエラーコードの置き換え">3.1.11. 例外によるエラーコードの置き換え</a></li>
+<li><a href="#_モジュールの分割">3.1.12. モジュールの分割</a></li>
 </ul>
 </li>
 </ul>
@@ -7662,34 +7663,468 @@ $ git commit -m 'test: タイプ2の場合'</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_タイプ3の場合">3.1.4. タイプ3の場合</h4>
+<div class="paragraph">
+<p>TODOリスト</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">タイプ1の場合</em></p>
+</li>
+<li>
+<p><em class="line-through">タイプ2の場合</em></p>
+</li>
+<li>
+<p>タイプ3の場合</p>
+<div class="ulist">
+<ul>
+<li>
+<p>数を文字列にして返す</p>
+<div class="ulist">
+<ul>
+<li>
+<p>1を渡したら文字列"1"を返す</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>3 の倍数のときは数を文字列にして返す</p>
+<div class="ulist">
+<ul>
+<li>
+<p>3を渡したら文字列"3"を返す</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>5 の倍数のときは数を文字列にして返す</p>
+<div class="ulist">
+<ul>
+<li>
+<p>5を渡したら文字列"5"を返す</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す</p>
+<div class="ulist">
+<ul>
+<li>
+<p>15を渡したら文字列"FizzBuzz"を返す</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+    describe 'タイプ3の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.generate(3, 3)
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.generate(5, 3)
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列FizzBuzzを返す
+          assert_equal 'FizzBuzz', @fizzbuzz.generate(15, 3)
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.generate(1, 3)
+        end
+      end
+    end
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"> FAIL["test_1を渡したら文字列1を返す", #&lt;Minitest::Reporters::Suite:0x00005642171ea5a0 @name="数を文字列にして返す::タイプ3の場合::その他の場合"&gt;, 0.003375133004738018]
+ test_1を渡したら文字列1を返す#数を文字列にして返す::タイプ3の場合::その他の場合 (0.00s)
+        Expected: "1"
+          Actual: nil
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:123:in `test_1を渡したら文字列1を返す'
+
+ FAIL["test_5を渡したら文字列5を返す", #&lt;Minitest::Reporters::Suite:0x000056421723af78 @name="数を文字列にして返す::タイプ3の場合::五の倍数の場合"&gt;, 0.003832244998193346]
+ test_5を渡したら文字列5を返す#数を文字列にして返す::タイプ3の場合::五の倍数の場合 (0.00s)
+        Expected: "5"
+          Actual: nil
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:111:in `test_5を渡したら文字列5を返す'
+
+ FAIL["test_3を渡したら文字列3を返す", #&lt;Minitest::Reporters::Suite:0x0000564217297340 @name="数を文字列にして返す::タイプ3の場合::三の倍数の場合"&gt;, 0.0043466729985084385]
+ test_3を渡したら文字列3を返す#数を文字列にして返す::タイプ3の場合::三の倍数の場合 (0.00s)
+        Expected: "3"
+          Actual: nil
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:105:in `test_3を渡したら文字列3を返す'
+
+ FAIL["test_15を渡したら文字列FizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x00005642174dec98 @name="数を文字列にして返す::タイプ3の場合::三と五の倍数の場合"&gt;, 0.006096020006225444]
+ test_15を渡したら文字列FizzBuzzを返す#数を文字列にして返す::タイプ3の場合::三と五の倍数の場合 (0.01s)
+        Expected: "FizzBuzz"
+          Actual: nil
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:117:in `test_15を渡したら文字列FizzBuzzを返す'
+
+  31/31: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00650s
+31 tests, 33 assertions, 4 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number, type = 1)
+    case type
+    when 1
+      is_fizz = number.modulo(3).zero?
+      is_buzz = number.modulo(5).zero?
+
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+      return 'Fizz' if is_fizz
+      return 'Buzz' if is_buzz
+
+      number.to_s
+    when 2
+      number.to_s
+    when 3
+      is_fizz = number.modulo(3).zero?
+      is_buzz = number.modulo(5).zero?
+
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+
+      number.to_s
+    end
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">...
+
+  31/31: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00610s
+31 tests, 33 assertions, 0 failures, 0 errors, 0 skips
+
+06:50:37 - INFO - Inspecting Ruby code style of all files
+lib/fizz_buzz.rb:6:3: C: Metrics/CyclomaticComplexity: Cyclomatic complexity for generate is too high. [10/8]
+  def self.generate(number, type = 1) ...
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:6:3: C: Metrics/PerceivedComplexity: Perceived complexity for generate is too high. [8/7]
+  def self.generate(number, type = 1) ...
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 7/7 files |====================================== 100 =======================================&gt;| Time: 00:00:00
+
+7 files inspected, 2 offenses detected
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'test: タイプ3の場合'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number, type = 1)
+    case type
+    when 1
+      is_fizz = number.modulo(3).zero?
+      is_buzz = number.modulo(5).zero?
+
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+      return 'Fizz' if is_fizz
+      return 'Buzz' if is_buzz
+
+      number.to_s
+    when 2
+      number.to_s
+    when 3
+      is_fizz = number.modulo(3).zero?
+      is_buzz = number.modulo(5).zero?
+
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+
+      number.to_s
+    end
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number, type = 1)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    case type
+    when 1
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+      return 'Fizz' if is_fizz
+      return 'Buzz' if is_buzz
+
+      number.to_s
+    when 2
+      number.to_s
+    when 3
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+
+      number.to_s
+    end
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'refactor: ステートメントのスライド'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>TODOリスト</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">タイプ1の場合</em></p>
+</li>
+<li>
+<p><em class="line-through">タイプ2の場合</em></p>
+</li>
+<li>
+<p>タイプ3の場合</p>
+<div class="ulist">
+<ul>
+<li>
+<p>数を文字列にして返す</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">1を渡したら文字列"1"を返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>3 の倍数のときは数を文字列にして返す</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">3を渡したら文字列"3"を返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>5 の倍数のときは数を文字列にして返す</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">5を渡したら文字列"5"を返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">15を渡したら文字列"FizzBuzz"を返す</em></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_例外ケース">3.1.5. 例外ケース</h4>
+<div class="paragraph">
+<p>TODOリスト</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">タイプ1の場合</em></p>
+</li>
+<li>
+<p><em class="line-through">タイプ2の場合</em></p>
+</li>
+<li>
+<p><em class="line-through">タイプ3の場合</em></p>
+</li>
+<li>
+<p>それ以外のタイプの場合</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+        describe 'それ以外のタイプの場合' do
+          def setup
+            @fizzbuzz = FizzBuzz
+          end
+
+          def test_例外を返す
+            e = assert_raises RuntimeError do
+              @fizzbuzz.generate(1, 4)
+            end
+
+            assert_equal '該当するタイプは存在しません', e.message
+          end
+        end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">...
+ FAIL["test_例外を返す", #&lt;Minitest::Reporters::Suite:0x0000558a26888e60 @name="数を文字列にして返す::それ以外のタイプの場合"&gt;, 0.003033002998563461]
+ test_例外を返す#数を文字列にして返す::それ以外のタイプの場合 (0.00s)
+        RuntimeError expected but nothing was raised.
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:134:in `test_例外を返す'
+
+  32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00609s
+32 tests, 34 assertions, 1 failures, 0 errors, 0 skips
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number, type = 1)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    case type
+    when 1
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+      return 'Fizz' if is_fizz
+      return 'Buzz' if is_buzz
+
+      number.to_s
+    when 2
+      number.to_s
+    when 3
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+
+      number.to_s
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">07:04:53 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 16 / 16 LOC (100.0%) covered.
+Started with run options --guard --seed 32508
+
+  32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00600s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'test: それ以外のタイプの場合'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>TODOリスト</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">タイプ1の場合</em></p>
+</li>
+<li>
+<p><em class="line-through">タイプ2の場合</em></p>
+</li>
+<li>
+<p><em class="line-through">タイプ3の場合</em></p>
+</li>
+<li>
+<p><em class="line-through">それ以外のタイプの場合</em></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_フィールドのカプセル化">3.1.6. フィールドのカプセル化</h4>
 
 </div>
 <div class="sect3">
-<h4 id="_フィールドのカプセル化">3.1.5. フィールドのカプセル化</h4>
+<h4 id="_ポリモーフィズムによる条件記述の置き換え">3.1.7. ポリモーフィズムによる条件記述の置き換え</h4>
 
 </div>
 <div class="sect3">
-<h4 id="_ポリモーフィズムによる条件記述の置き換え">3.1.6. ポリモーフィズムによる条件記述の置き換え</h4>
+<h4 id="_スーパークラスの抽出">3.1.8. スーパークラスの抽出</h4>
 
 </div>
 <div class="sect3">
-<h4 id="_スーパークラスの抽出">3.1.7. スーパークラスの抽出</h4>
+<h4 id="_オブジェクトによるプリミティブの置き換え">3.1.9. オブジェクトによるプリミティブの置き換え</h4>
 
 </div>
 <div class="sect3">
-<h4 id="_オブジェクトによるプリミティブの置き換え">3.1.8. オブジェクトによるプリミティブの置き換え</h4>
+<h4 id="_アサーションの導入">3.1.10. アサーションの導入</h4>
 
 </div>
 <div class="sect3">
-<h4 id="_アサーションの導入">3.1.9. アサーションの導入</h4>
+<h4 id="_例外によるエラーコードの置き換え">3.1.11. 例外によるエラーコードの置き換え</h4>
 
 </div>
 <div class="sect3">
-<h4 id="_例外によるエラーコードの置き換え">3.1.10. 例外によるエラーコードの置き換え</h4>
-
-</div>
-<div class="sect3">
-<h4 id="_モジュールの分割">3.1.11. モジュールの分割</h4>
+<h4 id="_モジュールの分割">3.1.12. モジュールの分割</h4>
 
 </div>
 </div>
@@ -7831,7 +8266,7 @@ $ git commit -m 'test: タイプ2の場合'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-01 15:37:57 JST
+Last updated 2020-02-01 16:07:32 JST
 </div>
 </div>
 </body>
