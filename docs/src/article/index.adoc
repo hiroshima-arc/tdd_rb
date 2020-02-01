@@ -207,10 +207,6 @@ class FizzBuzzTest < Minitest::Test
         def test_1を渡したら文字列1を返す
           assert_equal '1', @fizzbuzz.generate(1)
         end
-
-        def test_2を渡したら文字列2を返す
-          assert_equal '2', @fizzbuzz.generate(2)
-        end
       end
 
       describe '1から100までのFizzBuzzの配列を返す' do
@@ -279,8 +275,226 @@ TODOリスト
 ** 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
 *** 15を渡したら文字列"FizzBuzz"を返す
 
-
 ==== タイプ2の場合
+TODOリスト
+
+* [line-through]_タイプ1の場合_
+* タイプ2の場合
+** 数を文字列にして返す
+*** 1を渡したら文字列"1"を返す
+** 3 の倍数のときは数を文字列にして返す
+*** 3を渡したら文字列"3"を返す
+** 5 の倍数のときは数を文字列にして返す
+*** 5を渡したら文字列"5"を返す
+** 3 と 5 両方の倍数の場合には数を文字列にして返す
+*** 15を渡したら文字列"15"を返す
+* タイプ3の場合
+** 数を文字列にして返す
+*** 1を渡したら文字列"1"を返す
+** 3 の倍数のときは数を文字列にして返す
+*** 3を渡したら文字列"3"を返す
+** 5 の倍数のときは数を文字列にして返す
+*** 5を渡したら文字列"5"を返す
+** 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+*** 15を渡したら文字列"FizzBuzz"を返す
+
+[source, ruby]
+----
+...
+    end
+
+    describe 'タイプ2の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.generate(1, 2)
+        end
+      end
+    end
+...
+----
+
+[source, bash]
+----
+...
+FAIL["test_1を渡したら文字列1を返す", #<Minitest::Reporters::Suite:0x00005555ec747100 @name="数を文字列にして返す::タイプ2の場合::その他の場合">, 0.002283181995153427]
+ test_1を渡したら文字列1を返す#数を文字列にして返す::タイプ2の場合::その他の場合 (0.00s)
+        Expected: "1"
+          Actual: nil
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:75:in `test_1を渡したら文字列1を返す'
+
+  24/24: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00437s
+24 tests, 26 assertions, 1 failures, 0 errors, 0 skips
+...
+----
+
+[source, ruby]
+----
+...
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number, type = 1)
+    case type
+    when 1
+      is_fizz = number.modulo(3).zero?
+      is_buzz = number.modulo(5).zero?
+
+      return 'FizzBuzz' if is_fizz && is_buzz
+      return 'Fizz' if is_fizz
+      return 'Buzz' if is_buzz
+
+      number.to_s
+    when 2
+      number.to_s
+    end
+  end
+...
+----
+
+[source, bash]
+----
+[1] guard(main)> 
+06:21:44 - INFO - Run all
+06:21:44 - INFO - Running: all tests
+Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 13 LOC (30.77%) covered.
+Started with run options --guard --seed 29302
+
+  24/24: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00453s
+24 tests, 26 assertions, 0 failures, 0 errors, 0 skips
+...
+----
+
+[source, ruby]
+----
+...
+   end
+
+    describe 'タイプ2の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.generate(3, 2)
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.generate(5, 2)
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列15を返す
+          assert_equal '15', @fizzbuzz.generate(15, 2)
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.generate(1, 2)
+        end
+      end
+    end
+  end
+...
+----
+
+[source, bash]
+----
+...
+Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 13 LOC (30.77%) covered.
+Started with run options --guard --seed 898
+
+  27/27: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00900s
+27 tests, 29 assertions, 0 failures, 0 errors, 0 skips
+
+06:27:40 - INFO - Inspecting Ruby code style of all files
+test/fizz_buzz_test.rb:11:3: C: Metrics/BlockLength: Block has too many lines. [70/62]                          
+  describe '数を文字列にして返す' do ...
+  ^^^^^^^^^^^^^^^^^^^^^^^^
+ 7/7 files |====================================== 100 =======================================>| Time: 00:00:00 
+
+7 files inspected, 1 offense detected
+...
+----
+
+[source, yml]
+----
+...
+# Offense count: 2
+# Configuration parameters: CountComments, ExcludedMethods.
+# ExcludedMethods: refine
+Metrics/BlockLength:
+  Max: 62
+  Exclude:
+    - 'test/fizz_buzz_test.rb'
+...
+----
+
+[source, bash]
+----
+[1] guard(main)> 
+06:33:03 - INFO - Run all
+06:33:03 - INFO - Running: all tests
+Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 13 LOC (30.77%) covered.
+Started with run options --guard --seed 42496
+
+  27/27: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00824s
+27 tests, 29 assertions, 0 failures, 0 errors, 0 skips
+
+06:33:03 - INFO - Inspecting Ruby code style of all files
+ 7/7 files |====================================== 100 =======================================>| Time: 00:00:00 
+
+7 files inspected, no offenses detected
+06:33:05 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
+ 0/0 files |====================================== 100 =======================================>| Time: 00:00:00 
+
+0 files inspected, no offenses detected
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'test: タイプ2の場合'
+----
+
+TODOリスト
+
+* [line-through]_タイプ1の場合_
+* タイプ2の場合
+** 数を文字列にして返す
+*** [line-through]_1を渡したら文字列"1"を返す_
+** 3 の倍数のときは数を文字列にして返す
+*** [line-through]_3を渡したら文字列"3"を返す_
+** 5 の倍数のときは数を文字列にして返す
+*** [line-through]_5を渡したら文字列"5"を返す_
+** 3 と 5 両方の倍数の場合には数を文字列にして返す
+*** [line-through]_15を渡したら文字列"15"を返す_
+* タイプ3の場合
+** 数を文字列にして返す
+*** 1を渡したら文字列"1"を返す
+** 3 の倍数のときは数を文字列にして返す
+*** 3を渡したら文字列"3"を返す
+** 5 の倍数のときは数を文字列にして返す
+*** 5を渡したら文字列"5"を返す
+** 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
+*** 15を渡したら文字列"FizzBuzz"を返す
+
 ==== タイプ3の場合
 ==== フィールドのカプセル化
 ==== ポリモーフィズムによる条件記述の置き換え
