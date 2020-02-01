@@ -21,6 +21,9 @@ GEM
     guard-minitest (2.4.6)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
+    guard-rubocop (1.3.0)
+      guard (~> 2.0)
+      rubocop (~> 0.20)
     guard-shell (0.7.1)
       guard (>= 2.0.0)
       guard-compat (~> 1.0)
@@ -75,6 +78,7 @@ PLATFORMS
 DEPENDENCIES
   guard
   guard-minitest
+  guard-rubocop
   guard-shell
   minitest
   minitest-reporters
