@@ -816,6 +816,414 @@ TODOリスト
 * [line-through]_それ以外のタイプの場合_
 
 ==== フィールドのカプセル化
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number, type = 1)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    case type
+    when 1
+      return 'FizzBuzz' if is_fizz && is_buzz
+      return 'Fizz' if is_fizz
+      return 'Buzz' if is_buzz
+
+      number.to_s
+    when 2
+      number.to_s
+    when 3
+      return 'FizzBuzz' if is_fizz && is_buzz
+
+      number.to_s
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
+  def self.generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_accessor :list
+
+  def generate(number, type = 1)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    case type
+    when 1
+      return 'FizzBuzz' if is_fizz && is_buzz
+      return 'Fizz' if is_fizz
+      return 'Buzz' if is_buzz
+
+      number.to_s
+    when 2
+      number.to_s
+    when 3
+      return 'FizzBuzz' if is_fizz && is_buzz
+
+      number.to_s
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end
+----
+
+[source, bash]
+----
+...
+
+ERROR["test_15を渡したら文字列FizzBuzzを返す", #<Minitest::Reporters::Suite:0x00005613555ed120 @name="数を文字列にして返す::タイプ3の場合::三と五の倍数の場合">, 0.0041351839900016785]
+ test_15を渡したら文字列FizzBuzzを返す#数を文字列にして返す::タイプ3の場合::三と五の倍数の場合 (0.00s)
+Minitest::UnexpectedError:         NoMethodError: undefined method `generate' for FizzBuzz:Class
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:117:in `test_15を渡したら文字列FizzBuzzを返す'
+...
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzTest < Minitest::Test
+  describe '数を文字列にして返す' do
+    describe 'タイプ1の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new
+      end
+...
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          fizzbuzz = FizzBuzz.new
+          @result = fizzbuzz.generate_list
+        end
+...
+    end
+
+    describe 'タイプ2の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new
+      end
+...
+    end
+
+    describe 'タイプ3の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new
+      end
+...
+    end
+
+    describe 'それ以外のタイプの場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new
+      end
+...
+    end
+  end
+...
+----
+
+[source, bash]
+----
+...
+07:17:36 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 5 / 17 LOC (29.41%) covered.
+Started with run options --guard --seed 7701
+
+  32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00616s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+...
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: フィールドのカプセル化'
+----
+
+[source, ruby]
+----
+
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_accessor :list
+
+  def initialize(type)
+    @type = type
+  end
+...
+----
+
+[source, bash]
+----
+...
+ERROR["test_3を渡したら文字列3を返す", #<Minitest::Reporters::Suite:0x00005564e21e85b0 @name="数を文字列にして返す::タイプ3の場合::三の倍数の場合">, 0.004276092993677594]
+ test_3を渡したら文字列3を返す#数を文字列にして返す::タイプ3の場合::三の倍数の場合 (0.00s)
+Minitest::UnexpectedError:         ArgumentError: wrong number of arguments (given 0, expected 1)
+            /workspace/tdd_rb/lib/fizz_buzz.rb:7:in `initialize'
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:101:in `new'
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:101:in `setup'
+...
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzTest < Minitest::Test
+  describe '数を文字列にして返す' do
+    describe 'タイプ1の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(1)
+      end
+...
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          fizzbuzz = FizzBuzz.new(1)
+          @result = fizzbuzz.generate_list
+        end
+...
+    end
+
+    describe 'タイプ2の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(2)
+      end
+...
+    end
+
+    describe 'タイプ3の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(3)
+      end
+...
+    end
+
+    describe 'それ以外のタイプの場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(4)
+      end
+...
+    end
+  end
+...
+----
+
+[source, bash]
+----
+...
+07:28:38 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 6 / 19 LOC (31.58%) covered.
+Started with run options --guard --seed 46661
+
+  32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00793s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+...
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_accessor :list
+
+  def initialize(type)
+    @type = type
+  end
+
+  def generate(number, _type = 1)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    case @type
+    when 1
+      return 'FizzBuzz' if is_fizz && is_buzz
+      return 'Fizz' if is_fizz
+      return 'Buzz' if is_buzz
+
+      number.to_s
+    when 2
+      number.to_s
+    when 3
+      return 'FizzBuzz' if is_fizz && is_buzz
+
+      number.to_s
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+...
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_accessor :list
+
+  def initialize(type)
+    @type = type
+  end
+
+  def generate(number)
+...
+----
+
+[source, bash]
+----
+...
+ERROR["test_15を渡したら文字列FizzBuzzを返す", #<Minitest::Reporters::Suite:0x0000564e16c14200 @name="数を文字列にして返す::タイプ3の場合::三と五の倍数の場合">, 0.01706391001062002]
+ test_15を渡したら文字列FizzBuzzを返す#数を文字列にして返す::タイプ3の場合::三と五の倍数の場合 (0.02s)
+Minitest::UnexpectedError:         ArgumentError: wrong number of arguments (given 2, expected 1)
+            /workspace/tdd_rb/lib/fizz_buzz.rb:11:in `generate'
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:118:in `test_15を渡したら文字列FizzBuzzを返す'
+...
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzTest < Minitest::Test
+  describe '数を文字列にして返す' do
+  ...
+    describe 'タイプ2の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(2)
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.generate(3)
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.generate(5)
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列15を返す
+          assert_equal '15', @fizzbuzz.generate(15)
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.generate(1)
+        end
+      end
+    end
+
+    describe 'タイプ3の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(3)
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.generate(3)
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.generate(5)
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列FizzBuzzを返す
+          assert_equal 'FizzBuzz', @fizzbuzz.generate(15)
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.generate(1)
+        end
+      end
+    end
+
+    describe 'それ以外のタイプの場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(4)
+      end
+
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          @fizzbuzz.generate(1)
+        end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
+  end
+...
+----
+
+[source, bash]
+----
+...
+07:34:57 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 15 / 19 LOC (78.95%) covered.
+Started with run options --guard --seed 59116
+
+  32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00700s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+...
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: フィールドのカプセル化'
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_accessor :list
+...
+----
+
+[source, ruby]
+----
+
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+...
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: setterの削除'
+----
+
 ==== ポリモーフィズムによる条件記述の置き換え
 ==== スーパークラスの抽出
 ==== オブジェクトによるプリミティブの置き換え
