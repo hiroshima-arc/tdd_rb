@@ -2045,8 +2045,199 @@ $ git add .
 $ git commit -m 'refactor: メソッドの移動'
 ----
 
-
 ==== オブジェクトによるプリミティブの置き換え
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = FizzBuzzType.create(type)
+  end
+...
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = type
+  end
+...
+----
+
+[source, bash]
+----
+...
+
+ERROR["test_1を渡したら文字列1を返す", #<Minitest::Reporters::Suite:0x00005654f32602c0 @name="数を文字列にして返す::タイプ3の場合::その他の場合">, 0.00241121300496161]
+ test_1を渡したら文字列1を返す#数を文字列にして返す::タイプ3の場合::その他の場合 (0.00s)
+Minitest::UnexpectedError:         NoMethodError: undefined method `generate' for 3:Integer
+            /workspace/tdd_rb/lib/fizz_buzz.rb:12:in `generate'
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:125:in `test_1を渡したら文字列1を返す'
+...
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzTest < Minitest::Test
+  describe '数を文字列にして返す' do
+    describe 'タイプ1の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(1)
+      end
+...
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          fizzbuzz = FizzBuzz.new(1)
+          fizzbuzz.generate_list
+          @result = fizzbuzz.list
+        end
+...
+    describe 'タイプ2の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(2)
+      end
+...
+    describe 'タイプ3の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(3)
+      end
+...
+    describe 'それ以外のタイプの場合' do
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          FizzBuzz.new(4)
+        end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
+  end
+----
+
+[source, ruby]
+----
+class FizzBuzzTest < Minitest::Test
+  describe '数を文字列にして返す' do
+    describe 'タイプ1の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+      end
+...
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+          fizzbuzz.generate_list
+          @result = fizzbuzz.list
+        end
+...
+    describe 'タイプ2の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(FizzBuzzType02.new)
+      end
+...
+    describe 'タイプ3の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(FizzBuzzType03.new)
+      end
+...
+    describe 'それ以外のタイプの場合' do
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          FizzBuzzType.create(4)
+        end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
+  end
+----
+
+[source, bash]
+----
+09:09:40 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 30 / 33 LOC (90.91%) covered.
+Started with run options --guard --seed 17452
+
+  32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00687s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: オブジェクトによるプリミティブの置き換え'
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzType
+  def self.create(type)
+    case type
+    when 1
+      FizzBuzzType01.new
+    when 2
+      FizzBuzzType02.new
+    when 3
+      FizzBuzzType03.new
+    else
+      raise '該当するタイプは存在しません'
+    end
+ end
+...
+----
+
+[source, ruby]
+----
+...
+
+class FizzBuzzType
+  TYPE_01 = 1
+  TYPE_02 = 2
+  TYPE_03 = 3
+
+  def self.create(type)
+    case type
+    when FizzBuzzType::TYPE_01
+      FizzBuzzType01.new
+    when FizzBuzzType::TYPE_02
+      FizzBuzzType02.new
+    when FizzBuzzType::TYPE_03
+      FizzBuzzType03.new
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+...
+----
+
+[source, bash]
+----
+09:18:51 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 33 / 36 LOC (91.67%) covered.
+Started with run options --guard --seed 41124
+
+  32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00909s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: マジックナンバーの置き換え'
+----
+
 ==== アサーションの導入
 ==== 例外によるエラーコードの置き換え
 ==== モジュールの分割
