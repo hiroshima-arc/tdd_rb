@@ -909,7 +909,8 @@ class FizzBuzzTest < Minitest::Test
       describe '1から100までのFizzBuzzの配列を返す' do
         def setup
           fizzbuzz = FizzBuzz.new
-          @result = fizzbuzz.generate_list
+          fizzbuzz.generate_list
+          @result = fizzbuzz.list
         end
 ...
     end
