@@ -3260,6 +3260,277 @@ $ git commit -m 'refactor: アサーションの導入'
 ----
 
 ==== 例外によるエラーコードの置き換え
+[source, ruby]
+----
+...
+module Assertions
+  class AssertionFailedError < StandardError; end
+
+  def assert(&condition)
+    raise AssertionFailedError, 'Assertion Failed' unless condition.call
+  end
+end
+
+class FizzBuzzValue
+  include Assertions
+  attr_reader :number, :value
+
+  def initialize(number, value)
+    assert { number >= 0 }
+    @number = number
+    @value = value
+  end
+...
+end
+
+class FizzBuzzList
+  include Assertions
+  attr_reader :value
+
+  def initialize(list)
+    assert { list.count <= 100 }
+    @value = list
+  end
+...
+end
+...
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzValue
+  attr_reader :number, :value
+
+  def initialize(number, value)
+    raise '正の値のみ有効です' if number < 0
+
+    @number = number
+    @value = value
+  end
+...
+end
+
+class FizzBuzzList
+  attr_reader :value
+
+  def initialize(list)
+    raise '上限は100件までです' if list.count > 100
+
+    @value = list
+  end
+...
+end
+----
+
+[source, bash]
+----
+ERROR["test_値は正の値のみ許可する", #<Minitest::Reporters::Suite:0x000055d30f0b8a50 @name="FizzBuzz::数を文字列にして返す::例外ケース">, 0.004186890990240499]
+ test_値は正の値のみ許可する#FizzBuzz::数を文字列にして返す::例外ケース (0.00s)
+Minitest::UnexpectedError:         NameError: uninitialized constant FizzBuzzTest::Assertions
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:143:in `test_値は正の値のみ許可する'
+
+ERROR["test_100より多い数を許可しない", #<Minitest::Reporters::Suite:0x000055d30f114210 @name="FizzBuzz::数を文字列にして返す::例外ケース">, 0.008254560001660138]
+ test_100より多い数を許可しない#FizzBuzz::数を文字列にして返す::例外ケース (0.01s)
+Minitest::UnexpectedError:         NameError: uninitialized constant FizzBuzzTest::Assertions
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:151:in `test_100より多い数を許可しない'
+
+  37/37: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01731s
+37 tests, 39 assertions, 0 failures, 2 errors, 0 skips
+----
+
+[source, ruby]
+----
+...
+      describe '例外ケース' do
+        def test_値は正の値のみ許可する
+          assert_raises Assertions::AssertionFailedError do
+            FizzBuzzValueCommand.new(
+              FizzBuzzType.create(FizzBuzzType::TYPE_01)
+            ).execute(-1)
+          end
+        end
+
+        def test_100より多い数を許可しない
+          assert_raises Assertions::AssertionFailedError do
+            FizzBuzzListCommand.new(
+              FizzBuzzType.create(FizzBuzzType::TYPE_01)
+            ).execute(101)
+          end
+        end
+      end
+    end
+  end
+...
+----
+
+[source, ruby]
+----
+...
+      describe '例外ケース' do
+        def test_値は正の値のみ許可する
+          e = assert_raises RuntimeError do
+            FizzBuzzValueCommand.new(
+              FizzBuzzType.create(FizzBuzzType::TYPE_01)
+            ).execute(-1)
+          end
+
+          assert_equal '正の値のみ有効です', e.message
+        end
+
+        def test_100より多い数を許可しない
+          e = assert_raises RuntimeError do
+            FizzBuzzListCommand.new(
+              FizzBuzzType.create(FizzBuzzType::TYPE_01)
+            ).execute(101)
+          end
+
+          assert_equal '上限は100件までです', e.message
+        end
+      end
+    end
+  end
+...
+----
+
+[source, bash]
+----
+02:13:46 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 55 / 58 LOC (94.83%) covered.
+Started with run options --guard --seed 55179
+
+  37/37: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00738s
+37 tests, 43 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor:  例外によるエラーコードの置き換え'
+----
+
+[source, bash]
+----
+02:13:46 - INFO - Inspecting Ruby code style: test/fizz_buzz_test.rb lib/fizz_buzz.rb
+lib/fizz_buzz.rb:58:26: C: Style/NumericPredicate: Use number.negative? instead of number < 0.                  
+    raise '正の値のみ有効です' if number < 0
+                         ^^^^^^^^^^
+ 2/2 files |====================================== 100 =======================================>| Time: 00:00:00 
+
+2 files inspected, 1 offense detected
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzValue
+  attr_reader :number, :value
+
+  def initialize(number, value)
+    raise '正の値のみ有効です' if number < 0
+...
+----
+
+[source, ruby]
+----
+...
+
+class FizzBuzzValue
+  attr_reader :number, :value
+
+  def initialize(number, value)
+    raise '正の値のみ有効です' if number.negative?
+...
+----
+
+[source, bash]
+----
+02:18:31 - INFO - Inspecting Ruby code style: lib/fizz_buzz.rb
+ 1/1 file |======================================= 100 =======================================>| Time: 00:00:00 
+
+1 file inspected, no offenses detected
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: アルゴリズムの置き換え'
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzList
+  attr_reader :value
+
+  def initialize(list)
+    raise '上限は100件までです' if list.count > 100
+
+    @value = list
+  end
+...
+----
+
+[source, ruby]
+----
+class FizzBuzzList
+  MAX_COUNT = 100
+  attr_reader :value
+
+  def initialize(list)
+    raise "上限は#{MAX_COUNT}件までです" if list.count > MAX_COUNT
+
+    @value = list
+  end
+...
+----
+
+[source, ruby]
+----
+class FizzBuzzList
+  MAX_COUNT = 10
+...
+----
+
+[source, bash]
+----
+ERROR["test_配列の14番目は文字列のFizzBuzzを返す", #<Minitest::Reporters::Suite:0x000055942ab5e230 @name="FizzBuzz::数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す">, 0.008073228993453085]
+ test_配列の14番目は文字列のFizzBuzzを返す#FizzBuzz::数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す (0.01s)
+Minitest::UnexpectedError:         RuntimeError: 上限は10件までです
+            /workspace/tdd_rb/lib/fizz_buzz.rb:80:in `initialize'
+            /workspace/tdd_rb/lib/fizz_buzz.rb:112:in `new'
+            /workspace/tdd_rb/lib/fizz_buzz.rb:112:in `execute'
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:45:in `setup'
+----
+
+[source, ruby]
+----
+class FizzBuzzList
+  MAX_COUNT = 100
+...
+----
+
+[source, bash]
+----
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+Started with run options --seed 5525
+
+
+Progress: |====================================================================================================|
+
+Finished in 0.01262s
+37 tests, 43 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: マジックナンバーの置き換え'
+----
 
 ==== モジュールの分割
 
