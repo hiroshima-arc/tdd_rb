@@ -2626,6 +2626,363 @@ $ git add .
 $ git commit -m 'refactor: 学習用テスト'
 ----
 
+==== メソッドオブジェクトによるメソッドの置き換え
+[source, ruby]
+----
+...
+class FizzBuzzCommand; end
+
+class FizzBuzzValueCommand < FizzBuzzCommand
+  def initialize(type)
+    @type = type
+  end
+
+  def execute(number)
+    @type.generate(number)
+  end
+end
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzTest < Minitest::Test
+  describe 'FizzBuzz' do
+    describe '数を文字列にして返す' do
+      describe 'タイプ1の場合' do
+        def setup
+          @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType01.new)
+        end
+
+        describe '三の倍数の場合' do
+          def test_3を渡したら文字列Fizzを返す
+            assert_equal 'Fizz', @fizzbuzz.execute(3).value
+          end
+        end
+
+        describe '五の倍数の場合' do
+          def test_5を渡したら文字列Buzzを返す
+            assert_equal 'Buzz', @fizzbuzz.execute(5).value
+          end
+        end
+
+        describe '三と五の倍数の場合' do
+          def test_15を渡したら文字列FizzBuzzを返す
+            assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
+          end
+        end
+
+        describe 'その他の場合' do
+          def test_1を渡したら文字列1を返す
+            assert_equal '1', @fizzbuzz.execute(1).value
+          end
+        end
+
+        describe '1から100までのFizzBuzzの配列を返す' do
+          def setup
+            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+            fizzbuzz.generate_list
+            @result = fizzbuzz.list.value
+          end
+
+          def test_配列の初めは文字列の1を返す
+            assert_equal '1', @result.first.value
+          end
+
+          def test_配列の最後は文字列のBuzzを返す
+            assert_equal 'Buzz', @result.last.value
+          end
+
+          def test_配列の2番目は文字列のFizzを返す
+            assert_equal 'Fizz', @result[2].value
+          end
+
+          def test_配列の4番目は文字列のBuzzを返す
+            assert_equal 'Buzz', @result[4].value
+          end
+
+          def test_配列の14番目は文字列のFizzBuzzを返す
+            assert_equal 'FizzBuzz', @result[14].value
+          end
+        end
+      end
+
+      describe 'タイプ2の場合' do
+        def setup
+          @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType02.new)
+        end
+
+        describe '三の倍数の場合' do
+          def test_3を渡したら文字列3を返す
+            assert_equal '3', @fizzbuzz.execute(3).value
+          end
+        end
+
+        describe '五の倍数の場合' do
+          def test_5を渡したら文字列5を返す
+            assert_equal '5', @fizzbuzz.execute(5).value
+          end
+        end
+
+        describe '三と五の倍数の場合' do
+          def test_15を渡したら文字列15を返す
+            assert_equal '15', @fizzbuzz.execute(15).value
+          end
+        end
+
+        describe 'その他の場合' do
+          def test_1を渡したら文字列1を返す
+            assert_equal '1', @fizzbuzz.execute(1).value
+          end
+        end
+      end
+
+      describe 'タイプ3の場合' do
+        def setup
+          @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType03.new)
+        end
+
+        describe '三の倍数の場合' do
+          def test_3を渡したら文字列3を返す
+            assert_equal '3', @fizzbuzz.execute(3).value
+          end
+        end
+
+        describe '五の倍数の場合' do
+          def test_5を渡したら文字列5を返す
+            assert_equal '5', @fizzbuzz.execute(5).value
+          end
+        end
+
+        describe '三と五の倍数の場合' do
+          def test_15を渡したら文字列FizzBuzzを返す
+            assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
+          end
+        end
+
+        describe 'その他の場合' do
+          def test_1を渡したら文字列1を返す
+            assert_equal '1', @fizzbuzz.execute(1).value
+          end
+        end
+
+        describe 'それ以外のタイプの場合' do
+          def test_例外を返す
+            e = assert_raises RuntimeError do
+              @fizzbuzz = FizzBuzzType.create(4)
+            end
+
+            assert_equal '該当するタイプは存在しません', e.message
+          end
+        end
+      end
+    end
+  end
+...
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: メソッドオブジェクトによるメソッドの置き換え'
+----
+
+[source, ruby]
+----
+...
+class FizzBuzzListCommand < FizzBuzzCommand
+  def initialize(type)
+    @type = type
+  end
+
+  def execute(number)
+    FizzBuzzList.new((1..number).map { |i| @type.generate(i) })
+  end
+end
+----
+
+[source, ruby]
+----
+...
+        describe '1から100までのFizzBuzzの配列を返す' do
+          def setup
+            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+            fizzbuzz.generate_list
+            @result = fizzbuzz.list.value
+          end
+...
+----
+
+[source, ruby]
+----
+...
+
+        describe '1から100までのFizzBuzzの配列を返す' do
+          def setup
+            fizz_buzz = FizzBuzzListCommand.new(FizzBuzzType01.new)
+            fizz_buzz_list = fizz_buzz.execute(100)
+            @result = fizz_buzz_list.value
+          end
+...
+----
+
+[source, bash]
+----
+01:27:54 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 61 / 66 LOC (92.42%) covered.
+Started with run options --guard --seed 62253
+
+  35/35: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00652s
+35 tests, 39 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: メソッドオブジェクトによるメソッドの置き換え'
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = type
+    @list = FizzBuzzList.new([])
+  end
+
+  def generate(number)
+    @type.generate(number)
+  end
+
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = @list.add((1..MAX_NUMBER).map { |n| @type.generate(n) })
+  end
+end
+...
+----
+
+[source, bash]
+----
+ERROR["test_同じで値である", #<Minitest::Reporters::Suite:0x0000562fd34f7848 @name="FizzBuzzValue">, 0.008059715997660533]
+ test_同じで値である#FizzBuzzValue (0.01s)
+Minitest::UnexpectedError:         NameError: uninitialized constant FizzBuzzTest::FizzBuzz
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:225:in `setup'
+
+ERROR["test_to_stringメソッド", #<Minitest::Reporters::Suite:0x0000562fd37694a0 @name="FizzBuzzValue">, 0.01728590900893323]
+ test_to_stringメソッド#FizzBuzzValue (0.02s)
+Minitest::UnexpectedError:         NameError: uninitialized constant FizzBuzzTest::FizzBuzz
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:225:in `setup'
+
+ERROR["test_新しいインスタンスが作られる", #<Minitest::Reporters::Suite:0x0000562fd39be070 @name="FizzBuzzValueList">, 0.028008958004647866]
+ test_新しいインスタンスが作られる#FizzBuzzValueList (0.03s)
+Minitest::UnexpectedError:         NameError: uninitialized constant FizzBuzzTest::FizzBuzz
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:244:in `setup'
+
+========================================|
+
+Finished in 0.03539s
+35 tests, 35 assertions, 0 failures, 3 errors, 0 skips
+----
+
+[source, ruby]
+----
+  describe 'FizzBuzzValue' do
+    def setup
+      @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    end
+
+    def test_同じで値である
+      value1 = @fizzbuzz.generate(1)
+      value2 = @fizzbuzz.generate(1)
+
+      assert value1.eql?(value2)
+    end
+
+    def test_to_stringメソッド
+      value = @fizzbuzz.generate(3)
+
+      assert_equal '3:Fizz', value.to_s
+    end
+  end
+
+  describe 'FizzBuzzValueList' do
+    def setup
+      @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    end
+
+    def test_新しいインスタンスが作られる
+      list1 = @fizzbuzz.generate_list
+      list2 = list1.add(list1.value)
+
+      assert_equal 100, list1.value.count
+      assert_equal 200, list2.value.count
+    end
+  end
+end
+----
+
+[source, ruby]
+----
+...
+  describe 'FizzBuzzValue' do
+    def setup
+      @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    end
+
+    def test_同じで値である
+      value1 = @fizzbuzz.execute(1)
+      value2 = @fizzbuzz.execute(1)
+
+      assert value1.eql?(value2)
+    end
+
+    def test_to_stringメソッド
+      value = @fizzbuzz.execute(3)
+
+      assert_equal '3:Fizz', value.to_s
+    end
+  end
+
+  describe 'FizzBuzzValueList' do
+    def setup
+      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    end
+
+    def test_新しいインスタンスが作られる
+      list1 = @fizzbuzz.execute(100)
+      list2 = list1.add(list1.value)
+
+      assert_equal 100, list1.value.count
+      assert_equal 200, list2.value.count
+    end
+  end
+end
+----
+
+[source, bash]
+----
+01:35:22 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 50 / 56 LOC (89.29%) covered.
+Started with run options --guard --seed 10411
+
+  35/35: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00704s
+35 tests, 39 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: デッドコードの削除'
+----
+
 ==== アサーションの導入
 ==== 例外によるエラーコードの置き換え
 ==== モジュールの分割
