@@ -3533,6 +3533,467 @@ $ git commit -m 'refactor: マジックナンバーの置き換え'
 ----
 
 ==== モジュールの分割
+[source, bash]
+----
+ ruby main.rb 
+Traceback (most recent call last):
+main.rb:5:in `<main>': uninitialized constant FizzBuzz (NameError)
+Did you mean?  FizzBuzzType
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require './lib/fizz_buzz.rb'
+
+puts FizzBuzz.generate_list
+----
+
+[source, bash]
+----
+# frozen_string_literal: true
+
+require './lib/fizz_buzz.rb'
+
+command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+command.execute(100).value.each { |i| puts i.value }
+----
+
+[source, bash]
+----
+$ ruby main.rb 
+1
+2
+Fizz
+4
+Buzz
+...
+Fizz
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'fix: プリントする'
+----
+
+
+ /main.rb
+   |--lib/
+       |
+        -- fizz_buzz.rb
+   |--test/
+       |
+        -- fizz_buzz_test.rb
+
+ /main.rb
+   |--lib/
+       |
+       domain/
+            |
+            model/
+                |
+                -- fizz_buzz_value.rb
+                -- fizz_buzz_list.rb
+            type/
+                |
+                -- fizz_buzz_type.rb
+                -- fizz_buzz_type_01.rb
+                -- fizz_buzz_type_02.rb
+                -- fizz_buzz_type_03.rb
+        -- fizz_buzz.rb
+   |--test/
+       |
+        -- fizz_buzz_test.rb
+
+[source, bash]
+----
+Progress: |======================================================================================|
+
+Finished in 0.01302s
+37 tests, 43 assertions, 0 failures, 0 errors, 0 skips
+02:43:56 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png lib/domain/model/fizz_buzz_list.rb lib/domain/model/fizz_buzz_value.rb lib/domain/type/fizz_buzz_type_03.rb lib/domain/type/fizz_buzz_type_02.rb lib/domain/type/fizz_buzz_type_01.rb lib/domain/type/fizz_buzz_type.rb
+lib/domain/model/fizz_buzz_list.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzList
+^^^^^
+lib/domain/model/fizz_buzz_value.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzValue
+^^^^^
+lib/domain/type/fizz_buzz_type_03.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzType03 < FizzBuzzType
+^^^^^
+lib/domain/type/fizz_buzz_type_02.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzType02 < FizzBuzzType
+^^^^^
+lib/domain/type/fizz_buzz_type_01.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzType01 < FizzBuzzType
+^^^^^
+lib/domain/type/fizz_buzz_type.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzType
+^^^^^
+ 6/6 files |=============================== 100 ================================>| Time: 00:00:00 
+
+6 files inspected, 6 offenses detected
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor(WIP): モジュール分割'
+----
+
+ /main.rb
+   |--lib/
+       |
+       domain/
+            |
+            model/
+                |
+                -- fizz_buzz_value.rb
+                -- fizz_buzz_list.rb
+            type/
+                |
+                -- fizz_buzz_type.rb
+                -- fizz_buzz_type_01.rb
+                -- fizz_buzz_type_02.rb
+                -- fizz_buzz_type_03.rb
+        -- fizz_buzz.rb
+   |--test/
+       |
+        -- fizz_buzz_test.rb
+
+ /main.rb
+   |--lib/
+       |
+      application/
+            |
+            -- fizz_buzz_command.rb
+            -- fizz_buzz_value_command.rb
+            -- fizz_buzz_list_command.rb
+      domain/
+            |
+            model/
+                |
+                -- fizz_buzz_value.rb
+                -- fizz_buzz_list.rb
+            type/
+                |
+                -- fizz_buzz_type.rb
+                -- fizz_buzz_type_01.rb
+                -- fizz_buzz_type_02.rb
+                -- fizz_buzz_type_03.rb
+        -- fizz_buzz.rb
+   |--test/
+       |
+        -- fizz_buzz_test.rb
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor(WIP): モジュール分割'
+----
+
+ /main.rb
+   |--lib/
+       |
+      application/
+            |
+            -- fizz_buzz_command.rb
+            -- fizz_buzz_value_command.rb
+            -- fizz_buzz_list_command.rb
+      domain/
+            |
+            model/
+                |
+                -- fizz_buzz_value.rb
+                -- fizz_buzz_list.rb
+            type/
+                |
+                -- fizz_buzz_type.rb
+                -- fizz_buzz_type_01.rb
+                -- fizz_buzz_type_02.rb
+                -- fizz_buzz_type_03.rb
+        -- fizz_buzz.rb
+   |--test/
+       |
+      application/
+            |
+            -- fizz_buzz_value_command_test.rb
+            -- fizz_buzz_list_command._test.rb
+       |
+        -- fizz_buzz_test.rb
+
+[source, bash]
+----
+03:02:48 - INFO - Running: test/application/fizz_buzz_list_command_test.rb
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 56 / 59 LOC (94.92%) covered.
+Started with run options --guard --seed 13143
+
+  5/5: [=====================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00534s
+5 tests, 5 assertions, 0 failures, 0 errors, 0 skips
+...
+test/application/fizz_buzz_value_command_test.rb:113:16: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+      def test_値は正の値のみ許可する
+               ^^^^^^^^^^^
+test/application/fizz_buzz_value_command_test.rb:123:11: C: Naming/MethodName: Use snake_case for method names.
+      def test_100より多い数を許可しない
+          ^^^^^^^^^^^^^^^^^^^
+test/application/fizz_buzz_value_command_test.rb:123:19: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+      def test_100より多い数を許可しない
+                  ^^^^^^^^^^^
+lib/application/fizz_buzz_list_command.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzListCommand < FizzBuzzCommand
+^^^^^
+lib/application/fizz_buzz_value_command.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzValueCommand < FizzBuzzCommand
+^^^^^
+lib/domain/model/fizz_buzz_list.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzList
+^^^^^
+lib/domain/model/fizz_buzz_value.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzValue
+^^^^^
+lib/domain/type/fizz_buzz_type_03.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzType03 < FizzBuzzType
+^^^^^
+lib/domain/type/fizz_buzz_type_02.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzType02 < FizzBuzzType
+^^^^^
+lib/domain/type/fizz_buzz_type_01.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzType01 < FizzBuzzType
+^^^^^
+lib/domain/type/fizz_buzz_type.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzType
+^^^^^
+ 10/10 files |============================== 100 ===============================>| Time: 00:00:00 
+
+10 files inspected, 49 offenses detected
+----
+
+[source, yml]
+----
+inherit_from: .rubocop_todo.yml
+
+Naming/AsciiIdentifiers:
+  Exclude:
+    - 'test/**/*'
+
+Naming/MethodName:
+  EnforcedStyle: snake_case
+  Exclude:
+    - 'test/**/*'
+
+Metrics/BlockLength:
+  Max: 62
+  Exclude:
+    - 'test/**/*'
+
+Documentation:
+  Enabled: false
+----
+
+[source, bash]
+----
+03:17:08 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 172 / 276 LOC (62.32%) covered.
+Started with run options --guard --seed 54739
+
+  57/57: [===================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01768s
+57 tests, 66 assertions, 0 failures, 0 errors, 0 skips
+
+03:17:08 - INFO - Inspecting Ruby code style of all files
+/workspace/tdd_rb/.rubocop.yml: Warning: no department given for Documentation.
+ 18/18 files |============================== 100 ===============================>| Time: 00:00:01 
+
+18 files inspected, no offenses detected
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor(WIP): モジュール分割'
+----
+
+
+ /main.rb
+   |--lib/
+       |
+      application/
+            |
+            -- fizz_buzz_command.rb
+            -- fizz_buzz_value_command.rb
+            -- fizz_buzz_list_command.rb
+      domain/
+            |
+            model/
+                |
+                -- fizz_buzz_value.rb
+                -- fizz_buzz_list.rb
+            type/
+                |
+                -- fizz_buzz_type.rb
+                -- fizz_buzz_type_01.rb
+                -- fizz_buzz_type_02.rb
+                -- fizz_buzz_type_03.rb
+        -- fizz_buzz.rb
+   |--test/
+       |
+      application/
+            |
+            -- fizz_buzz_value_command_test.rb
+            -- fizz_buzz_list_command._test.rb
+       |
+        -- fizz_buzz_test.rb
+
+
+ /main.rb
+   |--lib/
+       |
+      application/
+            |
+            -- fizz_buzz_command.rb
+            -- fizz_buzz_value_command.rb
+            -- fizz_buzz_list_command.rb
+      domain/
+            |
+            model/
+                |
+                -- fizz_buzz_value.rb
+                -- fizz_buzz_list.rb
+            type/
+                |
+                -- fizz_buzz_type.rb
+                -- fizz_buzz_type_01.rb
+                -- fizz_buzz_type_02.rb
+                -- fizz_buzz_type_03.rb
+        -- fizz_buzz.rb
+   |--test/
+       |
+      application/
+            |
+            -- fizz_buzz_value_command_test.rb
+            -- fizz_buzz_list_command._test.rb
+       |
+        -- test_helper.rb
+
+[source, ruby]
+----
+require './lib/application/fizz_buzz_command.rb'
+require './lib/application/fizz_buzz_value_command.rb'
+require './lib/application/fizz_buzz_list_command.rb'
+require './lib/domain/model/fizz_buzz_value.rb'
+require './lib/domain/model/fizz_buzz_list.rb'
+require './lib/domain/type/fizz_buzz_type.rb'
+require './lib/domain/type/fizz_buzz_type_01.rb'
+require './lib/domain/type/fizz_buzz_type_02.rb'
+require './lib/domain/type/fizz_buzz_type_03.rb'
+----
+
+[source, bash]
+----
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+Warning: coverage data provided by Coverage [114] exceeds number of lines in /workspace/tdd_rb/lib/fizz_buzz.rb [11]
+Started with run options --seed 3525
+
+
+Progress: |======================================================================================|
+
+Finished in 0.00772s
+37 tests, 43 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use!
+----
+
+[source, ruby]
+----
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
+class FizzBuzzValueCommandTest < Minitest::Test
+...
+----
+
+[source, ruby]
+----
+require './test/test_helper'
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
+class FizzBuzzValueCommandTest < Minitest::Test
+...
+----
+
+[source, ruby]
+----
+require './test/test_helper'
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
+class FizzBuzzListCommandTest < Minitest::Test
+...
+----
+
+[source, bash]
+----
+$ rake test
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb"  
+----
+
+[source, ruby]
+----
+...
+Rake::TestTask.new do |test|
+  test.test_files = Dir['./test/fizz_buzz_test.rb']
+  test.verbose = true
+end
+...
+----
+
+[source, ruby]
+----
+...
+Rake::TestTask.new do |test|
+  test.test_files = Dir['./test/**/*_test.rb']
+  test.verbose = true
+end
+...
+----
+
+[source, bash]
+----
+$ rake test
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/application/fizz_buzz_list_command_test.rb" "./test/application/fizz_buzz_value_command_test.rb" 
+Started with run options --seed 13671
+
+  20/20: [===================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00652s
+20 tests, 23 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 129 / 135 LOC (95.56%) covered.
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: モジュール分割'
+----
 
 == エピソード4
 === クライアント開発から始めるテスト駆動開発
