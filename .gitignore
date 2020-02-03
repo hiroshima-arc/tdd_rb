@@ -75,3 +75,5 @@ public
 .vagrant
 
 tmp
+
+docs/**/.asciidoctor/*

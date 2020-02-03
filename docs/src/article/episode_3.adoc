@@ -1,4 +1,7 @@
 === オブジェクト指向から始めるテスト駆動開発
+
+エピソード1ので作成したプログラムに以下の仕様を追加しました。
+
 仕様
 
   1 から 100 までの数をプリントするプログラムを書け。
@@ -7,12 +10,29 @@
   タイプごとに出力を切り替えることができる。
   タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz の場合のみをプリントする。
 
+早速開発に取り掛かりましょう。エピソード2で自動化しているので以下のコマンドを実行するだけで開始することができます。
+
 [source, bash]
 ----
 $ rake
 ----
 
+`guard` が起動するとコンソールが使えなくなるのでもう一つコンソールを開いておきましょう。もしくは `.` を使うことで `guard` 内でコンソールのコマンドを呼び出すことができます。
+
+[source, bash]
+----
+[1] guard(main)> . ls
+coverage  Gemfile.lock  lib      provisioning  README.md  tmp
+Gemfile   Guardfile     main.rb  Rakefile      test       Vagrantfile
+[2] guard(main)> . pwd
+/workspace/tdd_rb
+[3] guard(main)> . git status
+----
+
 ==== TODOリスト作成
+
+まずは追加仕様を *TODOリスト* に落とし込んでいきます。
+
 TODOリスト
 
 * タイプ1の場合
@@ -20,6 +40,11 @@ TODOリスト
 *** 1を渡したら文字列"1"を返す
 
 ==== タイプ1の場合
+
+*テストファースト* *アサートファースト* で最初に失敗するテストから始めます。テストを追加しましょう。
+
+ここでは既存の `FizzBuzz.generate` メソッドにタイプを *引数* として追加することで対応できるように変更してみたいと思います。
+
 [source, ruby]
 ----
 ...
@@ -55,13 +80,15 @@ Finished in 0.00796s
 25 tests, 26 assertions, 0 failures, 1 errors, 0 skips
 ----
 
+`ArgumentError: wrong number of arguments (given 2, expected 1)` *引数* が違うと指摘されていますね。 `FizzBuzz.generate` メソッドの引数の変更したいのですが既存のテストを壊したくないのでここは *デフォルト引数* 使ってみましょう。
+
 [source, bash]
 ----
 ...
 class FizzBuzz
   MAX_NUMBER = 100
 
-  def self.generate(number, _type = 1)
+  def self.generate(number, type = 1)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 
@@ -108,6 +135,29 @@ Finished in 0.00723s
 ...
 ----
 
+ちなみにここでは 引数に `type=1` と入力したのですがコーディングルールに従って以下のように自動修正されます。
+
+[source, bash]
+----
+...
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number, _type = 1)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if is_fizz && is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+
+    number.to_s
+  end
+...
+----
+
+*case式* を使って *引数* を判定できるように変更しましょう。ちなみに `_type` をメソッド内で変数として使うと警告されるので `type` に変更しています。
+
 [source, ruby]
 ----
 ...
@@ -132,32 +182,33 @@ class FizzBuzz
 
 [source, bash]
 ----
-1] guard(main)> 
-06:00:10 - INFO - Run all
-06:00:10 - INFO - Running: all tests
-Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 12 LOC (33.33%) covered.
-Started with run options --guard --seed 3988
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+Started with run options --seed 51330
 
-  25/25: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00756s
+Progress: |=============================================================|
+
+Finished in 0.00828s
 25 tests, 27 assertions, 0 failures, 0 errors, 0 skips
+04:27:12 - INFO - Inspecting Ruby code style: lib/fizz_buzz.rb
+ 1/1 file |=================== 100 ====================>| Time: 00:00:00 
 
-06:00:11 - INFO - Inspecting Ruby code style of all files
- 7/7 files |====================================== 100 =======================================>| Time: 00:00:00 
-
-7 files inspected, no offenses detected
-06:00:12 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
- 0/0 files |====================================== 100 =======================================>| Time: 00:00:00 
+1 file inspected, no offenses detected
+04:27:13 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
+ 0/0 files |=================== 100 ===================>| Time: 00:00:00 
 
 0 files inspected, no offenses detected
 ----
+
+テストは無事通りました。ここでコミットしておきます。
 
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'test: タイプ1の場合'
 ----
+
+追加仕様の取っ掛かりができました。既存のテストを使いたいので先程作成したテストを削除して以下のように新しいグループ内に既存テストコードを移動しましょう。
 
 [source, ruby]
 ----
@@ -224,6 +275,8 @@ class FizzBuzzTest < Minitest::Test
 ...
 ----
 
+テストコードが壊れていないことを確認したらコミットしておきます。
+
 [source, bash]
 ----
 $ git add .
@@ -283,6 +336,9 @@ TODOリスト
 ** 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
 *** 15を渡したら文字列"FizzBuzz"を返す
 
+
+続いて、タイプ2の場合に取り掛かりましょう。
+
 [source, ruby]
 ----
 ...
@@ -318,6 +374,8 @@ Finished in 0.00437s
 ...
 ----
 
+まだ *引数* に2を渡した場合は何もしないので *case式* に2を渡した場合の処理を追加します。
+
 [source, ruby]
 ----
 ...
@@ -344,18 +402,17 @@ class FizzBuzz
 
 [source, bash]
 ----
-[1] guard(main)> 
-06:21:44 - INFO - Run all
-06:21:44 - INFO - Running: all tests
-Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 13 LOC (30.77%) covered.
-Started with run options --guard --seed 29302
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+Started with run options --seed 19625
 
-  24/24: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00453s
+Progress: |=============================================================================|
+
+Finished in 0.00894s
 24 tests, 26 assertions, 0 failures, 0 errors, 0 skips
-...
 ----
+
+テストが通ったのでテストケースを追加します。ここはタイプ1の場合をコピーして編集すれば良いでしょう。
 
 [source, ruby]
 ----
@@ -416,6 +473,8 @@ test/fizz_buzz_test.rb:11:3: C: Metrics/BlockLength: Block has too many lines. [
 ...
 ----
 
+テストは通りましたが何やら警告が表示されるようになりました。　https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsblocklength[Metrics/BlockLength: Block has too many lines.^] これは `数を文字列にして返す` テストケースが長いという警告のようですがテストコードはチェックの対象から外しておきたいので `.rubocop_todo.yml` に以下コードを追加してチェック対象から外しておきます。
+
 [source, yml]
 ----
 ...
@@ -428,6 +487,8 @@ Metrics/BlockLength:
     - 'test/fizz_buzz_test.rb'
 ...
 ----
+
+ちなみに `guard(main)>` にカーソルを合わせてエンターキーを押すと自動化タスクが実行されます。
 
 [source, bash]
 ----
@@ -451,6 +512,8 @@ Finished in 0.00824s
 
 0 files inspected, no offenses detected
 ----
+
+警告は消えたのでコミットしておきます。
 
 [source, bash]
 ----
@@ -494,6 +557,8 @@ TODOリスト
 *** 5を渡したら文字列"5"を返す
 ** 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
 *** 15を渡したら文字列"FizzBuzz"を返す
+
+続いて、タイプ3の場合ですがやることは同じなので今回は一気にテストを書いてみましょう。
 
 [source, ruby]
 ----
@@ -563,6 +628,8 @@ Finished in 0.00650s
 31 tests, 33 assertions, 4 failures, 0 errors, 0 skips
 ----
 
+*case式* 処理を追加します。
+
 [source, ruby]
 ----
 ...
@@ -597,31 +664,35 @@ class FizzBuzz
 
 [source, bash]
 ----
-...
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+Started with run options --seed 12137
 
-  31/31: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00610s
+Progress: |=============================================================================|
+
+Finished in 0.01662s
 31 tests, 33 assertions, 0 failures, 0 errors, 0 skips
-
-06:50:37 - INFO - Inspecting Ruby code style of all files
-lib/fizz_buzz.rb:6:3: C: Metrics/CyclomaticComplexity: Cyclomatic complexity for generate is too high. [10/8]   
+05:06:44 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png lib/fizz_buzz.rb
+lib/fizz_buzz.rb:6:3: C: Metrics/CyclomaticComplexity: Cyclomatic complexity for generate is too high. [10/8]
   def self.generate(number, type = 1) ...
   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 lib/fizz_buzz.rb:6:3: C: Metrics/PerceivedComplexity: Perceived complexity for generate is too high. [8/7]
   def self.generate(number, type = 1) ...
   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 7/7 files |====================================== 100 =======================================>| Time: 00:00:00 
+ 1/1 file |=========================== 100 ============================>| Time: 00:00:00 
 
-7 files inspected, 2 offenses detected
-...
+1 file inspected, 2 offenses detected
 ----
+
+テストは通りましたが新しい警告が表示されるようになりました。とりあえずコミットしておきます。
 
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'test: タイプ3の場合'
 ----
+
+処理の追加により一部重複が発生したので *ステートメントのスライド* を適用して重複をなくしておきましょう。
 
 [source, ruby]
 ----
@@ -682,6 +753,8 @@ class FizzBuzz
 ...
 ----
 
+警告は消えていませんがプログラムは壊れていないことが確認できたのでコミットしておきます。
+
 [source, bash]
 ----
 $ git add .
@@ -704,6 +777,8 @@ TODOリスト
 
 ==== 例外ケース
 
+追加仕様には対応しましたがタイプ1,2,3以外の値が *引数* として渡された場合はどうしましょうか 現状では `nil` を返しますがこのような例外ケースも考慮する必要があります。
+
 TODOリスト
 
 * [line-through]_タイプ1の場合_
@@ -711,22 +786,27 @@ TODOリスト
 * [line-through]_タイプ3の場合_
 * それ以外のタイプの場合
 
+*例外処理* を追加します。まず、例外のテストですが以下の様に書きます。
+
 [source, ruby]
 ----
+    describe 'タイプ3の場合' do
 ...
-        describe 'それ以外のタイプの場合' do
-          def setup
-            @fizzbuzz = FizzBuzz
-          end
+    end
 
-          def test_例外を返す
-            e = assert_raises RuntimeError do
-              @fizzbuzz.generate(1, 4)
-            end
+    describe 'それ以外のタイプの場合' do
+      def setup
+        @fizzbuzz = FizzBuzz
+      end
 
-            assert_equal '該当するタイプは存在しません', e.message
-          end
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          @fizzbuzz.generate(1, 4)
         end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
 ...
 ----
 
@@ -744,6 +824,8 @@ Finished in 0.00609s
 32 tests, 34 assertions, 1 failures, 0 errors, 0 skips
 ...
 ----
+
+*case式* に該当しない場合は *例外を発生させる* ようにします。
 
 [source, ruby]
 ----
@@ -787,6 +869,8 @@ Finished in 0.00600s
 32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+テストが通ったのでコミットしておきます。
+
 [source, bash]
 ----
 $ git add .
@@ -800,7 +884,156 @@ TODOリスト
 * [line-through]_タイプ3の場合_
 * [line-through]_それ以外のタイプの場合_
 
-==== フィールドのカプセル化
+*TODOリスト* をすべて完了しました。追加仕様を満たすプログラムは出来ましたがまだ改善の余地がありそうですね。続いてリファクタリングを通したオブジェクト指向アプローチによる動作するきれいなコードの実現を解説します。
+
+==== オブジェクト指向
+
+===== 手続き型
+
+[source, ruby]
+----
+type = 1
+list = []
+
+100.times do |i|
+  r = ''
+  i += 1
+  case type
+  when 1
+    if i % 3 == 0 && i % 5 == 0
+      r = 'FizzBuzz'
+    elsif i % 3 == 0
+      r = 'Fizz'
+    elsif i % 5 == 0
+      r = 'Buzz'
+    else
+      r = i.to_s
+    end
+  when 2
+    r = i.to_s
+  when 3
+    if i % 3 == 0 && i % 5 == 0
+      r = 'FizzBuzz'
+    else
+      r = i.to_s
+    end
+  else
+    raise '該当するタイプは存在しません'
+  end
+
+  list.push(r)
+end
+
+puts list
+----
+
+[plantuml]
+----
+start
+
+repeat
+
+  if (タイプ1) then (yes)
+    if (カウンタが3と5で割り切れる) then (yes)
+      :変数にFizzBuzzをセットする;
+    else if (カウンタが3で割り切れる) then (yes)
+      :変数にFizzをセットする;
+    else if (カウンタが5で割り切れる) then (yes)
+      :変数にBuzzをセットする;
+    else
+      :変数にカウンタをセットする;
+    endif
+  else if (タイプ2) then (yes)
+    :変数にカウンタをセットする;
+  else if (タイプ3) then (yes)
+    if (カウンタが3と5で割り切れる) then (yes)
+      :変数にFizzBuzzをセットする;
+    else
+      :変数にカウンタをセットする;
+    endif
+  else (no)
+    :該当するタイプは存在しません;
+  endif
+
+  :カウンタを1増やす;
+repeat while (カウンタが100になるまで)
+
+stop
+----
+
+===== オブジェクト指向
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number, type = 1)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    case type
+    when 1
+      return 'FizzBuzz' if is_fizz && is_buzz
+      return 'Fizz' if is_fizz
+      return 'Buzz' if is_buzz
+
+      number.to_s
+    when 2
+      number.to_s
+    when 3
+      return 'FizzBuzz' if is_fizz && is_buzz
+
+      number.to_s
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
+  def self.generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end
+----
+
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    {static} generate()
+    {static} generate_list()
+}
+----
+
+[plantuml]
+----
+participant "Main" as A
+participant "FizzBuzz" as B
+
+A -> B : generate_list()
+activate B
+
+loop 100 times
+  B -> B : generate()
+end loop
+
+A <<-- B : list
+deactivate B
+
+----
+
+==== カプセル化
+===== フィールドのカプセル化
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    {static} generate()
+    {static} generate_list()
+}
+----
+
 [source, ruby]
 ----
 class FizzBuzz
@@ -942,6 +1175,16 @@ Finished in 0.00616s
 ----
 $ git add .
 $ git commit -m 'refactor: フィールドのカプセル化'
+----
+
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    generate()
+    generate_list()
+}
 ----
 
 [source, ruby]
@@ -1211,7 +1454,31 @@ $ git add .
 $ git commit -m 'refactor: setterの削除'
 ----
 
-==== ポリモーフィズムによる条件記述の置き換え
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    generate()
+    generate_list()
+}
+----
+
+==== ポリモーフィズム
+
+===== ポリモーフィズムによる条件記述の置き換え
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    generate()
+    generate_list()
+}
+----
+
 [source, bash]
 ----
 ...
@@ -1296,6 +1563,22 @@ class FizzBuzz
 $ git add .
 $ git commit -m 'refactor(WIP): ポリモーフィズムによる条件記述の置き換え'
 ----
+
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    {static} create()
+    generate()
+    generate_list()
+}
+FizzBuzz -> FizzBuzzType01
+FizzBuzz -> FizzBuzzType02
+FizzBuzz -> FizzBuzzType03
+----
+
 
 [source, ruby]
 ----
@@ -1466,6 +1749,30 @@ $ git add .
 $ git commit -m 'refactor: ポリモーフィズムによる条件記述の置き換え'
 ----
 
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    {static} create()
+    generate()
+    generate_list()
+}
+class FizzBuzzType01 {
+    generate()
+}
+class FizzBuzzType02 {
+    generate()
+}
+class FizzBuzzType03 {
+    generate()
+}
+FizzBuzz -> FizzBuzzType01
+FizzBuzz -> FizzBuzzType02
+FizzBuzz -> FizzBuzzType03
+----
+
 [source, ruby]
 ----
 class FizzBuzz
@@ -1505,6 +1812,30 @@ end
 ----
 $ git add .
 $ git commit -m 'refactor: サブクラスによるタイプコードの置き換え'
+----
+
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    {static} create()
+    generate()
+    generate_list()
+}
+class FizzBuzzType01 {
+    generate()
+}
+class FizzBuzzType02 {
+    generate()
+}
+class FizzBuzzType03 {
+    generate()
+}
+FizzBuzz *- FizzBuzzType01
+FizzBuzz *- FizzBuzzType02
+FizzBuzz *- FizzBuzzType03
 ----
 
 [source, ruby]
@@ -1658,7 +1989,57 @@ $ git add .
 $ git commit -m 'refactor: 移譲の隠蔽'
 ----
 
-==== スーパークラスの抽出
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    {static} create()
+    generate()
+    generate_list()
+}
+class FizzBuzzType01 {
+    generate()
+}
+class FizzBuzzType02 {
+    generate()
+}
+class FizzBuzzType03 {
+    generate()
+}
+FizzBuzz *- FizzBuzzType01
+FizzBuzz *- FizzBuzzType02
+FizzBuzz *- FizzBuzzType03
+----
+
+==== 継承
+
+===== スーパークラスの抽出
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    {static} create()
+    generate()
+    generate_list()
+}
+class FizzBuzzType01 {
+    generate()
+}
+class FizzBuzzType02 {
+    generate()
+}
+class FizzBuzzType03 {
+    generate()
+}
+FizzBuzz *- FizzBuzzType01
+FizzBuzz *- FizzBuzzType02
+FizzBuzz *- FizzBuzzType03
+----
+
 [source, ruby]
 ----
 class FizzBuzz
@@ -1809,6 +2190,36 @@ $ git add .
 $ git commit -m 'refactor: スーパークラスの抽出'
 ----
 
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    {static} create()
+    generate()
+    generate_list()
+}
+class FizzBuzzType {
+  is_fizz()
+  is_buzz()
+}
+class FizzBuzzType01 {
+    generate()
+}
+class FizzBuzzType02 {
+    generate()
+}
+class FizzBuzzType03 {
+    generate()
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzz -> FizzBuzzType
+----
+
+
 [source, bash]
 ----
 08:50:19 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png lib/fizz_buzz.rb
@@ -1915,6 +2326,35 @@ Finished in 0.01144s
 ----
 $ git add .
 $ git commit -m 'refactor: メソッド名の変更'
+----
+
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    {static} create()
+    generate()
+    generate_list()
+}
+class FizzBuzzType {
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+    generate()
+}
+class FizzBuzzType02 {
+    generate()
+}
+class FizzBuzzType03 {
+    generate()
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzz -> FizzBuzzType
 ----
 
 [source, ruby]
@@ -2031,7 +2471,67 @@ $ git add .
 $ git commit -m 'refactor: メソッドの移動'
 ----
 
-==== オブジェクトによるプリミティブの置き換え
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    generate()
+    generate_list()
+}
+class FizzBuzzType {
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+    generate()
+}
+class FizzBuzzType02 {
+    generate()
+}
+class FizzBuzzType03 {
+    generate()
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzz -> FizzBuzzType
+----
+
+==== 値オブジェクト
+
+===== オブジェクトによるプリミティブの置き換え
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    generate()
+    generate_list()
+}
+class FizzBuzzType {
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+    generate()
+}
+class FizzBuzzType02 {
+    generate()
+}
+class FizzBuzzType03 {
+    generate()
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzz -> FizzBuzzType
+----
+
 [source, ruby]
 ----
 class FizzBuzz
@@ -2163,6 +2663,35 @@ $ git add .
 $ git commit -m 'refactor: オブジェクトによるプリミティブの置き換え'
 ----
 
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    generate()
+    generate_list()
+}
+class FizzBuzzType {
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+    generate()
+}
+class FizzBuzzType02 {
+    generate()
+}
+class FizzBuzzType03 {
+    generate()
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzz *- FizzBuzzType
+----
+
 [source, ruby]
 ----
 ...
@@ -2222,6 +2751,38 @@ Finished in 0.00909s
 ----
 $ git add .
 $ git commit -m 'refactor: マジックナンバーの置き換え'
+----
+
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    generate()
+    generate_list()
+}
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+    generate()
+}
+class FizzBuzzType02 {
+    generate()
+}
+class FizzBuzzType03 {
+    generate()
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzz *- FizzBuzzType
 ----
 
 [source, ruby]
@@ -2461,6 +3022,45 @@ $ git add .
 $ git commit -m 'refactor: オブジェクトによるプリミティブの置き換え'
 ----
 
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    generate()
+    generate_list()
+}
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+   generate()
+}
+class FizzBuzzType02 {
+   generate()
+}
+class FizzBuzzType03 {
+   generate()
+}
+class FizzBuzzValue {
+   number
+   value
+   to_s()
+   eql?()
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzz *- FizzBuzzType
+FizzBuzzType -> FizzBuzzValue
+----
+
 [source, ruby]
 ----
 ...
@@ -2587,6 +3187,52 @@ $ git add .
 $ git commit -m 'refactor: コレクションのカプセル化'
 ----
 
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    generate()
+    generate_list()
+}
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+   generate()
+}
+class FizzBuzzType02 {
+   generate()
+}
+class FizzBuzzType03 {
+   generate()
+}
+class FizzBuzzValue {
+   number
+   value
+   to_s()
+   eql?()
+}
+class FizzBuzzList {
+   value
+   to_s()
+   add(value)
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzz *- FizzBuzzType
+FizzBuzzType -> FizzBuzzValue
+FizzBuzzList *-- FizzBuzzValue
+FizzBuzz -> FizzBuzzList
+----
+
 [source, ruby]
 ----
   describe 'FizzBuzzValueList' do
@@ -2611,7 +3257,8 @@ $ git add .
 $ git commit -m 'refactor: 学習用テスト'
 ----
 
-==== メソッドオブジェクトによるメソッドの置き換え
+==== デザインパターン
+===== メソッドオブジェクトによるメソッドの置き換え
 [source, ruby]
 ----
 ...
@@ -2772,6 +3419,59 @@ $ git add .
 $ git commit -m 'refactor: メソッドオブジェクトによるメソッドの置き換え'
 ----
 
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    generate()
+    generate_list()
+}
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+   generate()
+}
+class FizzBuzzType02 {
+   generate()
+}
+class FizzBuzzType03 {
+   generate()
+}
+class FizzBuzzValue {
+   number
+   value
+   to_s()
+   eql?()
+}
+class FizzBuzzList {
+   value
+   to_s()
+   add(value)
+}
+Interface FizzBuzzCommand {
+}
+class FizzBuzzValueCommand {
+  execute(number)
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzz *- FizzBuzzType
+FizzBuzzType -> FizzBuzzValue
+FizzBuzzList *-- FizzBuzzValue
+FizzBuzz -> FizzBuzzList
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzValueCommand *- FizzBuzzType
+----
+
 [source, ruby]
 ----
 ...
@@ -2828,6 +3528,64 @@ Finished in 0.00652s
 $ git add .
 $ git commit -m 'refactor: メソッドオブジェクトによるメソッドの置き換え'
 ----
+
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    generate()
+    generate_list()
+}
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+   generate()
+}
+class FizzBuzzType02 {
+   generate()
+}
+class FizzBuzzType03 {
+   generate()
+}
+class FizzBuzzValue {
+   number
+   value
+   to_s()
+   eql?()
+}
+class FizzBuzzList {
+   value
+   to_s()
+   add(value)
+}
+Interface FizzBuzzCommand {
+}
+class FizzBuzzValueCommand {
+  execute(number)
+}
+class FizzBuzzListCommand {
+  execute(number)
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzz *- FizzBuzzType
+FizzBuzzType -> FizzBuzzValue
+FizzBuzzList *-- FizzBuzzValue
+FizzBuzz -> FizzBuzzList
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzCommand *- FizzBuzzType
+----
+
 
 [source, ruby]
 ----
@@ -2968,7 +3726,60 @@ $ git add .
 $ git commit -m 'refactor: デッドコードの削除'
 ----
 
-==== アサーションの導入
+[plantuml]
+----
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+   generate()
+}
+class FizzBuzzType02 {
+   generate()
+}
+class FizzBuzzType03 {
+   generate()
+}
+class FizzBuzzValue {
+   number
+   value
+   to_s()
+   eql?()
+}
+class FizzBuzzList {
+   value
+   to_s()
+   add(value)
+}
+Interface FizzBuzzCommand {
+}
+class FizzBuzzValueCommand {
+  execute(number)
+}
+class FizzBuzzListCommand {
+  execute(number)
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType01 --> FizzBuzzValue
+FizzBuzzType02 --> FizzBuzzValue
+FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzList *- FizzBuzzValue
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzListCommand --> FizzBuzzList
+FizzBuzzCommand *- FizzBuzzType
+----
+
+==== 例外
+
+===== アサーションの導入
 [source, ruby]
 ----
 class FizzBuzzTest < Minitest::Test
@@ -3059,6 +3870,61 @@ Finished in 0.01433s
 ----
 $ git add .
 $ git commit -m 'refactor: アサーションの導入'
+----
+
+[plantuml]
+----
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+   generate()
+}
+class FizzBuzzType02 {
+   generate()
+}
+class FizzBuzzType03 {
+   generate()
+}
+class FizzBuzzValue {
+   number
+   value
+   to_s()
+   eql?()
+}
+class FizzBuzzList {
+   value
+   to_s()
+   add(value)
+}
+Interface FizzBuzzCommand {
+}
+class FizzBuzzValueCommand {
+  execute(number)
+}
+class FizzBuzzListCommand {
+  execute(number)
+}
+class Assertions {
+  assert(&condition)
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType01 --> FizzBuzzValue
+FizzBuzzType02 --> FizzBuzzValue
+FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzList *- FizzBuzzValue
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzListCommand --> FizzBuzzList
+FizzBuzzCommand *- FizzBuzzType
+FizzBuzzValue --|> Assertions
 ----
 
 [source, ruby]
@@ -3244,7 +4110,63 @@ $ git add .
 $ git commit -m 'refactor: アサーションの導入'
 ----
 
-==== 例外によるエラーコードの置き換え
+[plantuml]
+----
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+   generate()
+}
+class FizzBuzzType02 {
+   generate()
+}
+class FizzBuzzType03 {
+   generate()
+}
+class FizzBuzzValue {
+   number
+   value
+   to_s()
+   eql?()
+}
+class FizzBuzzList {
+   value
+   to_s()
+   add(value)
+}
+Interface FizzBuzzCommand {
+}
+class FizzBuzzValueCommand {
+  execute(number)
+}
+class FizzBuzzListCommand {
+  execute(number)
+}
+class Assertions {
+  assert(&condition)
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType01 --> FizzBuzzValue
+FizzBuzzType02 --> FizzBuzzValue
+FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzList *- FizzBuzzValue
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzListCommand --> FizzBuzzList
+FizzBuzzCommand *- FizzBuzzType
+FizzBuzzValue --|> Assertions
+FizzBuzzList --|> Assertions
+----
+
+===== 例外によるエラーコードの置き換え
 [source, ruby]
 ----
 ...
@@ -3398,6 +4320,57 @@ $ git add .
 $ git commit -m 'refactor:  例外によるエラーコードの置き換え'
 ----
 
+[plantuml]
+----
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+   generate()
+}
+class FizzBuzzType02 {
+   generate()
+}
+class FizzBuzzType03 {
+   generate()
+}
+class FizzBuzzValue {
+   number
+   value
+   to_s()
+   eql?()
+}
+class FizzBuzzList {
+   value
+   to_s()
+   add(value)
+}
+Interface FizzBuzzCommand {
+}
+class FizzBuzzValueCommand {
+  execute(number)
+}
+class FizzBuzzListCommand {
+  execute(number)
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType01 --> FizzBuzzValue
+FizzBuzzType02 --> FizzBuzzValue
+FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzList *- FizzBuzzValue
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzListCommand --> FizzBuzzList
+FizzBuzzCommand *- FizzBuzzType
+----
+
 [source, bash]
 ----
 02:13:46 - INFO - Inspecting Ruby code style: test/fizz_buzz_test.rb lib/fizz_buzz.rb
@@ -3517,6 +4490,58 @@ $ git add .
 $ git commit -m 'refactor: マジックナンバーの置き換え'
 ----
 
+[plantuml]
+----
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+   generate()
+}
+class FizzBuzzType02 {
+   generate()
+}
+class FizzBuzzType03 {
+   generate()
+}
+class FizzBuzzValue {
+   number
+   value
+   to_s()
+   eql?()
+}
+class FizzBuzzList {
+   MAX_COUNT = 100
+   value
+   to_s()
+   add(value)
+}
+Interface FizzBuzzCommand {
+}
+class FizzBuzzValueCommand {
+  execute(number)
+}
+class FizzBuzzListCommand {
+  execute(number)
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType01 --> FizzBuzzValue
+FizzBuzzType02 --> FizzBuzzValue
+FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzList *- FizzBuzzValue
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzListCommand --> FizzBuzzList
+FizzBuzzCommand *- FizzBuzzType
+----
+
 ==== モジュールの分割
 [source, bash]
 ----
@@ -3628,6 +4653,36 @@ $ git add .
 $ git commit -m 'refactor(WIP): モジュール分割'
 ----
 
+[plantuml]
+----
+package "Domain" {
+  package "Model" {
+    class FizzBuzzValue {
+    }
+    class FizzBuzzList {
+    }
+  }
+  package "Type" {
+    class FizzBuzzType {
+    }
+    class FizzBuzzType01 {
+    }
+    class FizzBuzzType02 {
+    }
+    class FizzBuzzType03 {
+    }
+  }
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType01 --> FizzBuzzValue
+FizzBuzzType02 --> FizzBuzzValue
+FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzList *- FizzBuzzValue
+----
+
+
  /main.rb
    |--lib/
        |
@@ -3677,6 +4732,47 @@ $ git commit -m 'refactor(WIP): モジュール分割'
 ----
 $ git add .
 $ git commit -m 'refactor(WIP): モジュール分割'
+----
+
+[plantuml]
+----
+package "Application" {
+  class FizzBuzzCommand {
+  }
+  class FizzBuzzValueCommand {
+  }
+  class FizzBuzzListCommand {
+  }
+}
+package "Domain" {
+  package "Model" {
+    class FizzBuzzValue {
+    }
+    class FizzBuzzList {
+    }
+  }
+  package "Type" {
+    class FizzBuzzType {
+    }
+    class FizzBuzzType01 {
+    }
+    class FizzBuzzType02 {
+    }
+    class FizzBuzzType03 {
+    }
+  }
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType01 --> FizzBuzzValue
+FizzBuzzType02 --> FizzBuzzValue
+FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzList *- FizzBuzzValue
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzListCommand --> FizzBuzzList
+FizzBuzzCommand *- FizzBuzzType
 ----
 
  /main.rb
@@ -3978,4 +5074,131 @@ Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage
 ----
 $ git add .
 $ git commit -m 'refactor: モジュール分割'
+----
+
+[plantuml]
+----
+package "lib" {
+  package "Application" {
+    class FizzBuzzCommand {
+    }
+    class FizzBuzzValueCommand {
+    }
+    class FizzBuzzListCommand {
+    }
+  }
+  package "Domain" {
+    package "Model" {
+      class FizzBuzzValue {
+      }
+      class FizzBuzzList {
+      }
+    }
+    package "Type" {
+      class FizzBuzzType {
+      }
+      class FizzBuzzType01 {
+      }
+      class FizzBuzzType02 {
+      }
+      class FizzBuzzType03 {
+      }
+    }
+  }
+}
+package "test" {
+  class FizzBuzzValueCommandTest {
+  }
+  class FizzBuzzListCommandTest {
+  }
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType01 --> FizzBuzzValue
+FizzBuzzType02 --> FizzBuzzValue
+FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzList *- FizzBuzzValue
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzListCommand --> FizzBuzzList
+FizzBuzzCommand *- FizzBuzzType
+----
+
+===== Application
+
+./main.rb
+[source, ruby]
+----
+include::./code/episode_3/main.rb[]
+----
+
+./lib/application/fizz_buzz_command.rb
+[source, ruby]
+----
+include::./code/episode_3/lib/application/fizz_buzz_command.rb[]
+----
+
+./lib/application/fizz_buzz_value_command.rb
+[source, ruby]
+----
+include::./code/episode_3/lib/application/fizz_buzz_value_command.rb[]
+----
+
+./lib/application/fizz_buzz_list_command.rb
+[source, ruby]
+----
+include::./code/episode_3/lib/application/fizz_buzz_list_command.rb[]
+----
+
+===== Domain
+
+./lib/domain/model/fizz_buzz_value.rb
+[source, ruby]
+----
+include::./code/episode_3/lib/domain/model/fizz_buzz_value.rb[]
+----
+
+./lib/domain/model/fizz_buzz_list.rb
+[source, ruby]
+----
+include::./code/episode_3/lib/domain/model/fizz_buzz_list.rb[]
+----
+
+./lib/domain/type/fizz_buzz_type.rb
+[source, ruby]
+----
+include::./code/episode_3/lib/domain/type/fizz_buzz_type.rb[]
+----
+
+./lib/domain/type/fizz_buzz_type_01.rb
+[source, ruby]
+----
+include::./code/episode_3/lib/domain/type/fizz_buzz_type_01.rb[]
+----
+
+./lib/domain/type/fizz_buzz_type_02.rb
+[source, ruby]
+----
+include::./code/episode_3/lib/domain/type/fizz_buzz_type_02.rb[]
+----
+
+./lib/domain/type/fizz_buzz_type_03.rb
+[source, ruby]
+----
+include::./code/episode_3/lib/domain/type/fizz_buzz_type_03.rb[]
+----
+
+===== Test
+
+./test/application/fizz_buzz_value_command_test.rb
+[source, ruby]
+----
+include::./code/episode_3/test/application/fizz_buzz_value_command_test.rb[]
+----
+
+./test/application/fizz_buzz_list_command_test.rb
+[source, ruby]
+----
+include::./code/episode_3/test/application/fizz_buzz_list_command_test.rb[]
 ----

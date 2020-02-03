@@ -432,6 +432,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect2">
 <h3 id="_オブジェクト指向から始めるテスト駆動開発">オブジェクト指向から始めるテスト駆動開発</h3>
 <div class="paragraph">
+<p>エピソード1ので作成したプログラムに以下の仕様を追加しました。</p>
+</div>
+<div class="paragraph">
 <p>仕様</p>
 </div>
 <div class="literalblock">
@@ -443,13 +446,32 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz の場合のみをプリントする。</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>早速開発に取り掛かりましょう。エピソード2で自動化しているので以下のコマンドを実行するだけで開始することができます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ rake</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><code>guard</code> が起動するとコンソールが使えなくなるのでもう一つコンソールを開いておきましょう。もしくは <code>.</code> を使うことで <code>guard</code> 内でコンソールのコマンドを呼び出すことができます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">[1] guard(main)&gt; . ls
+coverage  Gemfile.lock  lib      provisioning  README.md  tmp
+Gemfile   Guardfile     main.rb  Rakefile      test       Vagrantfile
+[2] guard(main)&gt; . pwd
+/workspace/tdd_rb
+[3] guard(main)&gt; . git status</code></pre>
+</div>
+</div>
 <div class="sect3">
 <h4 id="_todoリスト作成">TODOリスト作成</h4>
+<div class="paragraph">
+<p>まずは追加仕様を <strong>TODOリスト</strong> に落とし込んでいきます。</p>
+</div>
 <div class="paragraph">
 <p>TODOリスト</p>
 </div>
@@ -477,6 +499,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="sect3">
 <h4 id="_タイプ1の場合">タイプ1の場合</h4>
+<div class="paragraph">
+<p><strong>テストファースト</strong> <strong>アサートファースト</strong> で最初に失敗するテストから始めます。テストを追加しましょう。</p>
+</div>
+<div class="paragraph">
+<p>ここでは既存の <code>FizzBuzz.generate</code> メソッドにタイプを <strong>引数</strong> として追加することで対応できるように変更してみたいと思います。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -512,13 +540,16 @@ Finished in 0.00796s
 25 tests, 26 assertions, 0 failures, 1 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><code>ArgumentError: wrong number of arguments (given 2, expected 1)</code> <strong>引数</strong> が違うと指摘されていますね。 <code>FizzBuzz.generate</code> メソッドの引数の変更したいのですが既存のテストを壊したくないのでここは <strong>デフォルト引数</strong> 使ってみましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">...
 class FizzBuzz
   MAX_NUMBER = 100
 
-  def self.generate(number, _type = 1)
+  def self.generate(number, type = 1)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 
@@ -565,6 +596,31 @@ Finished in 0.00723s
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>ちなみにここでは 引数に <code>type=1</code> と入力したのですがコーディングルールに従って以下のように自動修正されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">...
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number, _type = 1)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+    return 'Fizz' if is_fizz
+    return 'Buzz' if is_buzz
+
+    number.to_s
+  end
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>case式</strong> を使って <strong>引数</strong> を判定できるように変更しましょう。ちなみに <code>_type</code> をメソッド内で変数として使うと警告されるので <code>type</code> に変更しています。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -589,32 +645,35 @@ class FizzBuzz
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">1] guard(main)&gt;
-06:00:10 - INFO - Run all
-06:00:10 - INFO - Running: all tests
-Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 12 LOC (33.33%) covered.
-Started with run options --guard --seed 3988
+<pre class="highlight"><code class="language-bash" data-lang="bash">/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb"
+Started with run options --seed 51330
 
-  25/25: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00756s
+Progress: |=============================================================|
+
+Finished in 0.00828s
 25 tests, 27 assertions, 0 failures, 0 errors, 0 skips
+04:27:12 - INFO - Inspecting Ruby code style: lib/fizz_buzz.rb
+ 1/1 file |=================== 100 ====================&gt;| Time: 00:00:00
 
-06:00:11 - INFO - Inspecting Ruby code style of all files
- 7/7 files |====================================== 100 =======================================&gt;| Time: 00:00:00
-
-7 files inspected, no offenses detected
-06:00:12 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
- 0/0 files |====================================== 100 =======================================&gt;| Time: 00:00:00
+1 file inspected, no offenses detected
+04:27:13 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
+ 0/0 files |=================== 100 ===================&gt;| Time: 00:00:00
 
 0 files inspected, no offenses detected</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストは無事通りました。ここでコミットしておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'test: タイプ1の場合'</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>追加仕様の取っ掛かりができました。既存のテストを使いたいので先程作成したテストを削除して以下のように新しいグループ内に既存テストコードを移動しましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -680,6 +739,9 @@ class FizzBuzzTest &lt; Minitest::Test
   end
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストコードが壊れていないことを確認したらコミットしておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -942,6 +1004,9 @@ $ $ git commit -m 'refactor: メソッドのインライン化'</code></pre>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>続いて、タイプ2の場合に取り掛かりましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -977,6 +1042,9 @@ Finished in 0.00437s
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>まだ <strong>引数</strong> に2を渡した場合は何もしないので <strong>case式</strong> に2を渡した場合の処理を追加します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -1003,18 +1071,18 @@ class FizzBuzz
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">[1] guard(main)&gt;
-06:21:44 - INFO - Run all
-06:21:44 - INFO - Running: all tests
-Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 13 LOC (30.77%) covered.
-Started with run options --guard --seed 29302
+<pre class="highlight"><code class="language-bash" data-lang="bash">/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb"
+Started with run options --seed 19625
 
-  24/24: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00453s
-24 tests, 26 assertions, 0 failures, 0 errors, 0 skips
-...</code></pre>
+Progress: |=============================================================================|
+
+Finished in 0.00894s
+24 tests, 26 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストが通ったのでテストケースを追加します。ここはタイプ1の場合をコピーして編集すれば良いでしょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1075,6 +1143,9 @@ test/fizz_buzz_test.rb:11:3: C: Metrics/BlockLength: Block has too many lines. [
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストは通りましたが何やら警告が表示されるようになりました。　<a href="https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsblocklength" target="_blank" rel="noopener">Metrics/BlockLength: Block has too many lines.</a> これは <code>数を文字列にして返す</code> テストケースが長いという警告のようですがテストコードはチェックの対象から外しておきたいので <code>.rubocop_todo.yml</code> に以下コードを追加してチェック対象から外しておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yml" data-lang="yml">...
@@ -1087,6 +1158,9 @@ Metrics/BlockLength:
     - 'test/fizz_buzz_test.rb'
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>ちなみに <code>guard(main)&gt;</code> にカーソルを合わせてエンターキーを押すと自動化タスクが実行されます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1110,6 +1184,9 @@ Finished in 0.00824s
 
 0 files inspected, no offenses detected</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>警告は消えたのでコミットしておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1284,6 +1361,9 @@ $ git commit -m 'test: タイプ2の場合'</code></pre>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>続いて、タイプ3の場合ですがやることは同じなので今回は一気にテストを書いてみましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -1352,6 +1432,9 @@ Finished in 0.00650s
 31 tests, 33 assertions, 4 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><strong>case式</strong> 処理を追加します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -1385,31 +1468,37 @@ class FizzBuzz
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">...
+<pre class="highlight"><code class="language-bash" data-lang="bash">/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb"
+Started with run options --seed 12137
 
-  31/31: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00610s
+Progress: |=============================================================================|
+
+Finished in 0.01662s
 31 tests, 33 assertions, 0 failures, 0 errors, 0 skips
-
-06:50:37 - INFO - Inspecting Ruby code style of all files
+05:06:44 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png lib/fizz_buzz.rb
 lib/fizz_buzz.rb:6:3: C: Metrics/CyclomaticComplexity: Cyclomatic complexity for generate is too high. [10/8]
   def self.generate(number, type = 1) ...
   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 lib/fizz_buzz.rb:6:3: C: Metrics/PerceivedComplexity: Perceived complexity for generate is too high. [8/7]
   def self.generate(number, type = 1) ...
   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 7/7 files |====================================== 100 =======================================&gt;| Time: 00:00:00
+ 1/1 file |=========================== 100 ============================&gt;| Time: 00:00:00
 
-7 files inspected, 2 offenses detected
-...</code></pre>
+1 file inspected, 2 offenses detected</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストは通りましたが新しい警告が表示されるようになりました。とりあえずコミットしておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'test: タイプ3の場合'</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>処理の追加により一部重複が発生したので <strong>ステートメントのスライド</strong> を適用して重複をなくしておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1469,6 +1558,9 @@ class FizzBuzz
   end
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>警告は消えていませんがプログラムは壊れていないことが確認できたのでコミットしておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1540,6 +1632,9 @@ $ git commit -m 'refactor: ステートメントのスライド'</code></pre>
 <div class="sect3">
 <h4 id="_例外ケース">例外ケース</h4>
 <div class="paragraph">
+<p>追加仕様には対応しましたがタイプ1,2,3以外の値が <strong>引数</strong> として渡された場合はどうしましょうか 現状では <code>nil</code> を返しますがこのような例外ケースも考慮する必要があります。</p>
+</div>
+<div class="paragraph">
 <p>TODOリスト</p>
 </div>
 <div class="ulist">
@@ -1558,22 +1653,28 @@ $ git commit -m 'refactor: ステートメントのスライド'</code></pre>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p><strong>例外処理</strong> を追加します。まず、例外のテストですが以下の様に書きます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
-        describe 'それ以外のタイプの場合' do
-          def setup
-            @fizzbuzz = FizzBuzz
-          end
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">    describe 'タイプ3の場合' do
+...
+    end
 
-          def test_例外を返す
-            e = assert_raises RuntimeError do
-              @fizzbuzz.generate(1, 4)
-            end
+    describe 'それ以外のタイプの場合' do
+      def setup
+        @fizzbuzz = FizzBuzz
+      end
 
-            assert_equal '該当するタイプは存在しません', e.message
-          end
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          @fizzbuzz.generate(1, 4)
         end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
 ...</code></pre>
 </div>
 </div>
@@ -1591,6 +1692,9 @@ Finished in 0.00609s
 32 tests, 34 assertions, 1 failures, 0 errors, 0 skips
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><strong>case式</strong> に該当しない場合は <strong>例外を発生させる</strong> ようにします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1634,6 +1738,9 @@ Finished in 0.00600s
 32 tests, 35 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストが通ったのでコミットしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
@@ -1659,9 +1766,114 @@ $ git commit -m 'test: それ以外のタイプの場合'</code></pre>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p><strong>TODOリスト</strong> をすべて完了しました。追加仕様を満たすプログラムは出来ましたがまだ改善の余地がありそうですね。続いてリファクタリングを通したオブジェクト指向アプローチによる動作するきれいなコードの実現を解説します。</p>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_フィールドのカプセル化">フィールドのカプセル化</h4>
+<h4 id="_オブジェクト指向">オブジェクト指向</h4>
+<div class="sect4">
+<h5 id="_手続き型">手続き型</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">type = 1
+list = []
+
+100.times do |i|
+  r = ''
+  i += 1
+  case type
+  when 1
+    if i % 3 == 0 &amp;&amp; i % 5 == 0
+      r = 'FizzBuzz'
+    elsif i % 3 == 0
+      r = 'Fizz'
+    elsif i % 5 == 0
+      r = 'Buzz'
+    else
+      r = i.to_s
+    end
+  when 2
+    r = i.to_s
+  when 3
+    if i % 3 == 0 &amp;&amp; i % 5 == 0
+      r = 'FizzBuzz'
+    else
+      r = i.to_s
+    end
+  else
+    raise '該当するタイプは存在しません'
+  end
+
+  list.push(r)
+end
+
+puts list</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-5fdd77d695a36593811ff81908acad97.png" alt="diag 5fdd77d695a36593811ff81908acad97" width="1594" height="474">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_オブジェクト指向_2">オブジェクト指向</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+
+  def self.generate(number, type = 1)
+    is_fizz = number.modulo(3).zero?
+    is_buzz = number.modulo(5).zero?
+
+    case type
+    when 1
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+      return 'Fizz' if is_fizz
+      return 'Buzz' if is_buzz
+
+      number.to_s
+    when 2
+      number.to_s
+    when 3
+      return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
+
+      number.to_s
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
+  def self.generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-428f320ab235496eeeb0cec0082ca257.png" alt="diag 428f320ab235496eeeb0cec0082ca257" width="138" height="104">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-4098c9c172e3af6b2bdf3326dfe87d8e.png" alt="diag 4098c9c172e3af6b2bdf3326dfe87d8e" width="265" height="230">
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_カプセル化">カプセル化</h4>
+<div class="sect4">
+<h5 id="_フィールドのカプセル化">フィールドのカプセル化</h5>
+<div class="imageblock">
+<div class="content">
+<img src="diag-428f320ab235496eeeb0cec0082ca257.png" alt="diag 428f320ab235496eeeb0cec0082ca257" width="138" height="104">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
@@ -1803,6 +2015,11 @@ Finished in 0.00616s
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'refactor: フィールドのカプセル化'</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-4aa8394c1d393b83d9ac6531ee8f0936.png" alt="diag 4aa8394c1d393b83d9ac6531ee8f0936" width="138" height="117">
 </div>
 </div>
 <div class="listingblock">
@@ -2070,9 +2287,22 @@ $ git commit -m 'refactor: フィールドのカプセル化'</code></pre>
 $ git commit -m 'refactor: setterの削除'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-1fa9697e7ac9ce563b8ccefe66b065a5.png" alt="diag 1fa9697e7ac9ce563b8ccefe66b065a5" width="138" height="130">
+</div>
+</div>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_ポリモーフィズムによる条件記述の置き換え">ポリモーフィズムによる条件記述の置き換え</h4>
+<h4 id="_ポリモーフィズム">ポリモーフィズム</h4>
+<div class="sect4">
+<h5 id="_ポリモーフィズムによる条件記述の置き換え">ポリモーフィズムによる条件記述の置き換え</h5>
+<div class="imageblock">
+<div class="content">
+<img src="diag-1fa9697e7ac9ce563b8ccefe66b065a5.png" alt="diag 1fa9697e7ac9ce563b8ccefe66b065a5" width="138" height="130">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">...
@@ -2156,6 +2386,11 @@ class FizzBuzzType03; end</code></pre>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'refactor(WIP): ポリモーフィズムによる条件記述の置き換え'</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-58dc9cca953a08db2f3f6d80116b0b79.png" alt="diag 58dc9cca953a08db2f3f6d80116b0b79" width="627" height="191">
 </div>
 </div>
 <div class="listingblock">
@@ -2327,6 +2562,11 @@ Finished in 0.00559s
 $ git commit -m 'refactor: ポリモーフィズムによる条件記述の置き換え'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-a8a0f7e73f6ccd50df57a6bf6d7e40df.png" alt="diag a8a0f7e73f6ccd50df57a6bf6d7e40df" width="627" height="191">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
@@ -2365,6 +2605,11 @@ end</code></pre>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'refactor: サブクラスによるタイプコードの置き換え'</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-8a04c2b1c80ac0b9585ab2499676a39d.png" alt="diag 8a04c2b1c80ac0b9585ab2499676a39d" width="627" height="191">
 </div>
 </div>
 <div class="listingblock">
@@ -2518,9 +2763,22 @@ Finished in 0.00564s
 $ git commit -m 'refactor: 移譲の隠蔽'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-8a04c2b1c80ac0b9585ab2499676a39d.png" alt="diag 8a04c2b1c80ac0b9585ab2499676a39d" width="627" height="191">
+</div>
+</div>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_スーパークラスの抽出">スーパークラスの抽出</h4>
+<h4 id="_継承">継承</h4>
+<div class="sect4">
+<h5 id="_スーパークラスの抽出">スーパークラスの抽出</h5>
+<div class="imageblock">
+<div class="content">
+<img src="diag-8a04c2b1c80ac0b9585ab2499676a39d.png" alt="diag 8a04c2b1c80ac0b9585ab2499676a39d" width="627" height="191">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
@@ -2671,6 +2929,11 @@ lib/fizz_buzz.rb:39:7: C: Naming/PredicateName: Rename is_buzz to buzz?.
 $ git commit -m 'refactor: スーパークラスの抽出'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-c5562aee5c36f7a34fc92925fe057aa3.png" alt="diag c5562aee5c36f7a34fc92925fe057aa3" width="470" height="264">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">08:50:19 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png lib/fizz_buzz.rb
@@ -2777,6 +3040,11 @@ Finished in 0.01144s
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'refactor: メソッド名の変更'</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-d9160e6801276e2daab7185d2190252d.png" alt="diag d9160e6801276e2daab7185d2190252d" width="470" height="264">
 </div>
 </div>
 <div class="listingblock">
@@ -2892,9 +3160,22 @@ Finished in 0.00688s
 $ git commit -m 'refactor: メソッドの移動'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-337dc5ff5d03ee9f5eab82f0d3233fd0.png" alt="diag 337dc5ff5d03ee9f5eab82f0d3233fd0" width="470" height="251">
+</div>
+</div>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_オブジェクトによるプリミティブの置き換え">オブジェクトによるプリミティブの置き換え</h4>
+<h4 id="_値オブジェクト">値オブジェクト</h4>
+<div class="sect4">
+<h5 id="_オブジェクトによるプリミティブの置き換え">オブジェクトによるプリミティブの置き換え</h5>
+<div class="imageblock">
+<div class="content">
+<img src="diag-337dc5ff5d03ee9f5eab82f0d3233fd0.png" alt="diag 337dc5ff5d03ee9f5eab82f0d3233fd0" width="470" height="251">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
@@ -3026,6 +3307,11 @@ Finished in 0.00687s
 $ git commit -m 'refactor: オブジェクトによるプリミティブの置き換え'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-8c51b913766b480e52dc0ad218c5e29a.png" alt="diag 8c51b913766b480e52dc0ad218c5e29a" width="470" height="251">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -3085,6 +3371,11 @@ Finished in 0.00909s
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-f981c240a38685122123bac1bc1d6cea.png" alt="diag f981c240a38685122123bac1bc1d6cea" width="470" height="264">
 </div>
 </div>
 <div class="listingblock">
@@ -3324,6 +3615,11 @@ class FizzBuzzTest &lt; Minitest::Test
 $ git commit -m 'refactor: オブジェクトによるプリミティブの置き換え'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-6784eef3a06015b3afd514181ea55821.png" alt="diag 6784eef3a06015b3afd514181ea55821" width="470" height="264">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -3450,6 +3746,11 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `[]' for #&lt
 $ git commit -m 'refactor: コレクションのカプセル化'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-c71f04d2bdaf08275832a101cabec792.png" alt="diag c71f04d2bdaf08275832a101cabec792" width="764" height="346">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">  describe 'FizzBuzzValueList' do
@@ -3475,8 +3776,11 @@ $ git commit -m 'refactor: 学習用テスト'</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect3">
-<h4 id="_メソッドオブジェクトによるメソッドの置き換え">メソッドオブジェクトによるメソッドの置き換え</h4>
+<h4 id="_デザインパターン">デザインパターン</h4>
+<div class="sect4">
+<h5 id="_メソッドオブジェクトによるメソッドの置き換え">メソッドオブジェクトによるメソッドの置き換え</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -3637,6 +3941,11 @@ class FizzBuzzTest &lt; Minitest::Test
 $ git commit -m 'refactor: メソッドオブジェクトによるメソッドの置き換え'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-6afa2ee838f81494e5f7c609379846b1.png" alt="diag 6afa2ee838f81494e5f7c609379846b1" width="508" height="437">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -3692,6 +4001,11 @@ Finished in 0.00652s
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'refactor: メソッドオブジェクトによるメソッドの置き換え'</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-fef169f793e0bf06c147b610a6f03084.png" alt="diag fef169f793e0bf06c147b610a6f03084" width="1089" height="349">
 </div>
 </div>
 <div class="listingblock">
@@ -3833,9 +4147,17 @@ Finished in 0.00704s
 $ git commit -m 'refactor: デッドコードの削除'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-0bacf9102c81d63f8f7ebed6200fa1d3.png" alt="diag 0bacf9102c81d63f8f7ebed6200fa1d3" width="876" height="424">
+</div>
+</div>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_アサーションの導入">アサーションの導入</h4>
+<h4 id="_例外">例外</h4>
+<div class="sect4">
+<h5 id="_アサーションの導入">アサーションの導入</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzTest &lt; Minitest::Test
@@ -3925,6 +4247,11 @@ Finished in 0.01433s
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'refactor: アサーションの導入'</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-dfbaaf7facf54432e7ad84b1cb7212f1.png" alt="diag dfbaaf7facf54432e7ad84b1cb7212f1" width="876" height="545">
 </div>
 </div>
 <div class="listingblock">
@@ -4110,9 +4437,14 @@ Finished in 0.00717s
 $ git commit -m 'refactor: アサーションの導入'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-f90bf5dd89f4aba1044d05004d7588fa.png" alt="diag f90bf5dd89f4aba1044d05004d7588fa" width="876" height="545">
 </div>
-<div class="sect3">
-<h4 id="_例外によるエラーコードの置き換え">例外によるエラーコードの置き換え</h4>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_例外によるエラーコードの置き換え">例外によるエラーコードの置き換え</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -4266,6 +4598,11 @@ Finished in 0.00738s
 $ git commit -m 'refactor:  例外によるエラーコードの置き換え'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-0bacf9102c81d63f8f7ebed6200fa1d3.png" alt="diag 0bacf9102c81d63f8f7ebed6200fa1d3" width="876" height="424">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">02:13:46 - INFO - Inspecting Ruby code style: test/fizz_buzz_test.rb lib/fizz_buzz.rb
@@ -4383,6 +4720,12 @@ Finished in 0.01262s
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-cbf143a596f96d524e0c352a13abc7d4.png" alt="diag cbf143a596f96d524e0c352a13abc7d4" width="876" height="424">
+</div>
 </div>
 </div>
 </div>
@@ -4503,6 +4846,11 @@ class FizzBuzzType
 $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-9b5683e490fa54c5a44573412cd5ddac.png" alt="diag 9b5683e490fa54c5a44573412cd5ddac" width="521" height="361">
+</div>
+</div>
 <div class="literalblock">
 <div class="content">
 <pre>/main.rb
@@ -4558,6 +4906,11 @@ $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-7f7afe4277590090e49ebc6a8ecb1cce.png" alt="diag 7f7afe4277590090e49ebc6a8ecb1cce" width="919" height="361">
 </div>
 </div>
 <div class="literalblock">
@@ -4868,12 +5221,380 @@ Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage
 $ git commit -m 'refactor: モジュール分割'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-947ca99899a6736f85f5981f2e47c4fd.png" alt="diag 947ca99899a6736f85f5981f2e47c4fd" width="1380" height="396">
+</div>
+</div>
+<div class="sect4">
+<h5 id="_application">Application</h5>
+<div class="listingblock">
+<div class="title">/main.rb</div>
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+require './lib/fizz_buzz.rb'
+
+command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+command.execute(100).value.each { |i| puts i.value }</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/application/fizz_buzz_command.rb</div>
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+class FizzBuzzCommand; end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/application/fizz_buzz_value_command.rb</div>
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+class FizzBuzzValueCommand &lt; FizzBuzzCommand
+  def initialize(type)
+    @type = type
+  end
+
+  def execute(number)
+    @type.generate(number)
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/application/fizz_buzz_list_command.rb</div>
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+class FizzBuzzListCommand &lt; FizzBuzzCommand
+  def initialize(type)
+    @type = type
+  end
+
+  def execute(number)
+    FizzBuzzList.new((1..number).map { |i| @type.generate(i) })
+  end
+end</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_domain">Domain</h5>
+<div class="listingblock">
+<div class="title">/lib/domain/model/fizz_buzz_value.rb</div>
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+class FizzBuzzValue
+  attr_reader :number, :value
+
+  def initialize(number, value)
+    raise '正の値のみ有効です' if number.negative?
+
+    @number = number
+    @value = value
+  end
+
+  def to_s
+    "#{@number}:#{@value}"
+  end
+
+  def ==(other)
+    @number == other.number &amp;&amp; @value == other.value
+  end
+
+  alias eql? ==
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/domain/model/fizz_buzz_list.rb</div>
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+class FizzBuzzList
+  MAX_COUNT = 100
+  attr_reader :value
+
+  def initialize(list)
+    raise "上限は#{MAX_COUNT}件までです" if list.count &gt; MAX_COUNT
+
+    @value = list
+  end
+
+  def to_s
+    @value.to_s
+  end
+
+  def add(value)
+    FizzBuzzList.new(@value + value)
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/domain/type/fizz_buzz_type.rb</div>
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+class FizzBuzzType
+  TYPE_01 = 1
+  TYPE_02 = 2
+  TYPE_03 = 3
+
+  def self.create(type)
+    case type
+    when FizzBuzzType::TYPE_01
+      FizzBuzzType01.new
+    when FizzBuzzType::TYPE_02
+      FizzBuzzType02.new
+    when FizzBuzzType::TYPE_03
+      FizzBuzzType03.new
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
+  def fizz?(number)
+    number.modulo(3).zero?
+  end
+
+  def buzz?(number)
+    number.modulo(5).zero?
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/domain/type/fizz_buzz_type_01.rb</div>
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+class FizzBuzzType01 &lt; FizzBuzzType
+  def generate(number)
+    return FizzBuzzValue.new(number, 'FizzBuzz') if fizz?(number) &amp;&amp; buzz?(number)
+    return FizzBuzzValue.new(number, 'Fizz') if fizz?(number)
+    return FizzBuzzValue.new(number, 'Buzz') if buzz?(number)
+
+    FizzBuzzValue.new(number, number.to_s)
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/domain/type/fizz_buzz_type_02.rb</div>
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+class FizzBuzzType02 &lt; FizzBuzzType
+  def generate(number)
+    FizzBuzzValue.new(number, number.to_s)
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/domain/type/fizz_buzz_type_03.rb</div>
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+class FizzBuzzType03 &lt; FizzBuzzType
+  def generate(number)
+    return FizzBuzzValue.new(number, 'FizzBuzz') if fizz?(number) &amp;&amp; buzz?(number)
+
+    FizzBuzzValue.new(number, number.to_s)
+  end
+end</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_test">Test</h5>
+<div class="listingblock">
+<div class="title">/test/application/fizz_buzz_value_command_test.rb</div>
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+require './test/test_helper'
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
+class FizzBuzzValueCommandTest &lt; Minitest::Test
+  describe '数を文字列にして返す' do
+    describe 'タイプ1の場合' do
+      def setup
+        @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType01.new)
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列Fizzを返す
+          assert_equal 'Fizz', @fizzbuzz.execute(3).value
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列Buzzを返す
+          assert_equal 'Buzz', @fizzbuzz.execute(5).value
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列FizzBuzzを返す
+          assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.execute(1).value
+        end
+      end
+    end
+
+    describe 'タイプ2の場合' do
+      def setup
+        @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType02.new)
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.execute(3).value
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.execute(5).value
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列15を返す
+          assert_equal '15', @fizzbuzz.execute(15).value
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.execute(1).value
+        end
+      end
+    end
+
+    describe 'タイプ3の場合' do
+      def setup
+        @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType03.new)
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.execute(3).value
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.execute(5).value
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列FizzBuzzを返す
+          assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.execute(1).value
+        end
+      end
+    end
+
+    describe 'それ以外のタイプの場合' do
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          @fizzbuzz = FizzBuzzType.create(4)
+        end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
+
+    describe '例外ケース' do
+      def test_値は正の値のみ許可する
+        e = assert_raises RuntimeError do
+          FizzBuzzValueCommand.new(
+            FizzBuzzType.create(FizzBuzzType::TYPE_01)
+          ).execute(-1)
+        end
+
+        assert_equal '正の値のみ有効です', e.message
+      end
+
+      def test_100より多い数を許可しない
+        e = assert_raises RuntimeError do
+          FizzBuzzListCommand.new(
+            FizzBuzzType.create(FizzBuzzType::TYPE_01)
+          ).execute(101)
+        end
+
+        assert_equal '上限は100件までです', e.message
+      end
+    end
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/test/application/fizz_buzz_list_command_test.rb</div>
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+require './test/test_helper'
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
+class FizzBuzzListCommandTest &lt; Minitest::Test
+  describe '1から100までのFizzBuzzの配列を返す' do
+    def setup
+      fizz_buzz = FizzBuzzListCommand.new(FizzBuzzType01.new)
+      fizz_buzz_list = fizz_buzz.execute(100)
+      @result = fizz_buzz_list.value
+    end
+
+    def test_配列の初めは文字列の1を返す
+      assert_equal '1', @result.first.value
+    end
+
+    def test_配列の最後は文字列のBuzzを返す
+      assert_equal 'Buzz', @result.last.value
+    end
+
+    def test_配列の2番目は文字列のFizzを返す
+      assert_equal 'Fizz', @result[2].value
+    end
+
+    def test_配列の4番目は文字列のBuzzを返す
+      assert_equal 'Buzz', @result[4].value
+    end
+
+    def test_配列の14番目は文字列のFizzBuzzを返す
+      assert_equal 'FizzBuzz', @result[14].value
+    end
+  end
+end</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-03 12:52:45 JST
+Last updated 2020-02-03 19:08:51 JST
 </div>
 </div>
 </body>
