@@ -2984,7 +2984,100 @@ $ git commit -m 'refactor: デッドコードの削除'
 ----
 
 ==== アサーションの導入
+[source, ruby]
+----
+class FizzBuzzTest < Minitest::Test
+...
+      describe '例外ケース' do
+        def test_値は正の値のみ許可する
+          assert_raises Assertions::AssertionFailedError do
+            FizzBuzzValueCommand.new(
+              FizzBuzzType.create(FizzBuzzType::TYPE_01)
+            ).execute(-1)
+          end
+        end
+      end
+    end
+  end
+----
+
+[source, bash]
+----
+ FAIL["test_値は正の値のみ許可する", #<Minitest::Reporters::Suite:0x0000565140f5fa40 @name="FizzBuzz::数を文字列にして返す::例外ケース">, 0.0028807210037484765]
+ test_値は正の値のみ許可する#FizzBuzz::数を文字列にして返す::例外ケース (0.00s)
+        Assertions::AssertionFailedError expected but nothing was raised.
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:143:in `test_値は正の値のみ許可する'
+
+  36/36: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00705s
+36 tests, 40 assertions, 1 failures, 0 errors, 0 skips
+----
+
+
+[source, ruby]
+----
+...
+module Assertions
+  class AssertionFailedError < StandardError; end
+
+  def assert(&condition)
+    raise AssertionFailedError, 'Assertion Failed' unless condition.call
+  end
+end
+
+class FizzBuzzValue
+...
+----
+
+[source, ruby]
+----
+class FizzBuzzValue
+  attr_reader :number, :value
+
+  def initialize(number, value)
+    @number = number
+    @value = value
+  end
+...
+end
+----
+
+[source, ruby]
+----
+class FizzBuzzValue
+  include Assertions
+  attr_reader :number, :value
+
+  def initialize(number, value)
+    assert { number >= 0 }
+    @number = number
+    @value = value
+  end
+...
+end
+----
+
+[source, bash]
+----
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+Started with run options --seed 37354
+
+
+Progress: |====================================================================================================|
+
+Finished in 0.01433s
+36 tests, 40 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: アサーションの導入'
+----
+
 ==== 例外によるエラーコードの置き換え
+
 ==== モジュールの分割
 
 == エピソード4

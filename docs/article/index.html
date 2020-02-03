@@ -10276,7 +10276,97 @@ $ git commit -m 'refactor: デッドコードの削除'</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_アサーションの導入">3.1.11. アサーションの導入</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzTest &lt; Minitest::Test
+...
+      describe '例外ケース' do
+        def test_値は正の値のみ許可する
+          assert_raises Assertions::AssertionFailedError do
+            FizzBuzzValueCommand.new(
+              FizzBuzzType.create(FizzBuzzType::TYPE_01)
+            ).execute(-1)
+          end
+        end
+      end
+    end
+  end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"> FAIL["test_値は正の値のみ許可する", #&lt;Minitest::Reporters::Suite:0x0000565140f5fa40 @name="FizzBuzz::数を文字列にして返す::例外ケース"&gt;, 0.0028807210037484765]
+ test_値は正の値のみ許可する#FizzBuzz::数を文字列にして返す::例外ケース (0.00s)
+        Assertions::AssertionFailedError expected but nothing was raised.
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:143:in `test_値は正の値のみ許可する'
 
+  36/36: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00705s
+36 tests, 40 assertions, 1 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+module Assertions
+  class AssertionFailedError &lt; StandardError; end
+
+  def assert(&amp;condition)
+    raise AssertionFailedError, 'Assertion Failed' unless condition.call
+  end
+end
+
+class FizzBuzzValue
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzValue
+  attr_reader :number, :value
+
+  def initialize(number, value)
+    @number = number
+    @value = value
+  end
+...
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzValue
+  include Assertions
+  attr_reader :number, :value
+
+  def initialize(number, value)
+    assert { number &gt;= 0 }
+    @number = number
+    @value = value
+  end
+...
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb"
+Started with run options --seed 37354
+
+
+Progress: |====================================================================================================|
+
+Finished in 0.01433s
+36 tests, 40 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'refactor: アサーションの導入'</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_例外によるエラーコードの置き換え">3.1.12. 例外によるエラーコードの置き換え</h4>
@@ -10425,7 +10515,7 @@ $ git commit -m 'refactor: デッドコードの削除'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-03 10:37:24 JST
+Last updated 2020-02-03 10:51:53 JST
 </div>
 </div>
 </body>
