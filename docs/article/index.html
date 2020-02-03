@@ -8281,7 +8281,8 @@ class FizzBuzzTest &lt; Minitest::Test
       describe '1から100までのFizzBuzzの配列を返す' do
         def setup
           fizzbuzz = FizzBuzz.new(1)
-          @result = fizzbuzz.generate_list
+          fizzbuzz.generate_list
+          @result = fizzbuzz.list
         end
 ...
     end
@@ -9525,6 +9526,393 @@ Finished in 0.00909s
 $ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
 </div>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzzValue
+  attr_reader :number, :value
+
+  def initialize(number, value)
+    @number = number
+    @value = value
+  end
+
+  def to_s
+    "#{@number}:#{@value}"
+  end
+
+  def ==(other)
+    @number == other.number &amp;&amp; @value == other.value
+  end
+
+  alias eql? ==
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzzType
+  TYPE_01 = 1
+  TYPE_02 = 2
+  TYPE_03 = 3
+
+  def self.create(type)
+    case type
+    when FizzBuzzType::TYPE_01
+      FizzBuzzType01.new
+    when FizzBuzzType::TYPE_02
+      FizzBuzzType02.new
+    when FizzBuzzType::TYPE_03
+      FizzBuzzType03.new
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
+  def fizz?(number)
+    number.modulo(3).zero?
+  end
+
+  def buzz?(number)
+    number.modulo(5).zero?
+  end
+end
+
+class FizzBuzzType01 &lt; FizzBuzzType
+  def generate(number)
+    return FizzBuzzValue.new(number, 'FizzBuzz') if fizz?(number) &amp;&amp; buzz?(number)
+    return FizzBuzzValue.new(number, 'Fizz') if fizz?(number)
+    return FizzBuzzValue.new(number, 'Buzz') if buzz?(number)
+
+    FizzBuzzValue.new(number, number.to_s)
+  end
+end
+
+class FizzBuzzType02 &lt; FizzBuzzType
+  def generate(number)
+    FizzBuzzValue.new(number, number.to_s)
+  end
+end
+
+class FizzBuzzType03 &lt; FizzBuzzType
+  def generate(number)
+    return FizzBuzzValue.new(number, 'FizzBuzz') if fizz?(number) &amp;&amp; buzz?(number)
+
+    FizzBuzzValue.new(number, number.to_s)
+  end
+end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">...
+ FAIL["test_配列の2番目は文字列のFizzを返す", #&lt;Minitest::Reporters::Suite:0x000055feccc65ab8 @name="数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す"&gt;, 0.012104410998290405]
+ test_配列の2番目は文字列のFizzを返す#数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す (0.01s)
+        --- expected
+        +++ actual
+        @@ -1 +1 @@
+        -"Fizz"
+        +#&lt;FizzBuzzValue:0xXXXXXX @number=3, @value="Fizz"&gt;
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:57:in `test_配列の2番目は文字列のFizzを返す'
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzzTest &lt; Minitest::Test
+  describe 'FizzBuzz' do
+    describe '数を文字列にして返す' do
+      describe 'タイプ1の場合' do
+        def setup
+          @fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+        end
+
+        describe '三の倍数の場合' do
+          def test_3を渡したら文字列Fizzを返す
+            assert_equal 'Fizz', @fizzbuzz.generate(3).value
+          end
+        end
+
+        describe '五の倍数の場合' do
+          def test_5を渡したら文字列Buzzを返す
+            assert_equal 'Buzz', @fizzbuzz.generate(5).value
+          end
+        end
+
+        describe '三と五の倍数の場合' do
+          def test_15を渡したら文字列FizzBuzzを返す
+            assert_equal 'FizzBuzz', @fizzbuzz.generate(15).value
+          end
+        end
+
+        describe 'その他の場合' do
+          def test_1を渡したら文字列1を返す
+            assert_equal '1', @fizzbuzz.generate(1).value
+          end
+        end
+
+        describe '1から100までのFizzBuzzの配列を返す' do
+          def setup
+            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+            fizzbuzz.generate_list
+            @result = fizzbuzz.list
+          end
+
+          def test_配列の初めは文字列の1を返す
+            assert_equal '1', @result.first.value
+          end
+
+          def test_配列の最後は文字列のBuzzを返す
+            assert_equal 'Buzz', @result.last.value
+          end
+
+          def test_配列の2番目は文字列のFizzを返す
+            assert_equal 'Fizz', @result[2].value
+          end
+
+          def test_配列の4番目は文字列のBuzzを返す
+            assert_equal 'Buzz', @result[4].value
+          end
+
+          def test_配列の14番目は文字列のFizzBuzzを返す
+            assert_equal 'FizzBuzz', @result[14].value
+          end
+        end
+      end
+
+      describe 'タイプ2の場合' do
+        def setup
+          @fizzbuzz = FizzBuzz.new(FizzBuzzType02.new)
+        end
+
+        describe '三の倍数の場合' do
+          def test_3を渡したら文字列3を返す
+            assert_equal '3', @fizzbuzz.generate(3).value
+          end
+        end
+
+        describe '五の倍数の場合' do
+          def test_5を渡したら文字列5を返す
+            assert_equal '5', @fizzbuzz.generate(5).value
+          end
+        end
+
+        describe '三と五の倍数の場合' do
+          def test_15を渡したら文字列15を返す
+            assert_equal '15', @fizzbuzz.generate(15).value
+          end
+        end
+
+        describe 'その他の場合' do
+          def test_1を渡したら文字列1を返す
+            assert_equal '1', @fizzbuzz.generate(1).value
+          end
+        end
+      end
+
+      describe 'タイプ3の場合' do
+        def setup
+          @fizzbuzz = FizzBuzz.new(FizzBuzzType03.new)
+        end
+
+        describe '三の倍数の場合' do
+          def test_3を渡したら文字列3を返す
+            assert_equal '3', @fizzbuzz.generate(3).value
+          end
+        end
+
+        describe '五の倍数の場合' do
+          def test_5を渡したら文字列5を返す
+            assert_equal '5', @fizzbuzz.generate(5).value
+          end
+        end
+
+        describe '三と五の倍数の場合' do
+          def test_15を渡したら文字列FizzBuzzを返す
+            assert_equal 'FizzBuzz', @fizzbuzz.generate(15).value
+          end
+        end
+
+        describe 'その他の場合' do
+          def test_1を渡したら文字列1を返す
+            assert_equal '1', @fizzbuzz.generate(1).value
+          end
+        end
+
+        describe 'それ以外のタイプの場合' do
+          def test_例外を返す
+            e = assert_raises RuntimeError do
+              @fizzbuzz = FizzBuzzType.create(4)
+            end
+
+            assert_equal '該当するタイプは存在しません', e.message
+          end
+        end
+      end
+    end
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'refactor: オブジェクトによるプリミティブの置き換え'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+  describe 'FizzBuzzValue' do
+    def setup
+      @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    end
+
+    def test_同じで値である
+      value1 = @fizzbuzz.generate(1)
+      value2 = @fizzbuzz.generate(1)
+
+      assert value1.eql?(value2)
+    end
+
+    def test_to_stringメソッド
+      value = @fizzbuzz.generate(3)
+
+      assert_equal '3:Fizz', value.to_s
+    end
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'test: 学習用テスト'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzzList
+  attr_reader :value
+
+  def initialize(list)
+    @value = list
+  end
+
+  def to_s
+    @value.to_s
+  end
+
+  def add(value)
+    FizzBuzzList.new(@value + value)
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = type
+  end
+...
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = type
+    @list = FizzBuzzList.new([])
+  end
+
+...
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = @list.add((1..MAX_NUMBER).map { |n| @type.generate(n) })
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">...
+ERROR["test_配列の14番目は文字列のFizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x00005561331b7940 @name="FizzBuzz::数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す"&gt;, 0.011710233025951311]
+ test_配列の14番目は文字列のFizzBuzzを返す#FizzBuzz::数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す (0.01s)
+Minitest::UnexpectedError:         NoMethodError: undefined method `[]' for #&lt;FizzBuzzList:0x0000556133198ba8 @value=[]&gt;
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:66:in `test_配列の14番目は文字列のFizzBuzzを返す'
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+        describe '1から100までのFizzBuzzの配列を返す' do
+          def setup
+            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+            fizzbuzz.generate_list
+            @result = fizzbuzz.list
+          end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+        describe '1から100までのFizzBuzzの配列を返す' do
+          def setup
+            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+            fizzbuzz.generate_list
+            @result = fizzbuzz.list.value
+          end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'refactor: コレクションのカプセル化'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">  describe 'FizzBuzzValueList' do
+    def setup
+      @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    end
+
+    def test_新しいインスタンスが作られる
+      list1 = @fizzbuzz.generate_list
+      list2 = list1.add(list1.value)
+
+      assert_equal 100, list1.value.count
+      assert_equal 200, list2.value.count
+    end
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'refactor: 学習用テスト'</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_アサーションの導入">3.1.10. アサーションの導入</h4>
@@ -9677,7 +10065,7 @@ $ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-01 18:21:33 JST
+Last updated 2020-02-03 10:11:55 JST
 </div>
 </div>
 </body>
