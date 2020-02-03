@@ -10367,6 +10367,189 @@ Finished in 0.01433s
 $ git commit -m 'refactor: アサーションの導入'</code></pre>
 </div>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+      describe '例外ケース' do
+        def test_値は正の値のみ許可する
+          assert_raises Assertions::AssertionFailedError do
+            FizzBuzzValueCommand.new(
+              FizzBuzzType.create(FizzBuzzType::TYPE_01)
+            ).execute(-1)
+          end
+        end
+
+        def test_100より多い数を許可しない
+          assert_raises Assertions::AssertionFailedError do
+            FizzBuzzListCommand.new(
+              FizzBuzzType.create(FizzBuzzType::TYPE_01)
+            ).execute(101)
+          end
+        end
+      end
+    end
+  end
+
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+class FizzBuzzList
+  include Assertions
+  attr_reader :value
+
+  def initialize(list)
+    assert { list.count &lt;= 100 }
+    @value = list
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">ERROR["test_新しいインスタンスが作られる", #&lt;Minitest::Reporters::Suite:0x00005558ca6e8e80 @name="FizzBuzzValueList"&gt;, 0.010412617004476488]
+ test_新しいインスタンスが作られる#FizzBuzzValueList (0.01s)
+Minitest::UnexpectedError:         Assertions::AssertionFailedError: Assertion Failed
+            /workspace/tdd_rb/lib/fizz_buzz.rb:58:in `assert'
+            /workspace/tdd_rb/lib/fizz_buzz.rb:88:in `initialize'
+            /workspace/tdd_rb/lib/fizz_buzz.rb:97:in `new'
+            /workspace/tdd_rb/lib/fizz_buzz.rb:97:in `add'
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:259:in `test_新しいインスタンスが作られる'
+
+====================================================================================================|
+
+Finished in 0.01238s
+36 tests, 38 assertions, 0 failures, 1 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+
+  describe 'FizzBuzzValueList' do
+    def setup
+      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    end
+
+    def test_新しいインスタンスが作られる
+      list1 = @fizzbuzz.execute(100)
+      list2 = list1.add(list1.value)
+
+      assert_equal 100, list1.value.count
+      assert_equal 200, list2.value.count
+    end
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+
+  describe 'FizzBuzzValueList' do
+    def setup
+      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    end
+
+    def test_新しいインスタンスが作られる
+      list1 = @fizzbuzz.execute(50)
+      list2 = list1.add(list1.value)
+
+      assert_equal 100, list1.value.count
+      assert_equal 200, list2.value.count
+    end
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"> FAIL["test_新しいインスタンスが作られる", #&lt;Minitest::Reporters::Suite:0x0000556b5137c780 @name="FizzBuzzValueList"&gt;, 0.003735148988198489]
+ test_新しいインスタンスが作られる#FizzBuzzValueList (0.00s)
+        Expected: 100
+          Actual: 50
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:261:in `test_新しいインスタンスが作られる'
+
+  36/36: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00837s
+36 tests, 39 assertions, 1 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+
+  describe 'FizzBuzzValueList' do
+    def setup
+      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    end
+
+    def test_新しいインスタンスが作られる
+      list1 = @fizzbuzz.execute(50)
+      list2 = list1.add(list1.value)
+
+      assert_equal 50, list1.value.count
+      assert_equal 200, list2.value.count
+    end
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"> FAIL["test_新しいインスタンスが作られる", #&lt;Minitest::Reporters::Suite:0x0000563a0c4fc2b0 @name="FizzBuzzValueList"&gt;, 0.005684088013367727]
+ test_新しいインスタンスが作られる#FizzBuzzValueList (0.01s)
+        Expected: 200
+          Actual: 100
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:262:in `test_新しいインスタンスが作られる'
+
+  36/36: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00809s
+36 tests, 40 assertions, 1 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+
+  describe 'FizzBuzzValueList' do
+    def setup
+      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    end
+
+    def test_新しいインスタンスが作られる
+      list1 = @fizzbuzz.execute(50)
+      list2 = list1.add(list1.value)
+
+      assert_equal 50, list1.value.count
+      assert_equal 100, list2.value.count
+    end
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">01:58:57 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 61 / 64 LOC (95.31%) covered.
+Started with run options --guard --seed 44956
+
+  36/36: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00717s
+36 tests, 40 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'refactor: アサーションの導入'</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_例外によるエラーコードの置き換え">3.1.12. 例外によるエラーコードの置き換え</h4>
@@ -10515,7 +10698,7 @@ $ git commit -m 'refactor: アサーションの導入'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-03 10:51:53 JST
+Last updated 2020-02-03 11:01:33 JST
 </div>
 </div>
 </body>
