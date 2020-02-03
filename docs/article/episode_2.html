@@ -1583,6 +1583,7 @@ $ guard init</code></pre>
 #   watch(%r{file/path}) { `command(s)` }
 #
 guard :shell do
+  watch(%r{lib/(.*).rb}) { |_m| `rake test` }
 end
 
 guard :minitest do
@@ -1747,7 +1748,7 @@ $ git commit -m 'chore: タスクの自動化'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-01 14:20:38 JST
+Last updated 2020-02-03 12:56:37 JST
 </div>
 </div>
 </body>

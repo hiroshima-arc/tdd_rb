@@ -4,6 +4,7 @@
 #   watch(%r{file/path}) { `command(s)` }
 #
 guard :shell do
+  watch(%r{lib/(.*).rb}) { |_m| `rake test` }
 end
 
 guard :minitest do
