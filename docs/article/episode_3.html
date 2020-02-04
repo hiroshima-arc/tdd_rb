@@ -1632,7 +1632,7 @@ $ git commit -m 'refactor: ステートメントのスライド'</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_例外ケース">例外ケース</h5>
+<h5 id="_それ以外のタイプの場合">それ以外のタイプの場合</h5>
 <div class="paragraph">
 <p>追加仕様には対応しましたがタイプ1,2,3以外の値が <strong>引数</strong> として渡された場合はどうしましょうか 現状では <code>nil</code> を返しますがこのような例外ケースも考慮する必要があります。</p>
 </div>
@@ -3479,6 +3479,17 @@ $ git commit -m 'refactor: メソッドの移動'</code></pre>
 <img src="diag-337dc5ff5d03ee9f5eab82f0d3233fd0.png" alt="diag 337dc5ff5d03ee9f5eab82f0d3233fd0" width="470" height="251">
 </div>
 </div>
+<div class="paragraph">
+<p><code>FizzBuzz</code> クラスを <strong>インスタンス化</strong> するには以下のように書きます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">fizz_buzz = FizzBuzz.new(1)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>コンストラクタ</strong> の <strong>引数</strong> に渡される <code>1</code> は何を表しているのでしょうか？もちろんタイプですが初めてこのコードを見る人にはわからないでしょう。このような整数、浮動小数点、文字列などの基本データ（プリミティブ）型の使い方からは <strong>基本データ型への執着</strong> の臭いがします。 <strong>オブジェクトによるプリミティブの置き換え</strong> を実施してコードの意図を明確にしましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
@@ -3503,6 +3514,9 @@ $ git commit -m 'refactor: メソッドの移動'</code></pre>
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><strong>コンストラクタ</strong> で引き渡されるタイプは整数ではなくタイプクラスの <strong>インスタンス</strong> に変更します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">...
@@ -3514,6 +3528,9 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `generate' fo
             /workspace/tdd_rb/test/fizz_buzz_test.rb:125:in `test_1を渡したら文字列1を返す'
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストが失敗しました。 <strong>コンストラクタ</strong> の引数を整数からタイプクラスの <strong>インスタンス</strong> に変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3553,6 +3570,9 @@ class FizzBuzzTest &lt; Minitest::Test
     end
   end</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>ここで注意するのは <code>それ以外のタイプの場合</code> ですが例外を投げなくなります。静的に型付けされた言語なら型チェックエラーになるのですがRubyは動的に型付けされる言語のため <code>FizzBuzz#generate</code> メソッド実行までエラーになりません。そこで例外を投げる <code>FizzBuzzType#create</code> メソッドに変更しておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3604,16 +3624,28 @@ Finished in 0.00687s
 32 tests, 35 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>初めてコードを見る人でもテストコードを見ればコードの意図が読み取れるようになりましたのでコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'refactor: オブジェクトによるプリミティブの置き換え'</code></pre>
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_マジックナンバーの置き換え">マジックナンバーの置き換え</h5>
 <div class="imageblock">
 <div class="content">
 <img src="diag-8c51b913766b480e52dc0ad218c5e29a.png" alt="diag 8c51b913766b480e52dc0ad218c5e29a" width="470" height="251">
 </div>
+</div>
+<div class="paragraph">
+<p>まだプリミティグ型を使っている部分があります。</p>
+</div>
+<div class="paragraph">
+<p>ここは <strong>マジックナンバーの置き換え</strong> を実施して可読性を上げておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3676,10 +3708,16 @@ Finished in 0.00909s
 $ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_オブジェクトによるプリミティブの置き換え_2">オブジェクトによるプリミティブの置き換え</h5>
 <div class="imageblock">
 <div class="content">
 <img src="diag-f981c240a38685122123bac1bc1d6cea.png" alt="diag f981c240a38685122123bac1bc1d6cea" width="470" height="264">
 </div>
+</div>
+<div class="paragraph">
+<p>次に <strong>基本データ型への執着</strong> の臭いがする箇所として <code>FizzBuzz#generate</code> メソッドが返すFizzBuzzの値が文字型である点です。<strong>値オブジェクト</strong> <code>FizzBuzzValue</code> を返すように変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3703,6 +3741,9 @@ class FizzBuzzValue
   alias eql? ==
 end</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>各タイプクラスの <code>generate</code> メソッドが文字列のプリミティブ型を返しているので <strong>値オブジェクト</strong> <code>FizzBuzzValue</code> を返すように変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3774,143 +3815,168 @@ end
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>変更によりテストが失敗しました。エラー内容を見てみると文字列からオブジェクトを返しているためアサーションが失敗しているようです。ここは、<strong>値オブジェクト</strong> の <strong>アクセッサメソッド</strong> を経由して取得した値をアサーション対象に変更しましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
 class FizzBuzzTest &lt; Minitest::Test
-  describe 'FizzBuzz' do
-    describe '数を文字列にして返す' do
-      describe 'タイプ1の場合' do
-        def setup
-          @fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
-        end
+  describe '数を文字列にして返す' do
+    describe 'タイプ1の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+      end
 
-        describe '三の倍数の場合' do
-          def test_3を渡したら文字列Fizzを返す
-            assert_equal 'Fizz', @fizzbuzz.generate(3).value
-          end
-        end
-
-        describe '五の倍数の場合' do
-          def test_5を渡したら文字列Buzzを返す
-            assert_equal 'Buzz', @fizzbuzz.generate(5).value
-          end
-        end
-
-        describe '三と五の倍数の場合' do
-          def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.generate(15).value
-          end
-        end
-
-        describe 'その他の場合' do
-          def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1).value
-          end
-        end
-
-        describe '1から100までのFizzBuzzの配列を返す' do
-          def setup
-            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
-            fizzbuzz.generate_list
-            @result = fizzbuzz.list
-          end
-
-          def test_配列の初めは文字列の1を返す
-            assert_equal '1', @result.first.value
-          end
-
-          def test_配列の最後は文字列のBuzzを返す
-            assert_equal 'Buzz', @result.last.value
-          end
-
-          def test_配列の2番目は文字列のFizzを返す
-            assert_equal 'Fizz', @result[2].value
-          end
-
-          def test_配列の4番目は文字列のBuzzを返す
-            assert_equal 'Buzz', @result[4].value
-          end
-
-          def test_配列の14番目は文字列のFizzBuzzを返す
-            assert_equal 'FizzBuzz', @result[14].value
-          end
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列Fizzを返す
+          assert_equal 'Fizz', @fizzbuzz.generate(3).value
         end
       end
 
-      describe 'タイプ2の場合' do
-        def setup
-          @fizzbuzz = FizzBuzz.new(FizzBuzzType02.new)
-        end
-
-        describe '三の倍数の場合' do
-          def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.generate(3).value
-          end
-        end
-
-        describe '五の倍数の場合' do
-          def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.generate(5).value
-          end
-        end
-
-        describe '三と五の倍数の場合' do
-          def test_15を渡したら文字列15を返す
-            assert_equal '15', @fizzbuzz.generate(15).value
-          end
-        end
-
-        describe 'その他の場合' do
-          def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1).value
-          end
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列Buzzを返す
+          assert_equal 'Buzz', @fizzbuzz.generate(5).value
         end
       end
 
-      describe 'タイプ3の場合' do
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列FizzBuzzを返す
+          assert_equal 'FizzBuzz', @fizzbuzz.generate(15).value
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.generate(1).value
+        end
+      end
+
+      describe '1から100までのFizzBuzzの配列を返す' do
         def setup
-          @fizzbuzz = FizzBuzz.new(FizzBuzzType03.new)
+          fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+          fizzbuzz.generate_list
+          @result = fizzbuzz.list
         end
 
-        describe '三の倍数の場合' do
-          def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.generate(3).value
-          end
+        def test_配列の初めは文字列の1を返す
+          assert_equal '1', @result.first.value
         end
 
-        describe '五の倍数の場合' do
-          def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.generate(5).value
-          end
+        def test_配列の最後は文字列のBuzzを返す
+          assert_equal 'Buzz', @result.last.value
         end
 
-        describe '三と五の倍数の場合' do
-          def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.generate(15).value
-          end
+        def test_配列の2番目は文字列のFizzを返す
+          assert_equal 'Fizz', @result[2].value
         end
 
-        describe 'その他の場合' do
-          def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.generate(1).value
-          end
+        def test_配列の4番目は文字列のBuzzを返す
+          assert_equal 'Buzz', @result[4].value
         end
 
-        describe 'それ以外のタイプの場合' do
-          def test_例外を返す
-            e = assert_raises RuntimeError do
-              @fizzbuzz = FizzBuzzType.create(4)
-            end
-
-            assert_equal '該当するタイプは存在しません', e.message
-          end
+        def test_配列の14番目は文字列のFizzBuzzを返す
+          assert_equal 'FizzBuzz', @result[14].value
         end
+      end
+    end
+
+    describe 'タイプ2の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(FizzBuzzType02.new)
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.generate(3).value
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.generate(5).value
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列15を返す
+          assert_equal '15', @fizzbuzz.generate(15).value
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.generate(1).value
+        end
+      end
+    end
+
+    describe 'タイプ3の場合' do
+      def setup
+        @fizzbuzz = FizzBuzz.new(FizzBuzzType03.new)
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.generate(3).value
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.generate(5).value
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列FizzBuzzを返す
+          assert_equal 'FizzBuzz', @fizzbuzz.generate(15).value
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.generate(1).value
+        end
+      end
+    end
+
+    describe 'それ以外のタイプの場合' do
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          FizzBuzzType.create(4)
+        end
+
+        assert_equal '該当するタイプは存在しません', e.message
       end
     end
   end
 ...</code></pre>
 </div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">08:49:28 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 41 / 46 LOC (89.13%) covered.
+Started with run options --guard --seed 25972
+
+  32/32: [==================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00619s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+
+08:49:29 - INFO - Inspecting Ruby code style of all files
+ 7/7 files |======================================= 100 =======================================&gt;| Time: 00:00:00
+
+7 files inspected, no offenses detected
+08:49:30 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
+ 0/0 files |======================================= 100 =======================================&gt;| Time: 00:00:00
+
+0 files inspected, no offenses detected</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストコードをそれほど変更することなく　<strong>値オブジェクト</strong> を返すリファクタリングが出来ました。コミットしておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3922,6 +3988,12 @@ $ git commit -m 'refactor: オブジェクトによるプリミティブの置�
 <div class="content">
 <img src="diag-6784eef3a06015b3afd514181ea55821.png" alt="diag 6784eef3a06015b3afd514181ea55821" width="470" height="264">
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_学習用テスト">学習用テスト</h5>
+<div class="paragraph">
+<p><strong>値オブジェクト</strong> の理解を深めるために <strong>学習用テスト</strong> を追加します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3953,6 +4025,17 @@ end</code></pre>
 $ git commit -m 'test: 学習用テスト'</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ファーストクラスコレクション">ファーストクラスコレクション</h4>
+<div class="imageblock">
+<div class="content">
+<img src="diag-6784eef3a06015b3afd514181ea55821.png" alt="diag 6784eef3a06015b3afd514181ea55821" width="470" height="264">
+</div>
+</div>
+<div class="sect4">
+<h5 id="_コレクションのカプセル化">コレクションのカプセル化</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -5897,7 +5980,7 @@ end</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-04 16:42:59 JST
+Last updated 2020-02-04 18:01:06 JST
 </div>
 </div>
 </body>
