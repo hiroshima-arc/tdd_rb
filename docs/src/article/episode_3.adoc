@@ -3677,12 +3677,64 @@ $ git commit -m 'refactor: 学習用テスト'
 
 ==== デザインパターン
 
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    generate()
+    generate_list()
+}
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+   generate()
+}
+class FizzBuzzType02 {
+   generate()
+}
+class FizzBuzzType03 {
+   generate()
+}
+class FizzBuzzValue {
+   number
+   value
+   to_s()
+   eql?()
+}
+class FizzBuzzList {
+   value
+   to_s()
+   add(value)
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzz *- FizzBuzzType
+FizzBuzzType -> FizzBuzzValue
+FizzBuzzList *-- FizzBuzzValue
+FizzBuzz -> FizzBuzzList
+----
+
+*値オブジェクト* 及び *ファーストクラスコレクション* の適用で *基本データ型への執着* の臭いはなくなりました。今度は設計の観点から全体を眺めてみましょう。ここで気になるのが `FizzBuzz` クラスです。このクラスは他のクラスと比べてやることが多いようです。このようなクラスは *単一責任の原則* に違反している可能性があります。そこで *デザインパターン* の１つである *Commandパターン* を使ったリファクタリングを適用してみようと思います。
+
 ===== メソッドオブジェクトによるメソッドの置き換え
+
+まず、*値オブジェクト* の `FizzBuzzValue` を返す責務だけを持った *メソッドオブジェクト* を抽出します。Rubyのような動的言語では必要が無いのですが *Commandパターン* の説明のため *インターフェイス* にあたるスーパークラスを継承した *メソッドオブジェクト* を定義します。
 
 [source, ruby]
 ----
 ...
-class FizzBuzzCommand; end
+class FizzBuzzCommand
+  def execute; end
+end
 
 class FizzBuzzValueCommand < FizzBuzzCommand
   def initialize(type)
@@ -3690,148 +3742,168 @@ class FizzBuzzValueCommand < FizzBuzzCommand
   end
 
   def execute(number)
-    @type.generate(number)
+    @type.generate(number).value
   end
 end
 ----
+
+テストコードを `FizzBuzzValueCommand` を呼び出すように変更します。
 
 [source, ruby]
 ----
 ...
 class FizzBuzzTest < Minitest::Test
-  describe 'FizzBuzz' do
-    describe '数を文字列にして返す' do
-      describe 'タイプ1の場合' do
-        def setup
-          @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType01.new)
-        end
+  describe '数を文字列にして返す' do
+    describe 'タイプ1の場合' do
+      def setup
+        @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType01.new)
+      end
 
-        describe '三の倍数の場合' do
-          def test_3を渡したら文字列Fizzを返す
-            assert_equal 'Fizz', @fizzbuzz.execute(3).value
-          end
-        end
-
-        describe '五の倍数の場合' do
-          def test_5を渡したら文字列Buzzを返す
-            assert_equal 'Buzz', @fizzbuzz.execute(5).value
-          end
-        end
-
-        describe '三と五の倍数の場合' do
-          def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
-          end
-        end
-
-        describe 'その他の場合' do
-          def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.execute(1).value
-          end
-        end
-
-        describe '1から100までのFizzBuzzの配列を返す' do
-          def setup
-            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
-            fizzbuzz.generate_list
-            @result = fizzbuzz.list.value
-          end
-
-          def test_配列の初めは文字列の1を返す
-            assert_equal '1', @result.first.value
-          end
-
-          def test_配列の最後は文字列のBuzzを返す
-            assert_equal 'Buzz', @result.last.value
-          end
-
-          def test_配列の2番目は文字列のFizzを返す
-            assert_equal 'Fizz', @result[2].value
-          end
-
-          def test_配列の4番目は文字列のBuzzを返す
-            assert_equal 'Buzz', @result[4].value
-          end
-
-          def test_配列の14番目は文字列のFizzBuzzを返す
-            assert_equal 'FizzBuzz', @result[14].value
-          end
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列Fizzを返す
+          assert_equal 'Fizz', @fizzbuzz.execute(3)
         end
       end
 
-      describe 'タイプ2の場合' do
-        def setup
-          @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType02.new)
-        end
-
-        describe '三の倍数の場合' do
-          def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.execute(3).value
-          end
-        end
-
-        describe '五の倍数の場合' do
-          def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.execute(5).value
-          end
-        end
-
-        describe '三と五の倍数の場合' do
-          def test_15を渡したら文字列15を返す
-            assert_equal '15', @fizzbuzz.execute(15).value
-          end
-        end
-
-        describe 'その他の場合' do
-          def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.execute(1).value
-          end
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列Buzzを返す
+          assert_equal 'Buzz', @fizzbuzz.execute(5)
         end
       end
 
-      describe 'タイプ3の場合' do
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列FizzBuzzを返す
+          assert_equal 'FizzBuzz', @fizzbuzz.execute(15)
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.execute(1)
+        end
+      end
+
+      describe '1から100までのFizzBuzzの配列を返す' do
         def setup
-          @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType03.new)
+          fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
+          fizzbuzz.generate_list
+          @result = fizzbuzz.list
         end
 
-        describe '三の倍数の場合' do
-          def test_3を渡したら文字列3を返す
-            assert_equal '3', @fizzbuzz.execute(3).value
-          end
+        def test_配列の初めは文字列の1を返す
+          assert_equal '1', @result.first.value
         end
 
-        describe '五の倍数の場合' do
-          def test_5を渡したら文字列5を返す
-            assert_equal '5', @fizzbuzz.execute(5).value
-          end
+        def test_配列の最後は文字列のBuzzを返す
+          assert_equal 'Buzz', @result.last.value
         end
 
-        describe '三と五の倍数の場合' do
-          def test_15を渡したら文字列FizzBuzzを返す
-            assert_equal 'FizzBuzz', @fizzbuzz.execute(15).value
-          end
+        def test_配列の2番目は文字列のFizzを返す
+          assert_equal 'Fizz', @result[2].value
         end
 
-        describe 'その他の場合' do
-          def test_1を渡したら文字列1を返す
-            assert_equal '1', @fizzbuzz.execute(1).value
-          end
+        def test_配列の4番目は文字列のBuzzを返す
+          assert_equal 'Buzz', @result[4].value
         end
 
-        describe 'それ以外のタイプの場合' do
-          def test_例外を返す
-            e = assert_raises RuntimeError do
-              @fizzbuzz = FizzBuzzType.create(4)
-            end
-
-            assert_equal '該当するタイプは存在しません', e.message
-          end
+        def test_配列の14番目は文字列のFizzBuzzを返す
+          assert_equal 'FizzBuzz', @result[14].value
         end
+      end
+    end
+
+    describe 'タイプ2の場合' do
+      def setup
+        @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType02.new)
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.execute(3)
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.execute(5)
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列15を返す
+          assert_equal '15', @fizzbuzz.execute(15)
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.execute(1)
+        end
+      end
+    end
+
+    describe 'タイプ3の場合' do
+      def setup
+        @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType03.new)
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.execute(3)
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.execute(5)
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列FizzBuzzを返す
+          assert_equal 'FizzBuzz', @fizzbuzz.execute(15)
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.execute(1)
+        end
+      end
+    end
+
+    describe 'それ以外のタイプの場合' do
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          FizzBuzzType.create(4)
+        end
+
+        assert_equal '該当するタイプは存在しません', e.message
       end
     end
   end
 ...
 ----
+
+[source, bash]
+----
+09:56:19 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 60 / 63 LOC (95.24%) covered.
+Started with run options --guard --seed 27353
+
+  35/35: [==================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00692s
+35 tests, 39 assertions, 0 failures, 0 errors, 0 skips
+
+09:56:20 - INFO - Inspecting Ruby code style of all files
+ 7/7 files |======================================= 100 =======================================>| Time: 00:00:00 
+
+7 files inspected, no offenses detected
+09:56:21 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
+ 0/0 files |======================================= 100 =======================================>| Time: 00:00:00 
+----
+
 
 [source, bash]
 ----
@@ -3877,6 +3949,7 @@ class FizzBuzzList {
    add(value)
 }
 Interface FizzBuzzCommand {
+  execute()
 }
 class FizzBuzzValueCommand {
   execute(number)
@@ -3891,6 +3964,8 @@ FizzBuzz -> FizzBuzzList
 FizzBuzzCommand <|-- FizzBuzzValueCommand
 FizzBuzzValueCommand *- FizzBuzzType
 ----
+
+===== メソッドオブジェクトによるメソッドの置き換え
 
 [source, ruby]
 ----
@@ -3913,7 +3988,7 @@ end
           def setup
             fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
             fizzbuzz.generate_list
-            @result = fizzbuzz.list.value
+            @result = fizzbuzz.list
           end
 ...
 ----
@@ -3948,6 +4023,8 @@ Finished in 0.00652s
 $ git add .
 $ git commit -m 'refactor: メソッドオブジェクトによるメソッドの置き換え'
 ----
+
+===== デッドコードの削除
 
 [plantuml]
 ----
@@ -4011,11 +4088,14 @@ FizzBuzzCommand *- FizzBuzzType
 ----
 class FizzBuzz
   MAX_NUMBER = 100
-  attr_reader :list
 
   def initialize(type)
     @type = type
     @list = FizzBuzzList.new([])
+  end
+
+  def list
+    @list.value
   end
 
   def generate(number)
