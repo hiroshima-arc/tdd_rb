@@ -3469,6 +3469,8 @@ FizzBuzz *- FizzBuzzType
 FizzBuzzType -> FizzBuzzValue
 ----
 
+*値オブジェクト* を扱うFizzBuzzリストですが *ファーストクラスコレクション* にしましょう。
+
 ===== コレクションのカプセル化
 
 [source, ruby]
@@ -3490,6 +3492,8 @@ class FizzBuzzList
   end
 end
 ----
+
+FizzBuzz配列を *ファーストクラスコレクション* から取得するように変更します。
 
 [source, ruby]
 ----
@@ -3537,29 +3541,59 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `[]' for #<Fi
 ...
 ----
 
+*ファーストクラスコレクション* 経由で取得するようになったので *アクセッサメソッド* を変更する必要があります。
+
 [source, ruby]
 ----
-...
-        describe '1から100までのFizzBuzzの配列を返す' do
-          def setup
-            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
-            fizzbuzz.generate_list
-            @result = fizzbuzz.list
-          end
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = type
+    @list = FizzBuzzList.new([])
+  end
 ...
 ----
 
 [source, ruby]
 ----
-...
-        describe '1から100までのFizzBuzzの配列を返す' do
-          def setup
-            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
-            fizzbuzz.generate_list
-            @result = fizzbuzz.list.value
-          end
-...
+class FizzBuzz
+  MAX_NUMBER = 100
+
+  def initialize(type)
+    @type = type
+    @list = FizzBuzzList.new([])
+  end
+
+  def list
+    @list.value
+  end
+....
 ----
+
+[source, bash]
+----
+09:12:46 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 53 / 56 LOC (94.64%) covered.
+Started with run options --guard --seed 61051
+
+  34/34: [==================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01285s
+34 tests, 37 assertions, 0 failures, 0 errors, 0 skips
+
+09:12:47 - INFO - Inspecting Ruby code style of all files
+ 7/7 files |======================================= 100 =======================================>| Time: 00:00:00 
+
+7 files inspected, no offenses detected
+09:12:48 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
+ 0/0 files |======================================= 100 =======================================>| Time: 00:00:00 
+
+0 files inspected, no offenses detected
+----
+
+テストが直ったのでコミットしておきます。
 
 [source, bash]
 ----
@@ -3612,6 +3646,10 @@ FizzBuzzType -> FizzBuzzValue
 FizzBuzzList *-- FizzBuzzValue
 FizzBuzz -> FizzBuzzList
 ----
+
+===== 学習用テスト
+
+*ファーストクラスコレクション* を理解するため *学習用テスト* を追加します。
 
 [source, ruby]
 ----

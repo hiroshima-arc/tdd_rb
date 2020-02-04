@@ -4034,6 +4034,9 @@ $ git commit -m 'test: 学習用テスト'</code></pre>
 <img src="diag-6784eef3a06015b3afd514181ea55821.png" alt="diag 6784eef3a06015b3afd514181ea55821" width="470" height="264">
 </div>
 </div>
+<div class="paragraph">
+<p><strong>値オブジェクト</strong> を扱うFizzBuzzリストですが <strong>ファーストクラスコレクション</strong> にしましょう。</p>
+</div>
 <div class="sect4">
 <h5 id="_コレクションのカプセル化">コレクションのカプセル化</h5>
 <div class="listingblock">
@@ -4055,6 +4058,9 @@ class FizzBuzzList
   end
 end</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>FizzBuzz配列を <strong>ファーストクラスコレクション</strong> から取得するように変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4102,29 +4108,61 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `[]' for #&lt
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><strong>ファーストクラスコレクション</strong> 経由で取得するようになったので <strong>アクセッサメソッド</strong> を変更する必要があります。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
-        describe '1から100までのFizzBuzzの配列を返す' do
-          def setup
-            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
-            fizzbuzz.generate_list
-            @result = fizzbuzz.list
-          end
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = type
+    @list = FizzBuzzList.new([])
+  end
 ...</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
-        describe '1から100までのFizzBuzzの配列を返す' do
-          def setup
-            fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
-            fizzbuzz.generate_list
-            @result = fizzbuzz.list.value
-          end
-...</code></pre>
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+
+  def initialize(type)
+    @type = type
+    @list = FizzBuzzList.new([])
+  end
+
+  def list
+    @list.value
+  end
+....</code></pre>
 </div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">09:12:46 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 53 / 56 LOC (94.64%) covered.
+Started with run options --guard --seed 61051
+
+  34/34: [==================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01285s
+34 tests, 37 assertions, 0 failures, 0 errors, 0 skips
+
+09:12:47 - INFO - Inspecting Ruby code style of all files
+ 7/7 files |======================================= 100 =======================================&gt;| Time: 00:00:00
+
+7 files inspected, no offenses detected
+09:12:48 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
+ 0/0 files |======================================= 100 =======================================&gt;| Time: 00:00:00
+
+0 files inspected, no offenses detected</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストが直ったのでコミットしておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4136,6 +4174,12 @@ $ git commit -m 'refactor: コレクションのカプセル化'</code></pre>
 <div class="content">
 <img src="diag-c71f04d2bdaf08275832a101cabec792.png" alt="diag c71f04d2bdaf08275832a101cabec792" width="764" height="346">
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_学習用テスト_2">学習用テスト</h5>
+<div class="paragraph">
+<p><strong>ファーストクラスコレクション</strong> を理解するため <strong>学習用テスト</strong> を追加します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5980,7 +6024,7 @@ end</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-04 18:01:06 JST
+Last updated 2020-02-04 18:18:57 JST
 </div>
 </div>
 </body>
