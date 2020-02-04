@@ -1549,7 +1549,8 @@ class FizzBuzz {
 
 ==== ポリモーフィズム
 
-===== ポリモーフィズムによる条件記述の置き換え
+===== ポリモーフィズムによる条件記述の置き換え 1
+
 [plantuml]
 ----
 class FizzBuzz {
@@ -1560,6 +1561,8 @@ class FizzBuzz {
     generate_list()
 }
 ----
+
+リファクタリングによりデータとロジックを１つのクラスにまとめて *カプセル化* を進めることが出来ました。しかし、以下の警告メッセージが表示されたままです。*ポリモーフィズム* によるロジックのリファクタリングを実施していきましょう。
 
 [source, bash]
 ----
@@ -1576,6 +1579,11 @@ lib/fizz_buzz.rb:11:3: C: Metrics/PerceivedComplexity: Perceived complexity for 
 2 files inspected, 2 offenses detected
 ...
 ----
+
+* https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricscyclomaticcomplexity[Metrics/CyclomaticComplexity^]
+* https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsperceivedcomplexity[Metrics/PerceivedComplexity^]
+
+https://ja.wikipedia.org/wiki/%E5%BE%AA%E7%92%B0%E7%9A%84%E8%A4%87%E9%9B%91%E5%BA%A6[循環的複雑度^] が高く可読性が低く複雑なコードと警告されているようです。対象となっている　`FizzBuzz#generate` を確認してみましょう。
 
 [source, ruby]
 ----
@@ -1603,6 +1611,8 @@ lib/fizz_buzz.rb:11:3: C: Metrics/PerceivedComplexity: Perceived complexity for 
   end
 ...
 ----
+
+コードの不吉な臭いである *重複したスイッチ文* に該当するコードのようなのでここはリファクタリングカタログに従って *ポリモーフィズムによる条件記述の置き換え* を適用していきましょう。比較的大きなリファクタリングなのでいくつかのステップに分けて進めていきます。
 
 [source, ruby]
 ----
@@ -1640,6 +1650,8 @@ class FizzBuzz
 ...
 ----
 
+まず、タイプごとのクラスを定義してそれを *インスタンス化* する *ファクトリメソッド* をFizzBuzzクラスに追加します。この時点では新しいクラスとメソッドの追加だけなのでテストは壊れていないはずです（警告は出ていますが・・・）。ここでコミットしておきますがリファクタリング作業としては https://ja.wikipedia.org/wiki/%E4%BB%95%E6%8E%9B%E5%93%81[仕掛^] なのでWIP(Work In Progress)をメッセージに追加してコミットします。
+
 [source, bash]
 ----
 $ git add .
@@ -1661,6 +1673,9 @@ FizzBuzz -> FizzBuzzType02
 FizzBuzz -> FizzBuzzType03
 ----
 
+===== ポリモーフィズムによる条件記述の置き換え 2
+
+続いて、各タイプクラスにメソッドを実装します。ここでは *case式* の各処理をコピー&ペーストしています。カット&ペーストするとプロダクトコードが壊れたままリファクタリングを進めることになるのでここは慎重に進めていきます。
 
 [source, ruby]
 ----
@@ -1711,16 +1726,58 @@ class FizzBuzzType03
     is_buzz = number.modulo(5).zero?
 
     return 'FizzBuzz' if is_fizz && is_buzz
-
+。
     number.to_s
   end
 end
 ----
 
+警告は出ますがテストは壊れていないのでコミットします。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'refactor(WIP): ポリモーフィズムによる条件記述の置き換え'
+----
+
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    {static} create()
+    generate()
+    generate_list()
+}
+class FizzBuzzType01 {
+    generate()
+}
+class FizzBuzzType02 {
+    generate()
+}
+class FizzBuzzType03 {
+    generate()
+}
+FizzBuzz -> FizzBuzzType01
+FizzBuzz -> FizzBuzzType02
+FizzBuzz -> FizzBuzzType03
+----
+
+===== ポリモーフィズムによる条件記述の置き換え 3
+
+これで準備は整いましたのでテストコードの `setup` メソッドを *ファクトリメソッド* の呼び出しに変更します。以下の部分は変更してはいけません。理由はわかりますか？
+
+[source, ruby]
+----
+...
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          fizzbuzz = FizzBuzz.new(1)
+          fizzbuzz.generate_list
+          @result = fizzbuzz.list
+        end
+...
 ----
 
 [source, ruby]
@@ -1779,6 +1836,8 @@ Finished in 0.00685s
 ...
 ----
 
+失敗するテストがありますね、該当するコードを確認したところ例外が発生するタイミングが変わってしまったので以下のように変更します。
+
 [source, ruby]
 ----
 ...
@@ -1825,6 +1884,8 @@ Finished in 0.00559s
 32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+*ポリモーフィズムによる条件記述の置き換え* が完了したのでWIPを外してコミットします。
+
 [source, bash]
 ----
 $ git add .
@@ -1855,6 +1916,10 @@ FizzBuzz -> FizzBuzzType02
 FizzBuzz -> FizzBuzzType03
 ----
 
+===== サブクラスによるタイプコードの置き換え
+
+タイプごとにFizzBuzzを生成するクラスを用意したのでFizzBuzzクラスから呼び出せるようにしましょう。
+
 [source, ruby]
 ----
 class FizzBuzz
@@ -1872,6 +1937,40 @@ class FizzBuzz
 end
 ----
 
+まず、*コンストラクタ* から *クラスメソッド* の *ファクトリメソッド* を呼び出して *インスタンス変数* の `type` にタイプクラスの *参照* を *代入* します。
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = FizzBuzz.create(type)
+  end
+...
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end
+----
+
+[source, bash]
+----
+ERROR["test_配列の14番目は文字列のFizzBuzzを返す", #<Minitest::Reporters::Suite:0x000055670a343110 @name="数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す">, 0.006740843993611634]
+ test_配列の14番目は文字列のFizzBuzzを返す#数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す (0.01s)
+Minitest::UnexpectedError:         RuntimeError: 該当するタイプは存在しません
+            /workspace/tdd_rb/lib/fizz_buzz.rb:42:in `generate'
+            /workspace/tdd_rb/lib/fizz_buzz.rb:48:in `block in generate_list'
+            /workspace/tdd_rb/lib/fizz_buzz.rb:48:in `each'
+            /workspace/tdd_rb/lib/fizz_buzz.rb:48:in `map'
+            /workspace/tdd_rb/lib/fizz_buzz.rb:48:in `generate_list'
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:44:in `setup'
+----
+
+テストが失敗して沢山エラーが表示するようになりましたが落ち着いてください。次に *インスタンスメソッド* `FizzBuzz#generate_list` 内の `FizzBuzz#generate` メソッド呼び出しを *インスタンス変数* `type` が参照するタイプクラスのメソッド `FizzBuzzTypeXX#generate` を呼び出すように変更します。
+
 [source, ruby]
 ----
 class FizzBuzz
@@ -1887,14 +1986,40 @@ class FizzBuzz
     @list = (1..MAX_NUMBER).map { |n| @type.generate(n) }
   end
 end
-
 ----
+
+[source, bash]
+----
+Started with run options --seed 13878
+
+
+Progress: |=====================================================================================================|
+
+Finished in 0.00960s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+05:54:49 - INFO - Inspecting Ruby code style: lib/fizz_buzz.rb
+lib/fizz_buzz.rb:24:3: C: Metrics/CyclomaticComplexity: Cyclomatic complexity for generate is too high. [10/8]   
+  def generate(number) ...
+  ^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:24:3: C: Metrics/PerceivedComplexity: Perceived complexity for generate is too high. [8/7]
+  def generate(number) ...
+  ^^^^^^^^^^^^^^^^^^^^
+ 1/1 file |======================================= 100 ========================================>| Time: 00:00:00 
+
+1 file inspected, 2 offenses detected
+----
+
+再びテストが通るようになりました。始めのうちはコードを少し変更しただけでなんで動くようになったの？と思うかもしれませんがこれが *ポリモーフィズム* です。この概念を感覚としてつかんで使いこなせるようになることがオブジェクト指向プログラムの第一歩です。感覚は意識して手を動かしていればそのうちつかめます（多分）。コミットしておきましょう。
 
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'refactor: サブクラスによるタイプコードの置き換え'
 ----
+
+===== 委譲の隠蔽
+
+*ポリモーフィズム* を使って、警告メッセージを消すとしましょう。
 
 [plantuml]
 ----
@@ -1973,29 +2098,48 @@ end
 ...
 ----
 
+まず、`FizzBuzz#generate` のメソッド呼び出しを *インスタンス変数* `type` が参照するタイプクラスのメソッド `FizzBuzzTypeXX#generate` を呼び出すように変更します。
+
 [source, ruby]
 ----
-class FizzBuzz
-  MAX_NUMBER = 100
-  attr_reader :list
-
-  def initialize(type)
-    @type = FizzBuzz.create(type)
+...
+  def generate(number)
+    @type.generate(number)
   end
 
-  def self.create(type)
-    case type
-    when 1
-      FizzBuzzType01.new
-    when 2
-      FizzBuzzType02.new
-    when 3
-      FizzBuzzType03.new
-    else
-      raise '該当するタイプは存在しません'
-    end
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = (1..MAX_NUMBER).map { |n| @type.generate(n) }
   end
+end
+...
+----
 
+警告が消えました。しかもテストも壊れていないようです。実は `FizzBuzz#generate` メソッドはどこからも使われていないためテストも壊れることが無いのですがこれでは不要なメソッドになってしまうので *移譲の隠蔽* を実施して、`FizzBuzz#generate_list` から呼び出すようにします。
+
+[source, bash]
+----
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+Started with run options --seed 49543
+
+
+Progress: |=====================================================================================================|
+
+Finished in 0.00925s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+06:34:27 - INFO - Inspecting Ruby code style: lib/fizz_buzz.rb
+ 1/1 file |======================================= 100 ========================================>| Time: 00:00:00 
+
+1 file inspected, no offenses detected
+06:34:29 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
+ 0/0 files |======================================= 100 =======================================>| Time: 00:00:00 
+
+0 files inspected, no offenses detected
+----
+
+[source, ruby]
+----
+...
   def generate(number)
     @type.generate(number)
   end
@@ -2007,6 +2151,8 @@ class FizzBuzz
 end
 ...
 ----
+
+テストもFizzBuzzインスタンス経由で実行するように修正しておきます。これですべての呼び出しが `new` メソッド経由となりテストコードに一貫性を取り戻すことが出来ました。
 
 [source, ruby]
 ----
@@ -2064,6 +2210,9 @@ Finished in 0.00564s
 
 7 files inspected, no offenses detected
 ----
+
+*ポリモーフィズム* の感覚がつかめないうちは `FizzBuzz#generate` のコードが一行になったのに既存のテストも壊れず動いていることが不思議に思うかもしれません。しかしコードとしてはFizzBuzzクラスの `generate` メソッドは任意のタイプクラスの `generate` メソッドを呼び出しているだけで処理の詳細は理解しなくても振る舞いを理解できる *抽象化* された読みやすいコードになりました。静的コード解析も可読性が高くシンプルなコードとみなしてくれているようです。
+さて、警告メッセージもなくなり、テストも壊れていないのでコミットしておきましょう。
 
 [source, bash]
 ----

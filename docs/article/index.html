@@ -528,7 +528,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_ポリモーフィズム">3.1.4. ポリモーフィズム</a>
 <ul class="sectlevel4">
-<li><a href="#_ポリモーフィズムによる条件記述の置き換え">ポリモーフィズムによる条件記述の置き換え</a></li>
+<li><a href="#_ポリモーフィズムによる条件記述の置き換え_1">ポリモーフィズムによる条件記述の置き換え 1</a></li>
+<li><a href="#_ポリモーフィズムによる条件記述の置き換え_2">ポリモーフィズムによる条件記述の置き換え 2</a></li>
+<li><a href="#_ポリモーフィズムによる条件記述の置き換え_3">ポリモーフィズムによる条件記述の置き換え 3</a></li>
+<li><a href="#_サブクラスによるタイプコードの置き換え">サブクラスによるタイプコードの置き換え</a></li>
+<li><a href="#_委譲の隠蔽">委譲の隠蔽</a></li>
 </ul>
 </li>
 <li><a href="#_継承">3.1.5. 継承</a>
@@ -8883,11 +8887,14 @@ $ git commit -m 'refactor: setterの削除'</code></pre>
 <div class="sect3">
 <h4 id="_ポリモーフィズム">3.1.4. ポリモーフィズム</h4>
 <div class="sect4">
-<h5 id="_ポリモーフィズムによる条件記述の置き換え">ポリモーフィズムによる条件記述の置き換え</h5>
+<h5 id="_ポリモーフィズムによる条件記述の置き換え_1">ポリモーフィズムによる条件記述の置き換え 1</h5>
 <div class="imageblock">
 <div class="content">
 <img src="diag-1fa9697e7ac9ce563b8ccefe66b065a5.png" alt="diag 1fa9697e7ac9ce563b8ccefe66b065a5" width="138" height="130">
 </div>
+</div>
+<div class="paragraph">
+<p>リファクタリングによりデータとロジックを１つのクラスにまとめて <strong>カプセル化</strong> を進めることが出来ました。しかし、以下の警告メッセージが表示されたままです。<strong>ポリモーフィズム</strong> によるロジックのリファクタリングを実施していきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8904,6 +8911,19 @@ lib/fizz_buzz.rb:11:3: C: Metrics/PerceivedComplexity: Perceived complexity for 
 2 files inspected, 2 offenses detected
 ...</code></pre>
 </div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricscyclomaticcomplexity" target="_blank" rel="noopener">Metrics/CyclomaticComplexity</a></p>
+</li>
+<li>
+<p><a href="https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsperceivedcomplexity" target="_blank" rel="noopener">Metrics/PerceivedComplexity</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><a href="https://ja.wikipedia.org/wiki/%E5%BE%AA%E7%92%B0%E7%9A%84%E8%A4%87%E9%9B%91%E5%BA%A6" target="_blank" rel="noopener">循環的複雑度</a> が高く可読性が低く複雑なコードと警告されているようです。対象となっている　<code>FizzBuzz#generate</code> を確認してみましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8931,6 +8951,9 @@ lib/fizz_buzz.rb:11:3: C: Metrics/PerceivedComplexity: Perceived complexity for 
   end
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>コードの不吉な臭いである <strong>重複したスイッチ文</strong> に該当するコードのようなのでここはリファクタリングカタログに従って <strong>ポリモーフィズムによる条件記述の置き換え</strong> を適用していきましょう。比較的大きなリファクタリングなのでいくつかのステップに分けて進めていきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8968,6 +8991,9 @@ class FizzBuzzType03; end</code></pre>
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>まず、タイプごとのクラスを定義してそれを <strong>インスタンス化</strong> する <strong>ファクトリメソッド</strong> をFizzBuzzクラスに追加します。この時点では新しいクラスとメソッドの追加だけなのでテストは壊れていないはずです（警告は出ていますが・・・）。ここでコミットしておきますがリファクタリング作業としては <a href="https://ja.wikipedia.org/wiki/%E4%BB%95%E6%8E%9B%E5%93%81" target="_blank" rel="noopener">仕掛</a> なのでWIP(Work In Progress)をメッセージに追加してコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
@@ -8978,6 +9004,12 @@ $ git commit -m 'refactor(WIP): ポリモーフィズムによる条件記述の
 <div class="content">
 <img src="diag-58dc9cca953a08db2f3f6d80116b0b79.png" alt="diag 58dc9cca953a08db2f3f6d80116b0b79" width="627" height="191">
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_ポリモーフィズムによる条件記述の置き換え_2">ポリモーフィズムによる条件記述の置き換え 2</h5>
+<div class="paragraph">
+<p>続いて、各タイプクラスにメソッドを実装します。ここでは <strong>case式</strong> の各処理をコピー&amp;ペーストしています。カット&amp;ペーストするとプロダクトコードが壊れたままリファクタリングを進めることになるのでここは慎重に進めていきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9028,16 +9060,42 @@ class FizzBuzzType03
     is_buzz = number.modulo(5).zero?
 
     return 'FizzBuzz' if is_fizz &amp;&amp; is_buzz
-
+。
     number.to_s
   end
 end</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>警告は出ますがテストは壊れていないのでコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'refactor(WIP): ポリモーフィズムによる条件記述の置き換え'</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-a8a0f7e73f6ccd50df57a6bf6d7e40df.png" alt="diag a8a0f7e73f6ccd50df57a6bf6d7e40df" width="627" height="191">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_ポリモーフィズムによる条件記述の置き換え_3">ポリモーフィズムによる条件記述の置き換え 3</h5>
+<div class="paragraph">
+<p>これで準備は整いましたのでテストコードの <code>setup</code> メソッドを <strong>ファクトリメソッド</strong> の呼び出しに変更します。以下の部分は変更してはいけません。理由はわかりますか？</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          fizzbuzz = FizzBuzz.new(1)
+          fizzbuzz.generate_list
+          @result = fizzbuzz.list
+        end
+...</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -9096,6 +9154,9 @@ Finished in 0.00685s
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>失敗するテストがありますね、該当するコードを確認したところ例外が発生するタイミングが変わってしまったので以下のように変更します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -9142,6 +9203,9 @@ Finished in 0.00559s
 32 tests, 35 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><strong>ポリモーフィズムによる条件記述の置き換え</strong> が完了したのでWIPを外してコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
@@ -9152,6 +9216,12 @@ $ git commit -m 'refactor: ポリモーフィズムによる条件記述の置�
 <div class="content">
 <img src="diag-a8a0f7e73f6ccd50df57a6bf6d7e40df.png" alt="diag a8a0f7e73f6ccd50df57a6bf6d7e40df" width="627" height="191">
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_サブクラスによるタイプコードの置き換え">サブクラスによるタイプコードの置き換え</h5>
+<div class="paragraph">
+<p>タイプごとにFizzBuzzを生成するクラスを用意したのでFizzBuzzクラスから呼び出せるようにしましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9169,6 +9239,42 @@ $ git commit -m 'refactor: ポリモーフィズムによる条件記述の置�
   end
 end</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>まず、<strong>コンストラクタ</strong> から <strong>クラスメソッド</strong> の <strong>ファクトリメソッド</strong> を呼び出して <strong>インスタンス変数</strong> の <code>type</code> にタイプクラスの <strong>参照</strong> を <strong>代入</strong> します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+
+  def initialize(type)
+    @type = FizzBuzz.create(type)
+  end
+...
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = (1..MAX_NUMBER).map { |n| generate(n) }
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">ERROR["test_配列の14番目は文字列のFizzBuzzを返す", #&lt;Minitest::Reporters::Suite:0x000055670a343110 @name="数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す"&gt;, 0.006740843993611634]
+ test_配列の14番目は文字列のFizzBuzzを返す#数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す (0.01s)
+Minitest::UnexpectedError:         RuntimeError: 該当するタイプは存在しません
+            /workspace/tdd_rb/lib/fizz_buzz.rb:42:in `generate'
+            /workspace/tdd_rb/lib/fizz_buzz.rb:48:in `block in generate_list'
+            /workspace/tdd_rb/lib/fizz_buzz.rb:48:in `each'
+            /workspace/tdd_rb/lib/fizz_buzz.rb:48:in `map'
+            /workspace/tdd_rb/lib/fizz_buzz.rb:48:in `generate_list'
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:44:in `setup'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストが失敗して沢山エラーが表示するようになりましたが落ち着いてください。次に <strong>インスタンスメソッド</strong> <code>FizzBuzz#generate_list</code> 内の <code>FizzBuzz#generate</code> メソッド呼び出しを <strong>インスタンス変数</strong> <code>type</code> が参照するタイプクラスのメソッド <code>FizzBuzzTypeXX#generate</code> を呼び出すように変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9189,9 +9295,39 @@ end</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">Started with run options --seed 13878
+
+
+Progress: |=====================================================================================================|
+
+Finished in 0.00960s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+05:54:49 - INFO - Inspecting Ruby code style: lib/fizz_buzz.rb
+lib/fizz_buzz.rb:24:3: C: Metrics/CyclomaticComplexity: Cyclomatic complexity for generate is too high. [10/8]
+  def generate(number) ...
+  ^^^^^^^^^^^^^^^^^^^^
+lib/fizz_buzz.rb:24:3: C: Metrics/PerceivedComplexity: Perceived complexity for generate is too high. [8/7]
+  def generate(number) ...
+  ^^^^^^^^^^^^^^^^^^^^
+ 1/1 file |======================================= 100 ========================================&gt;| Time: 00:00:00
+
+1 file inspected, 2 offenses detected</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>再びテストが通るようになりました。始めのうちはコードを少し変更しただけでなんで動くようになったの？と思うかもしれませんがこれが <strong>ポリモーフィズム</strong> です。この概念を感覚としてつかんで使いこなせるようになることがオブジェクト指向プログラムの第一歩です。感覚は意識して手を動かしていればそのうちつかめます（多分）。コミットしておきましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'refactor: サブクラスによるタイプコードの置き換え'</code></pre>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_委譲の隠蔽">委譲の隠蔽</h5>
+<div class="paragraph">
+<p><strong>ポリモーフィズム</strong> を使って、警告メッセージを消すとしましょう。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -9251,29 +9387,50 @@ end
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>まず、<code>FizzBuzz#generate</code> のメソッド呼び出しを <strong>インスタンス変数</strong> <code>type</code> が参照するタイプクラスのメソッド <code>FizzBuzzTypeXX#generate</code> を呼び出すように変更します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
-  MAX_NUMBER = 100
-  attr_reader :list
-
-  def initialize(type)
-    @type = FizzBuzz.create(type)
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+  def generate(number)
+    @type.generate(number)
   end
 
-  def self.create(type)
-    case type
-    when 1
-      FizzBuzzType01.new
-    when 2
-      FizzBuzzType02.new
-    when 3
-      FizzBuzzType03.new
-    else
-      raise '該当するタイプは存在しません'
-    end
+  def generate_list
+    # 1から最大値までのFizzBuzz配列を1発で作る
+    @list = (1..MAX_NUMBER).map { |n| @type.generate(n) }
   end
+end
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>警告が消えました。しかもテストも壊れていないようです。実は <code>FizzBuzz#generate</code> メソッドはどこからも使われていないためテストも壊れることが無いのですがこれでは不要なメソッドになってしまうので <strong>移譲の隠蔽</strong> を実施して、<code>FizzBuzz#generate_list</code> から呼び出すようにします。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb"
+Started with run options --seed 49543
 
+
+Progress: |=====================================================================================================|
+
+Finished in 0.00925s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+06:34:27 - INFO - Inspecting Ruby code style: lib/fizz_buzz.rb
+ 1/1 file |======================================= 100 ========================================&gt;| Time: 00:00:00
+
+1 file inspected, no offenses detected
+06:34:29 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
+ 0/0 files |======================================= 100 =======================================&gt;| Time: 00:00:00
+
+0 files inspected, no offenses detected</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
   def generate(number)
     @type.generate(number)
   end
@@ -9285,6 +9442,9 @@ end
 end
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストもFizzBuzzインスタンス経由で実行するように修正しておきます。これですべての呼び出しが <code>new</code> メソッド経由となりテストコードに一貫性を取り戻すことが出来ました。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9342,6 +9502,10 @@ Finished in 0.00564s
 
 7 files inspected, no offenses detected</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><strong>ポリモーフィズム</strong> の感覚がつかめないうちは <code>FizzBuzz#generate</code> のコードが一行になったのに既存のテストも壊れず動いていることが不思議に思うかもしれません。しかしコードとしてはFizzBuzzクラスの <code>generate</code> メソッドは任意のタイプクラスの <code>generate</code> メソッドを呼び出しているだけで処理の詳細は理解しなくても振る舞いを理解できる <strong>抽象化</strong> された読みやすいコードになりました。静的コード解析も可読性が高くシンプルなコードとみなしてくれているようです。
+さて、警告メッセージもなくなり、テストも壊れていないのでコミットしておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
