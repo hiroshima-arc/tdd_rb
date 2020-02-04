@@ -2271,6 +2271,8 @@ FizzBuzz *- FizzBuzzType02
 FizzBuzz *- FizzBuzzType03
 ----
 
+分割したタイプクラスのメソッドに重複する処理があるので *継承* を使ってリファクタリングしましょう。
+
 [source, ruby]
 ----
 class FizzBuzz
@@ -2316,6 +2318,35 @@ Finished in 0.00860s
  7/7 files |====================================== 100 =======================================>| Time: 00:00:00 
 
 7 files inspected, no offenses detected
+----
+
+まずは、タイプクラスのスーパークラスとなる `FizzBuzzType` クラスを作成して各タイプクラスに継承させます。
+
+[plantuml]
+----
+class FizzBuzz {
+    MAX_NUMBER = 100
+    list
+    type
+    {static} create()
+    generate()
+    generate_list()
+}
+class FizzBuzzType {
+}
+class FizzBuzzType01 {
+    generate()
+}
+class FizzBuzzType02 {
+    generate()
+}
+class FizzBuzzType03 {
+    generate()
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzz -> FizzBuzzType
 ----
 
 [source, ruby]
@@ -2415,6 +2446,8 @@ lib/fizz_buzz.rb:39:7: C: Naming/PredicateName: Rename is_buzz to buzz?.
 7 files inspected, 2 offenses detected
 ----
 
+次に `is_fizz` `is_buzz` 部分を共通メソッドとしてスーパークラスに定義して各タイプクラスで呼び出すように変更します。テストが壊れていないことが確認できたのでコミットしておきます。
+
 [source, bash]
 ----
 $ git add .
@@ -2450,6 +2483,9 @@ FizzBuzzType <|-- FizzBuzzType03
 FizzBuzz -> FizzBuzzType
 ----
 
+===== メソッド名の変更
+
+*スーパークラスの抽出* を実施したところまた警告メッセージが表示されるようになりました。
 
 [source, bash]
 ----
@@ -2464,6 +2500,8 @@ lib/fizz_buzz.rb:39:7: C: Naming/PredicateName: Rename is_buzz to buzz?.
 
 1 file inspected, 2 offenses detected
 ----
+
+https://rubocop.readthedocs.io/en/latest/cops_naming/#namingpredicatename[Naming/PredicateName^] Rubyのネーミングとしてはよろしくないようなので指示に従って *メソッド名の変更* を実施しましょう。
 
 [source, ruby]
 ----
@@ -2553,6 +2591,8 @@ Finished in 0.01144s
 1 file inspected, no offenses detected
 ----
 
+作業としては難しくないのでミスタイプしないように（まあ、ミスタイプしてもテストが教えてくれますが・・・）変更してコミットしましょう。
+
 [source, bash]
 ----
 $ git add .
@@ -2587,6 +2627,10 @@ FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03
 FizzBuzz -> FizzBuzzType
 ----
+
+===== メソッドの移動
+
+`FizzBuzz` クラスの *ファクトリメソッド* ですが *特性の横恋慕* の臭いがするので *メソッドの移動* を実施します。
 
 [source, ruby]
 ----
@@ -2632,6 +2676,9 @@ class FizzBuzzType
 end
 ...
 ----
+
+*クラスメソッド* `FizzBuzz.create` をカット&ペーストして `FizzBuzzType.create` に移動します。
+`FizzBuzz` の *コンストラクタ* で呼び出している *クラスメソッド* を `FizzBuzzType.create` に変更します。
 
 [source, ruby]
 ----
@@ -2695,6 +2742,8 @@ Finished in 0.00688s
 
 7 files inspected, no offenses detected
 ----
+
+テストが壊れていないことを確認したらコミットします。
 
 [source, bash]
 ----

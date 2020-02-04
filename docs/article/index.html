@@ -538,6 +538,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_継承">3.1.5. 継承</a>
 <ul class="sectlevel4">
 <li><a href="#_スーパークラスの抽出">スーパークラスの抽出</a></li>
+<li><a href="#_メソッド名の変更">メソッド名の変更</a></li>
+<li><a href="#_メソッドの移動">メソッドの移動</a></li>
 </ul>
 </li>
 <li><a href="#_値オブジェクト">3.1.6. 値オブジェクト</a>
@@ -9529,6 +9531,9 @@ $ git commit -m 'refactor: 移譲の隠蔽'</code></pre>
 <img src="diag-8a04c2b1c80ac0b9585ab2499676a39d.png" alt="diag 8a04c2b1c80ac0b9585ab2499676a39d" width="627" height="191">
 </div>
 </div>
+<div class="paragraph">
+<p>分割したタイプクラスのメソッドに重複する処理があるので <strong>継承</strong> を使ってリファクタリングしましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
@@ -9574,6 +9579,14 @@ Finished in 0.00860s
  7/7 files |====================================== 100 =======================================&gt;| Time: 00:00:00
 
 7 files inspected, no offenses detected</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>まずは、タイプクラスのスーパークラスとなる <code>FizzBuzzType</code> クラスを作成して各タイプクラスに継承させます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-d34186f2c08c4af6d8e9f56e78b4be1b.png" alt="diag d34186f2c08c4af6d8e9f56e78b4be1b" width="470" height="264">
 </div>
 </div>
 <div class="listingblock">
@@ -9673,6 +9686,9 @@ lib/fizz_buzz.rb:39:7: C: Naming/PredicateName: Rename is_buzz to buzz?.
 7 files inspected, 2 offenses detected</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>次に <code>is_fizz</code> <code>is_buzz</code> 部分を共通メソッドとしてスーパークラスに定義して各タイプクラスで呼び出すように変更します。テストが壊れていないことが確認できたのでコミットしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
@@ -9683,6 +9699,12 @@ $ git commit -m 'refactor: スーパークラスの抽出'</code></pre>
 <div class="content">
 <img src="diag-c5562aee5c36f7a34fc92925fe057aa3.png" alt="diag c5562aee5c36f7a34fc92925fe057aa3" width="470" height="264">
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_メソッド名の変更">メソッド名の変更</h5>
+<div class="paragraph">
+<p><strong>スーパークラスの抽出</strong> を実施したところまた警告メッセージが表示されるようになりました。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9697,6 +9719,9 @@ lib/fizz_buzz.rb:39:7: C: Naming/PredicateName: Rename is_buzz to buzz?.
 
 1 file inspected, 2 offenses detected</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><a href="https://rubocop.readthedocs.io/en/latest/cops_naming/#namingpredicatename" target="_blank" rel="noopener">Naming/PredicateName</a> Rubyのネーミングとしてはよろしくないようなので指示に従って <strong>メソッド名の変更</strong> を実施しましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9786,6 +9811,9 @@ Finished in 0.01144s
 1 file inspected, no offenses detected</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>作業としては難しくないのでミスタイプしないように（まあ、ミスタイプしてもテストが教えてくれますが・・・）変更してコミットしましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
@@ -9796,6 +9824,12 @@ $ git commit -m 'refactor: メソッド名の変更'</code></pre>
 <div class="content">
 <img src="diag-d9160e6801276e2daab7185d2190252d.png" alt="diag d9160e6801276e2daab7185d2190252d" width="470" height="264">
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_メソッドの移動">メソッドの移動</h5>
+<div class="paragraph">
+<p><code>FizzBuzz</code> クラスの <strong>ファクトリメソッド</strong> ですが <strong>特性の横恋慕</strong> の臭いがするので <strong>メソッドの移動</strong> を実施します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9841,6 +9875,10 @@ class FizzBuzzType
 end
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><strong>クラスメソッド</strong> <code>FizzBuzz.create</code> をカット&amp;ペーストして <code>FizzBuzzType.create</code> に移動します。
+<code>FizzBuzz</code> の <strong>コンストラクタ</strong> で呼び出している <strong>クラスメソッド</strong> を <code>FizzBuzzType.create</code> に変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9903,6 +9941,9 @@ Finished in 0.00688s
 
 7 files inspected, no offenses detected</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストが壊れていないことを確認したらコミットします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
