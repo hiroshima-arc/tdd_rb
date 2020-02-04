@@ -431,6 +431,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="content">
 <div class="sect2">
 <h3 id="_オブジェクト指向から始めるテスト駆動開発">オブジェクト指向から始めるテスト駆動開発</h3>
+<div class="sect3">
+<h4 id="_テスト駆動開発">テスト駆動開発</h4>
 <div class="paragraph">
 <p>エピソード1ので作成したプログラムに以下の仕様を追加しました。</p>
 </div>
@@ -467,8 +469,8 @@ Gemfile   Guardfile     main.rb  Rakefile      test       Vagrantfile
 [3] guard(main)&gt; . git status</code></pre>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_todoリスト作成">TODOリスト作成</h4>
+<div class="sect4">
+<h5 id="_todoリスト作成">TODOリスト作成</h5>
 <div class="paragraph">
 <p>まずは追加仕様を <strong>TODOリスト</strong> に落とし込んでいきます。</p>
 </div>
@@ -497,8 +499,8 @@ Gemfile   Guardfile     main.rb  Rakefile      test       Vagrantfile
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_タイプ1の場合">タイプ1の場合</h4>
+<div class="sect4">
+<h5 id="_タイプ1の場合">タイプ1の場合</h5>
 <div class="paragraph">
 <p><strong>テストファースト</strong> <strong>アサートファースト</strong> で最初に失敗するテストから始めます。テストを追加しましょう。</p>
 </div>
@@ -898,8 +900,8 @@ $ $ git commit -m 'refactor: メソッドのインライン化'</code></pre>
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_タイプ2の場合">タイプ2の場合</h4>
+<div class="sect4">
+<h5 id="_タイプ2の場合">タイプ2の場合</h5>
 <div class="paragraph">
 <p>TODOリスト</p>
 </div>
@@ -1144,7 +1146,7 @@ test/fizz_buzz_test.rb:11:3: C: Metrics/BlockLength: Block has too many lines. [
 </div>
 </div>
 <div class="paragraph">
-<p>テストは通りましたが何やら警告が表示されるようになりました。　<a href="https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsblocklength" target="_blank" rel="noopener">Metrics/BlockLength: Block has too many lines.</a> これは <code>数を文字列にして返す</code> テストケースが長いという警告のようですがテストコードはチェックの対象から外しておきたいので <code>.rubocop_todo.yml</code> に以下コードを追加してチェック対象から外しておきます。</p>
+<p>テストは通りましたが何やら警告が表示されるようになりました。　<a href="https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsblocklength" target="_blank" rel="noopener">Metrics/BlockLength: Block has too many lines.</a> これは <code>数を文字列にして返す</code> テストケースのコードブロックが長いという警告のようですがテストコードはチェックの対象から外しておきたいので <code>.rubocop_todo.yml</code> に以下コードを追加してチェック対象から外しておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1299,8 +1301,8 @@ $ git commit -m 'test: タイプ2の場合'</code></pre>
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_タイプ3の場合">タイプ3の場合</h4>
+<div class="sect4">
+<h5 id="_タイプ3の場合">タイプ3の場合</h5>
 <div class="paragraph">
 <p>TODOリスト</p>
 </div>
@@ -1433,7 +1435,7 @@ Finished in 0.00650s
 </div>
 </div>
 <div class="paragraph">
-<p><strong>case式</strong> 処理を追加します。</p>
+<p><strong>case式</strong> に処理を追加します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1629,8 +1631,8 @@ $ git commit -m 'refactor: ステートメントのスライド'</code></pre>
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_例外ケース">例外ケース</h4>
+<div class="sect4">
+<h5 id="_例外ケース">例外ケース</h5>
 <div class="paragraph">
 <p>追加仕様には対応しましたがタイプ1,2,3以外の値が <strong>引数</strong> として渡された場合はどうしましょうか 現状では <code>nil</code> を返しますがこのような例外ケースも考慮する必要があります。</p>
 </div>
@@ -1767,19 +1769,24 @@ $ git commit -m 'test: それ以外のタイプの場合'</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p><strong>TODOリスト</strong> をすべて完了しました。追加仕様を満たすプログラムは出来ましたがまだ改善の余地がありそうですね。続いてリファクタリングを通したオブジェクト指向アプローチによる動作するきれいなコードの実現を解説します。</p>
+<p><strong>TODOリスト</strong> をすべて完了しました。追加仕様を満たすプログラムは出来ましたがまだ改善の余地がありそうですね。以降はオブジェクト指向アプローチによるコードのリファクタリングを解説していきたいと思います。</p>
+</div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_オブジェクト指向">オブジェクト指向</h4>
 <div class="sect4">
 <h5 id="_手続き型">手続き型</h5>
+<div class="paragraph">
+<p>オブジェクト指向の解説の前に以下のコードを御覧いただきたい。いわゆる手続き型で書かれたコードですが、これも追加仕様を満たしています。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">type = 1
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">MAX_NUMBER = 100
+type = 1
 list = []
 
-100.times do |i|
+MAX_NUMBER.times do |i|
   r = ''
   i += 1
   case type
@@ -1811,6 +1818,9 @@ end
 puts list</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>処理の流れをフローチャートにしたものです、実態はコードに記述されている内容を記号に置き換えて人間が読めるようにしたものです。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="diag-5fdd77d695a36593811ff81908acad97.png" alt="diag 5fdd77d695a36593811ff81908acad97" width="1594" height="474">
@@ -1819,6 +1829,9 @@ puts list</code></pre>
 </div>
 <div class="sect4">
 <h5 id="_オブジェクト指向_2">オブジェクト指向</h5>
+<div class="paragraph">
+<p>続いて、これまでに作ってきたコードがこちらになります。上記の手続き型コードとの大きな違いとして <code>class</code> というキーワードでくくられている部分があります。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
@@ -1853,15 +1866,24 @@ puts list</code></pre>
 end</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>UMLを使って上記のコードの構造をクラス図として表現しました。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="diag-428f320ab235496eeeb0cec0082ca257.png" alt="diag 428f320ab235496eeeb0cec0082ca257" width="138" height="104">
 </div>
 </div>
+<div class="paragraph">
+<p>更にシーケンス図を使って上記のコードの振る舞いを表現しました。</p>
+</div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-4098c9c172e3af6b2bdf3326dfe87d8e.png" alt="diag 4098c9c172e3af6b2bdf3326dfe87d8e" width="265" height="230">
+<img src="diag-4cda3860e38bd75023756d182d6db0b7.png" alt="diag 4cda3860e38bd75023756d182d6db0b7" width="265" height="230">
 </div>
+</div>
+<div class="paragraph">
+<p>手続き型コードのフローチャートと比べてどう思われましたか？具体的な記述が少なくデータや処理の概要だけを表現しているけどFizzBuzzのルールを知っている人であれば何をやろうとしているかのイメージはつかみやすいのでは無いでしょうか？これがオブジェクト指向であるというわけではありません、今は <strong>抽象化</strong> がキーワードだという程度の認識で十分です。オブジェクト指向の詳細は控えるとして、ここでは <strong>カプセル化</strong> <strong>ポリモフィズム</strong> <strong>継承</strong> というオブジェクト指向でよく言及される概念をリファクタリングを通して体験してもらい、オブジェクト指向プログラムの感覚を掴んでもらうことを目的に解説を進めて行きたいと思います。</p>
 </div>
 </div>
 </div>
@@ -1873,6 +1895,9 @@ end</code></pre>
 <div class="content">
 <img src="diag-428f320ab235496eeeb0cec0082ca257.png" alt="diag 428f320ab235496eeeb0cec0082ca257" width="138" height="104">
 </div>
+</div>
+<div class="paragraph">
+<p>まず、データとロジックを１つのクラスにまとめていくためのリファクタリングを実施していくとします。<code>FizzBuzz</code> クラスにFizzBuzz配列を保持できるようにするため <strong>フィールドのカプセル化</strong> を適用します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1954,6 +1979,9 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `generate' fo
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>FizzBuzz配列を <strong>インスタンス変数</strong> <code>@list</code> に <strong>代入</strong> して <strong>アクセッサメソッド</strong> 経由で取得できるように変更しました。変更に当たり <strong>クラスメソッド</strong> <code>FizzBuzz.generate</code> と <code>FizzBuzz.generate_list</code> を <strong>インスタンスメソッド</strong> に変更しています。それに伴ってテストが失敗して <code>NoMethodError: undefined method `generate'</code> と表示されるようになってしまいました。<code>new</code> メソッドを使ってFizzBuzzクラスの <strong>インスタンス</strong> を作りFizzBuzz配列を <strong>アクセッサメソッド</strong> 経由で取得するようにテストコードを変更します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -2011,6 +2039,9 @@ Finished in 0.00616s
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストが直りました。<strong>クラスメソッド</strong> <strong>インスタンスメソッド</strong> <strong>インスタンス変数</strong> <strong>インスタンス</strong> などいろんな単語が出てきて戸惑ってしまったかもしれませんが、ピンとこないうちは <strong>クラス</strong> に値や状態を保持させるためには <strong>インスタンス化</strong> する必要があってそのためには <code>new</code> メソッドを使わないといけないのね程度の理解で十分です。大概のことは手を動かしているうちにピン来るようになります。テストが動作して既存のコードが壊れていないことが確認できたのでここでコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
@@ -2021,6 +2052,9 @@ $ git commit -m 'refactor: フィールドのカプセル化'</code></pre>
 <div class="content">
 <img src="diag-4aa8394c1d393b83d9ac6531ee8f0936.png" alt="diag 4aa8394c1d393b83d9ac6531ee8f0936" width="138" height="117">
 </div>
+</div>
+<div class="paragraph">
+<p>引き続き、FizzBuzz配列は保持できるようになりましたがタイプごとに出力される配列のパターンは違います。FizzBuzzクラスにタイプを持たる必要があります。ここでは <strong>コンストラクタ</strong> を使って <strong>インスタンス化</strong> する際に <strong>インスタンス変数</strong> に <strong>代入</strong> するようにします。Rubyでは <strong>initialize</strong> というメソッドを使って初期化処理を実行します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2045,6 +2079,9 @@ Minitest::UnexpectedError:         ArgumentError: wrong number of arguments (giv
             /workspace/tdd_rb/test/fizz_buzz_test.rb:101:in `setup'
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストが失敗して引数が違うというエラーが表示される用になりました。<code>new</code> メソッドの <strong>引数</strong> にタイプを渡すようにテストを変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2102,6 +2139,9 @@ Finished in 0.00793s
 32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストは直りましたがまだ <strong>インスタンス変数</strong> のタイプが使われていないので使うようにプロダクトコードを変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2161,6 +2201,9 @@ Minitest::UnexpectedError:         ArgumentError: wrong number of arguments (giv
             /workspace/tdd_rb/test/fizz_buzz_test.rb:118:in `test_15を渡したら文字列FizzBuzzを返す'
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>続いて、<code>FizzBuzz#generate</code> メソッドから不要になった <strong>引数</strong> typeを削除したところテストが壊れたのでテストコードを修正します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2259,11 +2302,20 @@ Finished in 0.00700s
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>コミットしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
 $ git commit -m 'refactor: フィールドのカプセル化'</code></pre>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_setterの削除">setterの削除</h5>
+<div class="paragraph">
+<p>FizzBuzz配列を取得する <strong>アクセッサメソッド</strong> は現在このように定義されています。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2273,6 +2325,46 @@ $ git commit -m 'refactor: フィールドのカプセル化'</code></pre>
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>以下のようにテストコードを変更したらどうなるでしょうか？</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          fizzbuzz = FizzBuzz.new(1)
+          fizzbuzz.generate_list
+          @result = fizzbuzz.list
+        end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          fizzbuzz = FizzBuzz.new(1)
+          fizzbuzz.generate_list
+          fizzbuzz.list = []
+          @result = fizzbuzz.list
+        end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"> FAIL["test_配列の2番目は文字列のFizzを返す", #&lt;Minitest::Reporters::Suite:0x0000563c29a8a8c0 @name="数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す"&gt;, 0.005137628992088139]
+ test_配列の2番目は文字列のFizzを返す#数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す (0.01s)
+        Expected: "Fizz"
+          Actual: nil
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:58:in `test_配列の2番目は文字列のFizzを返す'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>FizzBuzz配列が初期化されてしまいました。<strong>アクセッサメソッド</strong> に参照のための <strong>getter</strong> と 更新するための <strong>setter</strong> が許可されているため　<strong>カプセル化</strong> が破られてしまいました。ここは <strong>setterの削除</strong> を適用して外部からの更新を出来ないようにしておきましょう。Rubyでは以下のようにして <strong>インスタンス変数</strong> を読み取り専用にします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
@@ -2280,6 +2372,18 @@ $ git commit -m 'refactor: フィールドのカプセル化'</code></pre>
   attr_reader :list
 ...</code></pre>
 </div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">ERROR["test_配列の2番目は文字列のFizzを返す", #&lt;Minitest::Reporters::Suite:0x000055b32efd75f0 @name="数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す"&gt;, 0.008614362974185497]
+ test_配列の2番目は文字列のFizzを返す#数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す (0.01s)
+Minitest::UnexpectedError:         NoMethodError: undefined method `list=' for #&lt;FizzBuzz:0x000055b32ee8c678&gt;
+        Did you mean?  list
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:45:in `setup'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>更新メソッドは存在しませんというエラーに変わったことが確認できたのでテストを元にもどしてテストが壊れていないことを確認したらコミットします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5594,7 +5698,7 @@ end</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-03 19:08:51 JST
+Last updated 2020-02-04 13:32:17 JST
 </div>
 </div>
 </body>

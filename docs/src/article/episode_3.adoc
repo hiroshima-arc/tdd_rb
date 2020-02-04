@@ -1,5 +1,7 @@
 === オブジェクト指向から始めるテスト駆動開発
 
+==== テスト駆動開発
+
 エピソード1ので作成したプログラムに以下の仕様を追加しました。
 
 仕様
@@ -29,7 +31,7 @@ Gemfile   Guardfile     main.rb  Rakefile      test       Vagrantfile
 [3] guard(main)> . git status
 ----
 
-==== TODOリスト作成
+===== TODOリスト作成
 
 まずは追加仕様を *TODOリスト* に落とし込んでいきます。
 
@@ -39,7 +41,7 @@ TODOリスト
 ** 数を文字列にして返す
 *** 1を渡したら文字列"1"を返す
 
-==== タイプ1の場合
+===== タイプ1の場合
 
 *テストファースト* *アサートファースト* で最初に失敗するテストから始めます。テストを追加しましょう。
 
@@ -313,7 +315,7 @@ TODOリスト
 ** 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
 *** 15を渡したら文字列"FizzBuzz"を返す
 
-==== タイプ2の場合
+===== タイプ2の場合
 TODOリスト
 
 * [line-through]_タイプ1の場合_
@@ -473,7 +475,7 @@ test/fizz_buzz_test.rb:11:3: C: Metrics/BlockLength: Block has too many lines. [
 ...
 ----
 
-テストは通りましたが何やら警告が表示されるようになりました。　https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsblocklength[Metrics/BlockLength: Block has too many lines.^] これは `数を文字列にして返す` テストケースが長いという警告のようですがテストコードはチェックの対象から外しておきたいので `.rubocop_todo.yml` に以下コードを追加してチェック対象から外しておきます。
+テストは通りましたが何やら警告が表示されるようになりました。　https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsblocklength[Metrics/BlockLength: Block has too many lines.^] これは `数を文字列にして返す` テストケースのコードブロックが長いという警告のようですがテストコードはチェックの対象から外しておきたいので `.rubocop_todo.yml` に以下コードを追加してチェック対象から外しておきます。
 
 [source, yml]
 ----
@@ -543,7 +545,7 @@ TODOリスト
 ** 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
 *** 15を渡したら文字列"FizzBuzz"を返す
 
-==== タイプ3の場合
+===== タイプ3の場合
 TODOリスト
 
 * [line-through]_タイプ1の場合_
@@ -628,7 +630,7 @@ Finished in 0.00650s
 31 tests, 33 assertions, 4 failures, 0 errors, 0 skips
 ----
 
-*case式* 処理を追加します。
+*case式* に処理を追加します。
 
 [source, ruby]
 ----
@@ -775,7 +777,7 @@ TODOリスト
 ** 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
 *** [line-through]_15を渡したら文字列"FizzBuzz"を返す_
 
-==== 例外ケース
+===== 例外ケース
 
 追加仕様には対応しましたがタイプ1,2,3以外の値が *引数* として渡された場合はどうしましょうか 現状では `nil` を返しますがこのような例外ケースも考慮する必要があります。
 
@@ -884,18 +886,21 @@ TODOリスト
 * [line-through]_タイプ3の場合_
 * [line-through]_それ以外のタイプの場合_
 
-*TODOリスト* をすべて完了しました。追加仕様を満たすプログラムは出来ましたがまだ改善の余地がありそうですね。続いてリファクタリングを通したオブジェクト指向アプローチによる動作するきれいなコードの実現を解説します。
+*TODOリスト* をすべて完了しました。追加仕様を満たすプログラムは出来ましたがまだ改善の余地がありそうですね。以降はオブジェクト指向アプローチによるコードのリファクタリングを解説していきたいと思います。
 
 ==== オブジェクト指向
 
 ===== 手続き型
 
+オブジェクト指向の解説の前に以下のコードを御覧いただきたい。いわゆる手続き型で書かれたコードですが、これも追加仕様を満たしています。
+
 [source, ruby]
 ----
+MAX_NUMBER = 100
 type = 1
 list = []
 
-100.times do |i|
+MAX_NUMBER.times do |i|
   r = ''
   i += 1
   case type
@@ -926,6 +931,8 @@ end
 
 puts list
 ----
+
+処理の流れをフローチャートにしたものです、実態はコードに記述されている内容を記号に置き換えて人間が読めるようにしたものです。
 
 [plantuml]
 ----
@@ -963,6 +970,8 @@ stop
 
 ===== オブジェクト指向
 
+続いて、これまでに作ってきたコードがこちらになります。上記の手続き型コードとの大きな違いとして `class` というキーワードでくくられている部分があります。
+
 [source, ruby]
 ----
 class FizzBuzz
@@ -997,6 +1006,8 @@ class FizzBuzz
 end
 ----
 
+UMLを使って上記のコードの構造をクラス図として表現しました。
+
 [plantuml]
 ----
 class FizzBuzz {
@@ -1005,6 +1016,8 @@ class FizzBuzz {
     {static} generate_list()
 }
 ----
+
+更にシーケンス図を使って上記のコードの振る舞いを表現しました。
 
 [plantuml]
 ----
@@ -1020,8 +1033,9 @@ end loop
 
 A <<-- B : list
 deactivate B
-
 ----
+
+手続き型コードのフローチャートと比べてどう思われましたか？具体的な記述が少なくデータや処理の概要だけを表現しているけどFizzBuzzのルールを知っている人であれば何をやろうとしているかのイメージはつかみやすいのでは無いでしょうか？これがオブジェクト指向であるというわけではありません、今は *抽象化* がキーワードだという程度の認識で十分です。オブジェクト指向の詳細は控えるとして、ここでは *カプセル化* *ポリモフィズム* *継承* というオブジェクト指向でよく言及される概念をリファクタリングを通して体験してもらい、オブジェクト指向プログラムの感覚を掴んでもらうことを目的に解説を進めて行きたいと思います。
 
 ==== カプセル化
 ===== フィールドのカプセル化
@@ -1033,6 +1047,8 @@ class FizzBuzz {
     {static} generate_list()
 }
 ----
+
+まず、データとロジックを１つのクラスにまとめていくためのリファクタリングを実施していくとします。`FizzBuzz` クラスにFizzBuzz配列を保持できるようにするため *フィールドのカプセル化* を適用します。
 
 [source, ruby]
 ----
@@ -1114,6 +1130,8 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `generate' fo
 ...
 ----
 
+FizzBuzz配列を *インスタンス変数* `@list` に *代入* して *アクセッサメソッド* 経由で取得できるように変更しました。変更に当たり *クラスメソッド* `FizzBuzz.generate` と `FizzBuzz.generate_list` を *インスタンスメソッド* に変更しています。それに伴ってテストが失敗して `NoMethodError: undefined method `generate'` と表示されるようになってしまいました。`new` メソッドを使ってFizzBuzzクラスの *インスタンス* を作りFizzBuzz配列を *アクセッサメソッド* 経由で取得するようにテストコードを変更します。
+
 [source, ruby]
 ----
 ...
@@ -1171,6 +1189,8 @@ Finished in 0.00616s
 ...
 ----
 
+テストが直りました。*クラスメソッド* *インスタンスメソッド* *インスタンス変数* *インスタンス* などいろんな単語が出てきて戸惑ってしまったかもしれませんが、ピンとこないうちは *クラス* に値や状態を保持させるためには *インスタンス化* する必要があってそのためには `new` メソッドを使わないといけないのね程度の理解で十分です。大概のことは手を動かしているうちにピン来るようになります。テストが動作して既存のコードが壊れていないことが確認できたのでここでコミットします。
+
 [source, bash]
 ----
 $ git add .
@@ -1187,9 +1207,10 @@ class FizzBuzz {
 }
 ----
 
+引き続き、FizzBuzz配列は保持できるようになりましたがタイプごとに出力される配列のパターンは違います。FizzBuzzクラスにタイプを持たる必要があります。ここでは *コンストラクタ* を使って *インスタンス化* する際に *インスタンス変数* に *代入* するようにします。Rubyでは *initialize* というメソッドを使って初期化処理を実行します。
+
 [source, ruby]
 ----
-
 class FizzBuzz
   MAX_NUMBER = 100
   attr_accessor :list
@@ -1211,6 +1232,8 @@ Minitest::UnexpectedError:         ArgumentError: wrong number of arguments (giv
             /workspace/tdd_rb/test/fizz_buzz_test.rb:101:in `setup'
 ...
 ----
+
+テストが失敗して引数が違うというエラーが表示される用になりました。`new` メソッドの *引数* にタイプを渡すようにテストを変更します。
 
 [source, ruby]
 ----
@@ -1268,6 +1291,8 @@ Finished in 0.00793s
 32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
 ...
 ----
+
+テストは直りましたがまだ *インスタンス変数* のタイプが使われていないので使うようにプロダクトコードを変更します。
 
 [source, ruby]
 ----
@@ -1327,6 +1352,8 @@ Minitest::UnexpectedError:         ArgumentError: wrong number of arguments (giv
             /workspace/tdd_rb/test/fizz_buzz_test.rb:118:in `test_15を渡したら文字列FizzBuzzを返す'
 ...
 ----
+
+続いて、`FizzBuzz#generate` メソッドから不要になった *引数* typeを削除したところテストが壊れたのでテストコードを修正します。
 
 [source, ruby]
 ----
@@ -1425,11 +1452,17 @@ Finished in 0.00700s
 ...
 ----
 
+コミットしておきます。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'refactor: フィールドのカプセル化'
 ----
+
+===== setterの削除
+
+FizzBuzz配列を取得する *アクセッサメソッド* は現在このように定義されています。
 
 [source, ruby]
 ----
@@ -1439,6 +1472,44 @@ class FizzBuzz
 ...
 ----
 
+以下のようにテストコードを変更したらどうなるでしょうか？
+
+[source, ruby]
+----
+...
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          fizzbuzz = FizzBuzz.new(1)
+          fizzbuzz.generate_list
+          @result = fizzbuzz.list
+        end
+...
+----
+
+[source, ruby]
+----
+...
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          fizzbuzz = FizzBuzz.new(1)
+          fizzbuzz.generate_list
+          fizzbuzz.list = []
+          @result = fizzbuzz.list
+        end
+...
+----
+
+[source, bash]
+----
+ FAIL["test_配列の2番目は文字列のFizzを返す", #<Minitest::Reporters::Suite:0x0000563c29a8a8c0 @name="数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す">, 0.005137628992088139]
+ test_配列の2番目は文字列のFizzを返す#数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す (0.01s)
+        Expected: "Fizz"
+          Actual: nil
+        /workspace/tdd_rb/test/fizz_buzz_test.rb:58:in `test_配列の2番目は文字列のFizzを返す'
+----
+
+FizzBuzz配列が初期化されてしまいました。*アクセッサメソッド* に参照のための *getter* と 更新するための *setter* が許可されているため　*カプセル化* が破られてしまいました。ここは *setterの削除* を適用して外部からの更新を出来ないようにしておきましょう。Rubyでは以下のようにして *インスタンス変数* を読み取り専用にします。
+
 [source, ruby]
 ----
 
@@ -1447,6 +1518,17 @@ class FizzBuzz
   attr_reader :list
 ...
 ----
+
+[source, bash]
+----
+ERROR["test_配列の2番目は文字列のFizzを返す", #<Minitest::Reporters::Suite:0x000055b32efd75f0 @name="数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す">, 0.008614362974185497]
+ test_配列の2番目は文字列のFizzを返す#数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す (0.01s)
+Minitest::UnexpectedError:         NoMethodError: undefined method `list=' for #<FizzBuzz:0x000055b32ee8c678>
+        Did you mean?  list
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:45:in `setup'
+----
+
+更新メソッドは存在しませんというエラーに変わったことが確認できたのでテストを元にもどしてテストが壊れていないことを確認したらコミットします。
 
 [source, bash]
 ----
