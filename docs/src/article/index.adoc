@@ -1,6 +1,7 @@
 :toc: left
 :toclevels: 5
 :sectnums:
+:source-highlighter: coderay
 
 = テスト駆動開発から始めるRuby入門
 
