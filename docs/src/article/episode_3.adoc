@@ -3675,7 +3675,7 @@ $ git add .
 $ git commit -m 'refactor: 学習用テスト'
 ----
 
-==== デザインパターン
+==== オブジェクト指向設計
 
 [plantuml]
 ----
@@ -3967,6 +3967,8 @@ FizzBuzzValueCommand *- FizzBuzzType
 
 ===== メソッドオブジェクトによるメソッドの置き換え
 
+続いて、*ファーストクラスコレクション* を扱う `FizzBuzzList` を返す責務だけを持った *メソッドオブジェクト* を抽出します。
+
 [source, ruby]
 ----
 ...
@@ -3976,10 +3978,12 @@ class FizzBuzzListCommand < FizzBuzzCommand
   end
 
   def execute(number)
-    FizzBuzzList.new((1..number).map { |i| @type.generate(i) })
+    FizzBuzzList.new((1..number).map { |i| @type.generate(i) }).value
   end
 end
 ----
+
+テストコードを *FizzBuzzListCommand* 経由から実行するように変更します
 
 [source, ruby]
 ----
@@ -3996,13 +4000,11 @@ end
 [source, ruby]
 ----
 ...
-
-        describe '1から100までのFizzBuzzの配列を返す' do
-          def setup
-            fizz_buzz = FizzBuzzListCommand.new(FizzBuzzType01.new)
-            fizz_buzz_list = fizz_buzz.execute(100)
-            @result = fizz_buzz_list.value
-          end
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType01.new)
+          @result = fizzbuzz.execute(100)
+        end
 ...
 ----
 
@@ -4018,13 +4020,13 @@ Finished in 0.00652s
 35 tests, 39 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+テストが通ったのでコミットします。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'refactor: メソッドオブジェクトによるメソッドの置き換え'
 ----
-
-===== デッドコードの削除
 
 [plantuml]
 ----
@@ -4066,9 +4068,11 @@ class FizzBuzzList {
 Interface FizzBuzzCommand {
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 class FizzBuzzListCommand {
+  type
   execute(number)
 }
 FizzBuzzType <|-- FizzBuzzType01
@@ -4081,8 +4085,12 @@ FizzBuzz -> FizzBuzzList
 FizzBuzzCommand <|-- FizzBuzzValueCommand
 FizzBuzzCommand <|-- FizzBuzzListCommand
 FizzBuzzCommand *- FizzBuzzType
+FizzBuzzListCommand -> FizzBuzzList
 ----
 
+===== デッドコードの削除
+
+`FizzBuzz` クラスの責務は各 *メソッドオブジェクト* が実行するようになったので削除しましょう。
 
 [source, ruby]
 ----
@@ -4133,6 +4141,8 @@ Finished in 0.03539s
 35 tests, 35 assertions, 0 failures, 3 errors, 0 skips
 ----
 
+テストが失敗しました。これは *学習用テスト* で `FizzBuzz` クラスを使っている箇所があるからですね。 *メソッドオブジェクト* 呼び出しに変更しておきましょう。
+
 [source, ruby]
 ----
   describe 'FizzBuzzValue' do
@@ -4174,32 +4184,26 @@ end
 ----
 ...
   describe 'FizzBuzzValue' do
-    def setup
-      @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
-
     def test_同じで値である
-      value1 = @fizzbuzz.execute(1)
-      value2 = @fizzbuzz.execute(1)
+      value1 = FizzBuzzValue.new(1, '1')
+      value2 = FizzBuzzValue.new(1, '1')
 
       assert value1.eql?(value2)
     end
 
     def test_to_stringメソッド
-      value = @fizzbuzz.execute(3)
+      value = FizzBuzzValue.new(3, 'Fizz')
 
       assert_equal '3:Fizz', value.to_s
     end
   end
 
   describe 'FizzBuzzValueList' do
-    def setup
-      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
-
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.execute(100)
-      list2 = list1.add(list1.value)
+      command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      array = command.execute(100)
+      list1 = FizzBuzzList.new(array)
+      list2 = list1.add(array)
 
       assert_equal 100, list1.value.count
       assert_equal 200, list2.value.count
@@ -4219,6 +4223,8 @@ Started with run options --guard --seed 10411
 Finished in 0.00704s
 35 tests, 39 assertions, 0 failures, 0 errors, 0 skips
 ----
+
+不要なコードを残しておくとメンテナンスの時に削除していいのかわからなくなり可読性を落とし原因となります。削除できる時に削除しておきましょう。後で必要になったとしてもバージョン管理システムを使えば問題ありません。ということでコミットします。
 
 [source, bash]
 ----
@@ -4259,9 +4265,11 @@ class FizzBuzzList {
 Interface FizzBuzzCommand {
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 class FizzBuzzListCommand {
+  type
   execute(number)
 }
 FizzBuzzType <|-- FizzBuzzType01
@@ -4277,7 +4285,155 @@ FizzBuzzListCommand --> FizzBuzzList
 FizzBuzzCommand *- FizzBuzzType
 ----
 
+===== デザインパターン
+
+*メソッドオブジェクトによるメソッドの置き換え* リファクタリングの結果として *Commandパターン* という *デザインパターン* を適用しました。実はこれまでにも *オブジェクトによるプリミティブの置き換え* では *Value Objectパターン* を *ポリモーフィズムによる条件記述の置き換え* では *Factory Methodパターン* をそして、*サブクラスによるタイプコードの置き換え* から *委譲の隠蔽* の実施による *State/Strategyによるタイプコードの置き換え* では *State/Strategyパターン* を適用しています。
+
+https://ja.wikipedia.org/wiki/Command_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3[Command パターン^]
+[plantuml]
+----
+interface Command {
+  execute()
+}
+class Invoker {
+}
+class ConcreateCommand {
+  execute()
+}
+class Receiver {
+  Action()
+}
+class Client {
+}
+Invoker o-> Command
+Command <|-- ConcreateCommand
+Receiver <- ConcreateCommand
+Client -> Receiver
+Client -> ConcreateCommand
+----
+
+https://ja.wikipedia.org/wiki/Strategy_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3[Strategy パターン^]
+[plantuml]
+----
+class Context {
+  ContextInterface()
+}
+interface Strategy {
+  AlgorithmInterface()
+}
+class ConcreateStrategyA {
+  AlgorithmInterface()
+}
+class ConcreateStrategyB {
+  AlgorithmInterface()
+}
+Context o- Strategy
+Strategy <|-- ConcreateStrategyA
+Strategy <|-- ConcreateStrategyB
+----
+
+パターンと完全に一致しているわけではありませんし、Rubyのような動的言語ではもっと簡単な実現方法もありますがここでは先人の考えた設計パターンというものがありオブジェクト指向の共通語として使えることそしてテスト駆動開発では一般的な設計アプローチとは異なる形で導かれているということくらいを頭に残しておけば結構です。どのパターンをいつ適用するかはリファクタリングを繰り返しているうちに思いつくようになってきます（多分）。
+
+あと、設計の観点から今回 *単一責任の原則* に従って `FizzBuzz` クラスを *メソッドオブジェクト* に分割して削除しました。
+
+[plantuml]
+----
+Interface FizzBuzzCommand {
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzCommand *- FizzBuzzType
+----
+
+もし、新しい処理を追加する必要が発生した場合はどうしましょうか？ `FizzBuzzCommand` インターフェイスを実装した *メソッドオブジェクト* を追加しましょう。
+
+[plantuml]
+----
+Interface FizzBuzzCommand {
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzCommand <|-- FizzBuzzSomethingSpecialCommand
+FizzBuzzCommand *- FizzBuzzType
+----
+
+もし、新しいタイプが必要になったらどうしましょうか？ `FizzBuzzType` クラスを継承した新しいタイプクラスを追加しましょう。
+
+[plantuml]
+----
+Interface FizzBuzzCommand {
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType <|-- FizzBuzzTypeXX
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzCommand *- FizzBuzzType
+----
+
+このように既存のコードを変更することなく振る舞いを変更できるので *開放/閉鎖原則* を満たしています。
+
 ==== 例外
+
+[plantuml]
+----
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+   generate()
+}
+class FizzBuzzType02 {
+   generate()
+}
+class FizzBuzzType03 {
+   generate()
+}
+class FizzBuzzValue {
+   number
+   value
+   to_s()
+   eql?()
+}
+class FizzBuzzList {
+   value
+   to_s()
+   add(value)
+}
+Interface FizzBuzzCommand {
+}
+class FizzBuzzValueCommand {
+  type
+  execute(number)
+}
+class FizzBuzzListCommand {
+  type
+  execute(number)
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType01 --> FizzBuzzValue
+FizzBuzzType02 --> FizzBuzzValue
+FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzList *- FizzBuzzValue
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzListCommand --> FizzBuzzList
+FizzBuzzCommand *- FizzBuzzType
+----
 
 ===== アサーションの導入
 [source, ruby]
@@ -4405,9 +4561,11 @@ class FizzBuzzList {
 Interface FizzBuzzCommand {
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 class FizzBuzzListCommand {
+  type
   execute(number)
 }
 class Assertions {

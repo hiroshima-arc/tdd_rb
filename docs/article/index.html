@@ -647,11 +647,12 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_学習用テスト_3">学習用テスト</a></li>
 </ul>
 </li>
-<li><a href="#_デザインパターン">3.1.8. デザインパターン</a>
+<li><a href="#_オブジェクト指向設計">3.1.8. オブジェクト指向設計</a>
 <ul class="sectlevel4">
 <li><a href="#_メソッドオブジェクトによるメソッドの置き換え">メソッドオブジェクトによるメソッドの置き換え</a></li>
 <li><a href="#_メソッドオブジェクトによるメソッドの置き換え_2">メソッドオブジェクトによるメソッドの置き換え</a></li>
 <li><a href="#_デッドコードの削除">デッドコードの削除</a></li>
+<li><a href="#_デザインパターン">デザインパターン</a></li>
 </ul>
 </li>
 <li><a href="#_例外">3.1.9. 例外</a>
@@ -10798,7 +10799,7 @@ $ git commit -m 'refactor: 学習用テスト'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_デザインパターン">3.1.8. デザインパターン</h4>
+<h4 id="_オブジェクト指向設計">3.1.8. オブジェクト指向設計</h4>
 <div class="imageblock">
 <div class="content">
 <img src="diag-c71f04d2bdaf08275832a101cabec792.png" alt="diag c71f04d2bdaf08275832a101cabec792" width="764" height="346">
@@ -11002,6 +11003,9 @@ $ git commit -m 'refactor: メソッドオブジェクトによるメソッド�
 </div>
 <div class="sect4">
 <h5 id="_メソッドオブジェクトによるメソッドの置き換え_2">メソッドオブジェクトによるメソッドの置き換え</h5>
+<div class="paragraph">
+<p>続いて、<strong>ファーストクラスコレクション</strong> を扱う <code>FizzBuzzList</code> を返す責務だけを持った <strong>メソッドオブジェクト</strong> を抽出します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
@@ -11011,10 +11015,13 @@ $ git commit -m 'refactor: メソッドオブジェクトによるメソッド�
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">execute</span>(number)
-    <span class="constant">FizzBuzzList</span>.new((<span class="integer">1</span>..number).map { |i| <span class="instance-variable">@type</span>.generate(i) })
+    <span class="constant">FizzBuzzList</span>.new((<span class="integer">1</span>..number).map { |i| <span class="instance-variable">@type</span>.generate(i) }).value
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストコードを <strong>FizzBuzzListCommand</strong> 経由から実行するように変更します</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -11031,13 +11038,11 @@ $ git commit -m 'refactor: メソッドオブジェクトによるメソッド�
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
-
-        describe <span class="string"><span class="delimiter">'</span><span class="content">1から100までのFizzBuzzの配列を返す</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
-          <span class="keyword">def</span> <span class="function">setup</span>
-            fizz_buzz = <span class="constant">FizzBuzzListCommand</span>.new(<span class="constant">FizzBuzzType01</span>.new)
-            fizz_buzz_list = fizz_buzz.execute(<span class="integer">100</span>)
-            <span class="instance-variable">@result</span> = fizz_buzz_list.value
-          <span class="keyword">end</span>
+      describe <span class="string"><span class="delimiter">'</span><span class="content">1から100までのFizzBuzzの配列を返す</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">setup</span>
+          fizzbuzz = <span class="constant">FizzBuzzListCommand</span>.new(<span class="constant">FizzBuzzType01</span>.new)
+          <span class="instance-variable">@result</span> = fizzbuzz.execute(<span class="integer">100</span>)
+        <span class="keyword">end</span>
 ...</code></pre>
 </div>
 </div>
@@ -11053,19 +11058,25 @@ Finished in 0.00652s
 35 tests, 39 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストが通ったのでコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'refactor: メソッドオブジェクトによるメソッドの置き換え'</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-b32b93fc1a6c352dd5ef3c99d3e90aab.png" alt="diag b32b93fc1a6c352dd5ef3c99d3e90aab" width="1162" height="411">
+</div>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_デッドコードの削除">デッドコードの削除</h5>
-<div class="imageblock">
-<div class="content">
-<img src="diag-fef169f793e0bf06c147b610a6f03084.png" alt="diag fef169f793e0bf06c147b610a6f03084" width="1089" height="349">
-</div>
+<div class="paragraph">
+<p><code>FizzBuzz</code> クラスの責務は各 <strong>メソッドオブジェクト</strong> が実行するようになったので削除しましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -11116,6 +11127,9 @@ Finished in 0.03539s
 35 tests, 35 assertions, 0 failures, 3 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストが失敗しました。これは <strong>学習用テスト</strong> で <code>FizzBuzz</code> クラスを使っている箇所があるからですね。 <strong>メソッドオブジェクト</strong> 呼び出しに変更しておきましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">  describe <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzzValue</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
@@ -11157,32 +11171,26 @@ Finished in 0.03539s
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
   describe <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzzValue</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
-    <span class="keyword">def</span> <span class="function">setup</span>
-      <span class="instance-variable">@fizzbuzz</span> = <span class="constant">FizzBuzzValueCommand</span>.new(<span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>))
-    <span class="keyword">end</span>
-
     <span class="keyword">def</span> <span class="function">test_同じで値である</span>
-      value1 = <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">1</span>)
-      value2 = <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">1</span>)
+      value1 = <span class="constant">FizzBuzzValue</span>.new(<span class="integer">1</span>, <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>)
+      value2 = <span class="constant">FizzBuzzValue</span>.new(<span class="integer">1</span>, <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>)
 
       assert value1.eql?(value2)
     <span class="keyword">end</span>
 
     <span class="keyword">def</span> <span class="function">test_to_stringメソッド</span>
-      value = <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">3</span>)
+      value = <span class="constant">FizzBuzzValue</span>.new(<span class="integer">3</span>, <span class="string"><span class="delimiter">'</span><span class="content">Fizz</span><span class="delimiter">'</span></span>)
 
       assert_equal <span class="string"><span class="delimiter">'</span><span class="content">3:Fizz</span><span class="delimiter">'</span></span>, value.to_s
     <span class="keyword">end</span>
   <span class="keyword">end</span>
 
   describe <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzzValueList</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
-    <span class="keyword">def</span> <span class="function">setup</span>
-      <span class="instance-variable">@fizzbuzz</span> = <span class="constant">FizzBuzzListCommand</span>.new(<span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>))
-    <span class="keyword">end</span>
-
     <span class="keyword">def</span> <span class="function">test_新しいインスタンスが作られる</span>
-      list1 = <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">100</span>)
-      list2 = list1.add(list1.value)
+      command = <span class="constant">FizzBuzzListCommand</span>.new(<span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>))
+      array = command.execute(<span class="integer">100</span>)
+      list1 = <span class="constant">FizzBuzzList</span>.new(array)
+      list2 = list1.add(array)
 
       assert_equal <span class="integer">100</span>, list1.value.count
       assert_equal <span class="integer">200</span>, list2.value.count
@@ -11203,6 +11211,9 @@ Finished in 0.00704s
 35 tests, 39 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>不要なコードを残しておくとメンテナンスの時に削除していいのかわからなくなり可読性を落とし原因となります。削除できる時に削除しておきましょう。後で必要になったとしてもバージョン管理システムを使えば問題ありません。ということでコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
@@ -11211,13 +11222,70 @@ $ git commit -m 'refactor: デッドコードの削除'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-0bacf9102c81d63f8f7ebed6200fa1d3.png" alt="diag 0bacf9102c81d63f8f7ebed6200fa1d3" width="876" height="424">
+<img src="diag-2283386d81c0d33141d551ac1397d4b2.png" alt="diag 2283386d81c0d33141d551ac1397d4b2" width="876" height="437">
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_デザインパターン">デザインパターン</h5>
+<div class="paragraph">
+<p><strong>メソッドオブジェクトによるメソッドの置き換え</strong> リファクタリングの結果として <strong>Commandパターン</strong> という <strong>デザインパターン</strong> を適用しました。実はこれまでにも <strong>オブジェクトによるプリミティブの置き換え</strong> では <strong>Value Objectパターン</strong> を <strong>ポリモーフィズムによる条件記述の置き換え</strong> では <strong>Factory Methodパターン</strong> をそして、<strong>サブクラスによるタイプコードの置き換え</strong> から <strong>委譲の隠蔽</strong> の実施による <strong>State/Strategyによるタイプコードの置き換え</strong> では <strong>State/Strategyパターン</strong> を適用しています。</p>
+</div>
+<div class="paragraph">
+<p><a href="https://ja.wikipedia.org/wiki/Command_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3" target="_blank" rel="noopener">Command パターン</a></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-3f9e53f62bd2f1b3bfe0f476521170ca.png" alt="diag 3f9e53f62bd2f1b3bfe0f476521170ca" width="380" height="199">
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://ja.wikipedia.org/wiki/Strategy_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3" target="_blank" rel="noopener">Strategy パターン</a></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-4969f773bcc5408d3afec24f14c006d3.png" alt="diag 4969f773bcc5408d3afec24f14c006d3" width="382" height="199">
+</div>
+</div>
+<div class="paragraph">
+<p>パターンと完全に一致しているわけではありませんし、Rubyのような動的言語ではもっと簡単な実現方法もありますがここでは先人の考えた設計パターンというものがありオブジェクト指向の共通語として使えることそしてテスト駆動開発では一般的な設計アプローチとは異なる形で導かれているということくらいを頭に残しておけば結構です。どのパターンをいつ適用するかはリファクタリングを繰り返しているうちに思いつくようになってきます（多分）。</p>
+</div>
+<div class="paragraph">
+<p>あと、設計の観点から今回 <strong>単一責任の原則</strong> に従って <code>FizzBuzz</code> クラスを <strong>メソッドオブジェクト</strong> に分割して削除しました。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-51044325ad9691ebfe6e60879f6c95e7.png" alt="diag 51044325ad9691ebfe6e60879f6c95e7" width="876" height="174">
+</div>
+</div>
+<div class="paragraph">
+<p>もし、新しい処理を追加する必要が発生した場合はどうしましょうか？ <code>FizzBuzzCommand</code> インターフェイスを実装した <strong>メソッドオブジェクト</strong> を追加しましょう。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-ea3196c5b1015bd1c10121bc92095fcb.png" alt="diag ea3196c5b1015bd1c10121bc92095fcb" width="1152" height="174">
+</div>
+</div>
+<div class="paragraph">
+<p>もし、新しいタイプが必要になったらどうしましょうか？ <code>FizzBuzzType</code> クラスを継承した新しいタイプクラスを追加しましょう。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-479f7874fa6e2b242ebd5a2f54730e37.png" alt="diag 479f7874fa6e2b242ebd5a2f54730e37" width="1039" height="174">
+</div>
+</div>
+<div class="paragraph">
+<p>このように既存のコードを変更することなく振る舞いを変更できるので <strong>開放/閉鎖原則</strong> を満たしています。</p>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_例外">3.1.9. 例外</h4>
+<div class="imageblock">
+<div class="content">
+<img src="diag-2283386d81c0d33141d551ac1397d4b2.png" alt="diag 2283386d81c0d33141d551ac1397d4b2" width="876" height="437">
+</div>
+</div>
 <div class="sect4">
 <h5 id="_アサーションの導入">アサーションの導入</h5>
 <div class="listingblock">
@@ -11313,7 +11381,7 @@ $ git commit -m 'refactor: アサーションの導入'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-dfbaaf7facf54432e7ad84b1cb7212f1.png" alt="diag dfbaaf7facf54432e7ad84b1cb7212f1" width="876" height="545">
+<img src="diag-c01981e741cde9a0b10a8c3fef7785e5.png" alt="diag c01981e741cde9a0b10a8c3fef7785e5" width="876" height="558">
 </div>
 </div>
 <div class="listingblock">
