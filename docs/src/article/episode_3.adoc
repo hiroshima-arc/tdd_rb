@@ -6835,7 +6835,6 @@ include::./code/episode_3/test/application/fizz_buzz_list_command_test.rb[]
 include::./code/episode_3/test/domain/model/fizz_buzz_value_test.rb[]
 ----
 
-
 ./test/domain/model/fizz_buzz_list_test.rb
 [source, ruby]
 ----
@@ -6848,3 +6847,10 @@ include::./code/episode_3/test/domain/model/fizz_buzz_list_test.rb[]
 include::./code/episode_3/test/learning_test.rb[]
 ----
 
+==== ふりかえり
+
+===== オブジェクト指向プログラム
+
+===== オブジェクト指向設計
+
+===== ドメインモデル
