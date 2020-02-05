@@ -5,7 +5,7 @@ class FizzBuzzList
   attr_reader :value
 
   def initialize(list)
-    raise "上限は#{MAX_COUNT}件までです" if list.count > 100
+    raise "上限は#{MAX_COUNT}件までです" if list.count > MAX_COUNT
 
     @value = list
   end

@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-class FizzBuzzCommand; end
+class FizzBuzzCommand
+  def execute; end
+end

@@ -6,6 +6,6 @@ class FizzBuzzListCommand < FizzBuzzCommand
   end
 
   def execute(number)
-    FizzBuzzList.new((1..number).map { |i| @type.generate(i) })
+    FizzBuzzList.new((1..number).map { |i| @type.generate(i) }).value
   end
 end

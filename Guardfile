@@ -10,7 +10,6 @@ end
 guard :minitest do
   # with Minitest::Unit
   watch(%r{test\/*.rb})
-  watch(%r{lib\/*.rb})
 end
 
 guard :rubocop, cli: %w[--auto-correct --format fuubar --format html -o ./tmp/rubocop_results.html] do

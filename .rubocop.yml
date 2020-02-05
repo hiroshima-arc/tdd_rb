@@ -1,11 +1,21 @@
 inherit_from: .rubocop_todo.yml
 
-# Offense count: 44
-# Configuration parameters: IgnoredPatterns.
-# SupportedStyles: snake_case, camelCase
+Naming/AsciiIdentifiers:
+  Exclude:
+    - 'test/**/*'
+    - 'docs/**/*'
+
 Naming/MethodName:
   EnforcedStyle: snake_case
   Exclude:
-    - 'docs/src/article/code/episode_1/test/fizz_buzz_test.rb'
-    - 'test/application/fizz_buzz_list_command_test.rb'
-    - 'test/application/fizz_buzz_value_command_test.rb'
+    - 'test/**/*'
+    - 'docs/**/*'
+
+Metrics/BlockLength:
+  Max: 62
+  Exclude:
+    - 'test/**/*'
+    - 'docs/**/*'
+
+Documentation:
+  Enabled: false
