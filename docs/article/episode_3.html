@@ -4695,23 +4695,29 @@ $ git commit -m 'refactor: デッドコードの削除'</code></pre>
 <img src="diag-2283386d81c0d33141d551ac1397d4b2.png" alt="diag 2283386d81c0d33141d551ac1397d4b2" width="876" height="437">
 </div>
 </div>
+<div class="paragraph">
+<p>ここまでは、正常系をリファクタリングしてきました。しかし、アプリケーションは例外系も考慮する必要があります。
+続いて、例外系のリファクタリングに取り組むとしましょう。</p>
+</div>
 <div class="sect4">
 <h5 id="_アサーションの導入">アサーションの導入</h5>
+<div class="paragraph">
+<p>まず、 <strong>メソッドオブジェクト</strong> の <code>FizzBuzzValueCommand</code> にマイナスの値が渡された場合の振る舞いをどうするか考えます。ここでは正の値のみ許可する振る舞いにしたいので以下のテストコードを追加します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzTest &lt; Minitest::Test
 ...
-      describe '例外ケース' do
-        def test_値は正の値のみ許可する
-          assert_raises Assertions::AssertionFailedError do
-            FizzBuzzValueCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(-1)
-          end
-        end
+  describe '例外ケース' do
+    def test_値は正の値のみ許可する
+      assert_raises Assertions::AssertionFailedError do
+        FizzBuzzValueCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(-1)
       end
     end
-  end</code></pre>
+  end
+end</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -4727,6 +4733,9 @@ Finished in 0.00705s
 36 tests, 40 assertions, 1 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストを通すためアサーションモジュールを追加します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -4741,6 +4750,9 @@ end
 class FizzBuzzValue
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>追加したモジュールを <code>FizzBuzzValue</code> クラスをに <strong>Mix-in</strong> します。そして、<strong>コンストラクタ</strong> 実行時に数値は0以上であるアサーションを追加します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4782,6 +4794,9 @@ Finished in 0.01433s
 36 tests, 40 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>アサーションが機能するようになりました、コミットしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
@@ -4793,31 +4808,34 @@ $ git commit -m 'refactor: アサーションの導入'</code></pre>
 <img src="diag-c01981e741cde9a0b10a8c3fef7785e5.png" alt="diag c01981e741cde9a0b10a8c3fef7785e5" width="876" height="558">
 </div>
 </div>
+<div class="paragraph">
+<p>次は、<strong>メソッドオブジェクト</strong> の <code>FizzBuzzListCommand</code> の実行時に100件以上指定された場合の振る舞いをどうするか考えます。ここでは100までを許可する振る舞いにします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
-      describe '例外ケース' do
-        def test_値は正の値のみ許可する
-          assert_raises Assertions::AssertionFailedError do
-            FizzBuzzValueCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(-1)
-          end
-        end
+  describe '例外ケース' do
+    def test_値は正の値のみ許可する
+      assert_raises Assertions::AssertionFailedError do
+        FizzBuzzValueCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(-1)
+      end
+    end
 
-        def test_100より多い数を許可しない
-          assert_raises Assertions::AssertionFailedError do
-            FizzBuzzListCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(101)
-          end
-        end
+    def test_100より多い数を許可しない
+      assert_raises Assertions::AssertionFailedError do
+        FizzBuzzListCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(101)
       end
     end
   end
-
-...</code></pre>
+end</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>FizzBuzzList</code> にアサーションモジュールを <strong>Mix-in</strong> します。<strong>コンストラクタ</strong> 実行時に配列のサイズは100までというアサーションを追加します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4850,45 +4868,48 @@ Finished in 0.01238s
 36 tests, 38 assertions, 0 failures, 1 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>追加したテストはパスするようになりましたが既存のテストコードでエラーが出るようになりました。該当するテストコードを見たところ100件より多い <strong>ファーストクラスコレクション</strong> を作ろうとしたため <code>AssertionFailedError</code> を発生させたようです。テストコードを修正しておきましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
-
   describe 'FizzBuzzValueList' do
-    def setup
-      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
-
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.execute(100)
-      list2 = list1.add(list1.value)
+      command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      array = command.execute(100)
+      list1 = FizzBuzzList.new(array)
+      list2 = list1.add(array)
 
       assert_equal 100, list1.value.count
       assert_equal 200, list2.value.count
     end
   end
-end</code></pre>
+...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>最初は50件作るように変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
-
   describe 'FizzBuzzValueList' do
-    def setup
-      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
-
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.execute(50)
-      list2 = list1.add(list1.value)
+      command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      array = command.execute(50)
+      list1 = FizzBuzzList.new(array)
+      list2 = list1.add(array)
 
       assert_equal 100, list1.value.count
       assert_equal 200, list2.value.count
     end
   end
-end</code></pre>
+...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>アサーションエラーはなくなりましたが期待した値と違うと指摘されています。テストコードのアサーションを修正します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4907,22 +4928,22 @@ Finished in 0.00837s
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
-
   describe 'FizzBuzzValueList' do
-    def setup
-      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
-
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.execute(50)
-      list2 = list1.add(list1.value)
+      command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      array = command.execute(50)
+      list1 = FizzBuzzList.new(array)
+      list2 = list1.add(array)
 
       assert_equal 50, list1.value.count
       assert_equal 200, list2.value.count
     end
   end
-end</code></pre>
+...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>２つ目のアサーションに引っかかってしまいました。こちらも修正します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4941,21 +4962,18 @@ Finished in 0.00809s
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
-
   describe 'FizzBuzzValueList' do
-    def setup
-      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
-
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.execute(50)
-      list2 = list1.add(list1.value)
+      command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      array = command.execute(50)
+      list1 = FizzBuzzList.new(array)
+      list2 = list1.add(array)
 
       assert_equal 50, list1.value.count
       assert_equal 100, list2.value.count
     end
   end
-end</code></pre>
+...</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -4970,6 +4988,9 @@ Finished in 0.00717s
 36 tests, 40 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>仕様変更による反映が出来たのでコミットしましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
@@ -4981,9 +5002,15 @@ $ git commit -m 'refactor: アサーションの導入'</code></pre>
 <img src="diag-f90bf5dd89f4aba1044d05004d7588fa.png" alt="diag f90bf5dd89f4aba1044d05004d7588fa" width="876" height="545">
 </div>
 </div>
+<div class="paragraph">
+<p><strong>アサーションの導入</strong> とは別のアプローチとして <strong>例外</strong> を返す方法もあります。 <strong>例外によるエラーコードの置き換え</strong> を適用してアサーションモジュールを削除しましょう。</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_例外によるエラーコードの置き換え">例外によるエラーコードの置き換え</h5>
+<div class="paragraph">
+<p>アサーションモジュールを削除してアサーション部分を <strong>例外</strong> に変更します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -5065,58 +5092,57 @@ Finished in 0.01731s
 37 tests, 39 assertions, 0 failures, 2 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>アサーションモジュールを削除したのでエラーが発生しています。テストコードを修正しましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
-      describe '例外ケース' do
-        def test_値は正の値のみ許可する
-          assert_raises Assertions::AssertionFailedError do
-            FizzBuzzValueCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(-1)
-          end
-        end
+  describe '例外ケース' do
+    def test_値は正の値のみ許可する
+      assert_raises Assertions::AssertionFailedError do
+        FizzBuzzValueCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(-1)
+      end
+    end
 
-        def test_100より多い数を許可しない
-          assert_raises Assertions::AssertionFailedError do
-            FizzBuzzListCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(101)
-          end
-        end
+    def test_100より多い数を許可しない
+      assert_raises Assertions::AssertionFailedError do
+        FizzBuzzListCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(101)
       end
     end
   end
-...</code></pre>
+end</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
-      describe '例外ケース' do
-        def test_値は正の値のみ許可する
-          e = assert_raises RuntimeError do
-            FizzBuzzValueCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(-1)
-          end
-
-          assert_equal '正の値のみ有効です', e.message
-        end
-
-        def test_100より多い数を許可しない
-          e = assert_raises RuntimeError do
-            FizzBuzzListCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(101)
-          end
-
-          assert_equal '上限は100件までです', e.message
-        end
+  describe '例外ケース' do
+    def test_値は正の値のみ許可する
+      e = assert_raises RuntimeError do
+        FizzBuzzValueCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(-1)
       end
+
+      assert_equal '正の値のみ有効です', e.message
+    end
+
+    def test_100より多い数を許可しない
+      e = assert_raises RuntimeError do
+        FizzBuzzListCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(101)
+      end
+
+      assert_equal '上限は100件までです', e.message
     end
   end
-...</code></pre>
+end</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -5131,6 +5157,9 @@ Finished in 0.00738s
 37 tests, 43 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>再びテストが通るようになったのでコミットしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
@@ -5141,6 +5170,12 @@ $ git commit -m 'refactor:  例外によるエラーコードの置き換え'</c
 <div class="content">
 <img src="diag-0bacf9102c81d63f8f7ebed6200fa1d3.png" alt="diag 0bacf9102c81d63f8f7ebed6200fa1d3" width="876" height="424">
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_アルゴリズムの置き換え">アルゴリズムの置き換え</h5>
+<div class="paragraph">
+<p>テストは通りますが警告が表示されるようになりました。 <code>Style/NumericPredicate: Use number.negative? instead of number &lt; 0.</code> とのことなので <strong>アルゴリズムの置き換え</strong> を適用しておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5190,6 +5225,12 @@ class FizzBuzzValue
 $ git commit -m 'refactor: アルゴリズムの置き換え'</code></pre>
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_マジックナンバーの置き換え_2">マジックナンバーの置き換え</h5>
+<div class="paragraph">
+<p>件数に <strong>リテラル</strong> を使っています。ここは <strong>マジックナンバーの置き換え</strong> を適用するべきですね。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">...
@@ -5218,6 +5259,9 @@ class FizzBuzzList
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストは壊れていないようですが <code>MAX_COUNT</code> を変更したらテストが失敗するか確認しておきましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzList
@@ -5235,6 +5279,9 @@ Minitest::UnexpectedError:         RuntimeError: 上限は10件までです
             /workspace/tdd_rb/lib/fizz_buzz.rb:112:in `execute'
             /workspace/tdd_rb/test/fizz_buzz_test.rb:45:in `setup'</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>想定通りのエラーが発生したのでコードを元に戻してコミットしましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5264,6 +5311,203 @@ $ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
 <div class="imageblock">
 <div class="content">
 <img src="diag-cbf143a596f96d524e0c352a13abc7d4.png" alt="diag cbf143a596f96d524e0c352a13abc7d4" width="876" height="424">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_特殊ケースの導入">特殊ケースの導入</h5>
+<div class="paragraph">
+<p>最後に <strong>ポリモーフィズム</strong> の応用としてタイプクラスが未定義の場合に <strong>例外</strong> ではなく未定義のタイプクラスを返す <strong>特殊ケースの導入</strong> を適用してみましょう。</p>
+</div>
+<div class="paragraph">
+<p>まず、それ以外のタイプの場合の振る舞いを変更します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+    describe 'それ以外のタイプの場合' do
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          FizzBuzzType.create(4)
+        end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+   describe 'それ以外のタイプの場合' do
+      def test_未定義のタイプを返す
+        fizzbuzz = FizzBuzzType.create(4)
+
+        assert_equal '未定義', fizzbuzz.to_s
+      end
+    end
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">ERROR["test_未定義のタイプを返す", #&lt;Minitest::Reporters::Suite:0x00005593e21297d0 @name="数を文字列にして返す::それ以外のタイプの場合"&gt;, 0.0065623498521745205]
+ test_未定義のタイプを返す#数を文字列にして返す::それ以外のタイプの場合 (0.01s)
+Minitest::UnexpectedError:         RuntimeError: 該当するタイプは存在しません
+            /workspace/tdd_rb/lib/fizz_buzz.rb:17:in `create'
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:131:in `test_未定義のタイプを返す'
+
+  37/37: [==================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00780s
+37 tests, 41 assertions, 0 failures, 1 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>現時点では <strong>例外</strong> を投げるので未定義タイプ <code>FizzBuzzTypeNotDefined</code> を作成して <strong>ファクトリメソッド</strong> の処理変更します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzType
+  TYPE_01 = 1
+  TYPE_02 = 2
+  TYPE_03 = 3
+
+  def self.create(type)
+    case type
+    when FizzBuzzType::TYPE_01
+      FizzBuzzType01.new
+    when FizzBuzzType::TYPE_02
+      FizzBuzzType02.new
+    when FizzBuzzType::TYPE_03
+      FizzBuzzType03.new
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
+  def fizz?(number)
+    number.modulo(3).zero?
+  end
+
+  def buzz?(number)
+    number.modulo(5).zero?
+  end
+end
+
+class FizzBuzzType01 &lt; FizzBuzzType
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzzType
+  TYPE_01 = 1
+  TYPE_02 = 2
+  TYPE_03 = 3
+
+  def self.create(type)
+    case type
+    when FizzBuzzType::TYPE_01
+      FizzBuzzType01.new
+    when FizzBuzzType::TYPE_02
+      FizzBuzzType02.new
+    when FizzBuzzType::TYPE_03
+      FizzBuzzType03.new
+    else
+      FizzBuzzTypeNotDefined.new
+    end
+  end
+...
+class FizzBuzzTypeNotDefined &lt; FizzBuzzType
+  def generate(number)
+    FizzBuzzValue.new(number, '')
+  end
+
+  def to_s
+    '未定義'
+  end
+end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb"
+Started with run options --seed 33939
+
+
+Progress: |=====================================================================================================|
+
+Finished in 0.01193s
+37 tests, 42 assertions, 0 failures, 0 errors, 0 skips
+06:46:48 - INFO - Inspecting Ruby code style: lib/fizz_buzz.rb
+ 1/1 file |======================================= 100 ========================================&gt;| Time: 00:00:00
+
+1 file inspected, no offenses detected
+06:46:49 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/border.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/loading_background.png
+ 0/0 files |======================================= 100 =======================================&gt;| Time: 00:00:00
+
+0 files inspected, no offenses detected</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストが通るようになりました。 <strong>メソッドオブジェクト</strong> から実行された場合の振る舞いも明記しておきましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby">...
+    describe 'それ以外のタイプの場合' do
+      def test_未定義のタイプを返す
+        fizzbuzz = FizzBuzzType.create(4)
+
+        assert_equal '未定義', fizzbuzz.to_s
+      end
+
+      def test_空の文字列を返す
+        type = FizzBuzzType.create(4)
+        command = FizzBuzzValueCommand.new(type)
+
+        assert_equal '', command.execute(3)
+      end
+    end
+  end
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">06:48:54 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 62 / 65 LOC (95.38%) covered.
+Started with run options --guard --seed 18202
+
+  38/38: [==================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00747s
+38 tests, 43 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>FizzBuzzTypeNotDefined</code> オブジェクトは <strong>Null Objectパターン</strong> と適用したものです。</p>
+</div>
+<div class="paragraph">
+<p><strong>開放/閉鎖原則</strong> に従って未定義のタイプである <strong>Null Object</strong> を安全に追加することが出来ました。</p>
+</div>
+<div class="paragraph">
+<p>コミットしましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
+$ git commit -m 'refactor: 特殊ケースの導入'</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-633a043c1664b9f55569102a3c998076.png" alt="diag 633a043c1664b9f55569102a3c998076" width="1088" height="437">
 </div>
 </div>
 </div>
@@ -6133,7 +6377,7 @@ end</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-05 13:13:02 JST
+Last updated 2020-02-05 15:59:27 JST
 </div>
 </div>
 </body>

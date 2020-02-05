@@ -4435,22 +4435,27 @@ FizzBuzzListCommand --> FizzBuzzList
 FizzBuzzCommand *- FizzBuzzType
 ----
 
+ここまでは、正常系をリファクタリングしてきました。しかし、アプリケーションは例外系も考慮する必要があります。
+続いて、例外系のリファクタリングに取り組むとしましょう。
+
 ===== アサーションの導入
+
+まず、 *メソッドオブジェクト* の `FizzBuzzValueCommand` にマイナスの値が渡された場合の振る舞いをどうするか考えます。ここでは正の値のみ許可する振る舞いにしたいので以下のテストコードを追加します。
+
 [source, ruby]
 ----
 class FizzBuzzTest < Minitest::Test
 ...
-      describe '例外ケース' do
-        def test_値は正の値のみ許可する
-          assert_raises Assertions::AssertionFailedError do
-            FizzBuzzValueCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(-1)
-          end
-        end
+  describe '例外ケース' do
+    def test_値は正の値のみ許可する
+      assert_raises Assertions::AssertionFailedError do
+        FizzBuzzValueCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(-1)
       end
     end
   end
+end
 ----
 
 [source, bash]
@@ -4466,6 +4471,7 @@ Finished in 0.00705s
 36 tests, 40 assertions, 1 failures, 0 errors, 0 skips
 ----
 
+テストを通すためアサーションモジュールを追加します。
 
 [source, ruby]
 ----
@@ -4481,6 +4487,8 @@ end
 class FizzBuzzValue
 ...
 ----
+
+追加したモジュールを `FizzBuzzValue` クラスをに *Mix-in* します。そして、*コンストラクタ* 実行時に数値は0以上であるアサーションを追加します。
 
 [source, ruby]
 ----
@@ -4521,6 +4529,8 @@ Progress: |=====================================================================
 Finished in 0.01433s
 36 tests, 40 assertions, 0 failures, 0 errors, 0 skips
 ----
+
+アサーションが機能するようになりました、コミットしておきます。
 
 [source, bash]
 ----
@@ -4585,31 +4595,32 @@ FizzBuzzCommand *- FizzBuzzType
 FizzBuzzValue --|> Assertions
 ----
 
+次は、*メソッドオブジェクト* の `FizzBuzzListCommand` の実行時に100件以上指定された場合の振る舞いをどうするか考えます。ここでは100までを許可する振る舞いにします。
+
 [source, ruby]
 ----
 ...
-      describe '例外ケース' do
-        def test_値は正の値のみ許可する
-          assert_raises Assertions::AssertionFailedError do
-            FizzBuzzValueCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(-1)
-          end
-        end
+  describe '例外ケース' do
+    def test_値は正の値のみ許可する
+      assert_raises Assertions::AssertionFailedError do
+        FizzBuzzValueCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(-1)
+      end
+    end
 
-        def test_100より多い数を許可しない
-          assert_raises Assertions::AssertionFailedError do
-            FizzBuzzListCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(101)
-          end
-        end
+    def test_100より多い数を許可しない
+      assert_raises Assertions::AssertionFailedError do
+        FizzBuzzListCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(101)
       end
     end
   end
-
-...
+end
 ----
+
+`FizzBuzzList` にアサーションモジュールを *Mix-in* します。*コンストラクタ* 実行時に配列のサイズは100までというアサーションを追加します。
 
 [source, ruby]
 ----
@@ -4642,45 +4653,45 @@ Finished in 0.01238s
 36 tests, 38 assertions, 0 failures, 1 errors, 0 skips
 ----
 
+追加したテストはパスするようになりましたが既存のテストコードでエラーが出るようになりました。該当するテストコードを見たところ100件より多い *ファーストクラスコレクション* を作ろうとしたため `AssertionFailedError` を発生させたようです。テストコードを修正しておきましょう。
+
 [source, ruby]
 ----
 ...
-
   describe 'FizzBuzzValueList' do
-    def setup
-      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
-
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.execute(100)
-      list2 = list1.add(list1.value)
+      command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      array = command.execute(100)
+      list1 = FizzBuzzList.new(array)
+      list2 = list1.add(array)
 
       assert_equal 100, list1.value.count
       assert_equal 200, list2.value.count
     end
   end
-end
+...
 ----
+
+最初は50件作るように変更します。
 
 [source, ruby]
 ----
 ...
-
   describe 'FizzBuzzValueList' do
-    def setup
-      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
-
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.execute(50)
-      list2 = list1.add(list1.value)
+      command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      array = command.execute(50)
+      list1 = FizzBuzzList.new(array)
+      list2 = list1.add(array)
 
       assert_equal 100, list1.value.count
       assert_equal 200, list2.value.count
     end
   end
-end
+...
 ----
+
+アサーションエラーはなくなりましたが期待した値と違うと指摘されています。テストコードのアサーションを修正します。
 
 [source, bash]
 ----
@@ -4699,22 +4710,21 @@ Finished in 0.00837s
 [source, ruby]
 ----
 ...
-
   describe 'FizzBuzzValueList' do
-    def setup
-      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
-
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.execute(50)
-      list2 = list1.add(list1.value)
+      command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      array = command.execute(50)
+      list1 = FizzBuzzList.new(array)
+      list2 = list1.add(array)
 
       assert_equal 50, list1.value.count
       assert_equal 200, list2.value.count
     end
   end
-end
+...
 ----
+
+２つ目のアサーションに引っかかってしまいました。こちらも修正します。
 
 [source, bash]
 ----
@@ -4733,21 +4743,18 @@ Finished in 0.00809s
 [source, ruby]
 ----
 ...
-
   describe 'FizzBuzzValueList' do
-    def setup
-      @fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
-
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.execute(50)
-      list2 = list1.add(list1.value)
+      command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      array = command.execute(50)
+      list1 = FizzBuzzList.new(array)
+      list2 = list1.add(array)
 
       assert_equal 50, list1.value.count
       assert_equal 100, list2.value.count
     end
   end
-end
+...
 ----
 
 [source, bash]
@@ -4761,6 +4768,8 @@ Started with run options --guard --seed 44956
 Finished in 0.00717s
 36 tests, 40 assertions, 0 failures, 0 errors, 0 skips
 ----
+
+仕様変更による反映が出来たのでコミットしましょう。
 
 [source, bash]
 ----
@@ -4824,7 +4833,12 @@ FizzBuzzValue --|> Assertions
 FizzBuzzList --|> Assertions
 ----
 
+*アサーションの導入* とは別のアプローチとして *例外* を返す方法もあります。 *例外によるエラーコードの置き換え* を適用してアサーションモジュールを削除しましょう。
+
 ===== 例外によるエラーコードの置き換え
+
+アサーションモジュールを削除してアサーション部分を *例外* に変更します。
+
 [source, ruby]
 ----
 ...
@@ -4906,58 +4920,56 @@ Finished in 0.01731s
 37 tests, 39 assertions, 0 failures, 2 errors, 0 skips
 ----
 
-[source, ruby]
-----
-...
-      describe '例外ケース' do
-        def test_値は正の値のみ許可する
-          assert_raises Assertions::AssertionFailedError do
-            FizzBuzzValueCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(-1)
-          end
-        end
-
-        def test_100より多い数を許可しない
-          assert_raises Assertions::AssertionFailedError do
-            FizzBuzzListCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(101)
-          end
-        end
-      end
-    end
-  end
-...
-----
+アサーションモジュールを削除したのでエラーが発生しています。テストコードを修正しましょう。
 
 [source, ruby]
 ----
 ...
-      describe '例外ケース' do
-        def test_値は正の値のみ許可する
-          e = assert_raises RuntimeError do
-            FizzBuzzValueCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(-1)
-          end
+  describe '例外ケース' do
+    def test_値は正の値のみ許可する
+      assert_raises Assertions::AssertionFailedError do
+        FizzBuzzValueCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(-1)
+      end
+    end
 
-          assert_equal '正の値のみ有効です', e.message
-        end
-
-        def test_100より多い数を許可しない
-          e = assert_raises RuntimeError do
-            FizzBuzzListCommand.new(
-              FizzBuzzType.create(FizzBuzzType::TYPE_01)
-            ).execute(101)
-          end
-
-          assert_equal '上限は100件までです', e.message
-        end
+    def test_100より多い数を許可しない
+      assert_raises Assertions::AssertionFailedError do
+        FizzBuzzListCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(101)
       end
     end
   end
+end
+----
+
+[source, ruby]
+----
 ...
+  describe '例外ケース' do
+    def test_値は正の値のみ許可する
+      e = assert_raises RuntimeError do
+        FizzBuzzValueCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(-1)
+      end
+
+      assert_equal '正の値のみ有効です', e.message
+    end
+
+    def test_100より多い数を許可しない
+      e = assert_raises RuntimeError do
+        FizzBuzzListCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(101)
+      end
+
+      assert_equal '上限は100件までです', e.message
+    end
+  end
+end
 ----
 
 [source, bash]
@@ -4971,6 +4983,8 @@ Started with run options --guard --seed 55179
 Finished in 0.00738s
 37 tests, 43 assertions, 0 failures, 0 errors, 0 skips
 ----
+
+再びテストが通るようになったのでコミットしておきます。
 
 [source, bash]
 ----
@@ -5029,6 +5043,10 @@ FizzBuzzListCommand --> FizzBuzzList
 FizzBuzzCommand *- FizzBuzzType
 ----
 
+===== アルゴリズムの置き換え
+
+テストは通りますが警告が表示されるようになりました。 `Style/NumericPredicate: Use number.negative? instead of number < 0.` とのことなので *アルゴリズムの置き換え* を適用しておきましょう。
+
 [source, bash]
 ----
 02:13:46 - INFO - Inspecting Ruby code style: test/fizz_buzz_test.rb lib/fizz_buzz.rb
@@ -5077,6 +5095,10 @@ $ git add .
 $ git commit -m 'refactor: アルゴリズムの置き換え'
 ----
 
+===== マジックナンバーの置き換え
+
+件数に *リテラル* を使っています。ここは *マジックナンバーの置き換え* を適用するべきですね。
+
 [source, ruby]
 ----
 ...
@@ -5105,6 +5127,8 @@ class FizzBuzzList
 ...
 ----
 
+テストは壊れていないようですが `MAX_COUNT` を変更したらテストが失敗するか確認しておきましょう。
+
 [source, ruby]
 ----
 class FizzBuzzList
@@ -5122,6 +5146,8 @@ Minitest::UnexpectedError:         RuntimeError: 上限は10件までです
             /workspace/tdd_rb/lib/fizz_buzz.rb:112:in `execute'
             /workspace/tdd_rb/test/fizz_buzz_test.rb:45:in `setup'
 ----
+
+想定通りのエラーが発生したのでコードを元に戻してコミットしましょう。
 
 [source, ruby]
 ----
@@ -5199,6 +5225,249 @@ FizzBuzzCommand <|-- FizzBuzzListCommand
 FizzBuzzListCommand --> FizzBuzzList
 FizzBuzzCommand *- FizzBuzzType
 ----
+
+===== 特殊ケースの導入
+
+最後に *ポリモーフィズム* の応用としてタイプクラスが未定義の場合に *例外* ではなく未定義のタイプクラスを返す *特殊ケースの導入* を適用してみましょう。
+
+まず、それ以外のタイプの場合の振る舞いを変更します。
+
+[source, ruby]
+----
+...
+    describe 'それ以外のタイプの場合' do
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          FizzBuzzType.create(4)
+        end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
+  end
+...
+----
+
+[source, ruby]
+----
+...
+   describe 'それ以外のタイプの場合' do
+      def test_未定義のタイプを返す
+        fizzbuzz = FizzBuzzType.create(4)
+
+        assert_equal '未定義', fizzbuzz.to_s
+      end
+    end
+  end
+...
+----
+
+[source, bash]
+----
+ERROR["test_未定義のタイプを返す", #<Minitest::Reporters::Suite:0x00005593e21297d0 @name="数を文字列にして返す::それ以外のタイプの場合">, 0.0065623498521745205]
+ test_未定義のタイプを返す#数を文字列にして返す::それ以外のタイプの場合 (0.01s)
+Minitest::UnexpectedError:         RuntimeError: 該当するタイプは存在しません
+            /workspace/tdd_rb/lib/fizz_buzz.rb:17:in `create'
+            /workspace/tdd_rb/test/fizz_buzz_test.rb:131:in `test_未定義のタイプを返す'
+
+  37/37: [==================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00780s
+37 tests, 41 assertions, 0 failures, 1 errors, 0 skips
+----
+
+現時点では *例外* を投げるので未定義タイプ `FizzBuzzTypeNotDefined` を作成して *ファクトリメソッド* の処理変更します。
+
+[source, ruby]
+----
+class FizzBuzzType
+  TYPE_01 = 1
+  TYPE_02 = 2
+  TYPE_03 = 3
+
+  def self.create(type)
+    case type
+    when FizzBuzzType::TYPE_01
+      FizzBuzzType01.new
+    when FizzBuzzType::TYPE_02
+      FizzBuzzType02.new
+    when FizzBuzzType::TYPE_03
+      FizzBuzzType03.new
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
+  def fizz?(number)
+    number.modulo(3).zero?
+  end
+
+  def buzz?(number)
+    number.modulo(5).zero?
+  end
+end
+
+class FizzBuzzType01 < FizzBuzzType
+...
+----
+
+[source, ruby]
+----
+class FizzBuzzType
+  TYPE_01 = 1
+  TYPE_02 = 2
+  TYPE_03 = 3
+
+  def self.create(type)
+    case type
+    when FizzBuzzType::TYPE_01
+      FizzBuzzType01.new
+    when FizzBuzzType::TYPE_02
+      FizzBuzzType02.new
+    when FizzBuzzType::TYPE_03
+      FizzBuzzType03.new
+    else
+      FizzBuzzTypeNotDefined.new
+    end
+  end
+...
+class FizzBuzzTypeNotDefined < FizzBuzzType
+  def generate(number)
+    FizzBuzzValue.new(number, '')
+  end
+
+  def to_s
+    '未定義'
+  end
+end
+...
+----
+
+[source, bash]
+----
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+Started with run options --seed 33939
+
+
+Progress: |=====================================================================================================|
+
+Finished in 0.01193s
+37 tests, 42 assertions, 0 failures, 0 errors, 0 skips
+06:46:48 - INFO - Inspecting Ruby code style: lib/fizz_buzz.rb
+ 1/1 file |======================================= 100 ========================================>| Time: 00:00:00 
+
+1 file inspected, no offenses detected
+06:46:49 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/border.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/loading_background.png
+ 0/0 files |======================================= 100 =======================================>| Time: 00:00:00 
+
+0 files inspected, no offenses detected
+----
+
+テストが通るようになりました。 *メソッドオブジェクト* から実行された場合の振る舞いも明記しておきましょう。
+
+[source, ruby]
+----
+...
+    describe 'それ以外のタイプの場合' do
+      def test_未定義のタイプを返す
+        fizzbuzz = FizzBuzzType.create(4)
+
+        assert_equal '未定義', fizzbuzz.to_s
+      end
+
+      def test_空の文字列を返す
+        type = FizzBuzzType.create(4)
+        command = FizzBuzzValueCommand.new(type)
+
+        assert_equal '', command.execute(3)
+      end
+    end
+  end
+...
+----
+
+[source, bash]
+----
+06:48:54 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 62 / 65 LOC (95.38%) covered.
+Started with run options --guard --seed 18202
+
+  38/38: [==================================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00747s
+38 tests, 43 assertions, 0 failures, 0 errors, 0 skips
+----
+
+`FizzBuzzTypeNotDefined` オブジェクトは *Null Objectパターン* と適用したものです。
+
+*開放/閉鎖原則* に従って未定義のタイプである *Null Object* を安全に追加することが出来ました。
+
+コミットしましょう。
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: 特殊ケースの導入'
+----
+
+[plantuml]
+----
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+   generate()
+}
+class FizzBuzzType02 {
+   generate()
+}
+class FizzBuzzType03 {
+   generate()
+}
+class FizzBuzzTypeNotDefined {
+   generate()
+   to_s()
+}
+class FizzBuzzValue {
+   number
+   value
+   to_s()
+   eql?()
+}
+class FizzBuzzList {
+   MAX_COUNT = 100
+   value
+   to_s()
+   add(value)
+}
+Interface FizzBuzzCommand {
+}
+class FizzBuzzValueCommand {
+  execute(number)
+}
+class FizzBuzzListCommand {
+  execute(number)
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType <|-- FizzBuzzTypeNotDefined
+FizzBuzzType01 --> FizzBuzzValue
+FizzBuzzType02 --> FizzBuzzValue
+FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzTypeNotDefined --> FizzBuzzValue
+FizzBuzzList *- FizzBuzzValue
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzListCommand --> FizzBuzzList
+FizzBuzzCommand *- FizzBuzzType
+----
+
 
 ==== モジュールの分割
 [source, bash]
