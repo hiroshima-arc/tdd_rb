@@ -6,6 +6,6 @@ class FizzBuzzValueCommand < FizzBuzzCommand
   end
 
   def execute(number)
-    @type.generate(number)
+    @type.generate(number).value
   end
 end

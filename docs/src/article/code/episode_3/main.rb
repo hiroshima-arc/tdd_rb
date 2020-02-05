@@ -3,4 +3,4 @@
 require './lib/fizz_buzz.rb'
 
 command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-command.execute(100).value.each { |i| puts i.value }
+command.execute(100).each { |i| puts i.value }

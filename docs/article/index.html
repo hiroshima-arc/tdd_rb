@@ -666,6 +666,10 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_モジュールの分割">3.1.10. モジュールの分割</a>
 <ul class="sectlevel4">
+<li><a href="#_ドメインモデル">ドメインモデル</a></li>
+<li><a href="#_アプリケーション">アプリケーション</a></li>
+<li><a href="#_テスト">テスト</a></li>
+<li><a href="#_エントリーポイント">エントリーポイント</a></li>
 <li><a href="#_application">Application</a></li>
 <li><a href="#_domain">Domain</a></li>
 <li><a href="#_test">Test</a></li>
@@ -12108,13 +12112,25 @@ $ git commit -m 'refactor: 特殊ケースの導入'</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_モジュールの分割">3.1.10. モジュールの分割</h4>
+<div class="imageblock">
+<div class="content">
+<img src="diag-633a043c1664b9f55569102a3c998076.png" alt="diag 633a043c1664b9f55569102a3c998076" width="1088" height="437">
+</div>
+</div>
+<div class="paragraph">
+<p>アプリケーションはだいたいこんなところでしょう。
+ここでアプリケーションを実行してみましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"> ruby main.rb
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby main.rb
 Traceback (most recent call last):
 main.rb:5:in `&lt;main&gt;': uninitialized constant FizzBuzz (NameError)
 Did you mean?  FizzBuzzType</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>エラーが出ています、これはアプリケーションの構成が変わったためです。クライアントプログラムをアプリケーションの変更に合わせて修正します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -12132,7 +12148,7 @@ puts <span class="constant">FizzBuzz</span>.generate_list</code></pre>
 require './lib/fizz_buzz.rb'
 
 command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-command.execute(100).value.each { |i| puts i.value }</code></pre>
+command.execute(100).each { |i| puts i.value }</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -12147,12 +12163,20 @@ Buzz
 Fizz</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>クライアントプログラムが直ったのでコミットしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'fix: プリントする'</code></pre>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_ドメインモデル">ドメインモデル</h5>
+<div class="paragraph">
+<p><code>fizz_buzz.rb</code> ファイル内のクラスモジュールをファイルとして分割していきます。まずは <strong>ドメインモデル</strong> から分割しましょう。既存のテストを壊さないように１つづつコピー&amp;ペーストしていきます。</p>
+</div>
 <div class="literalblock">
 <div class="content">
 <pre>/main.rb
@@ -12181,6 +12205,7 @@ $ git commit -m 'fix: プリントする'</code></pre>
                -- fizz_buzz_type_01.rb
                -- fizz_buzz_type_02.rb
                -- fizz_buzz_type_03.rb
+               -- fizz_buzz_type_not_defined.rb
        -- fizz_buzz.rb
   |--test/
       |
@@ -12189,16 +12214,177 @@ $ git commit -m 'fix: プリントする'</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">Progress: |======================================================================================|
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
 
-Finished in 0.01302s
-37 tests, 43 assertions, 0 failures, 0 errors, 0 skips
-02:43:56 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png lib/domain/model/fizz_buzz_list.rb lib/domain/model/fizz_buzz_value.rb lib/domain/type/fizz_buzz_type_03.rb lib/domain/type/fizz_buzz_type_02.rb lib/domain/type/fizz_buzz_type_01.rb lib/domain/type/fizz_buzz_type.rb
-lib/domain/model/fizz_buzz_list.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzList
-^^^^^
-lib/domain/model/fizz_buzz_value.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzValue
+<span class="keyword">class</span> <span class="class">FizzBuzzValue</span>
+  attr_reader <span class="symbol">:number</span>, <span class="symbol">:value</span>
+
+  <span class="keyword">def</span> <span class="function">initialize</span>(number, value)
+    raise <span class="string"><span class="delimiter">'</span><span class="content">正の値のみ有効です</span><span class="delimiter">'</span></span> <span class="keyword">if</span> number.negative?
+
+    <span class="instance-variable">@number</span> = number
+    <span class="instance-variable">@value</span> = value
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">to_s</span>
+    <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@number</span><span class="inline-delimiter">}</span></span><span class="content">:</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@value</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">==</span>(other)
+    <span class="instance-variable">@number</span> == other.number &amp;&amp; <span class="instance-variable">@value</span> == other.value
+  <span class="keyword">end</span>
+
+  <span class="keyword">alias</span> <span class="function">eql?</span> <span class="function">==</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzList</span>
+  <span class="constant">MAX_COUNT</span> = <span class="integer">100</span>
+  attr_reader <span class="symbol">:value</span>
+
+  <span class="keyword">def</span> <span class="function">initialize</span>(list)
+    raise <span class="string"><span class="delimiter">&quot;</span><span class="content">上限は</span><span class="inline"><span class="inline-delimiter">#{</span><span class="constant">MAX_COUNT</span><span class="inline-delimiter">}</span></span><span class="content">件までです</span><span class="delimiter">&quot;</span></span> <span class="keyword">if</span> list.count &gt; <span class="constant">MAX_COUNT</span>
+
+    <span class="instance-variable">@value</span> = list
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">to_s</span>
+    <span class="instance-variable">@value</span>.to_s
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">add</span>(value)
+    <span class="constant">FizzBuzzList</span>.new(<span class="instance-variable">@value</span> + value)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzType</span>
+  <span class="constant">TYPE_01</span> = <span class="integer">1</span>
+  <span class="constant">TYPE_02</span> = <span class="integer">2</span>
+  <span class="constant">TYPE_03</span> = <span class="integer">3</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">create</span>(type)
+    <span class="keyword">case</span> type
+    <span class="keyword">when</span> <span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>
+      <span class="constant">FizzBuzzType01</span>.new
+    <span class="keyword">when</span> <span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_02</span>
+      <span class="constant">FizzBuzzType02</span>.new
+    <span class="keyword">when</span> <span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_03</span>
+      <span class="constant">FizzBuzzType03</span>.new
+    <span class="keyword">else</span>
+      <span class="constant">FizzBuzzTypeNotDefined</span>.new
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">fizz?</span>(number)
+    number.modulo(<span class="integer">3</span>).zero?
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">buzz?</span>(number)
+    number.modulo(<span class="integer">5</span>).zero?
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzType</span>
+  <span class="constant">TYPE_01</span> = <span class="integer">1</span>
+  <span class="constant">TYPE_02</span> = <span class="integer">2</span>
+  <span class="constant">TYPE_03</span> = <span class="integer">3</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">create</span>(type)
+    <span class="keyword">case</span> type
+    <span class="keyword">when</span> <span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>
+      <span class="constant">FizzBuzzType01</span>.new
+    <span class="keyword">when</span> <span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_02</span>
+      <span class="constant">FizzBuzzType02</span>.new
+    <span class="keyword">when</span> <span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_03</span>
+      <span class="constant">FizzBuzzType03</span>.new
+    <span class="keyword">else</span>
+      <span class="constant">FizzBuzzTypeNotDefined</span>.new
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">fizz?</span>(number)
+    number.modulo(<span class="integer">3</span>).zero?
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">buzz?</span>(number)
+    number.modulo(<span class="integer">5</span>).zero?
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzType01</span> &lt; <span class="constant">FizzBuzzType</span>
+  <span class="keyword">def</span> <span class="function">generate</span>(number)
+    <span class="keyword">return</span> <span class="constant">FizzBuzzValue</span>.new(number, <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span>) <span class="keyword">if</span> fizz?(number) &amp;&amp; buzz?(number)
+    <span class="keyword">return</span> <span class="constant">FizzBuzzValue</span>.new(number, <span class="string"><span class="delimiter">'</span><span class="content">Fizz</span><span class="delimiter">'</span></span>) <span class="keyword">if</span> fizz?(number)
+    <span class="keyword">return</span> <span class="constant">FizzBuzzValue</span>.new(number, <span class="string"><span class="delimiter">'</span><span class="content">Buzz</span><span class="delimiter">'</span></span>) <span class="keyword">if</span> buzz?(number)
+
+    <span class="constant">FizzBuzzValue</span>.new(number, number.to_s)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzType02</span> &lt; <span class="constant">FizzBuzzType</span>
+  <span class="keyword">def</span> <span class="function">generate</span>(number)
+    <span class="constant">FizzBuzzValue</span>.new(number, number.to_s)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzType03</span> &lt; <span class="constant">FizzBuzzType</span>
+  <span class="keyword">def</span> <span class="function">generate</span>(number)
+    <span class="keyword">return</span> <span class="constant">FizzBuzzValue</span>.new(number, <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span>) <span class="keyword">if</span> fizz?(number) &amp;&amp; buzz?(number)
+
+    <span class="constant">FizzBuzzValue</span>.new(number, number.to_s)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzTypeNotDefined</span> &lt; <span class="constant">FizzBuzzType</span>
+  <span class="keyword">def</span> <span class="function">generate</span>(number)
+    <span class="constant">FizzBuzzValue</span>.new(number, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">to_s</span>
+    <span class="string"><span class="delimiter">'</span><span class="content">未定義</span><span class="delimiter">'</span></span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">07:29:03 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/border.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/loading_background.png lib/domain/type/fizz_buzz_type_not_defined.rb lib/domain/type/fizz_buzz_type_03.rb lib/domain/type/fizz_buzz_type_02.rb lib/domain/type/fizz_buzz_type_01.rb lib/domain/type/fizz_buzz_type.rb lib/domain/model/fizz_buzz_list.rb lib/domain/model/fizz_buzz_value.rb
+lib/domain/type/fizz_buzz_type_not_defined.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzTypeNotDefined &lt; FizzBuzzType
 ^^^^^
 lib/domain/type/fizz_buzz_type_03.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
 class FizzBuzzType03 &lt; FizzBuzzType
@@ -12212,10 +12398,19 @@ class FizzBuzzType01 &lt; FizzBuzzType
 lib/domain/type/fizz_buzz_type.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
 class FizzBuzzType
 ^^^^^
- 6/6 files |=============================== 100 ================================&gt;| Time: 00:00:00
+lib/domain/model/fizz_buzz_list.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzList
+^^^^^
+lib/domain/model/fizz_buzz_value.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzValue
+^^^^^
+ 7/7 files |======================== 100 =========================&gt;| Time: 00:00:00
 
-6 files inspected, 6 offenses detected</code></pre>
+7 files inspected, 7 offenses detected</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストは壊れていないようですが警告が出るようになりました。まだ仕掛ですが一旦コミットしておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -12225,8 +12420,14 @@ $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-9b5683e490fa54c5a44573412cd5ddac.png" alt="diag 9b5683e490fa54c5a44573412cd5ddac" width="521" height="361">
+<img src="diag-5f47ca3306a2dc4364311b77c4b5cea3.png" alt="diag 5f47ca3306a2dc4364311b77c4b5cea3" width="734" height="361">
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_アプリケーション">アプリケーション</h5>
+<div class="paragraph">
+<p>続いて <strong>アプリケーション層</strong> の分割を行います。</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -12281,13 +12482,89 @@ $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzCommand</span>
+  <span class="keyword">def</span> <span class="function">execute</span>; <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzValueCommand</span> &lt; <span class="constant">FizzBuzzCommand</span>
+  <span class="keyword">def</span> <span class="function">initialize</span>(type)
+    <span class="instance-variable">@type</span> = type
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">execute</span>(number)
+    <span class="instance-variable">@type</span>.generate(number).value
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzListCommand</span> &lt; <span class="constant">FizzBuzzCommand</span>
+  <span class="keyword">def</span> <span class="function">initialize</span>(type)
+    <span class="instance-variable">@type</span> = type
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">execute</span>(number)
+    <span class="constant">FizzBuzzList</span>.new((<span class="integer">1</span>..number).map { |i| <span class="instance-variable">@type</span>.generate(i) }).value
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストは壊れていないのでコミットしておきます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
 </div>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-7f7afe4277590090e49ebc6a8ecb1cce.png" alt="diag 7f7afe4277590090e49ebc6a8ecb1cce" width="919" height="361">
+<img src="diag-84a49e2f281dfc169055d0bfc4b4aeb6.png" alt="diag 84a49e2f281dfc169055d0bfc4b4aeb6" width="1132" height="361">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_テスト">テスト</h5>
+<div class="paragraph">
+<p>アプリケーションのメイン部分は分割できました。続いてテストも分割しましょう。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/main.rb
+  |--lib/
+      |
+     application/
+           |
+           -- fizz_buzz_command.rb
+           -- fizz_buzz_value_command.rb
+           -- fizz_buzz_list_command.rb
+     domain/
+           |
+           model/
+               |
+               -- fizz_buzz_value.rb
+               -- fizz_buzz_list.rb
+           type/
+               |
+               -- fizz_buzz_type.rb
+               -- fizz_buzz_type_01.rb
+               -- fizz_buzz_type_02.rb
+               -- fizz_buzz_type_03.rb
+       -- fizz_buzz.rb
+  |--test/
+      |
+       -- fizz_buzz_test.rb</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -12315,62 +12592,389 @@ $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
        -- fizz_buzz.rb
   |--test/
       |
-     application/
+      application/
            |
            -- fizz_buzz_value_command_test.rb
            -- fizz_buzz_list_command._test.rb
+      domain/
+           |
+           model/
+                 |
+                 -- fizz_buzz_value_test.rb
+                 -- fizz_buzz_list_test.rb
       |
-       -- fizz_buzz_test.rb</pre>
+       -- learning_test.rb</pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">03:02:48 - INFO - Running: test/application/fizz_buzz_list_command_test.rb
-Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 56 / 59 LOC (94.92%) covered.
-Started with run options --guard --seed 13143
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
 
-  5/5: [=====================================================] 100% Time: 00:00:00, Time: 00:00:00
+require <span class="string"><span class="delimiter">'</span><span class="content">simplecov</span><span class="delimiter">'</span></span>
+<span class="constant">SimpleCov</span>.start
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/reporters</span><span class="delimiter">'</span></span>
+<span class="constant">Minitest</span>::<span class="constant">Reporters</span>.use!
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
 
-Finished in 0.00534s
-5 tests, 5 assertions, 0 failures, 0 errors, 0 skips
-...
-test/application/fizz_buzz_value_command_test.rb:113:16: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
-      def test_値は正の値のみ許可する
-               ^^^^^^^^^^^
-test/application/fizz_buzz_value_command_test.rb:123:11: C: Naming/MethodName: Use snake_case for method names.
-      def test_100より多い数を許可しない
-          ^^^^^^^^^^^^^^^^^^^
-test/application/fizz_buzz_value_command_test.rb:123:19: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
-      def test_100より多い数を許可しない
-                  ^^^^^^^^^^^
-lib/application/fizz_buzz_list_command.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzListCommand &lt; FizzBuzzCommand
-^^^^^
-lib/application/fizz_buzz_value_command.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzValueCommand &lt; FizzBuzzCommand
-^^^^^
-lib/domain/model/fizz_buzz_list.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzList
-^^^^^
-lib/domain/model/fizz_buzz_value.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzValue
-^^^^^
-lib/domain/type/fizz_buzz_type_03.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzType03 &lt; FizzBuzzType
-^^^^^
-lib/domain/type/fizz_buzz_type_02.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzType02 &lt; FizzBuzzType
-^^^^^
-lib/domain/type/fizz_buzz_type_01.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzType01 &lt; FizzBuzzType
-^^^^^
-lib/domain/type/fizz_buzz_type.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzType
-^^^^^
- 10/10 files |============================== 100 ===============================&gt;| Time: 00:00:00
+<span class="keyword">class</span> <span class="class">FizzBuzzValueCommandTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  describe <span class="string"><span class="delimiter">'</span><span class="content">数を文字列にして返す</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+    describe <span class="string"><span class="delimiter">'</span><span class="content">タイプ1の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+      <span class="keyword">def</span> <span class="function">setup</span>
+        <span class="instance-variable">@fizzbuzz</span> = <span class="constant">FizzBuzzValueCommand</span>.new(<span class="constant">FizzBuzzType01</span>.new)
+      <span class="keyword">end</span>
 
-10 files inspected, 49 offenses detected</code></pre>
+      describe <span class="string"><span class="delimiter">'</span><span class="content">三の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">test_3を渡したら文字列Fizzを返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Fizz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">3</span>)
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+
+      describe <span class="string"><span class="delimiter">'</span><span class="content">五の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">test_5を渡したら文字列Buzzを返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Buzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">5</span>)
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+
+      describe <span class="string"><span class="delimiter">'</span><span class="content">三と五の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">test_15を渡したら文字列FizzBuzzを返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">15</span>)
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+
+      describe <span class="string"><span class="delimiter">'</span><span class="content">その他の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">test_1を渡したら文字列1を返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">1</span>)
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    describe <span class="string"><span class="delimiter">'</span><span class="content">タイプ2の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+      <span class="keyword">def</span> <span class="function">setup</span>
+        <span class="instance-variable">@fizzbuzz</span> = <span class="constant">FizzBuzzValueCommand</span>.new(<span class="constant">FizzBuzzType02</span>.new)
+      <span class="keyword">end</span>
+
+      describe <span class="string"><span class="delimiter">'</span><span class="content">三の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">test_3を渡したら文字列3を返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">3</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">3</span>)
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+
+      describe <span class="string"><span class="delimiter">'</span><span class="content">五の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">test_5を渡したら文字列5を返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">5</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">5</span>)
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+
+      describe <span class="string"><span class="delimiter">'</span><span class="content">三と五の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">test_15を渡したら文字列15を返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">15</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">15</span>)
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+
+      describe <span class="string"><span class="delimiter">'</span><span class="content">その他の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">test_1を渡したら文字列1を返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">1</span>)
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    describe <span class="string"><span class="delimiter">'</span><span class="content">タイプ3の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+      <span class="keyword">def</span> <span class="function">setup</span>
+        <span class="instance-variable">@fizzbuzz</span> = <span class="constant">FizzBuzzValueCommand</span>.new(<span class="constant">FizzBuzzType03</span>.new)
+      <span class="keyword">end</span>
+
+      describe <span class="string"><span class="delimiter">'</span><span class="content">三の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">test_3を渡したら文字列3を返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">3</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">3</span>)
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+
+      describe <span class="string"><span class="delimiter">'</span><span class="content">五の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">test_5を渡したら文字列5を返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">5</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">5</span>)
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+
+      describe <span class="string"><span class="delimiter">'</span><span class="content">三と五の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">test_15を渡したら文字列FizzBuzzを返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">15</span>)
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+
+      describe <span class="string"><span class="delimiter">'</span><span class="content">その他の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">test_1を渡したら文字列1を返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">1</span>)
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    describe <span class="string"><span class="delimiter">'</span><span class="content">それ以外のタイプの場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+      <span class="keyword">def</span> <span class="function">test_未定義のタイプを返す</span>
+        fizzbuzz = <span class="constant">FizzBuzzType</span>.create(<span class="integer">4</span>)
+
+        assert_equal <span class="string"><span class="delimiter">'</span><span class="content">未定義</span><span class="delimiter">'</span></span>, fizzbuzz.to_s
+      <span class="keyword">end</span>
+
+      <span class="keyword">def</span> <span class="function">test_空の文字列を返す</span>
+        type = <span class="constant">FizzBuzzType</span>.create(<span class="integer">4</span>)
+        command = <span class="constant">FizzBuzzValueCommand</span>.new(type)
+
+        assert_equal <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, command.execute(<span class="integer">3</span>)
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  describe <span class="string"><span class="delimiter">'</span><span class="content">例外ケース</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+    <span class="keyword">def</span> <span class="function">test_値は正の値のみ許可する</span>
+      e = assert_raises <span class="constant">RuntimeError</span> <span class="keyword">do</span>
+        <span class="constant">FizzBuzzValueCommand</span>.new(
+          <span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>)
+        ).execute(<span class="integer">-1</span>)
+      <span class="keyword">end</span>
+
+      assert_equal <span class="string"><span class="delimiter">'</span><span class="content">正の値のみ有効です</span><span class="delimiter">'</span></span>, e.message
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+require <span class="string"><span class="delimiter">'</span><span class="content">simplecov</span><span class="delimiter">'</span></span>
+<span class="constant">SimpleCov</span>.start
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/reporters</span><span class="delimiter">'</span></span>
+<span class="constant">Minitest</span>::<span class="constant">Reporters</span>.use!
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzListCommandTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  describe <span class="string"><span class="delimiter">'</span><span class="content">数を文字列にして返す</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+    describe <span class="string"><span class="delimiter">'</span><span class="content">タイプ1の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+      describe <span class="string"><span class="delimiter">'</span><span class="content">1から100までのFizzBuzzの配列を返す</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">setup</span>
+          fizzbuzz = <span class="constant">FizzBuzzListCommand</span>.new(<span class="constant">FizzBuzzType01</span>.new)
+          <span class="instance-variable">@result</span> = fizzbuzz.execute(<span class="integer">100</span>)
+        <span class="keyword">end</span>
+
+        <span class="keyword">def</span> <span class="function">test_配列の初めは文字列の1を返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>.first.value
+        <span class="keyword">end</span>
+
+        <span class="keyword">def</span> <span class="function">test_配列の最後は文字列のBuzzを返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Buzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>.last.value
+        <span class="keyword">end</span>
+
+        <span class="keyword">def</span> <span class="function">test_配列の2番目は文字列のFizzを返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Fizz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>[<span class="integer">2</span>].value
+        <span class="keyword">end</span>
+
+        <span class="keyword">def</span> <span class="function">test_配列の4番目は文字列のBuzzを返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Buzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>[<span class="integer">4</span>].value
+        <span class="keyword">end</span>
+
+        <span class="keyword">def</span> <span class="function">test_配列の14番目は文字列のFizzBuzzを返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>[<span class="integer">14</span>].value
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  describe <span class="string"><span class="delimiter">'</span><span class="content">例外ケース</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+    <span class="keyword">def</span> <span class="function">test_100より多い数を許可しない</span>
+      e = assert_raises <span class="constant">RuntimeError</span> <span class="keyword">do</span>
+        <span class="constant">FizzBuzzListCommand</span>.new(
+          <span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>)
+        ).execute(<span class="integer">101</span>)
+      <span class="keyword">end</span>
+
+      assert_equal <span class="string"><span class="delimiter">'</span><span class="content">上限は100件までです</span><span class="delimiter">'</span></span>, e.message
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+require <span class="string"><span class="delimiter">'</span><span class="content">simplecov</span><span class="delimiter">'</span></span>
+<span class="constant">SimpleCov</span>.start
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/reporters</span><span class="delimiter">'</span></span>
+<span class="constant">Minitest</span>::<span class="constant">Reporters</span>.use!
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzValueTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_同じで値である</span>
+    value1 = <span class="constant">FizzBuzzValue</span>.new(<span class="integer">1</span>, <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>)
+    value2 = <span class="constant">FizzBuzzValue</span>.new(<span class="integer">1</span>, <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>)
+
+    assert value1.eql?(value2)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_to_stringメソッド</span>
+    value = <span class="constant">FizzBuzzValue</span>.new(<span class="integer">3</span>, <span class="string"><span class="delimiter">'</span><span class="content">Fizz</span><span class="delimiter">'</span></span>)
+
+    assert_equal <span class="string"><span class="delimiter">'</span><span class="content">3:Fizz</span><span class="delimiter">'</span></span>, value.to_s
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+require <span class="string"><span class="delimiter">'</span><span class="content">simplecov</span><span class="delimiter">'</span></span>
+<span class="constant">SimpleCov</span>.start
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/reporters</span><span class="delimiter">'</span></span>
+<span class="constant">Minitest</span>::<span class="constant">Reporters</span>.use!
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">LearningTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  describe <span class="string"><span class="delimiter">'</span><span class="content">配列や繰り返し処理を理解する</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+    <span class="keyword">def</span> <span class="function">test_繰り返し処理</span>
+      <span class="global-variable">$stdout</span> = <span class="constant">StringIO</span>.new
+      [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>].each { |i| p i * i }
+      output = <span class="global-variable">$stdout</span>.string
+
+      assert_equal <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="char">\n</span><span class="delimiter">&quot;</span></span> + <span class="string"><span class="delimiter">&quot;</span><span class="content">4</span><span class="char">\n</span><span class="delimiter">&quot;</span></span> + <span class="string"><span class="delimiter">&quot;</span><span class="content">9</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>, output
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_selectメソッドで特定の条件を満たす要素だけを配列に入れて返す</span>
+      result = [<span class="float">1.1</span>, <span class="integer">2</span>, <span class="float">3.3</span>, <span class="integer">4</span>].select(&amp;<span class="symbol">:integer?</span>)
+      assert_equal [<span class="integer">2</span>, <span class="integer">4</span>], result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_find_allメソッドで特定の条件を満たす要素だけを配列に入れて返す</span>
+      result = [<span class="float">1.1</span>, <span class="integer">2</span>, <span class="float">3.3</span>, <span class="integer">4</span>].find_all(&amp;<span class="symbol">:integer?</span>)
+      assert_equal [<span class="integer">2</span>, <span class="integer">4</span>], result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_特定の条件を満たさない要素だけを配列に入れて返す</span>
+      result = [<span class="float">1.1</span>, <span class="integer">2</span>, <span class="float">3.3</span>, <span class="integer">4</span>].reject(&amp;<span class="symbol">:integer?</span>)
+      assert_equal [<span class="float">1.1</span>, <span class="float">3.3</span>], result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_mapメソッドで新しい要素の配列を返す</span>
+      result = <span class="string"><span class="delimiter">%w[</span><span class="content">apple orange pineapple strawberry</span><span class="delimiter">]</span></span>.map(&amp;<span class="symbol">:size</span>)
+      assert_equal [<span class="integer">5</span>, <span class="integer">6</span>, <span class="integer">9</span>, <span class="integer">10</span>], result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_collectメソッドで新しい要素の配列を返す</span>
+      result = <span class="string"><span class="delimiter">%w[</span><span class="content">apple orange pineapple strawberry</span><span class="delimiter">]</span></span>.collect(&amp;<span class="symbol">:size</span>)
+      assert_equal [<span class="integer">5</span>, <span class="integer">6</span>, <span class="integer">9</span>, <span class="integer">10</span>], result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_findメソッドで配列の中から条件に一致する要素を取得する</span>
+      result = <span class="string"><span class="delimiter">%w[</span><span class="content">apple orange pineapple strawberry</span><span class="delimiter">]</span></span>.find(&amp;<span class="symbol">:size</span>)
+      assert_equal <span class="string"><span class="delimiter">'</span><span class="content">apple</span><span class="delimiter">'</span></span>, result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_detectメソッドで配列の中から条件に一致する要素を取得する</span>
+      result = <span class="string"><span class="delimiter">%w[</span><span class="content">apple orange pineapple strawberry</span><span class="delimiter">]</span></span>.detect(&amp;<span class="symbol">:size</span>)
+      assert_equal <span class="string"><span class="delimiter">'</span><span class="content">apple</span><span class="delimiter">'</span></span>, result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_指定した評価式で並び変えた配列を返す</span>
+      result1 = <span class="string"><span class="delimiter">%w[</span><span class="content">2 4 13 3 1 10</span><span class="delimiter">]</span></span>.sort
+      result2 = <span class="string"><span class="delimiter">%w[</span><span class="content">2 4 13 3 1 10</span><span class="delimiter">]</span></span>.sort { |a, b| a.to_i &lt;=&gt; b.to_i }
+      result3 = <span class="string"><span class="delimiter">%w[</span><span class="content">2 4 13 3 1 10</span><span class="delimiter">]</span></span>.sort { |b, a| a.to_i &lt;=&gt; b.to_i }
+
+      assert_equal <span class="string"><span class="delimiter">%w[</span><span class="content">1 10 13 2 3 4</span><span class="delimiter">]</span></span>, result1
+      assert_equal <span class="string"><span class="delimiter">%w[</span><span class="content">1 2 3 4 10 13</span><span class="delimiter">]</span></span>, result2
+      assert_equal <span class="string"><span class="delimiter">%w[</span><span class="content">13 10 4 3 2 1</span><span class="delimiter">]</span></span>, result3
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_配列の中から条件に一致する要素を取得する</span>
+      result = <span class="string"><span class="delimiter">%w[</span><span class="content">apple orange pineapple strawberry apricot</span><span class="delimiter">]</span></span>.grep(<span class="regexp"><span class="delimiter">/</span><span class="content">^a</span><span class="delimiter">/</span></span>)
+      assert_equal <span class="string"><span class="delimiter">%w[</span><span class="content">apple apricot</span><span class="delimiter">]</span></span>, result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_ブロック内の条件式が真である間までの要素を返す</span>
+      result = [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span>, <span class="integer">6</span>, <span class="integer">7</span>, <span class="integer">8</span>, <span class="integer">9</span>].take_while { |item| item &lt; <span class="integer">6</span> }
+      assert_equal [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span>], result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_ブロック内の条件式が真である以降の要素を返す</span>
+      result = [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span>, <span class="integer">6</span>, <span class="integer">7</span>, <span class="integer">8</span>, <span class="integer">9</span>, <span class="integer">10</span>].drop_while { |item| item &lt; <span class="integer">6</span> }
+      assert_equal [<span class="integer">6</span>, <span class="integer">7</span>, <span class="integer">8</span>, <span class="integer">9</span>, <span class="integer">10</span>], result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_injectメソッドで畳み込み演算を行う</span>
+      result = [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span>].inject(<span class="integer">0</span>) { |total, n| total + n }
+      assert_equal <span class="integer">15</span>, result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_reduceメソッドで畳み込み演算を行う</span>
+      result = [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span>].reduce { |total, n| total + n }
+      assert_equal <span class="integer">15</span>, result
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+require <span class="string"><span class="delimiter">'</span><span class="content">simplecov</span><span class="delimiter">'</span></span>
+<span class="constant">SimpleCov</span>.start
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/reporters</span><span class="delimiter">'</span></span>
+<span class="constant">Minitest</span>::<span class="constant">Reporters</span>.use!
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzListTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_新しいインスタンスが作られる</span>
+    command = <span class="constant">FizzBuzzListCommand</span>.new(<span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>))
+    array = command.execute(<span class="integer">50</span>)
+    list1 = <span class="constant">FizzBuzzList</span>.new(array)
+    list2 = list1.add(array)
+
+    assert_equal <span class="integer">50</span>, list1.value.count
+    assert_equal <span class="integer">100</span>, list2.value.count
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ファイル分割でテストは壊れていないようですが警告がたくさん出てきました。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">...
+test/learning_test.rb:70:14: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+    def test_ブロック内の条件式が真である間までの要素を返す
+             ^^^^^^^^^^^^^^^^^^^^^^^
+test/learning_test.rb:75:9: C: Naming/MethodName: Use snake_case for method names.
+    def test_ブロック内の条件式が真である以降の要素を返す
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test/learning_test.rb:75:14: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+    def test_ブロック内の条件式が真である以降の要素を返す
+             ^^^^^^^^^^^^^^^^^^^^^^
+test/learning_test.rb:80:9: C: Naming/MethodName: Use snake_case for method names.
+    def test_injectメソッドで畳み込み演算を行う
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+test/learning_test.rb:80:20: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+    def test_injectメソッドで畳み込み演算を行う
+                   ^^^^^^^^^^^^^^
+test/learning_test.rb:85:9: C: Naming/MethodName: Use snake_case for method names.
+    def test_reduceメソッドで畳み込み演算を行う
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+test/learning_test.rb:85:20: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+    def test_reduceメソッドで畳み込み演算を行う
+                   ^^^^^^^^^^^^^^
+ 15/15 files |======================= 100 ========================&gt;| Time: 00:00:00
+
+15 files inspected, 87 offenses detected</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これらはテストコードに関する警告がほとんどなので <code>.rubocop.yml</code> を編集してチェック対象から外しておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -12396,21 +13000,55 @@ class FizzBuzzType
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">03:17:08 - INFO - Running: all tests
-Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 172 / 276 LOC (62.32%) covered.
-Started with run options --guard --seed 54739
+<pre class="CodeRay highlight"><code data-lang="bash">08:21:55 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 144 / 215 LOC (66.98%) covered.
+Started with run options --guard --seed 55977
 
-  57/57: [===================================================] 100% Time: 00:00:00, Time: 00:00:00
+  70/70: [=====================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.01768s
-57 tests, 66 assertions, 0 failures, 0 errors, 0 skips
+Finished in 0.01518s
+70 tests, 79 assertions, 0 failures, 0 errors, 0 skips
 
-03:17:08 - INFO - Inspecting Ruby code style of all files
+08:21:56 - INFO - Inspecting Ruby code style of all files
 /workspace/tdd_rb/.rubocop.yml: Warning: no department given for Documentation.
- 18/18 files |============================== 100 ===============================&gt;| Time: 00:00:01
+ 22/22 files |======================= 100 ========================&gt;| Time: 00:00:00
 
-18 files inspected, no offenses detected</code></pre>
+22 files inspected, no offenses detected
+08:21:58 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/border.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/loading_background.png
+/workspace/tdd_rb/.rubocop.yml: Warning: no department given for Documentation.
+ 0/0 files |======================== 100 =========================&gt;| Time: 00:00:00
+
+0 files inspected, no offenses detected</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>警告は消えました、仕上げに <code>fizz_buzz_test.rb</code> ファイルを削除します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">08:24:12 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 135 / 201 LOC (67.16%) covered.
+Started with run options --guard --seed 40104
+
+  32/32: [=====================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00601s
+32 tests, 36 assertions, 0 failures, 0 errors, 0 skips
+
+08:24:13 - INFO - Inspecting Ruby code style of all files
+/workspace/tdd_rb/.rubocop.yml: Warning: no department given for Documentation.
+ 21/21 files |======================= 100 ========================&gt;| Time: 00:00:00
+
+21 files inspected, no offenses detected
+08:24:14 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/border.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/loading_background.png
+/workspace/tdd_rb/.rubocop.yml: Warning: no department given for Documentation.
+ 0/0 files |======================== 100 =========================&gt;| Time: 00:00:00
+
+0 files inspected, no offenses detected</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストの分割も完了したのでコミットしておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -12418,6 +13056,12 @@ Finished in 0.01768s
 $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_エントリーポイント">エントリーポイント</h5>
+<div class="paragraph">
+<p>仕上げはクラスモジュールのエントリーポイント作成とテストヘルパーの追加です。</p>
+</div>
 <div class="literalblock">
 <div class="content">
 <pre>/main.rb
@@ -12443,12 +13087,18 @@ $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
        -- fizz_buzz.rb
   |--test/
       |
-     application/
+      application/
            |
            -- fizz_buzz_value_command_test.rb
            -- fizz_buzz_list_command._test.rb
+      domain/
+           |
+           model/
+                 |
+                 -- fizz_buzz_value_test.rb
+                 -- fizz_buzz_list_test.rb
       |
-       -- fizz_buzz_test.rb</pre>
+       -- learning_test.rb</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -12476,13 +13126,23 @@ $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
        -- fizz_buzz.rb
   |--test/
       |
-     application/
+      application/
            |
            -- fizz_buzz_value_command_test.rb
            -- fizz_buzz_list_command._test.rb
+      domain/
+           |
+           model/
+                 |
+                 -- fizz_buzz_value_test.rb
+                 -- fizz_buzz_list_test.rb
       |
+       -- learning_test.rb
        -- test_helper.rb</pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>fizz_buzz.rb</code> のファイルを内容クラスモジュール読み込みに変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -12494,21 +13154,24 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 require <span class="string"><span class="delimiter">'</span><span class="content">./lib/domain/type/fizz_buzz_type.rb</span><span class="delimiter">'</span></span>
 require <span class="string"><span class="delimiter">'</span><span class="content">./lib/domain/type/fizz_buzz_type_01.rb</span><span class="delimiter">'</span></span>
 require <span class="string"><span class="delimiter">'</span><span class="content">./lib/domain/type/fizz_buzz_type_02.rb</span><span class="delimiter">'</span></span>
-require <span class="string"><span class="delimiter">'</span><span class="content">./lib/domain/type/fizz_buzz_type_03.rb</span><span class="delimiter">'</span></span></code></pre>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/domain/type/fizz_buzz_type_03.rb</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/domain/type/fizz_buzz_type_not_defined.rb</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I&quot;lib&quot; -I&quot;/workspace/.rvm/gems/rake-13.0.1/lib&quot; &quot;/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb&quot; &quot;./test/fizz_buzz_test.rb&quot;
-Warning: coverage data provided by Coverage [114] exceeds number of lines in /workspace/tdd_rb/lib/fizz_buzz.rb [11]
-Started with run options --seed 3525
+<pre class="CodeRay highlight"><code data-lang="bash">08:34:32 - INFO - Running: all tests
+Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 119 / 211 LOC (56.4%) covered.
+Started with run options --guard --seed 18696
 
+  32/32: [=====================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Progress: |======================================================================================|
-
-Finished in 0.00772s
-37 tests, 43 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+Finished in 0.00561s
+32 tests, 36 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>コードカバレッジがうまく機能していないようなので、<code>test_helper.rb</code> を追加して共通分を書くファイルから読み込むように変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -12529,7 +13192,6 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
 require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
 
-<span class="keyword">class</span> <span class="class">FizzBuzzValueCommandTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
 ...</code></pre>
 </div>
 </div>
@@ -12539,25 +13201,20 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
 require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
 
-<span class="keyword">class</span> <span class="class">FizzBuzzValueCommandTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
 ...</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">./test/test_helper</span><span class="delimiter">'</span></span>
-require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
-require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
-
-<span class="keyword">class</span> <span class="class">FizzBuzzListCommandTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
-...</code></pre>
-</div>
+<div class="paragraph">
+<p>テストタスクを実行したところ動作しなくなりました。</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ rake test
 /home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I&quot;lib&quot; -I&quot;/workspace/.rvm/gems/rake-13.0.1/lib&quot; &quot;/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb&quot;</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テスト対象をテストディレクトリ内のすべてのテストコードに変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -12582,15 +13239,17 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ rake test
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I&quot;lib&quot; -I&quot;/workspace/.rvm/gems/rake-13.0.1/lib&quot; &quot;/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb&quot; &quot;./test/application/fizz_buzz_list_command_test.rb&quot; &quot;./test/application/fizz_buzz_value_command_test.rb&quot;
-Started with run options --seed 13671
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I&quot;lib&quot; -I&quot;/workspace/.rvm/gems/rake-13.0.1/lib&quot; &quot;/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb&quot; &quot;./test/domain/model/fizz_buzz_value_test.rb&quot; &quot;./test/domain/model/fizz_buzz_list_test.rb&quot; &quot;./test/application/fizz_buzz_value_command_test.rb&quot; &quot;./test/learning_test.rb&quot;
+Started with run options --seed 46929
 
-  20/20: [===================================================] 100% Time: 00:00:00, Time: 00:00:00
+  32/32: [=====================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00652s
-20 tests, 23 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 129 / 135 LOC (95.56%) covered.</code></pre>
+Finished in 0.00800s
+32 tests, 36 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストも壊れていないし警告も出ていません。モジュール分割完了です。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -12600,7 +13259,8 @@ $ git commit -m 'refactor: モジュール分割'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-947ca99899a6736f85f5981f2e47c4fd.png" alt="diag 947ca99899a6736f85f5981f2e47c4fd" width="1380" height="396">
+<img src="diag-c335939a7cce862d0b767629390a1852.png" alt="diag c335939a7cce862d0b767629390a1852" width="1593" height="396">
+</div>
 </div>
 </div>
 <div class="sect4">
@@ -12613,7 +13273,7 @@ $ git commit -m 'refactor: モジュール分割'</code></pre>
 require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz.rb</span><span class="delimiter">'</span></span>
 
 command = <span class="constant">FizzBuzzListCommand</span>.new(<span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>))
-command.execute(<span class="integer">100</span>).value.each { |i| puts i.value }</code></pre>
+command.execute(<span class="integer">100</span>).each { |i| puts i.value }</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -12621,7 +13281,9 @@ command.execute(<span class="integer">100</span>).value.each { |i| puts i.value 
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
 
-<span class="keyword">class</span> <span class="class">FizzBuzzCommand</span>; <span class="keyword">end</span></code></pre>
+<span class="keyword">class</span> <span class="class">FizzBuzzCommand</span>
+  <span class="keyword">def</span> <span class="function">execute</span>; <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -12635,7 +13297,7 @@ command.execute(<span class="integer">100</span>).value.each { |i| puts i.value 
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">execute</span>(number)
-    <span class="instance-variable">@type</span>.generate(number)
+    <span class="instance-variable">@type</span>.generate(number).value
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
@@ -12651,7 +13313,7 @@ command.execute(<span class="integer">100</span>).value.each { |i| puts i.value 
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">execute</span>(number)
-    <span class="constant">FizzBuzzList</span>.new((<span class="integer">1</span>..number).map { |i| <span class="instance-variable">@type</span>.generate(i) })
+    <span class="constant">FizzBuzzList</span>.new((<span class="integer">1</span>..number).map { |i| <span class="instance-variable">@type</span>.generate(i) }).value
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
@@ -12730,7 +13392,7 @@ command.execute(<span class="integer">100</span>).value.each { |i| puts i.value 
     <span class="keyword">when</span> <span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_03</span>
       <span class="constant">FizzBuzzType03</span>.new
     <span class="keyword">else</span>
-      raise <span class="string"><span class="delimiter">'</span><span class="content">該当するタイプは存在しません</span><span class="delimiter">'</span></span>
+      <span class="constant">FizzBuzzTypeNotDefined</span>.new
     <span class="keyword">end</span>
   <span class="keyword">end</span>
 
@@ -12786,6 +13448,22 @@ command.execute(<span class="integer">100</span>).value.each { |i| puts i.value 
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="listingblock">
+<div class="title">/lib/domain/type/fizz_buzz_type_not_defined.b</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzTypeNotDefined</span> &lt; <span class="constant">FizzBuzzType</span>
+  <span class="keyword">def</span> <span class="function">generate</span>(number)
+    <span class="constant">FizzBuzzValue</span>.new(number, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">to_s</span>
+    <span class="string"><span class="delimiter">'</span><span class="content">未定義</span><span class="delimiter">'</span></span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_test">Test</h5>
@@ -12807,25 +13485,25 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 
       describe <span class="string"><span class="delimiter">'</span><span class="content">三の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
         <span class="keyword">def</span> <span class="function">test_3を渡したら文字列Fizzを返す</span>
-          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Fizz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">3</span>).value
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Fizz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">3</span>)
         <span class="keyword">end</span>
       <span class="keyword">end</span>
 
       describe <span class="string"><span class="delimiter">'</span><span class="content">五の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
         <span class="keyword">def</span> <span class="function">test_5を渡したら文字列Buzzを返す</span>
-          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Buzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">5</span>).value
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Buzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">5</span>)
         <span class="keyword">end</span>
       <span class="keyword">end</span>
 
       describe <span class="string"><span class="delimiter">'</span><span class="content">三と五の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
         <span class="keyword">def</span> <span class="function">test_15を渡したら文字列FizzBuzzを返す</span>
-          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">15</span>).value
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">15</span>)
         <span class="keyword">end</span>
       <span class="keyword">end</span>
 
       describe <span class="string"><span class="delimiter">'</span><span class="content">その他の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
         <span class="keyword">def</span> <span class="function">test_1を渡したら文字列1を返す</span>
-          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">1</span>).value
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">1</span>)
         <span class="keyword">end</span>
       <span class="keyword">end</span>
     <span class="keyword">end</span>
@@ -12837,25 +13515,25 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 
       describe <span class="string"><span class="delimiter">'</span><span class="content">三の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
         <span class="keyword">def</span> <span class="function">test_3を渡したら文字列3を返す</span>
-          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">3</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">3</span>).value
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">3</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">3</span>)
         <span class="keyword">end</span>
       <span class="keyword">end</span>
 
       describe <span class="string"><span class="delimiter">'</span><span class="content">五の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
         <span class="keyword">def</span> <span class="function">test_5を渡したら文字列5を返す</span>
-          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">5</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">5</span>).value
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">5</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">5</span>)
         <span class="keyword">end</span>
       <span class="keyword">end</span>
 
       describe <span class="string"><span class="delimiter">'</span><span class="content">三と五の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
         <span class="keyword">def</span> <span class="function">test_15を渡したら文字列15を返す</span>
-          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">15</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">15</span>).value
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">15</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">15</span>)
         <span class="keyword">end</span>
       <span class="keyword">end</span>
 
       describe <span class="string"><span class="delimiter">'</span><span class="content">その他の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
         <span class="keyword">def</span> <span class="function">test_1を渡したら文字列1を返す</span>
-          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">1</span>).value
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">1</span>)
         <span class="keyword">end</span>
       <span class="keyword">end</span>
     <span class="keyword">end</span>
@@ -12867,59 +13545,54 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 
       describe <span class="string"><span class="delimiter">'</span><span class="content">三の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
         <span class="keyword">def</span> <span class="function">test_3を渡したら文字列3を返す</span>
-          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">3</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">3</span>).value
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">3</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">3</span>)
         <span class="keyword">end</span>
       <span class="keyword">end</span>
 
       describe <span class="string"><span class="delimiter">'</span><span class="content">五の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
         <span class="keyword">def</span> <span class="function">test_5を渡したら文字列5を返す</span>
-          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">5</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">5</span>).value
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">5</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">5</span>)
         <span class="keyword">end</span>
       <span class="keyword">end</span>
 
       describe <span class="string"><span class="delimiter">'</span><span class="content">三と五の倍数の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
         <span class="keyword">def</span> <span class="function">test_15を渡したら文字列FizzBuzzを返す</span>
-          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">15</span>).value
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">15</span>)
         <span class="keyword">end</span>
       <span class="keyword">end</span>
 
       describe <span class="string"><span class="delimiter">'</span><span class="content">その他の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
         <span class="keyword">def</span> <span class="function">test_1を渡したら文字列1を返す</span>
-          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">1</span>).value
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>, <span class="instance-variable">@fizzbuzz</span>.execute(<span class="integer">1</span>)
         <span class="keyword">end</span>
       <span class="keyword">end</span>
     <span class="keyword">end</span>
 
     describe <span class="string"><span class="delimiter">'</span><span class="content">それ以外のタイプの場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
-      <span class="keyword">def</span> <span class="function">test_例外を返す</span>
-        e = assert_raises <span class="constant">RuntimeError</span> <span class="keyword">do</span>
-          <span class="instance-variable">@fizzbuzz</span> = <span class="constant">FizzBuzzType</span>.create(<span class="integer">4</span>)
-        <span class="keyword">end</span>
+      <span class="keyword">def</span> <span class="function">test_未定義のタイプを返す</span>
+        fizzbuzz = <span class="constant">FizzBuzzType</span>.create(<span class="integer">4</span>)
 
-        assert_equal <span class="string"><span class="delimiter">'</span><span class="content">該当するタイプは存在しません</span><span class="delimiter">'</span></span>, e.message
+        assert_equal <span class="string"><span class="delimiter">'</span><span class="content">未定義</span><span class="delimiter">'</span></span>, fizzbuzz.to_s
+      <span class="keyword">end</span>
+
+      <span class="keyword">def</span> <span class="function">test_空の文字列を返す</span>
+        type = <span class="constant">FizzBuzzType</span>.create(<span class="integer">4</span>)
+        command = <span class="constant">FizzBuzzValueCommand</span>.new(type)
+
+        assert_equal <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, command.execute(<span class="integer">3</span>)
       <span class="keyword">end</span>
     <span class="keyword">end</span>
+  <span class="keyword">end</span>
 
-    describe <span class="string"><span class="delimiter">'</span><span class="content">例外ケース</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
-      <span class="keyword">def</span> <span class="function">test_値は正の値のみ許可する</span>
-        e = assert_raises <span class="constant">RuntimeError</span> <span class="keyword">do</span>
-          <span class="constant">FizzBuzzValueCommand</span>.new(
-            <span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>)
-          ).execute(<span class="integer">-1</span>)
-        <span class="keyword">end</span>
-
-        assert_equal <span class="string"><span class="delimiter">'</span><span class="content">正の値のみ有効です</span><span class="delimiter">'</span></span>, e.message
+  describe <span class="string"><span class="delimiter">'</span><span class="content">例外ケース</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+    <span class="keyword">def</span> <span class="function">test_値は正の値のみ許可する</span>
+      e = assert_raises <span class="constant">RuntimeError</span> <span class="keyword">do</span>
+        <span class="constant">FizzBuzzValueCommand</span>.new(
+          <span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>)
+        ).execute(<span class="integer">-1</span>)
       <span class="keyword">end</span>
 
-      <span class="keyword">def</span> <span class="function">test_100より多い数を許可しない</span>
-        e = assert_raises <span class="constant">RuntimeError</span> <span class="keyword">do</span>
-          <span class="constant">FizzBuzzListCommand</span>.new(
-            <span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>)
-          ).execute(<span class="integer">101</span>)
-        <span class="keyword">end</span>
-
-        assert_equal <span class="string"><span class="delimiter">'</span><span class="content">上限は100件までです</span><span class="delimiter">'</span></span>, e.message
-      <span class="keyword">end</span>
+      assert_equal <span class="string"><span class="delimiter">'</span><span class="content">正の値のみ有効です</span><span class="delimiter">'</span></span>, e.message
     <span class="keyword">end</span>
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
@@ -12935,31 +13608,185 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
 
 <span class="keyword">class</span> <span class="class">FizzBuzzListCommandTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
-  describe <span class="string"><span class="delimiter">'</span><span class="content">1から100までのFizzBuzzの配列を返す</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
-    <span class="keyword">def</span> <span class="function">setup</span>
-      fizz_buzz = <span class="constant">FizzBuzzListCommand</span>.new(<span class="constant">FizzBuzzType01</span>.new)
-      fizz_buzz_list = fizz_buzz.execute(<span class="integer">100</span>)
-      <span class="instance-variable">@result</span> = fizz_buzz_list.value
+  describe <span class="string"><span class="delimiter">'</span><span class="content">数を文字列にして返す</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+    describe <span class="string"><span class="delimiter">'</span><span class="content">タイプ1の場合</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+      describe <span class="string"><span class="delimiter">'</span><span class="content">1から100までのFizzBuzzの配列を返す</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+        <span class="keyword">def</span> <span class="function">setup</span>
+          fizzbuzz = <span class="constant">FizzBuzzListCommand</span>.new(<span class="constant">FizzBuzzType01</span>.new)
+          <span class="instance-variable">@result</span> = fizzbuzz.execute(<span class="integer">100</span>)
+        <span class="keyword">end</span>
+
+        <span class="keyword">def</span> <span class="function">test_配列の初めは文字列の1を返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>.first.value
+        <span class="keyword">end</span>
+
+        <span class="keyword">def</span> <span class="function">test_配列の最後は文字列のBuzzを返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Buzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>.last.value
+        <span class="keyword">end</span>
+
+        <span class="keyword">def</span> <span class="function">test_配列の2番目は文字列のFizzを返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Fizz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>[<span class="integer">2</span>].value
+        <span class="keyword">end</span>
+
+        <span class="keyword">def</span> <span class="function">test_配列の4番目は文字列のBuzzを返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Buzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>[<span class="integer">4</span>].value
+        <span class="keyword">end</span>
+
+        <span class="keyword">def</span> <span class="function">test_配列の14番目は文字列のFizzBuzzを返す</span>
+          assert_equal <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>[<span class="integer">14</span>].value
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  describe <span class="string"><span class="delimiter">'</span><span class="content">例外ケース</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+    <span class="keyword">def</span> <span class="function">test_100より多い数を許可しない</span>
+      e = assert_raises <span class="constant">RuntimeError</span> <span class="keyword">do</span>
+        <span class="constant">FizzBuzzListCommand</span>.new(
+          <span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>)
+        ).execute(<span class="integer">101</span>)
+      <span class="keyword">end</span>
+
+      assert_equal <span class="string"><span class="delimiter">'</span><span class="content">上限は100件までです</span><span class="delimiter">'</span></span>, e.message
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/test/domain/model/fizz_buzz_value_test.rb</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+require <span class="string"><span class="delimiter">'</span><span class="content">./test/test_helper</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzValueTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_同じで値である</span>
+    value1 = <span class="constant">FizzBuzzValue</span>.new(<span class="integer">1</span>, <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>)
+    value2 = <span class="constant">FizzBuzzValue</span>.new(<span class="integer">1</span>, <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>)
+
+    assert value1.eql?(value2)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_to_stringメソッド</span>
+    value = <span class="constant">FizzBuzzValue</span>.new(<span class="integer">3</span>, <span class="string"><span class="delimiter">'</span><span class="content">Fizz</span><span class="delimiter">'</span></span>)
+
+    assert_equal <span class="string"><span class="delimiter">'</span><span class="content">3:Fizz</span><span class="delimiter">'</span></span>, value.to_s
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/test/domain/model/fizz_buzz_list_test.rb</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+require <span class="string"><span class="delimiter">'</span><span class="content">./test/test_helper</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzListTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_新しいインスタンスが作られる</span>
+    command = <span class="constant">FizzBuzzListCommand</span>.new(<span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>))
+    array = command.execute(<span class="integer">50</span>)
+    list1 = <span class="constant">FizzBuzzList</span>.new(array)
+    list2 = list1.add(array)
+
+    assert_equal <span class="integer">50</span>, list1.value.count
+    assert_equal <span class="integer">100</span>, list2.value.count
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/test/learning_test.rb</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+require <span class="string"><span class="delimiter">'</span><span class="content">./test/test_helper</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">LearningTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  describe <span class="string"><span class="delimiter">'</span><span class="content">配列や繰り返し処理を理解する</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+    <span class="keyword">def</span> <span class="function">test_繰り返し処理</span>
+      <span class="global-variable">$stdout</span> = <span class="constant">StringIO</span>.new
+      [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>].each { |i| p i * i }
+      output = <span class="global-variable">$stdout</span>.string
+
+      assert_equal <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="char">\n</span><span class="delimiter">&quot;</span></span> + <span class="string"><span class="delimiter">&quot;</span><span class="content">4</span><span class="char">\n</span><span class="delimiter">&quot;</span></span> + <span class="string"><span class="delimiter">&quot;</span><span class="content">9</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>, output
     <span class="keyword">end</span>
 
-    <span class="keyword">def</span> <span class="function">test_配列の初めは文字列の1を返す</span>
-      assert_equal <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>.first.value
+    <span class="keyword">def</span> <span class="function">test_selectメソッドで特定の条件を満たす要素だけを配列に入れて返す</span>
+      result = [<span class="float">1.1</span>, <span class="integer">2</span>, <span class="float">3.3</span>, <span class="integer">4</span>].select(&amp;<span class="symbol">:integer?</span>)
+      assert_equal [<span class="integer">2</span>, <span class="integer">4</span>], result
     <span class="keyword">end</span>
 
-    <span class="keyword">def</span> <span class="function">test_配列の最後は文字列のBuzzを返す</span>
-      assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Buzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>.last.value
+    <span class="keyword">def</span> <span class="function">test_find_allメソッドで特定の条件を満たす要素だけを配列に入れて返す</span>
+      result = [<span class="float">1.1</span>, <span class="integer">2</span>, <span class="float">3.3</span>, <span class="integer">4</span>].find_all(&amp;<span class="symbol">:integer?</span>)
+      assert_equal [<span class="integer">2</span>, <span class="integer">4</span>], result
     <span class="keyword">end</span>
 
-    <span class="keyword">def</span> <span class="function">test_配列の2番目は文字列のFizzを返す</span>
-      assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Fizz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>[<span class="integer">2</span>].value
+    <span class="keyword">def</span> <span class="function">test_特定の条件を満たさない要素だけを配列に入れて返す</span>
+      result = [<span class="float">1.1</span>, <span class="integer">2</span>, <span class="float">3.3</span>, <span class="integer">4</span>].reject(&amp;<span class="symbol">:integer?</span>)
+      assert_equal [<span class="float">1.1</span>, <span class="float">3.3</span>], result
     <span class="keyword">end</span>
 
-    <span class="keyword">def</span> <span class="function">test_配列の4番目は文字列のBuzzを返す</span>
-      assert_equal <span class="string"><span class="delimiter">'</span><span class="content">Buzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>[<span class="integer">4</span>].value
+    <span class="keyword">def</span> <span class="function">test_mapメソッドで新しい要素の配列を返す</span>
+      result = <span class="string"><span class="delimiter">%w[</span><span class="content">apple orange pineapple strawberry</span><span class="delimiter">]</span></span>.map(&amp;<span class="symbol">:size</span>)
+      assert_equal [<span class="integer">5</span>, <span class="integer">6</span>, <span class="integer">9</span>, <span class="integer">10</span>], result
     <span class="keyword">end</span>
 
-    <span class="keyword">def</span> <span class="function">test_配列の14番目は文字列のFizzBuzzを返す</span>
-      assert_equal <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span>, <span class="instance-variable">@result</span>[<span class="integer">14</span>].value
+    <span class="keyword">def</span> <span class="function">test_collectメソッドで新しい要素の配列を返す</span>
+      result = <span class="string"><span class="delimiter">%w[</span><span class="content">apple orange pineapple strawberry</span><span class="delimiter">]</span></span>.collect(&amp;<span class="symbol">:size</span>)
+      assert_equal [<span class="integer">5</span>, <span class="integer">6</span>, <span class="integer">9</span>, <span class="integer">10</span>], result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_findメソッドで配列の中から条件に一致する要素を取得する</span>
+      result = <span class="string"><span class="delimiter">%w[</span><span class="content">apple orange pineapple strawberry</span><span class="delimiter">]</span></span>.find(&amp;<span class="symbol">:size</span>)
+      assert_equal <span class="string"><span class="delimiter">'</span><span class="content">apple</span><span class="delimiter">'</span></span>, result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_detectメソッドで配列の中から条件に一致する要素を取得する</span>
+      result = <span class="string"><span class="delimiter">%w[</span><span class="content">apple orange pineapple strawberry</span><span class="delimiter">]</span></span>.detect(&amp;<span class="symbol">:size</span>)
+      assert_equal <span class="string"><span class="delimiter">'</span><span class="content">apple</span><span class="delimiter">'</span></span>, result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_指定した評価式で並び変えた配列を返す</span>
+      result1 = <span class="string"><span class="delimiter">%w[</span><span class="content">2 4 13 3 1 10</span><span class="delimiter">]</span></span>.sort
+      result2 = <span class="string"><span class="delimiter">%w[</span><span class="content">2 4 13 3 1 10</span><span class="delimiter">]</span></span>.sort { |a, b| a.to_i &lt;=&gt; b.to_i }
+      result3 = <span class="string"><span class="delimiter">%w[</span><span class="content">2 4 13 3 1 10</span><span class="delimiter">]</span></span>.sort { |b, a| a.to_i &lt;=&gt; b.to_i }
+
+      assert_equal <span class="string"><span class="delimiter">%w[</span><span class="content">1 10 13 2 3 4</span><span class="delimiter">]</span></span>, result1
+      assert_equal <span class="string"><span class="delimiter">%w[</span><span class="content">1 2 3 4 10 13</span><span class="delimiter">]</span></span>, result2
+      assert_equal <span class="string"><span class="delimiter">%w[</span><span class="content">13 10 4 3 2 1</span><span class="delimiter">]</span></span>, result3
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_配列の中から条件に一致する要素を取得する</span>
+      result = <span class="string"><span class="delimiter">%w[</span><span class="content">apple orange pineapple strawberry apricot</span><span class="delimiter">]</span></span>.grep(<span class="regexp"><span class="delimiter">/</span><span class="content">^a</span><span class="delimiter">/</span></span>)
+      assert_equal <span class="string"><span class="delimiter">%w[</span><span class="content">apple apricot</span><span class="delimiter">]</span></span>, result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_ブロック内の条件式が真である間までの要素を返す</span>
+      result = [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span>, <span class="integer">6</span>, <span class="integer">7</span>, <span class="integer">8</span>, <span class="integer">9</span>].take_while { |item| item &lt; <span class="integer">6</span> }
+      assert_equal [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span>], result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_ブロック内の条件式が真である以降の要素を返す</span>
+      result = [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span>, <span class="integer">6</span>, <span class="integer">7</span>, <span class="integer">8</span>, <span class="integer">9</span>, <span class="integer">10</span>].drop_while { |item| item &lt; <span class="integer">6</span> }
+      assert_equal [<span class="integer">6</span>, <span class="integer">7</span>, <span class="integer">8</span>, <span class="integer">9</span>, <span class="integer">10</span>], result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_injectメソッドで畳み込み演算を行う</span>
+      result = [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span>].inject(<span class="integer">0</span>) { |total, n| total + n }
+      assert_equal <span class="integer">15</span>, result
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">test_reduceメソッドで畳み込み演算を行う</span>
+      result = [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span>].reduce { |total, n| total + n }
+      assert_equal <span class="integer">15</span>, result
     <span class="keyword">end</span>
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>

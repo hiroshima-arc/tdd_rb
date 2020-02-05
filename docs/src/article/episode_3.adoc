@@ -5470,13 +5470,76 @@ FizzBuzzCommand *- FizzBuzzType
 
 
 ==== モジュールの分割
+[plantuml]
+----
+class FizzBuzzType {
+    TYPE_01 = 1
+    TYPE_02 = 2
+    TYPE_03 = 3
+    {static} create()
+    fizz?()
+    buzz?()
+}
+class FizzBuzzType01 {
+   generate()
+}
+class FizzBuzzType02 {
+   generate()
+}
+class FizzBuzzType03 {
+   generate()
+}
+class FizzBuzzTypeNotDefined {
+   generate()
+   to_s()
+}
+class FizzBuzzValue {
+   number
+   value
+   to_s()
+   eql?()
+}
+class FizzBuzzList {
+   MAX_COUNT = 100
+   value
+   to_s()
+   add(value)
+}
+Interface FizzBuzzCommand {
+}
+class FizzBuzzValueCommand {
+  execute(number)
+}
+class FizzBuzzListCommand {
+  execute(number)
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType <|-- FizzBuzzTypeNotDefined
+FizzBuzzType01 --> FizzBuzzValue
+FizzBuzzType02 --> FizzBuzzValue
+FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzTypeNotDefined --> FizzBuzzValue
+FizzBuzzList *- FizzBuzzValue
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzListCommand --> FizzBuzzList
+FizzBuzzCommand *- FizzBuzzType
+----
+
+アプリケーションはだいたいこんなところでしょう。
+ここでアプリケーションを実行してみましょう。
+
 [source, bash]
 ----
- ruby main.rb 
+$ ruby main.rb 
 Traceback (most recent call last):
 main.rb:5:in `<main>': uninitialized constant FizzBuzz (NameError)
 Did you mean?  FizzBuzzType
 ----
+
+エラーが出ています、これはアプリケーションの構成が変わったためです。クライアントプログラムをアプリケーションの変更に合わせて修正します。
 
 [source, ruby]
 ----
@@ -5494,12 +5557,12 @@ puts FizzBuzz.generate_list
 require './lib/fizz_buzz.rb'
 
 command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-command.execute(100).value.each { |i| puts i.value }
+command.execute(100).each { |i| puts i.value }
 ----
 
 [source, bash]
 ----
-$ ruby main.rb 
+$ ruby main.rb
 1
 2
 Fizz
@@ -5509,12 +5572,17 @@ Buzz
 Fizz
 ----
 
+クライアントプログラムが直ったのでコミットしておきます。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'fix: プリントする'
 ----
 
+===== ドメインモデル
+
+`fizz_buzz.rb` ファイル内のクラスモジュールをファイルとして分割していきます。まずは *ドメインモデル* から分割しましょう。既存のテストを壊さないように１つづつコピー&ペーストしていきます。
 
  /main.rb
    |--lib/
@@ -5539,23 +5607,185 @@ $ git commit -m 'fix: プリントする'
                 -- fizz_buzz_type_01.rb
                 -- fizz_buzz_type_02.rb
                 -- fizz_buzz_type_03.rb
+                -- fizz_buzz_type_not_defined.rb
         -- fizz_buzz.rb
    |--test/
        |
         -- fizz_buzz_test.rb
 
+[source, ruby]
+----
+# frozen_string_literal: true
+
+class FizzBuzzValue
+  attr_reader :number, :value
+
+  def initialize(number, value)
+    raise '正の値のみ有効です' if number.negative?
+
+    @number = number
+    @value = value
+  end
+
+  def to_s
+    "#{@number}:#{@value}"
+  end
+
+  def ==(other)
+    @number == other.number && @value == other.value
+  end
+
+  alias eql? ==
+end
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+class FizzBuzzList
+  MAX_COUNT = 100
+  attr_reader :value
+
+  def initialize(list)
+    raise "上限は#{MAX_COUNT}件までです" if list.count > MAX_COUNT
+
+    @value = list
+  end
+
+  def to_s
+    @value.to_s
+  end
+
+  def add(value)
+    FizzBuzzList.new(@value + value)
+  end
+end
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+class FizzBuzzType
+  TYPE_01 = 1
+  TYPE_02 = 2
+  TYPE_03 = 3
+
+  def self.create(type)
+    case type
+    when FizzBuzzType::TYPE_01
+      FizzBuzzType01.new
+    when FizzBuzzType::TYPE_02
+      FizzBuzzType02.new
+    when FizzBuzzType::TYPE_03
+      FizzBuzzType03.new
+    else
+      FizzBuzzTypeNotDefined.new
+    end
+  end
+
+  def fizz?(number)
+    number.modulo(3).zero?
+  end
+
+  def buzz?(number)
+    number.modulo(5).zero?
+  end
+end
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+class FizzBuzzType
+  TYPE_01 = 1
+  TYPE_02 = 2
+  TYPE_03 = 3
+
+  def self.create(type)
+    case type
+    when FizzBuzzType::TYPE_01
+      FizzBuzzType01.new
+    when FizzBuzzType::TYPE_02
+      FizzBuzzType02.new
+    when FizzBuzzType::TYPE_03
+      FizzBuzzType03.new
+    else
+      FizzBuzzTypeNotDefined.new
+    end
+  end
+
+  def fizz?(number)
+    number.modulo(3).zero?
+  end
+
+  def buzz?(number)
+    number.modulo(5).zero?
+  end
+end
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+class FizzBuzzType01 < FizzBuzzType
+  def generate(number)
+    return FizzBuzzValue.new(number, 'FizzBuzz') if fizz?(number) && buzz?(number)
+    return FizzBuzzValue.new(number, 'Fizz') if fizz?(number)
+    return FizzBuzzValue.new(number, 'Buzz') if buzz?(number)
+
+    FizzBuzzValue.new(number, number.to_s)
+  end
+end
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+class FizzBuzzType02 < FizzBuzzType
+  def generate(number)
+    FizzBuzzValue.new(number, number.to_s)
+  end
+end
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+class FizzBuzzType03 < FizzBuzzType
+  def generate(number)
+    return FizzBuzzValue.new(number, 'FizzBuzz') if fizz?(number) && buzz?(number)
+
+    FizzBuzzValue.new(number, number.to_s)
+  end
+end
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+class FizzBuzzTypeNotDefined < FizzBuzzType
+  def generate(number)
+    FizzBuzzValue.new(number, '')
+  end
+
+  def to_s
+    '未定義'
+  end
+end
+----
+
 [source, bash]
 ----
-Progress: |======================================================================================|
-
-Finished in 0.01302s
-37 tests, 43 assertions, 0 failures, 0 errors, 0 skips
-02:43:56 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png lib/domain/model/fizz_buzz_list.rb lib/domain/model/fizz_buzz_value.rb lib/domain/type/fizz_buzz_type_03.rb lib/domain/type/fizz_buzz_type_02.rb lib/domain/type/fizz_buzz_type_01.rb lib/domain/type/fizz_buzz_type.rb
-lib/domain/model/fizz_buzz_list.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzList
-^^^^^
-lib/domain/model/fizz_buzz_value.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzValue
+07:29:03 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/border.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/loading_background.png lib/domain/type/fizz_buzz_type_not_defined.rb lib/domain/type/fizz_buzz_type_03.rb lib/domain/type/fizz_buzz_type_02.rb lib/domain/type/fizz_buzz_type_01.rb lib/domain/type/fizz_buzz_type.rb lib/domain/model/fizz_buzz_list.rb lib/domain/model/fizz_buzz_value.rb
+lib/domain/type/fizz_buzz_type_not_defined.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzTypeNotDefined < FizzBuzzType
 ^^^^^
 lib/domain/type/fizz_buzz_type_03.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
 class FizzBuzzType03 < FizzBuzzType
@@ -5569,10 +5799,18 @@ class FizzBuzzType01 < FizzBuzzType
 lib/domain/type/fizz_buzz_type.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
 class FizzBuzzType
 ^^^^^
- 6/6 files |=============================== 100 ================================>| Time: 00:00:00 
+lib/domain/model/fizz_buzz_list.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzList
+^^^^^
+lib/domain/model/fizz_buzz_value.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
+class FizzBuzzValue
+^^^^^
+ 7/7 files |======================== 100 =========================>| Time: 00:00:00 
 
-6 files inspected, 6 offenses detected
+7 files inspected, 7 offenses detected
 ----
+
+テストは壊れていないようですが警告が出るようになりました。まだ仕掛ですが一旦コミットしておきます。
 
 [source, bash]
 ----
@@ -5598,17 +5836,24 @@ package "Domain" {
     }
     class FizzBuzzType03 {
     }
+    class FizzBuzzTypeNotDefined {
+    }
   }
 }
 FizzBuzzType <|-- FizzBuzzType01
 FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType <|-- FizzBuzzTypeNotDefined
 FizzBuzzType01 --> FizzBuzzValue
 FizzBuzzType02 --> FizzBuzzValue
 FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzTypeNotDefined --> FizzBuzzValue
 FizzBuzzList *- FizzBuzzValue
 ----
 
+===== アプリケーション
+
+続いて *アプリケーション層* の分割を行います。
 
  /main.rb
    |--lib/
@@ -5654,6 +5899,47 @@ FizzBuzzList *- FizzBuzzValue
    |--test/
        |
         -- fizz_buzz_test.rb
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+class FizzBuzzCommand
+  def execute; end
+end
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+class FizzBuzzValueCommand < FizzBuzzCommand
+  def initialize(type)
+    @type = type
+  end
+
+  def execute(number)
+    @type.generate(number).value
+  end
+end
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+class FizzBuzzListCommand < FizzBuzzCommand
+  def initialize(type)
+    @type = type
+  end
+
+  def execute(number)
+    FizzBuzzList.new((1..number).map { |i| @type.generate(i) }).value
+  end
+end
+----
+
+テストは壊れていないのでコミットしておきます。
 
 [source, bash]
 ----
@@ -5687,20 +5973,28 @@ package "Domain" {
     }
     class FizzBuzzType03 {
     }
+    class FizzBuzzTypeNotDefined {
+    }
   }
 }
 FizzBuzzType <|-- FizzBuzzType01
 FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType <|-- FizzBuzzTypeNotDefined
 FizzBuzzType01 --> FizzBuzzValue
 FizzBuzzType02 --> FizzBuzzValue
 FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzTypeNotDefined --> FizzBuzzValue
 FizzBuzzList *- FizzBuzzValue
 FizzBuzzCommand <|-- FizzBuzzValueCommand
 FizzBuzzCommand <|-- FizzBuzzListCommand
 FizzBuzzListCommand --> FizzBuzzList
 FizzBuzzCommand *- FizzBuzzType
 ----
+
+===== テスト
+
+アプリケーションのメイン部分は分割できました。続いてテストも分割しましょう。
 
  /main.rb
    |--lib/
@@ -5725,61 +6019,412 @@ FizzBuzzCommand *- FizzBuzzType
         -- fizz_buzz.rb
    |--test/
        |
+        -- fizz_buzz_test.rb
+
+ /main.rb
+   |--lib/
+       |
       application/
+            |
+            -- fizz_buzz_command.rb
+            -- fizz_buzz_value_command.rb
+            -- fizz_buzz_list_command.rb
+      domain/
+            |
+            model/
+                |
+                -- fizz_buzz_value.rb
+                -- fizz_buzz_list.rb
+            type/
+                |
+                -- fizz_buzz_type.rb
+                -- fizz_buzz_type_01.rb
+                -- fizz_buzz_type_02.rb
+                -- fizz_buzz_type_03.rb
+        -- fizz_buzz.rb
+   |--test/
+       |
+       application/
             |
             -- fizz_buzz_value_command_test.rb
             -- fizz_buzz_list_command._test.rb
+       domain/
+            |
+            model/
+                  |
+                  -- fizz_buzz_value_test.rb
+                  -- fizz_buzz_list_test.rb
        |
-        -- fizz_buzz_test.rb
+        -- learning_test.rb
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
+class FizzBuzzValueCommandTest < Minitest::Test
+  describe '数を文字列にして返す' do
+    describe 'タイプ1の場合' do
+      def setup
+        @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType01.new)
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列Fizzを返す
+          assert_equal 'Fizz', @fizzbuzz.execute(3)
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列Buzzを返す
+          assert_equal 'Buzz', @fizzbuzz.execute(5)
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列FizzBuzzを返す
+          assert_equal 'FizzBuzz', @fizzbuzz.execute(15)
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.execute(1)
+        end
+      end
+    end
+
+    describe 'タイプ2の場合' do
+      def setup
+        @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType02.new)
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.execute(3)
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.execute(5)
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列15を返す
+          assert_equal '15', @fizzbuzz.execute(15)
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.execute(1)
+        end
+      end
+    end
+
+    describe 'タイプ3の場合' do
+      def setup
+        @fizzbuzz = FizzBuzzValueCommand.new(FizzBuzzType03.new)
+      end
+
+      describe '三の倍数の場合' do
+        def test_3を渡したら文字列3を返す
+          assert_equal '3', @fizzbuzz.execute(3)
+        end
+      end
+
+      describe '五の倍数の場合' do
+        def test_5を渡したら文字列5を返す
+          assert_equal '5', @fizzbuzz.execute(5)
+        end
+      end
+
+      describe '三と五の倍数の場合' do
+        def test_15を渡したら文字列FizzBuzzを返す
+          assert_equal 'FizzBuzz', @fizzbuzz.execute(15)
+        end
+      end
+
+      describe 'その他の場合' do
+        def test_1を渡したら文字列1を返す
+          assert_equal '1', @fizzbuzz.execute(1)
+        end
+      end
+    end
+
+    describe 'それ以外のタイプの場合' do
+      def test_未定義のタイプを返す
+        fizzbuzz = FizzBuzzType.create(4)
+
+        assert_equal '未定義', fizzbuzz.to_s
+      end
+
+      def test_空の文字列を返す
+        type = FizzBuzzType.create(4)
+        command = FizzBuzzValueCommand.new(type)
+
+        assert_equal '', command.execute(3)
+      end
+    end
+  end
+
+  describe '例外ケース' do
+    def test_値は正の値のみ許可する
+      e = assert_raises RuntimeError do
+        FizzBuzzValueCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(-1)
+      end
+
+      assert_equal '正の値のみ有効です', e.message
+    end
+  end
+end
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
+class FizzBuzzListCommandTest < Minitest::Test
+  describe '数を文字列にして返す' do
+    describe 'タイプ1の場合' do
+      describe '1から100までのFizzBuzzの配列を返す' do
+        def setup
+          fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType01.new)
+          @result = fizzbuzz.execute(100)
+        end
+
+        def test_配列の初めは文字列の1を返す
+          assert_equal '1', @result.first.value
+        end
+
+        def test_配列の最後は文字列のBuzzを返す
+          assert_equal 'Buzz', @result.last.value
+        end
+
+        def test_配列の2番目は文字列のFizzを返す
+          assert_equal 'Fizz', @result[2].value
+        end
+
+        def test_配列の4番目は文字列のBuzzを返す
+          assert_equal 'Buzz', @result[4].value
+        end
+
+        def test_配列の14番目は文字列のFizzBuzzを返す
+          assert_equal 'FizzBuzz', @result[14].value
+        end
+      end
+    end
+  end
+
+  describe '例外ケース' do
+    def test_100より多い数を許可しない
+      e = assert_raises RuntimeError do
+        FizzBuzzListCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(101)
+      end
+
+      assert_equal '上限は100件までです', e.message
+    end
+  end
+end
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
+class FizzBuzzValueTest < Minitest::Test
+  def test_同じで値である
+    value1 = FizzBuzzValue.new(1, '1')
+    value2 = FizzBuzzValue.new(1, '1')
+
+    assert value1.eql?(value2)
+  end
+
+  def test_to_stringメソッド
+    value = FizzBuzzValue.new(3, 'Fizz')
+
+    assert_equal '3:Fizz', value.to_s
+  end
+end
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
+class LearningTest < Minitest::Test
+  describe '配列や繰り返し処理を理解する' do
+    def test_繰り返し処理
+      $stdout = StringIO.new
+      [1, 2, 3].each { |i| p i * i }
+      output = $stdout.string
+
+      assert_equal "1\n" + "4\n" + "9\n", output
+    end
+
+    def test_selectメソッドで特定の条件を満たす要素だけを配列に入れて返す
+      result = [1.1, 2, 3.3, 4].select(&:integer?)
+      assert_equal [2, 4], result
+    end
+
+    def test_find_allメソッドで特定の条件を満たす要素だけを配列に入れて返す
+      result = [1.1, 2, 3.3, 4].find_all(&:integer?)
+      assert_equal [2, 4], result
+    end
+
+    def test_特定の条件を満たさない要素だけを配列に入れて返す
+      result = [1.1, 2, 3.3, 4].reject(&:integer?)
+      assert_equal [1.1, 3.3], result
+    end
+
+    def test_mapメソッドで新しい要素の配列を返す
+      result = %w[apple orange pineapple strawberry].map(&:size)
+      assert_equal [5, 6, 9, 10], result
+    end
+
+    def test_collectメソッドで新しい要素の配列を返す
+      result = %w[apple orange pineapple strawberry].collect(&:size)
+      assert_equal [5, 6, 9, 10], result
+    end
+
+    def test_findメソッドで配列の中から条件に一致する要素を取得する
+      result = %w[apple orange pineapple strawberry].find(&:size)
+      assert_equal 'apple', result
+    end
+
+    def test_detectメソッドで配列の中から条件に一致する要素を取得する
+      result = %w[apple orange pineapple strawberry].detect(&:size)
+      assert_equal 'apple', result
+    end
+
+    def test_指定した評価式で並び変えた配列を返す
+      result1 = %w[2 4 13 3 1 10].sort
+      result2 = %w[2 4 13 3 1 10].sort { |a, b| a.to_i <=> b.to_i }
+      result3 = %w[2 4 13 3 1 10].sort { |b, a| a.to_i <=> b.to_i }
+
+      assert_equal %w[1 10 13 2 3 4], result1
+      assert_equal %w[1 2 3 4 10 13], result2
+      assert_equal %w[13 10 4 3 2 1], result3
+    end
+
+    def test_配列の中から条件に一致する要素を取得する
+      result = %w[apple orange pineapple strawberry apricot].grep(/^a/)
+      assert_equal %w[apple apricot], result
+    end
+
+    def test_ブロック内の条件式が真である間までの要素を返す
+      result = [1, 2, 3, 4, 5, 6, 7, 8, 9].take_while { |item| item < 6 }
+      assert_equal [1, 2, 3, 4, 5], result
+    end
+
+    def test_ブロック内の条件式が真である以降の要素を返す
+      result = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].drop_while { |item| item < 6 }
+      assert_equal [6, 7, 8, 9, 10], result
+    end
+
+    def test_injectメソッドで畳み込み演算を行う
+      result = [1, 2, 3, 4, 5].inject(0) { |total, n| total + n }
+      assert_equal 15, result
+    end
+
+    def test_reduceメソッドで畳み込み演算を行う
+      result = [1, 2, 3, 4, 5].reduce { |total, n| total + n }
+      assert_equal 15, result
+    end
+  end
+end
+----
+
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
+class FizzBuzzListTest < Minitest::Test
+  def test_新しいインスタンスが作られる
+    command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    array = command.execute(50)
+    list1 = FizzBuzzList.new(array)
+    list2 = list1.add(array)
+
+    assert_equal 50, list1.value.count
+    assert_equal 100, list2.value.count
+  end
+end
+----
+
+ファイル分割でテストは壊れていないようですが警告がたくさん出てきました。
 
 [source, bash]
 ----
-03:02:48 - INFO - Running: test/application/fizz_buzz_list_command_test.rb
-Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 56 / 59 LOC (94.92%) covered.
-Started with run options --guard --seed 13143
-
-  5/5: [=====================================================] 100% Time: 00:00:00, Time: 00:00:00
-
-Finished in 0.00534s
-5 tests, 5 assertions, 0 failures, 0 errors, 0 skips
 ...
-test/application/fizz_buzz_value_command_test.rb:113:16: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
-      def test_値は正の値のみ許可する
-               ^^^^^^^^^^^
-test/application/fizz_buzz_value_command_test.rb:123:11: C: Naming/MethodName: Use snake_case for method names.
-      def test_100より多い数を許可しない
-          ^^^^^^^^^^^^^^^^^^^
-test/application/fizz_buzz_value_command_test.rb:123:19: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
-      def test_100より多い数を許可しない
-                  ^^^^^^^^^^^
-lib/application/fizz_buzz_list_command.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzListCommand < FizzBuzzCommand
-^^^^^
-lib/application/fizz_buzz_value_command.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzValueCommand < FizzBuzzCommand
-^^^^^
-lib/domain/model/fizz_buzz_list.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzList
-^^^^^
-lib/domain/model/fizz_buzz_value.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzValue
-^^^^^
-lib/domain/type/fizz_buzz_type_03.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzType03 < FizzBuzzType
-^^^^^
-lib/domain/type/fizz_buzz_type_02.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzType02 < FizzBuzzType
-^^^^^
-lib/domain/type/fizz_buzz_type_01.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzType01 < FizzBuzzType
-^^^^^
-lib/domain/type/fizz_buzz_type.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
-class FizzBuzzType
-^^^^^
- 10/10 files |============================== 100 ===============================>| Time: 00:00:00 
+test/learning_test.rb:70:14: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+    def test_ブロック内の条件式が真である間までの要素を返す
+             ^^^^^^^^^^^^^^^^^^^^^^^
+test/learning_test.rb:75:9: C: Naming/MethodName: Use snake_case for method names.
+    def test_ブロック内の条件式が真である以降の要素を返す
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test/learning_test.rb:75:14: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+    def test_ブロック内の条件式が真である以降の要素を返す
+             ^^^^^^^^^^^^^^^^^^^^^^
+test/learning_test.rb:80:9: C: Naming/MethodName: Use snake_case for method names.
+    def test_injectメソッドで畳み込み演算を行う
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+test/learning_test.rb:80:20: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+    def test_injectメソッドで畳み込み演算を行う
+                   ^^^^^^^^^^^^^^
+test/learning_test.rb:85:9: C: Naming/MethodName: Use snake_case for method names.
+    def test_reduceメソッドで畳み込み演算を行う
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+test/learning_test.rb:85:20: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+    def test_reduceメソッドで畳み込み演算を行う
+                   ^^^^^^^^^^^^^^
+ 15/15 files |======================= 100 ========================>| Time: 00:00:00 
 
-10 files inspected, 49 offenses detected
+15 files inspected, 87 offenses detected
 ----
+
+これらはテストコードに関する警告がほとんどなので `.rubocop.yml` を編集してチェック対象から外しておきましょう。
 
 [source, yml]
 ----
@@ -5805,21 +6450,53 @@ Documentation:
 
 [source, bash]
 ----
-03:17:08 - INFO - Running: all tests
-Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 172 / 276 LOC (62.32%) covered.
-Started with run options --guard --seed 54739
+08:21:55 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 144 / 215 LOC (66.98%) covered.
+Started with run options --guard --seed 55977
 
-  57/57: [===================================================] 100% Time: 00:00:00, Time: 00:00:00
+  70/70: [=====================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.01768s
-57 tests, 66 assertions, 0 failures, 0 errors, 0 skips
+Finished in 0.01518s
+70 tests, 79 assertions, 0 failures, 0 errors, 0 skips
 
-03:17:08 - INFO - Inspecting Ruby code style of all files
+08:21:56 - INFO - Inspecting Ruby code style of all files
 /workspace/tdd_rb/.rubocop.yml: Warning: no department given for Documentation.
- 18/18 files |============================== 100 ===============================>| Time: 00:00:01 
+ 22/22 files |======================= 100 ========================>| Time: 00:00:00 
 
-18 files inspected, no offenses detected
+22 files inspected, no offenses detected
+08:21:58 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/border.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/loading_background.png
+/workspace/tdd_rb/.rubocop.yml: Warning: no department given for Documentation.
+ 0/0 files |======================== 100 =========================>| Time: 00:00:00 
+
+0 files inspected, no offenses detected
 ----
+
+警告は消えました、仕上げに `fizz_buzz_test.rb` ファイルを削除します。
+
+[source, bash]
+----
+08:24:12 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 135 / 201 LOC (67.16%) covered.
+Started with run options --guard --seed 40104
+
+  32/32: [=====================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00601s
+32 tests, 36 assertions, 0 failures, 0 errors, 0 skips
+
+08:24:13 - INFO - Inspecting Ruby code style of all files
+/workspace/tdd_rb/.rubocop.yml: Warning: no department given for Documentation.
+ 21/21 files |======================= 100 ========================>| Time: 00:00:00 
+
+21 files inspected, no offenses detected
+08:24:14 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/border.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/loading_background.png
+/workspace/tdd_rb/.rubocop.yml: Warning: no department given for Documentation.
+ 0/0 files |======================== 100 =========================>| Time: 00:00:00 
+
+0 files inspected, no offenses detected
+----
+
+テストの分割も完了したのでコミットしておきます。
 
 [source, bash]
 ----
@@ -5827,6 +6504,9 @@ $ git add .
 $ git commit -m 'refactor(WIP): モジュール分割'
 ----
 
+===== エントリーポイント
+
+仕上げはクラスモジュールのエントリーポイント作成とテストヘルパーの追加です。
 
  /main.rb
    |--lib/
@@ -5851,13 +6531,18 @@ $ git commit -m 'refactor(WIP): モジュール分割'
         -- fizz_buzz.rb
    |--test/
        |
-      application/
+       application/
             |
             -- fizz_buzz_value_command_test.rb
             -- fizz_buzz_list_command._test.rb
+       domain/
+            |
+            model/
+                  |
+                  -- fizz_buzz_value_test.rb
+                  -- fizz_buzz_list_test.rb
        |
-        -- fizz_buzz_test.rb
-
+        -- learning_test.rb
 
  /main.rb
    |--lib/
@@ -5882,12 +6567,21 @@ $ git commit -m 'refactor(WIP): モジュール分割'
         -- fizz_buzz.rb
    |--test/
        |
-      application/
+       application/
             |
             -- fizz_buzz_value_command_test.rb
             -- fizz_buzz_list_command._test.rb
+       domain/
+            |
+            model/
+                  |
+                  -- fizz_buzz_value_test.rb
+                  -- fizz_buzz_list_test.rb
        |
+        -- learning_test.rb
         -- test_helper.rb
+
+`fizz_buzz.rb` のファイルを内容クラスモジュール読み込みに変更します。
 
 [source, ruby]
 ----
@@ -5900,20 +6594,22 @@ require './lib/domain/type/fizz_buzz_type.rb'
 require './lib/domain/type/fizz_buzz_type_01.rb'
 require './lib/domain/type/fizz_buzz_type_02.rb'
 require './lib/domain/type/fizz_buzz_type_03.rb'
+require './lib/domain/type/fizz_buzz_type_not_defined.rb'
 ----
 
 [source, bash]
 ----
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
-Warning: coverage data provided by Coverage [114] exceeds number of lines in /workspace/tdd_rb/lib/fizz_buzz.rb [11]
-Started with run options --seed 3525
+08:34:32 - INFO - Running: all tests
+Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 119 / 211 LOC (56.4%) covered.
+Started with run options --guard --seed 18696
 
+  32/32: [=====================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Progress: |======================================================================================|
-
-Finished in 0.00772s
-37 tests, 43 assertions, 0 failures, 0 errors, 0 skips
+Finished in 0.00561s
+32 tests, 36 assertions, 0 failures, 0 errors, 0 skips
 ----
+
+コードカバレッジがうまく機能していないようなので、`test_helper.rb` を追加して共通分を書くファイルから読み込むように変更します。
 
 [source, ruby]
 ----
@@ -5934,7 +6630,6 @@ Minitest::Reporters.use!
 require 'minitest/autorun'
 require './lib/fizz_buzz'
 
-class FizzBuzzValueCommandTest < Minitest::Test
 ...
 ----
 
@@ -5944,25 +6639,18 @@ require './test/test_helper'
 require 'minitest/autorun'
 require './lib/fizz_buzz'
 
-class FizzBuzzValueCommandTest < Minitest::Test
 ...
 ----
 
-[source, ruby]
-----
-require './test/test_helper'
-require 'minitest/autorun'
-require './lib/fizz_buzz'
-
-class FizzBuzzListCommandTest < Minitest::Test
-...
-----
+テストタスクを実行したところ動作しなくなりました。
 
 [source, bash]
 ----
 $ rake test
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb"  
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb"
 ----
+
+テスト対象をテストディレクトリ内のすべてのテストコードに変更します。
 
 [source, ruby]
 ----
@@ -5987,15 +6675,16 @@ end
 [source, bash]
 ----
 $ rake test
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/application/fizz_buzz_list_command_test.rb" "./test/application/fizz_buzz_value_command_test.rb" 
-Started with run options --seed 13671
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/domain/model/fizz_buzz_value_test.rb" "./test/domain/model/fizz_buzz_list_test.rb" "./test/application/fizz_buzz_value_command_test.rb" "./test/learning_test.rb" 
+Started with run options --seed 46929
 
-  20/20: [===================================================] 100% Time: 00:00:00, Time: 00:00:00
+  32/32: [=====================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00652s
-20 tests, 23 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 129 / 135 LOC (95.56%) covered.
+Finished in 0.00800s
+32 tests, 36 assertions, 0 failures, 0 errors, 0 skips
 ----
+
+テストも壊れていないし警告も出ていません。モジュール分割完了です。
 
 [source, bash]
 ----
@@ -6030,6 +6719,8 @@ package "lib" {
       }
       class FizzBuzzType03 {
       }
+      class FizzBuzzTypeNotDefined {
+      }
     }
   }
 }
@@ -6042,9 +6733,11 @@ package "test" {
 FizzBuzzType <|-- FizzBuzzType01
 FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType <|-- FizzBuzzTypeNotDefined
 FizzBuzzType01 --> FizzBuzzValue
 FizzBuzzType02 --> FizzBuzzValue
 FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzTypeNotDefined --> FizzBuzzValue
 FizzBuzzList *- FizzBuzzValue
 FizzBuzzCommand <|-- FizzBuzzValueCommand
 FizzBuzzCommand <|-- FizzBuzzListCommand
@@ -6116,6 +6809,12 @@ include::./code/episode_3/lib/domain/type/fizz_buzz_type_02.rb[]
 include::./code/episode_3/lib/domain/type/fizz_buzz_type_03.rb[]
 ----
 
+./lib/domain/type/fizz_buzz_type_not_defined.b
+[source, ruby]
+----
+include::./code/episode_3/lib/domain/type/fizz_buzz_type_not_defined.rb[]
+----
+
 ===== Test
 
 ./test/application/fizz_buzz_value_command_test.rb
@@ -6129,3 +6828,23 @@ include::./code/episode_3/test/application/fizz_buzz_value_command_test.rb[]
 ----
 include::./code/episode_3/test/application/fizz_buzz_list_command_test.rb[]
 ----
+
+./test/domain/model/fizz_buzz_value_test.rb
+[source, ruby]
+----
+include::./code/episode_3/test/domain/model/fizz_buzz_value_test.rb[]
+----
+
+
+./test/domain/model/fizz_buzz_list_test.rb
+[source, ruby]
+----
+include::./code/episode_3/test/domain/model/fizz_buzz_list_test.rb[]
+----
+
+./test/learning_test.rb
+[source, ruby]
+----
+include::./code/episode_3/test/learning_test.rb[]
+----
+

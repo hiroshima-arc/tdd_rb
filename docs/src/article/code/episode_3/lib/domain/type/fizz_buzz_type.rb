@@ -14,7 +14,7 @@ class FizzBuzzType
     when FizzBuzzType::TYPE_03
       FizzBuzzType03.new
     else
-      raise '該当するタイプは存在しません'
+      FizzBuzzTypeNotDefined.new
     end
   end
 
