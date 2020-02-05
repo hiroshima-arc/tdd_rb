@@ -2790,7 +2790,7 @@ Finished in 0.00262s
 壊れていませんね。ではコミットしておきましょう。
 
 ``` bash
-$ ruby main.rb
+$ git add main.rb
 $ git commit -m 'refactor:　変数の抽出'
 ```
 

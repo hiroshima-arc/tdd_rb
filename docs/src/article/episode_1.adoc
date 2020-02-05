@@ -2861,7 +2861,7 @@ Finished in 0.00262s
 
 [source, bash]
 ----
-$ ruby main.rb
+$ git add main.rb
 $ git commit -m 'refactor:　変数の抽出'
 ----
 
