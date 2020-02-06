@@ -2,7 +2,7 @@
 
 ==== テスト駆動開発
 
-エピソード1ので作成したプログラムに以下の仕様を追加しました。
+エピソード1ので作成したプログラムに以下の仕様を追加します。
 
 仕様
 
@@ -66,6 +66,7 @@ TODOリスト
 
 [source, bash]
 ----
+...
 05:32:51 - INFO - Running: all tests
 Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 11 LOC (36.36%) covered.
 Started with run options --guard --seed 37049
@@ -80,9 +81,15 @@ Minitest::UnexpectedError:         ArgumentError: wrong number of arguments (giv
 
 Finished in 0.00796s
 25 tests, 26 assertions, 0 failures, 1 errors, 0 skips
+...
 ----
 
 `ArgumentError: wrong number of arguments (given 2, expected 1)` *引数* が違うと指摘されていますね。 `FizzBuzz.generate` メソッドの引数の変更したいのですが既存のテストを壊したくないのでここは *デフォルト引数* 使ってみましょう。
+
+[quote, かんたんRuby]
+____
+メソッドの引数にはデフォルト値を指定する定義方法があります。これは、メソッドの引数を省略した場合に割り当てられる値です。
+____
 
 [source, bash]
 ----
@@ -105,6 +112,7 @@ class FizzBuzz
 
 [source, bash]
 ----
+...
 05:32:52 - INFO - Inspecting Ruby code style: test/fizz_buzz_test.rb Guardfile
  2/2 files |====================================== 100 =======================================>| Time: 00:00:00 
 
@@ -137,7 +145,7 @@ Finished in 0.00723s
 ...
 ----
 
-ちなみにここでは 引数に `type=1` と入力したのですがコーディングルールに従って以下のように自動修正されます。
+ちなみにここでは 引数に `type=1` と入力したのですがコードフォーマットによって以下のように自動修正されます。
 
 [source, bash]
 ----
@@ -184,7 +192,7 @@ class FizzBuzz
 
 [source, bash]
 ----
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+...
 Started with run options --seed 51330
 
 
@@ -200,6 +208,7 @@ Finished in 0.00828s
  0/0 files |=================== 100 ===================>| Time: 00:00:00 
 
 0 files inspected, no offenses detected
+...
 ----
 
 テストは無事通りました。ここでコミットしておきます。
@@ -210,7 +219,7 @@ $ git add .
 $ git commit -m 'test: タイプ1の場合'
 ----
 
-追加仕様の取っ掛かりができました。既存のテストを使いたいので先程作成したテストを削除して以下のように新しいグループ内に既存テストコードを移動しましょう。
+追加仕様の取っ掛かりができました。既存のテストを流用したいので先程作成したテストを削除して以下のように新しいグループ内に既存テストコードを移動しましょう。
 
 [source, ruby]
 ----
@@ -282,7 +291,7 @@ class FizzBuzzTest < Minitest::Test
 [source, bash]
 ----
 $ git add .
-$ $ git commit -m 'refactor: メソッドのインライン化'
+$ git commit -m 'refactor: メソッドのインライン化'
 ----
 
 TODOリスト
@@ -316,6 +325,7 @@ TODOリスト
 *** 15を渡したら文字列"FizzBuzz"を返す
 
 ===== タイプ2の場合
+
 TODOリスト
 
 * [line-through]_タイプ1の場合_
@@ -404,7 +414,7 @@ class FizzBuzz
 
 [source, bash]
 ----
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+...
 Started with run options --seed 19625
 
 
@@ -412,6 +422,7 @@ Progress: |=====================================================================
 
 Finished in 0.00894s
 24 tests, 26 assertions, 0 failures, 0 errors, 0 skips
+...
 ----
 
 テストが通ったのでテストケースを追加します。ここはタイプ1の場合をコピーして編集すれば良いでしょう。
@@ -495,24 +506,41 @@ Metrics/BlockLength:
 [source, bash]
 ----
 [1] guard(main)> 
-06:33:03 - INFO - Run all
-06:33:03 - INFO - Running: all tests
-Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 13 LOC (30.77%) covered.
-Started with run options --guard --seed 42496
+02:03:15 - INFO - Run all
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+Started with run options --seed 47335
 
-  27/27: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00824s
+Progress: |==============================================================================|
+
+Finished in 0.00781s
+27 tests, 29 assertions, 0 failures, 0 errors, 0 skips
+Started with run options --seed 47825
+
+
+Progress: |==============================================================================|
+
+Finished in 0.00761s
+27 tests, 29 assertions, 0 failures, 0 errors, 0 skips
+02:03:17 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 13 / 13 LOC (100.0%) covered.
+Started with run options --guard --seed 17744
+
+  27/27: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00789s
 27 tests, 29 assertions, 0 failures, 0 errors, 0 skips
 
-06:33:03 - INFO - Inspecting Ruby code style of all files
- 7/7 files |====================================== 100 =======================================>| Time: 00:00:00 
+02:03:17 - INFO - Inspecting Ruby code style of all files
+ 7/7 files |=========================== 100 ============================>| Time: 00:00:00 
 
 7 files inspected, no offenses detected
-06:33:05 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
- 0/0 files |====================================== 100 =======================================>| Time: 00:00:00 
+02:03:19 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/border.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/loading_background.png
+ 0/0 files |=========================== 100 ============================>| Time: 00:00:00 
 
 0 files inspected, no offenses detected
+[1] guard(main)> 
 ----
 
 警告は消えたのでコミットしておきます。
@@ -546,6 +574,7 @@ TODOリスト
 *** 15を渡したら文字列"FizzBuzz"を返す
 
 ===== タイプ3の場合
+
 TODOリスト
 
 * [line-through]_タイプ1の場合_
@@ -600,6 +629,7 @@ TODOリスト
 
 [source, bash]
 ----
+...
  FAIL["test_1を渡したら文字列1を返す", #<Minitest::Reporters::Suite:0x00005642171ea5a0 @name="数を文字列にして返す::タイプ3の場合::その他の場合">, 0.003375133004738018]
  test_1を渡したら文字列1を返す#数を文字列にして返す::タイプ3の場合::その他の場合 (0.00s)
         Expected: "1"
@@ -628,6 +658,7 @@ TODOリスト
 
 Finished in 0.00650s
 31 tests, 33 assertions, 4 failures, 0 errors, 0 skips
+...
 ----
 
 *case式* に処理を追加します。
@@ -694,7 +725,24 @@ $ git add .
 $ git commit -m 'test: タイプ3の場合'
 ----
 
-処理の追加により一部重複が発生したので *ステートメントのスライド* を適用して重複をなくしておきましょう。
+処理の追加により一部重複が発生しました。ここは、 *ステートメントのスライド* を適用して重複をなくしておきましょう。
+
+[quote, リファクタリング(第2版)]
+____
+ステートメントのスライド
+
+旧：重複した条件記述の断片の統合
+____
+
+[quote, 新装版 リファクタリング]
+____
+重複した条件記述の断片の統合
+
+条件式のすべて分岐に同じコードの断片がある。
+
+それを式の外側に移動する。
+____
+
 
 [source, ruby]
 ----
@@ -779,7 +827,8 @@ TODOリスト
 
 ===== それ以外のタイプの場合
 
-追加仕様には対応しましたがタイプ1,2,3以外の値が *引数* として渡された場合はどうしましょうか 現状では `nil` を返しますがこのような例外ケースも考慮する必要があります。
+追加仕様には対応しましたがタイプ1,2,3以外の値が *引数* として渡された場合はどうしましょうか？
+現状では `nil` を返しますがこのような例外ケースも考慮する必要があります。
 
 TODOリスト
 
@@ -789,6 +838,11 @@ TODOリスト
 * それ以外のタイプの場合
 
 *例外処理* を追加します。まず、例外のテストですが以下の様に書きます。
+
+[quote, かんたんRuby]
+____
+例外とは記述したプログラムが想定していない値を受け取ったり、何らかの障害が発生した場合に処理を中断して、例外オブジェクトを生成して呼び出し元のメソッドに処理を戻す機構です。
+____
 
 [source, ruby]
 ----
@@ -829,6 +883,11 @@ Finished in 0.00609s
 
 *case式* に該当しない場合は *例外を発生させる* ようにします。
 
+[quote, かんたんRuby]
+____
+例外を明示的に発生させるには「raise」を使います。raiseには発生させたい例外クラスを指定するのですが、何も指定しない場合はRuntimeErrorオブジェクトが生成されます。
+____
+
 [source, ruby]
 ----
 ...
@@ -861,6 +920,7 @@ class FizzBuzz
 
 [source, bash]
 ----
+...
 07:04:53 - INFO - Running: all tests
 Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 16 / 16 LOC (100.0%) covered.
 Started with run options --guard --seed 32508
@@ -869,6 +929,7 @@ Started with run options --guard --seed 32508
 
 Finished in 0.00600s
 32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+...
 ----
 
 テストが通ったのでコミットしておきます。
@@ -886,13 +947,13 @@ TODOリスト
 * [line-through]_タイプ3の場合_
 * [line-through]_それ以外のタイプの場合_
 
-*TODOリスト* をすべて完了しました。追加仕様を満たすプログラムは出来ましたがまだ改善の余地がありそうですね。以降はオブジェクト指向アプローチによるコードのリファクタリングを解説していきたいと思います。
+*TODOリスト* をすべて完了しました。追加仕様を満たすプログラムは出来ましたがまだ改善の余地がありそうですね。以降ではオブジェクト指向アプローチによるコードのリファクタリングを解説していきたいと思います。
 
 ==== オブジェクト指向
 
-===== 手続き型
+===== 手続き型プログラム
 
-オブジェクト指向の解説の前に以下のコードを御覧いただきたい。いわゆる手続き型で書かれたコードですが、これも追加仕様を満たしています。
+オブジェクト指向の解説の前に以下のコードを御覧ください。いわゆる手続き型で書かれたコードですが、これも追加仕様を満たしています。
 
 [source, ruby]
 ----
@@ -968,9 +1029,14 @@ repeat while (カウンタが100になるまで)
 stop
 ----
 
-===== オブジェクト指向
+===== オブジェクト指向プログラム
 
 続いて、これまでに作ってきたコードがこちらになります。上記の手続き型コードとの大きな違いとして `class` というキーワードでくくられている部分があります。
+
+[quote, かんたんRuby]
+____
+クラスとは、大まかに説明すると何らかの値と処理（メソッド）をひとかたまりにしたものです。
+____
 
 [source, ruby]
 ----
@@ -1012,8 +1078,8 @@ UMLを使って上記のコードの構造をクラス図として表現しま�
 ----
 class FizzBuzz {
     MAX_NUMBER = 100
-    {static} generate()
-    {static} generate_list()
+    {static} generate(number)
+    {static} generate_list(number)
 }
 ----
 
@@ -1035,10 +1101,18 @@ A <<-- B : list
 deactivate B
 ----
 
-手続き型コードのフローチャートと比べてどう思われましたか？具体的な記述が少なくデータや処理の概要だけを表現しているけどFizzBuzzのルールを知っている人であれば何をやろうとしているかのイメージはつかみやすいのでは無いでしょうか？これがオブジェクト指向であるというわけではありません、今は *抽象化* がキーワードだという程度の認識で十分です。オブジェクト指向の詳細は控えるとして、ここでは *カプセル化* *ポリモフィズム* *継承* というオブジェクト指向でよく言及される概念をリファクタリングを通して体験してもらい、オブジェクト指向プログラムの感覚を掴んでもらうことを目的に解説を進めて行きたいと思います。
+手続き型コードのフローチャートと比べてどう思われましたか？具体的な記述が少なくデータや処理の概要だけを表現しているけどFizzBuzzのルールを知っている人であれば何をやろうとしているかのイメージはつかみやすいのではないでしょうか？これがオブジェクト指向であるというわけではありません、現時点では *抽象化* がキーワードだという程度の認識で十分です。
+
+オブジェクト指向の理解を深める取り掛かりにはこちらの記事を参照してください。
+
+* https://qiita.com/nrslib/items/73bf176147192c402049[オブジェクト指向のいろは^]
+
+オブジェクト指向の詳細は控えるとして、ここでは *カプセル化* *ポリモフィズム* *継承* というオブジェクト指向で言及される概念をリファクタリングを通して体験してもらい、オブジェクト指向プログラムの感覚を掴んでもらうことを目的に解説を進めて行きたいと思います。
 
 ==== カプセル化
+
 ===== フィールドのカプセル化
+
 [plantuml]
 ----
 class FizzBuzz {
@@ -1048,7 +1122,19 @@ class FizzBuzz {
 }
 ----
 
-まず、データとロジックを１つのクラスにまとめていくためのリファクタリングを実施していくとします。`FizzBuzz` クラスにFizzBuzz配列を保持できるようにするため *フィールドのカプセル化* を適用します。
+まず、データとロジックを１つのクラスにまとめていくためのリファクタリングを実施していくとします。`FizzBuzz` クラスにFizzBuzz配列を保持できるようして以下のように取得できるようにしたいと思います。
+
+[source, ruby]
+----
+...
+          fizzbuzz.generate_list
+          @result = fizzbuzz.list
+...
+----
+
+まず、 *インスタンス変数* 追加します。
+
+次に `self` キーワードを外して *クラスメソッド* から *インスタンスメソッド* に変更します。
 
 [source, ruby]
 ----
@@ -1088,7 +1174,10 @@ end
 ----
 class FizzBuzz
   MAX_NUMBER = 100
-  attr_accessor :list
+
+  def list
+    @list
+  end
 
   def generate(number, type = 1)
     is_fizz = number.modulo(3).zero?
@@ -1130,7 +1219,12 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `generate' fo
 ...
 ----
 
-FizzBuzz配列を *インスタンス変数* `@list` に *代入* して *アクセッサメソッド* 経由で取得できるように変更しました。変更に当たり *クラスメソッド* `FizzBuzz.generate` と `FizzBuzz.generate_list` を *インスタンスメソッド* に変更しています。それに伴ってテストが失敗して `NoMethodError: undefined method `generate'` と表示されるようになってしまいました。`new` メソッドを使ってFizzBuzzクラスの *インスタンス* を作りFizzBuzz配列を *アクセッサメソッド* 経由で取得するようにテストコードを変更します。
+FizzBuzz配列を *インスタンス変数* `@list` に *代入* して *インスタンス変数* 経由で取得できるように変更しました。変更にあたり *クラスメソッド* `FizzBuzz.generate` と `FizzBuzz.generate_list` を *インスタンスメソッド* に変更しています。それに伴ってテストが失敗して `NoMethodError: undefined method `generate'` と表示されるようになってしまいました。*インスタンスメソッド* が使えるようにするため　`new` メソッドを使ってFizzBuzzクラスの *インスタンス* を作りFizzBuzz配列を *インスタンス変数* 経由で取得するようにテストコードを変更します。
+
+[quote, かんたんRuby]
+____
+クラスとして定義された情報を元に具体的な値を伴ったオブジェクトを作成することをインスタンス化と呼び、生成されたオブジェクトのことをインスタンスと呼びます。
+____
 
 [source, ruby]
 ----
@@ -1189,7 +1283,43 @@ Finished in 0.00616s
 ...
 ----
 
-テストが直りました。*クラスメソッド* *インスタンスメソッド* *インスタンス変数* *インスタンス* などいろんな単語が出てきて戸惑ってしまったかもしれませんが、ピンとこないうちは *クラス* に値や状態を保持させるためには *インスタンス化* する必要があってそのためには `new` メソッドを使わないといけないのね程度の理解で十分です。大概のことは手を動かしているうちにピン来るようになります。テストが動作して既存のコードが壊れていないことが確認できたのでここでコミットします。
+テストが直りました。*クラスメソッド* *インスタンスメソッド* *インスタンス変数* *インスタンス* などいろんな単語が出てきて戸惑ってしまったかもしれませんが、ピンとこないうちは *クラス* に値や状態を保持させるためには *インスタンス化* する必要があってそのためには `new` メソッドを使わないといけないのね程度の理解で十分です。大概のことは手を動かしているうちにピン来るようになります。
+
+*インスタンス変数* に直接アクセスしているのでここは *アクセッサメソッド* を使って *フィールドのカプセル化* を適用しておきます。
+
+[quote, かんたんRuby]
+____
+オブジェクト指向ではクラス内の値をカプセル化することが重要ですが、時には内部で保持しているインスタンス変数を参照や更新できる方が良い場合もあります。複雑な処理ではなく、単にインスタンス変数にアクセスするためのメソッドのことを、アクセッサメソッドと呼びます。
+____
+
+[quote, 新装版 リファクタリング]
+____
+フィールドのカプセル化
+
+公開フィールドがある。
+
+それを非公開にして、そのアクセサを用意する。
+____
+
+自動実行の結果、以下のように書き換えられている部分を変更します。
+
+[source, ruby]
+----
+class FizzBuz、
+  MAX_NUMBER = 100
+　attr_reader :list
+...
+----
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_accessor :list
+...
+----
+
+テストが動作して既存のコードが壊れていないことが確認できたのでここでコミットします。
 
 [source, bash]
 ----
@@ -1208,6 +1338,11 @@ class FizzBuzz {
 ----
 
 引き続き、FizzBuzz配列は保持できるようになりましたがタイプごとに出力される配列のパターンは違います。FizzBuzzクラスにタイプを持たる必要があります。ここでは *コンストラクタ* を使って *インスタンス化* する際に *インスタンス変数* に *代入* するようにします。Rubyでは *initialize* というメソッドを使って初期化処理を実行します。
+
+[quote, かんたんRuby]
+____
+クラスをインスタンス化した時に初期化処理を行うシチュエーションはよくあります。このような初期化処理を行うメソッドをコンストラクタと呼び、Rubyではinitializeという特別なメソッドを用意することで実現できます。
+____
 
 [source, ruby]
 ----
@@ -1309,24 +1444,10 @@ class FizzBuzz
     is_buzz = number.modulo(5).zero?
 
     case @type
-    when 1
-      return 'FizzBuzz' if is_fizz && is_buzz
-      return 'Fizz' if is_fizz
-      return 'Buzz' if is_buzz
-
-      number.to_s
-    when 2
-      number.to_s
-    when 3
-      return 'FizzBuzz' if is_fizz && is_buzz
-
-      number.to_s
-    else
-      raise '該当するタイプは存在しません'
-    end
-  end
 ...
 ----
+
+`FizzBuzz.gnerate` メソッドの *引数* から `type` を削除します。
 
 [source, ruby]
 ----
@@ -1353,7 +1474,7 @@ Minitest::UnexpectedError:         ArgumentError: wrong number of arguments (giv
 ...
 ----
 
-続いて、`FizzBuzz#generate` メソッドから不要になった *引数* typeを削除したところテストが壊れたのでテストコードを修正します。
+続いて、`FizzBuzz#generate` メソッドから不要になった *引数* `type` を削除したところテストが壊れたのでテストコードを修正します。
 
 [source, ruby]
 ----
@@ -1452,6 +1573,46 @@ Finished in 0.00700s
 ...
 ----
 
+*インスタンス変数* の `@type` も *アクセッサメソッド* を使って *フィールドのカプセル化* を適用しておきます。
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_accessor :list
+
+  def initialize(type)
+    @type = type
+  end
+...
+----
+
+[source, ruby]
+----
+
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_accessor :list
+  attr_accessor :type
+
+  def initialize(type)
+    @type = type
+  end
+...
+----
+
+[source, bash]
+----
+...
+Started with run options --guard --seed 56315
+
+  32/32: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01069s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+...
+----
+
 コミットしておきます。
 
 [source, bash]
@@ -1469,6 +1630,7 @@ FizzBuzz配列を取得する *アクセッサメソッド* は現在このよ�
 class FizzBuzz
   MAX_NUMBER = 100
   attr_accessor :list
+  attr_accessor :type
 ...
 ----
 
@@ -1508,7 +1670,16 @@ class FizzBuzz
         /workspace/tdd_rb/test/fizz_buzz_test.rb:58:in `test_配列の2番目は文字列のFizzを返す'
 ----
 
-FizzBuzz配列が初期化されてしまいました。*アクセッサメソッド* に参照のための *getter* と 更新するための *setter* が許可されているため　*カプセル化* が破られてしまいました。ここは *setterの削除* を適用して外部からの更新を出来ないようにしておきましょう。Rubyでは以下のようにして *インスタンス変数* を読み取り専用にします。
+FizzBuzz配列が初期化されてしまいました。*アクセッサメソッド* に参照のための *getter* と 更新するための *setter* が許可されているため　*カプセル化* が破られてしまいました。ここは *setterの削除* を適用して外部からの更新を出来ないようにしておきましょう。
+
+[quote, リファクタリング(第2版)]
+____
+setterの削除
+
+setterが用意されているということは、フィールドが変更される可能性があることを意味します。オブジェクトを生成した後でフィールドを変更したくないなら、setterは用意しません（加えて、フィールドを変更不可にします）。そうすることで、フィールドはコンストラクタでのみで設定され、変更させないという意図が明確になって、フィールドが変更される可能性を、たいていは排除できます。
+____
+
+Rubyでは以下のようにして *インスタンス変数* を読み取り専用にします。
 
 [source, ruby]
 ----
@@ -1516,6 +1687,7 @@ FizzBuzz配列が初期化されてしまいました。*アクセッサメソ�
 class FizzBuzz
   MAX_NUMBER = 100
   attr_reader :list
+  attr_accessor :type
 ...
 ----
 
@@ -1528,7 +1700,33 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `list=' for #
             /workspace/tdd_rb/test/fizz_buzz_test.rb:45:in `setup'
 ----
 
-更新メソッドは存在しませんというエラーに変わったことが確認できたのでテストを元にもどしてテストが壊れていないことを確認したらコミットします。
+更新メソッドは存在しませんというエラーに変わったことが確認できたのでテストを元にもどします。
+
+同様に *インスタンス変数* の `@type` も読み取り専用にします。
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+  attr_reader :type
+...
+----
+
+[source, bash]
+----
+...
+04:32:06 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 22 / 22 LOC (100.0%) covered.
+Started with run options --guard --seed 20902
+
+  32/32: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00920s
+...
+----
+
+テストが壊れていないことを確認したらコミットします。
 
 [source, bash]
 ----
@@ -1542,8 +1740,8 @@ class FizzBuzz {
     MAX_NUMBER = 100
     list
     type
-    generate()
-    generate_list()
+    generate(number)
+    generate_list(number)
 }
 ----
 
@@ -1557,8 +1755,8 @@ class FizzBuzz {
     MAX_NUMBER = 100
     list
     type
-    generate()
-    generate_list()
+    generate(number)
+    generate_list(number)
 }
 ----
 

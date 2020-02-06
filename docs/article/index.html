@@ -607,8 +607,8 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_オブジェクト指向">3.1.2. オブジェクト指向</a>
 <ul class="sectlevel4">
-<li><a href="#_手続き型">手続き型</a></li>
-<li><a href="#_オブジェクト指向_2">オブジェクト指向</a></li>
+<li><a href="#_手続き型プログラム">手続き型プログラム</a></li>
+<li><a href="#_オブジェクト指向プログラム">オブジェクト指向プログラム</a></li>
 </ul>
 </li>
 <li><a href="#_カプセル化">3.1.3. カプセル化</a>
@@ -677,7 +677,7 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_ふりかえり_2">3.1.11. ふりかえり</a>
 <ul class="sectlevel4">
-<li><a href="#_オブジェクト指向プログラム">オブジェクト指向プログラム</a></li>
+<li><a href="#_オブジェクト指向プログラム_2">オブジェクト指向プログラム</a></li>
 <li><a href="#_オブジェクト指向設計_2">オブジェクト指向設計</a></li>
 <li><a href="#_ドメインモデル_2">ドメインモデル</a></li>
 </ul>
@@ -7039,7 +7039,7 @@ $ git commit -m 'chore: タスクの自動化'</code></pre>
 <div class="sect3">
 <h4 id="_テスト駆動開発">3.1.1. テスト駆動開発</h4>
 <div class="paragraph">
-<p>エピソード1ので作成したプログラムに以下の仕様を追加しました。</p>
+<p>エピソード1ので作成したプログラムに以下の仕様を追加します。</p>
 </div>
 <div class="paragraph">
 <p>仕様</p>
@@ -7131,7 +7131,8 @@ Gemfile   Guardfile     main.rb  Rakefile      test       Vagrantfile
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">05:32:51 - INFO - Running: all tests
+<pre class="CodeRay highlight"><code data-lang="bash">...
+05:32:51 - INFO - Running: all tests
 Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 11 LOC (36.36%) covered.
 Started with run options --guard --seed 37049
 
@@ -7144,11 +7145,22 @@ Minitest::UnexpectedError:         ArgumentError: wrong number of arguments (giv
   25/25: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
 Finished in 0.00796s
-25 tests, 26 assertions, 0 failures, 1 errors, 0 skips</code></pre>
+25 tests, 26 assertions, 0 failures, 1 errors, 0 skips
+...</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p><code>ArgumentError: wrong number of arguments (given 2, expected 1)</code> <strong>引数</strong> が違うと指摘されていますね。 <code>FizzBuzz.generate</code> メソッドの引数の変更したいのですが既存のテストを壊したくないのでここは <strong>デフォルト引数</strong> 使ってみましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>メソッドの引数にはデフォルト値を指定する定義方法があります。これは、メソッドの引数を省略した場合に割り当てられる値です。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; かんたんRuby
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7171,7 +7183,8 @@ class FizzBuzz
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">05:32:52 - INFO - Inspecting Ruby code style: test/fizz_buzz_test.rb Guardfile
+<pre class="CodeRay highlight"><code data-lang="bash">...
+05:32:52 - INFO - Inspecting Ruby code style: test/fizz_buzz_test.rb Guardfile
  2/2 files |====================================== 100 =======================================&gt;| Time: 00:00:00
 
 2 files inspected, no offenses detected
@@ -7204,7 +7217,7 @@ Finished in 0.00723s
 </div>
 </div>
 <div class="paragraph">
-<p>ちなみにここでは 引数に <code>type=1</code> と入力したのですがコーディングルールに従って以下のように自動修正されます。</p>
+<p>ちなみにここでは 引数に <code>type=1</code> と入力したのですがコードフォーマットによって以下のように自動修正されます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7252,7 +7265,7 @@ class FizzBuzz
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I&quot;lib&quot; -I&quot;/workspace/.rvm/gems/rake-13.0.1/lib&quot; &quot;/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb&quot; &quot;./test/fizz_buzz_test.rb&quot;
+<pre class="CodeRay highlight"><code data-lang="bash">...
 Started with run options --seed 51330
 
 
@@ -7267,7 +7280,8 @@ Finished in 0.00828s
 04:27:13 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
  0/0 files |=================== 100 ===================&gt;| Time: 00:00:00
 
-0 files inspected, no offenses detected</code></pre>
+0 files inspected, no offenses detected
+...</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -7280,7 +7294,7 @@ $ git commit -m 'test: タイプ1の場合'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>追加仕様の取っ掛かりができました。既存のテストを使いたいので先程作成したテストを削除して以下のように新しいグループ内に既存テストコードを移動しましょう。</p>
+<p>追加仕様の取っ掛かりができました。既存のテストを流用したいので先程作成したテストを削除して以下のように新しいグループ内に既存テストコードを移動しましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7353,7 +7367,7 @@ $ git commit -m 'test: タイプ1の場合'</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
-$ $ git commit -m 'refactor: メソッドのインライン化'</code></pre>
+$ git commit -m 'refactor: メソッドのインライン化'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -7678,14 +7692,15 @@ Finished in 0.00437s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I&quot;lib&quot; -I&quot;/workspace/.rvm/gems/rake-13.0.1/lib&quot; &quot;/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb&quot; &quot;./test/fizz_buzz_test.rb&quot;
+<pre class="CodeRay highlight"><code data-lang="bash">...
 Started with run options --seed 19625
 
 
 Progress: |=============================================================================|
 
 Finished in 0.00894s
-24 tests, 26 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+24 tests, 26 assertions, 0 failures, 0 errors, 0 skips
+...</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -7772,24 +7787,41 @@ test/fizz_buzz_test.rb:11:3: C: Metrics/BlockLength: Block has too many lines. [
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">[1] guard(main)&gt;
-06:33:03 - INFO - Run all
-06:33:03 - INFO - Running: all tests
-Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 4 / 13 LOC (30.77%) covered.
-Started with run options --guard --seed 42496
+02:03:15 - INFO - Run all
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I&quot;lib&quot; -I&quot;/workspace/.rvm/gems/rake-13.0.1/lib&quot; &quot;/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb&quot; &quot;./test/fizz_buzz_test.rb&quot;
+/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I&quot;lib&quot; -I&quot;/workspace/.rvm/gems/rake-13.0.1/lib&quot; &quot;/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb&quot; &quot;./test/fizz_buzz_test.rb&quot;
+Started with run options --seed 47335
 
-  27/27: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00824s
+Progress: |==============================================================================|
+
+Finished in 0.00781s
+27 tests, 29 assertions, 0 failures, 0 errors, 0 skips
+Started with run options --seed 47825
+
+
+Progress: |==============================================================================|
+
+Finished in 0.00761s
+27 tests, 29 assertions, 0 failures, 0 errors, 0 skips
+02:03:17 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 13 / 13 LOC (100.0%) covered.
+Started with run options --guard --seed 17744
+
+  27/27: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00789s
 27 tests, 29 assertions, 0 failures, 0 errors, 0 skips
 
-06:33:03 - INFO - Inspecting Ruby code style of all files
- 7/7 files |====================================== 100 =======================================&gt;| Time: 00:00:00
+02:03:17 - INFO - Inspecting Ruby code style of all files
+ 7/7 files |=========================== 100 ============================&gt;| Time: 00:00:00
 
 7 files inspected, no offenses detected
-06:33:05 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
- 0/0 files |====================================== 100 =======================================&gt;| Time: 00:00:00
+02:03:19 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/border.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/loading_background.png
+ 0/0 files |=========================== 100 ============================&gt;| Time: 00:00:00
 
-0 files inspected, no offenses detected</code></pre>
+0 files inspected, no offenses detected
+[1] guard(main)&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8009,7 +8041,8 @@ $ git commit -m 'test: タイプ2の場合'</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"> FAIL[&quot;test_1を渡したら文字列1を返す&quot;, #&lt;Minitest::Reporters::Suite:0x00005642171ea5a0 @name=&quot;数を文字列にして返す::タイプ3の場合::その他の場合&quot;&gt;, 0.003375133004738018]
+<pre class="CodeRay highlight"><code data-lang="bash">...
+ FAIL[&quot;test_1を渡したら文字列1を返す&quot;, #&lt;Minitest::Reporters::Suite:0x00005642171ea5a0 @name=&quot;数を文字列にして返す::タイプ3の場合::その他の場合&quot;&gt;, 0.003375133004738018]
  test_1を渡したら文字列1を返す#数を文字列にして返す::タイプ3の場合::その他の場合 (0.00s)
         Expected: &quot;1&quot;
           Actual: nil
@@ -8036,7 +8069,8 @@ $ git commit -m 'test: タイプ2の場合'</code></pre>
   31/31: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
 Finished in 0.00650s
-31 tests, 33 assertions, 4 failures, 0 errors, 0 skips</code></pre>
+31 tests, 33 assertions, 4 failures, 0 errors, 0 skips
+...</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8105,7 +8139,36 @@ $ git commit -m 'test: タイプ3の場合'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>処理の追加により一部重複が発生したので <strong>ステートメントのスライド</strong> を適用して重複をなくしておきましょう。</p>
+<p>処理の追加により一部重複が発生しました。ここは、 <strong>ステートメントのスライド</strong> を適用して重複をなくしておきましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>ステートメントのスライド</p>
+</div>
+<div class="paragraph">
+<p>旧：重複した条件記述の断片の統合</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版)
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>重複した条件記述の断片の統合</p>
+</div>
+<div class="paragraph">
+<p>条件式のすべて分岐に同じコードの断片がある。</p>
+</div>
+<div class="paragraph">
+<p>それを式の外側に移動する。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8239,7 +8302,8 @@ $ git commit -m 'refactor: ステートメントのスライド'</code></pre>
 <div class="sect4">
 <h5 id="_それ以外のタイプの場合">それ以外のタイプの場合</h5>
 <div class="paragraph">
-<p>追加仕様には対応しましたがタイプ1,2,3以外の値が <strong>引数</strong> として渡された場合はどうしましょうか 現状では <code>nil</code> を返しますがこのような例外ケースも考慮する必要があります。</p>
+<p>追加仕様には対応しましたがタイプ1,2,3以外の値が <strong>引数</strong> として渡された場合はどうしましょうか？
+現状では <code>nil</code> を返しますがこのような例外ケースも考慮する必要があります。</p>
 </div>
 <div class="paragraph">
 <p>TODOリスト</p>
@@ -8262,6 +8326,16 @@ $ git commit -m 'refactor: ステートメントのスライド'</code></pre>
 </div>
 <div class="paragraph">
 <p><strong>例外処理</strong> を追加します。まず、例外のテストですが以下の様に書きます。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>例外とは記述したプログラムが想定していない値を受け取ったり、何らかの障害が発生した場合に処理を中断して、例外オブジェクトを生成して呼び出し元のメソッドに処理を戻す機構です。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; かんたんRuby
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8303,6 +8377,16 @@ Finished in 0.00609s
 <div class="paragraph">
 <p><strong>case式</strong> に該当しない場合は <strong>例外を発生させる</strong> ようにします。</p>
 </div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>例外を明示的に発生させるには「raise」を使います。raiseには発生させたい例外クラスを指定するのですが、何も指定しない場合はRuntimeErrorオブジェクトが生成されます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; かんたんRuby
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
@@ -8335,14 +8419,16 @@ Finished in 0.00609s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">07:04:53 - INFO - Running: all tests
+<pre class="CodeRay highlight"><code data-lang="bash">...
+07:04:53 - INFO - Running: all tests
 Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 16 / 16 LOC (100.0%) covered.
 Started with run options --guard --seed 32508
 
   32/32: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
 Finished in 0.00600s
-32 tests, 35 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+...</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8374,16 +8460,16 @@ $ git commit -m 'test: それ以外のタイプの場合'</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p><strong>TODOリスト</strong> をすべて完了しました。追加仕様を満たすプログラムは出来ましたがまだ改善の余地がありそうですね。以降はオブジェクト指向アプローチによるコードのリファクタリングを解説していきたいと思います。</p>
+<p><strong>TODOリスト</strong> をすべて完了しました。追加仕様を満たすプログラムは出来ましたがまだ改善の余地がありそうですね。以降ではオブジェクト指向アプローチによるコードのリファクタリングを解説していきたいと思います。</p>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_オブジェクト指向">3.1.2. オブジェクト指向</h4>
 <div class="sect4">
-<h5 id="_手続き型">手続き型</h5>
+<h5 id="_手続き型プログラム">手続き型プログラム</h5>
 <div class="paragraph">
-<p>オブジェクト指向の解説の前に以下のコードを御覧いただきたい。いわゆる手続き型で書かれたコードですが、これも追加仕様を満たしています。</p>
+<p>オブジェクト指向の解説の前に以下のコードを御覧ください。いわゆる手続き型で書かれたコードですが、これも追加仕様を満たしています。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8433,9 +8519,19 @@ puts list</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_オブジェクト指向_2">オブジェクト指向</h5>
+<h5 id="_オブジェクト指向プログラム">オブジェクト指向プログラム</h5>
 <div class="paragraph">
 <p>続いて、これまでに作ってきたコードがこちらになります。上記の手続き型コードとの大きな違いとして <code>class</code> というキーワードでくくられている部分があります。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>クラスとは、大まかに説明すると何らかの値と処理（メソッド）をひとかたまりにしたものです。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; かんたんRuby
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8476,7 +8572,7 @@ puts list</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-428f320ab235496eeeb0cec0082ca257.png" alt="diag 428f320ab235496eeeb0cec0082ca257" width="138" height="104">
+<img src="diag-532dd70b01a786c2d7867a5111338540.png" alt="diag 532dd70b01a786c2d7867a5111338540" width="147" height="104">
 </div>
 </div>
 <div class="paragraph">
@@ -8488,7 +8584,20 @@ puts list</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>手続き型コードのフローチャートと比べてどう思われましたか？具体的な記述が少なくデータや処理の概要だけを表現しているけどFizzBuzzのルールを知っている人であれば何をやろうとしているかのイメージはつかみやすいのでは無いでしょうか？これがオブジェクト指向であるというわけではありません、今は <strong>抽象化</strong> がキーワードだという程度の認識で十分です。オブジェクト指向の詳細は控えるとして、ここでは <strong>カプセル化</strong> <strong>ポリモフィズム</strong> <strong>継承</strong> というオブジェクト指向でよく言及される概念をリファクタリングを通して体験してもらい、オブジェクト指向プログラムの感覚を掴んでもらうことを目的に解説を進めて行きたいと思います。</p>
+<p>手続き型コードのフローチャートと比べてどう思われましたか？具体的な記述が少なくデータや処理の概要だけを表現しているけどFizzBuzzのルールを知っている人であれば何をやろうとしているかのイメージはつかみやすいのではないでしょうか？これがオブジェクト指向であるというわけではありません、現時点では <strong>抽象化</strong> がキーワードだという程度の認識で十分です。</p>
+</div>
+<div class="paragraph">
+<p>オブジェクト指向の理解を深める取り掛かりにはこちらの記事を参照してください。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://qiita.com/nrslib/items/73bf176147192c402049" target="_blank" rel="noopener">オブジェクト指向のいろは</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>オブジェクト指向の詳細は控えるとして、ここでは <strong>カプセル化</strong> <strong>ポリモフィズム</strong> <strong>継承</strong> というオブジェクト指向で言及される概念をリファクタリングを通して体験してもらい、オブジェクト指向プログラムの感覚を掴んでもらうことを目的に解説を進めて行きたいと思います。</p>
 </div>
 </div>
 </div>
@@ -8502,7 +8611,21 @@ puts list</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>まず、データとロジックを１つのクラスにまとめていくためのリファクタリングを実施していくとします。<code>FizzBuzz</code> クラスにFizzBuzz配列を保持できるようにするため <strong>フィールドのカプセル化</strong> を適用します。</p>
+<p>まず、データとロジックを１つのクラスにまとめていくためのリファクタリングを実施していくとします。<code>FizzBuzz</code> クラスにFizzBuzz配列を保持できるようして以下のように取得できるようにしたいと思います。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+          fizzbuzz.generate_list
+          <span class="instance-variable">@result</span> = fizzbuzz.list
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>まず、 <strong>インスタンス変数</strong> 追加します。</p>
+</div>
+<div class="paragraph">
+<p>次に <code>self</code> キーワードを外して <strong>クラスメソッド</strong> から <strong>インスタンスメソッド</strong> に変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8542,7 +8665,10 @@ puts list</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
   <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
-  attr_accessor <span class="symbol">:list</span>
+
+  <span class="keyword">def</span> <span class="function">list</span>
+    <span class="instance-variable">@list</span>
+  <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">generate</span>(number, type = <span class="integer">1</span>)
     is_fizz = number.modulo(<span class="integer">3</span>).zero?
@@ -8585,7 +8711,17 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `generate' fo
 </div>
 </div>
 <div class="paragraph">
-<p>FizzBuzz配列を <strong>インスタンス変数</strong> <code>@list</code> に <strong>代入</strong> して <strong>アクセッサメソッド</strong> 経由で取得できるように変更しました。変更に当たり <strong>クラスメソッド</strong> <code>FizzBuzz.generate</code> と <code>FizzBuzz.generate_list</code> を <strong>インスタンスメソッド</strong> に変更しています。それに伴ってテストが失敗して <code>NoMethodError: undefined method `generate'</code> と表示されるようになってしまいました。<code>new</code> メソッドを使ってFizzBuzzクラスの <strong>インスタンス</strong> を作りFizzBuzz配列を <strong>アクセッサメソッド</strong> 経由で取得するようにテストコードを変更します。</p>
+<p>FizzBuzz配列を <strong>インスタンス変数</strong> <code>@list</code> に <strong>代入</strong> して <strong>インスタンス変数</strong> 経由で取得できるように変更しました。変更にあたり <strong>クラスメソッド</strong> <code>FizzBuzz.generate</code> と <code>FizzBuzz.generate_list</code> を <strong>インスタンスメソッド</strong> に変更しています。それに伴ってテストが失敗して <code>NoMethodError: undefined method `generate'</code> と表示されるようになってしまいました。<strong>インスタンスメソッド</strong> が使えるようにするため　<code>new</code> メソッドを使ってFizzBuzzクラスの <strong>インスタンス</strong> を作りFizzBuzz配列を <strong>インスタンス変数</strong> 経由で取得するようにテストコードを変更します。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>クラスとして定義された情報を元に具体的な値を伴ったオブジェクトを作成することをインスタンス化と呼び、生成されたオブジェクトのことをインスタンスと呼びます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; かんたんRuby
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8645,7 +8781,58 @@ Finished in 0.00616s
 </div>
 </div>
 <div class="paragraph">
-<p>テストが直りました。<strong>クラスメソッド</strong> <strong>インスタンスメソッド</strong> <strong>インスタンス変数</strong> <strong>インスタンス</strong> などいろんな単語が出てきて戸惑ってしまったかもしれませんが、ピンとこないうちは <strong>クラス</strong> に値や状態を保持させるためには <strong>インスタンス化</strong> する必要があってそのためには <code>new</code> メソッドを使わないといけないのね程度の理解で十分です。大概のことは手を動かしているうちにピン来るようになります。テストが動作して既存のコードが壊れていないことが確認できたのでここでコミットします。</p>
+<p>テストが直りました。<strong>クラスメソッド</strong> <strong>インスタンスメソッド</strong> <strong>インスタンス変数</strong> <strong>インスタンス</strong> などいろんな単語が出てきて戸惑ってしまったかもしれませんが、ピンとこないうちは <strong>クラス</strong> に値や状態を保持させるためには <strong>インスタンス化</strong> する必要があってそのためには <code>new</code> メソッドを使わないといけないのね程度の理解で十分です。大概のことは手を動かしているうちにピン来るようになります。</p>
+</div>
+<div class="paragraph">
+<p><strong>インスタンス変数</strong> に直接アクセスしているのでここは <strong>アクセッサメソッド</strong> を使って <strong>フィールドのカプセル化</strong> を適用しておきます。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>オブジェクト指向ではクラス内の値をカプセル化することが重要ですが、時には内部で保持しているインスタンス変数を参照や更新できる方が良い場合もあります。複雑な処理ではなく、単にインスタンス変数にアクセスするためのメソッドのことを、アクセッサメソッドと呼びます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; かんたんRuby
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>フィールドのカプセル化</p>
+</div>
+<div class="paragraph">
+<p>公開フィールドがある。</p>
+</div>
+<div class="paragraph">
+<p>それを非公開にして、そのアクセサを用意する。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
+</div>
+<div class="paragraph">
+<p>自動実行の結果、以下のように書き換えられている部分を変更します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuz、</span>
+  <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
+　attr_reader <span class="symbol">:list</span>
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
+  <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
+  attr_accessor <span class="symbol">:list</span>
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストが動作して既存のコードが壊れていないことが確認できたのでここでコミットします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8660,6 +8847,16 @@ $ git commit -m 'refactor: フィールドのカプセル化'</code></pre>
 </div>
 <div class="paragraph">
 <p>引き続き、FizzBuzz配列は保持できるようになりましたがタイプごとに出力される配列のパターンは違います。FizzBuzzクラスにタイプを持たる必要があります。ここでは <strong>コンストラクタ</strong> を使って <strong>インスタンス化</strong> する際に <strong>インスタンス変数</strong> に <strong>代入</strong> するようにします。Rubyでは <strong>initialize</strong> というメソッドを使って初期化処理を実行します。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>クラスをインスタンス化した時に初期化処理を行うシチュエーションはよくあります。このような初期化処理を行うメソッドをコンストラクタと呼び、Rubyではinitializeという特別なメソッドを用意することで実現できます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; かんたんRuby
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8763,24 +8960,11 @@ Finished in 0.00793s
     is_buzz = number.modulo(<span class="integer">5</span>).zero?
 
     <span class="keyword">case</span> <span class="instance-variable">@type</span>
-    <span class="keyword">when</span> <span class="integer">1</span>
-      <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span> <span class="keyword">if</span> is_fizz &amp;&amp; is_buzz
-      <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">Fizz</span><span class="delimiter">'</span></span> <span class="keyword">if</span> is_fizz
-      <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">Buzz</span><span class="delimiter">'</span></span> <span class="keyword">if</span> is_buzz
-
-      number.to_s
-    <span class="keyword">when</span> <span class="integer">2</span>
-      number.to_s
-    <span class="keyword">when</span> <span class="integer">3</span>
-      <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span> <span class="keyword">if</span> is_fizz &amp;&amp; is_buzz
-
-      number.to_s
-    <span class="keyword">else</span>
-      raise <span class="string"><span class="delimiter">'</span><span class="content">該当するタイプは存在しません</span><span class="delimiter">'</span></span>
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>FizzBuzz.gnerate</code> メソッドの <strong>引数</strong> から <code>type</code> を削除します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8808,7 +8992,7 @@ Minitest::UnexpectedError:         ArgumentError: wrong number of arguments (giv
 </div>
 </div>
 <div class="paragraph">
-<p>続いて、<code>FizzBuzz#generate</code> メソッドから不要になった <strong>引数</strong> typeを削除したところテストが壊れたのでテストコードを修正します。</p>
+<p>続いて、<code>FizzBuzz#generate</code> メソッドから不要になった <strong>引数</strong> <code>type</code> を削除したところテストが壊れたのでテストコードを修正します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8908,6 +9092,46 @@ Finished in 0.00700s
 </div>
 </div>
 <div class="paragraph">
+<p><strong>インスタンス変数</strong> の <code>@type</code> も <strong>アクセッサメソッド</strong> を使って <strong>フィールドのカプセル化</strong> を適用しておきます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
+  <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
+  attr_accessor <span class="symbol">:list</span>
+
+  <span class="keyword">def</span> <span class="function">initialize</span>(type)
+    <span class="instance-variable">@type</span> = type
+  <span class="keyword">end</span>
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
+  <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
+  attr_accessor <span class="symbol">:list</span>
+  attr_accessor <span class="symbol">:type</span>
+
+  <span class="keyword">def</span> <span class="function">initialize</span>(type)
+    <span class="instance-variable">@type</span> = type
+  <span class="keyword">end</span>
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">...
+Started with run options --guard --seed 56315
+
+  32/32: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01069s
+32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>コミットしておきます。</p>
 </div>
 <div class="listingblock">
@@ -8927,6 +9151,7 @@ $ git commit -m 'refactor: フィールドのカプセル化'</code></pre>
 <pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
   <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
   attr_accessor <span class="symbol">:list</span>
+  attr_accessor <span class="symbol">:type</span>
 ...</code></pre>
 </div>
 </div>
@@ -8968,13 +9193,30 @@ $ git commit -m 'refactor: フィールドのカプセル化'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>FizzBuzz配列が初期化されてしまいました。<strong>アクセッサメソッド</strong> に参照のための <strong>getter</strong> と 更新するための <strong>setter</strong> が許可されているため　<strong>カプセル化</strong> が破られてしまいました。ここは <strong>setterの削除</strong> を適用して外部からの更新を出来ないようにしておきましょう。Rubyでは以下のようにして <strong>インスタンス変数</strong> を読み取り専用にします。</p>
+<p>FizzBuzz配列が初期化されてしまいました。<strong>アクセッサメソッド</strong> に参照のための <strong>getter</strong> と 更新するための <strong>setter</strong> が許可されているため　<strong>カプセル化</strong> が破られてしまいました。ここは <strong>setterの削除</strong> を適用して外部からの更新を出来ないようにしておきましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>setterの削除</p>
+</div>
+<div class="paragraph">
+<p>setterが用意されているということは、フィールドが変更される可能性があることを意味します。オブジェクトを生成した後でフィールドを変更したくないなら、setterは用意しません（加えて、フィールドを変更不可にします）。そうすることで、フィールドはコンストラクタでのみで設定され、変更させないという意図が明確になって、フィールドが変更される可能性を、たいていは排除できます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版)
+</div>
+</div>
+<div class="paragraph">
+<p>Rubyでは以下のようにして <strong>インスタンス変数</strong> を読み取り専用にします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
   <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
   attr_reader <span class="symbol">:list</span>
+  attr_accessor <span class="symbol">:type</span>
 ...</code></pre>
 </div>
 </div>
@@ -8988,7 +9230,35 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `list=' for #
 </div>
 </div>
 <div class="paragraph">
-<p>更新メソッドは存在しませんというエラーに変わったことが確認できたのでテストを元にもどしてテストが壊れていないことを確認したらコミットします。</p>
+<p>更新メソッドは存在しませんというエラーに変わったことが確認できたのでテストを元にもどします。</p>
+</div>
+<div class="paragraph">
+<p>同様に <strong>インスタンス変数</strong> の <code>@type</code> も読み取り専用にします。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
+  <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
+  attr_reader <span class="symbol">:list</span>
+  attr_reader <span class="symbol">:type</span>
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">...
+04:32:06 - INFO - Running: all tests
+Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 22 / 22 LOC (100.0%) covered.
+Started with run options --guard --seed 20902
+
+  32/32: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00920s
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストが壊れていないことを確認したらコミットします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8998,7 +9268,7 @@ $ git commit -m 'refactor: setterの削除'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-1fa9697e7ac9ce563b8ccefe66b065a5.png" alt="diag 1fa9697e7ac9ce563b8ccefe66b065a5" width="138" height="130">
+<img src="diag-d857c2570af80a610c2a0d666fd904e0.png" alt="diag d857c2570af80a610c2a0d666fd904e0" width="147" height="130">
 </div>
 </div>
 </div>
@@ -9009,7 +9279,7 @@ $ git commit -m 'refactor: setterの削除'</code></pre>
 <h5 id="_ポリモーフィズムによる条件記述の置き換え_1">ポリモーフィズムによる条件記述の置き換え 1</h5>
 <div class="imageblock">
 <div class="content">
-<img src="diag-1fa9697e7ac9ce563b8ccefe66b065a5.png" alt="diag 1fa9697e7ac9ce563b8ccefe66b065a5" width="138" height="130">
+<img src="diag-d857c2570af80a610c2a0d666fd904e0.png" alt="diag d857c2570af80a610c2a0d666fd904e0" width="147" height="130">
 </div>
 </div>
 <div class="paragraph">
@@ -13804,7 +14074,7 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 <div class="sect3">
 <h4 id="_ふりかえり_2">3.1.11. ふりかえり</h4>
 <div class="sect4">
-<h5 id="_オブジェクト指向プログラム">オブジェクト指向プログラム</h5>
+<h5 id="_オブジェクト指向プログラム_2">オブジェクト指向プログラム</h5>
 
 </div>
 <div class="sect4">
@@ -13960,7 +14230,7 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-05 18:48:34 JST
+Last updated 2020-02-06 09:30:36 JST
 </div>
 </div>
 </body>
