@@ -4025,31 +4025,31 @@ class FizzBuzz {
     MAX_NUMBER = 100
     list
     type
-    generate()
+    generate(number)
     generate_list()
 }
 class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 class FizzBuzzList {
    value
@@ -4065,7 +4065,43 @@ FizzBuzzList *-- FizzBuzzValue
 FizzBuzz -> FizzBuzzList
 ----
 
-*値オブジェクト* 及び *ファーストクラスコレクション* の適用で *基本データ型への執着* の臭いはなくなりました。今度は設計の観点から全体を眺めてみましょう。ここで気になるのが `FizzBuzz` クラスです。このクラスは他のクラスと比べてやることが多いようです。このようなクラスは *単一責任の原則* に違反している可能性があります。そこで *デザインパターン* の１つである *Commandパターン* を使ったリファクタリングを適用してみようと思います。
+*値オブジェクト* 及び *ファーストクラスコレクション* の適用で *基本データ型への執着* の臭いはなくなりました。今度は設計の観点から全体を眺めてみましょう。ここで気になるのが `FizzBuzz` クラスです。このクラスは他のクラスと比べてやることが多いようです。このようなクラスは *単一責任の原則* に違反している可能性があります。そこで *デザインパターン* の１つである *Commandパターン* を使ったリファクタリングである *メソッドオブジェクトによるメソッドの置き換え* 適用してみようと思います。
+
+[quote, Clean Architecture 達人に学ぶソフトウェアの構造と設計]
+____
+SRP: 単一責任の原則
+
+かつて単一責任の原則(SRP)は、以下のように語られてきた。
+
+  モジュールを変更する理由はたったひとつだけであるべきである
+
+ソフトウェアシステムに手を加えるのは、ユーザーやステークホルダーを満足させるためだ。この「ユーザーやステークホルダー」こそが、単一責任の原則（SRP）を指す「変更する理由」である。つまり、この原則は以下のように言い換えられる。
+
+  モジュールはたったひとりのユーザーやステークホルダーに対して責任を負うべきである。
+
+残念ながら「たったひとりのユーザーやステークホルダー」という表現は適切ではない。複数のユーザーやステークホルダーがシステムを同じように変更したいと考えることもある。ここでは、変更を望む人たちをひとまとめにしたグループとして扱いたい。このグループのことをアクターと呼ぶことにしよう。
+
+  モジュールはたったひとつのアクターに対して責任を負うべきである。
+
+残念さて、ここでいう「モジュール」とは何のことだろう？端的に言えば、モジュールとはソースファイルのことである。たいていの場合は、この定義で問題ないだろう。だが、ソースファイル以外のところにコードを格納する言語や開発環境も存在する。そのような場合の「モジュール」は、いくつかの関数やデータをまとめた凝集性のあるものだと考えよう。
+____
+
+[quote, テスト駆動開発]
+____
+Commandパターン
+
+処理の呼び出しが、シンプルなメソッド呼び出しよりも複雑になってきたときはどうすればよいだろうか---処理のためのオブジェクトを作成し、それを起動するようにしよう。
+____
+
+[quote, 新装版 リファクタリング]
+____
+メソッドオブジェクトによるメソッドの置き換え
+
+長いメソッドで、「メソッドの抽出」を適用できないようなローカル変数の使い方をしている。
+
+メソッド自身をオブジェクトとし、すべてのローカル変数をそのオブジェクトのフィールドとする。そうすれば、そのメソッドを同じオブジェクト中のメソッド群に分解できる。
+____
+
 
 ===== メソッドオブジェクトによるメソッドの置き換え
 
@@ -4246,6 +4282,7 @@ Finished in 0.00692s
  0/0 files |======================================= 100 =======================================>| Time: 00:00:00 
 ----
 
+`FizzBuzzValueCommand` の抽出ができたのでコミットしておきます。
 
 [source, bash]
 ----
@@ -4259,31 +4296,31 @@ class FizzBuzz {
     MAX_NUMBER = 100
     list
     type
-    generate()
+    generate(number)
     generate_list()
 }
 class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 class FizzBuzzList {
    value
@@ -4376,31 +4413,31 @@ class FizzBuzz {
     MAX_NUMBER = 100
     list
     type
-    generate()
+    generate(number)
     generate_list()
 }
 class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 class FizzBuzzList {
    value
@@ -4580,24 +4617,24 @@ class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 class FizzBuzzList {
    value
@@ -4629,7 +4666,7 @@ FizzBuzzCommand *- FizzBuzzType
 
 ===== デザインパターン
 
-*メソッドオブジェクトによるメソッドの置き換え* リファクタリングの結果として *Commandパターン* という *デザインパターン* を適用しました。実はこれまでにも *オブジェクトによるプリミティブの置き換え* では *Value Objectパターン* を *ポリモーフィズムによる条件記述の置き換え* では *Factory Methodパターン* をそして、*サブクラスによるタイプコードの置き換え* から *委譲の隠蔽* の実施による *State/Strategyによるタイプコードの置き換え* では *State/Strategyパターン* を適用しています。
+*メソッドオブジェクトによるメソッドの置き換え* リファクタリングの結果として *Commandパターン* という *デザインパターン* を適用しました。実はこれまでにも *オブジェクトによるプリミティブの置き換え* では *Value Objectパターン* を *ポリモーフィズムによる条件記述の置き換え* では *Factory Methodパターン* をそして、 *委譲の隠蔽* の実施による *State/Strategyによるタイプコードの置き換え* では *Strategyパターン* を適用しています。
 
 https://ja.wikipedia.org/wiki/Command_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3[Command パターン^]
 [plantuml]
@@ -4654,6 +4691,20 @@ Client -> Receiver
 Client -> ConcreateCommand
 ----
 
+[quote, テスト駆動開発]
+____
+Value Objectパターン
+
+広く共有されるものの、同一インスタンスであることはさほど重要でないオブジェクトを設計するにはどうしたらよいだろうか----オブジェクト作成時に状態を設定したら、その後決して変えないようにする。オブジェクトへの操作は必ず新しいオブジェクトを返すようにしよう。
+____
+
+[quote, テスト駆動開発]
+____
+Factory Methodパターン
+
+オブジェクト作成に柔軟性をもたせたいときは、どうすればよいだろうか---単にコンストラクタで作るのではなく、メソッドを使ってオブジェクトを作成しよう。
+____
+
 https://ja.wikipedia.org/wiki/Strategy_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3[Strategy パターン^]
 [plantuml]
 ----
@@ -4674,7 +4725,12 @@ Strategy <|-- ConcreateStrategyA
 Strategy <|-- ConcreateStrategyB
 ----
 
-パターンと完全に一致しているわけではありませんし、Rubyのような動的言語ではもっと簡単な実現方法もありますがここでは先人の考えた設計パターンというものがありオブジェクト指向の共通語として使えることそしてテスト駆動開発では一般的な設計アプローチとは異なる形で導かれているということくらいを頭に残しておけば結構です。どのパターンをいつ適用するかはリファクタリングを繰り返しているうちに思いつくようになってきます（多分）。
+パターンと完全に一致しているわけではありませんし、Rubyのような動的言語ではもっと簡単な実現方法もありますがここでは先人の考えた設計パターンというものがありオブジェクト指向設計の https://ja.wikipedia.org/wiki/%E3%82%A4%E3%83%87%E3%82%A3%E3%82%AA%E3%83%A0[イデオム^] として使えること。そしてテスト駆動開発では一般的な設計アプローチとは異なる形で導かれているということくらいを頭に残しておけば結構です。どのパターンをいつ適用するかはリファクタリングを繰り返しているうちに思いつくようになってきます（多分）。
+
+[quote, テスト駆動開発]
+____
+ただ、書籍『デザインパターン』（通称Gof本）の大ヒットは、その反面、それらパターンを表現する方法の多様性を奪ってしまった。Gof本には、設計をフェーズとして扱うという暗黙の前提があるように見受けられる。つまり、リファクタリングを設計行為として捉えていない。TDDにおける設計は、デザインパターンを少しだけ違う側面から捉えなければならない。
+____
 
 あと、設計の観点から今回 *単一責任の原則* に従って `FizzBuzz` クラスを *メソッドオブジェクト* に分割して削除しました。
 
@@ -4720,7 +4776,20 @@ FizzBuzzCommand <|-- FizzBuzzListCommand
 FizzBuzzCommand *- FizzBuzzType
 ----
 
-このように既存のコードを変更することなく振る舞いを変更できるので *開放/閉鎖原則* を満たしています。
+このように既存のコードを変更することなく振る舞いを変更できるので *オープン・クローズドの原則* を満たした設計といえます。
+
+[quote, Clean Architecture 達人に学ぶソフトウェアの構造と設計]
+____
+OCP:オープン・クローズドの原則
+
+「オープン・クローズドの原則（OCP）」は、1988年にBertrand Maeerが提唱した以下のような原則だ。
+
+  ソフトウェアの構成要素は拡張に対しては開いていて、修正に対しては閉じていなければならない。
+  　　　　　　　　　　　　『アジャイルソフトウェア開発の奥義　第2版』（SBクリエイティブ）より引用
+
+言い換えれば、ソフトウェアの振る舞いは、既存の成果物を変更せず拡張できるようにすべきである、ということだ。
+____
+
 
 ==== 例外
 
@@ -4730,24 +4799,24 @@ class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 class FizzBuzzList {
    value
@@ -4777,7 +4846,7 @@ FizzBuzzListCommand --> FizzBuzzList
 FizzBuzzCommand *- FizzBuzzType
 ----
 
-ここまでは、正常系をリファクタリングしてきました。しかし、アプリケーションは例外系も考慮する必要があります。
+ここまでは、正常系をリファクタリングして設計を改善してきました。しかし、アプリケーションは例外系も考慮する必要があります。
 続いて、例外系のリファクタリングに取り組むとしましょう。
 
 ===== アサーションの導入
