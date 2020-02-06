@@ -3100,13 +3100,34 @@ FizzBuzz -> FizzBuzzType
 fizz_buzz = FizzBuzz.new(1)
 ----
 
+[quote, かんたんRuby]
+____
+クラスとして定義された情報を元に具体的な値を伴ったオブジェクトを作成することをインスタンス化と呼び、生成されたオブジェクトのことをインスタンスと呼びます。
+____
+
 *コンストラクタ* の *引数* に渡される `1` は何を表しているのでしょうか？もちろんタイプですが初めてこのコードを見る人にはわからないでしょう。このような整数、浮動小数点、文字列などの基本データ（プリミティブ）型の使い方からは *基本データ型への執着* の臭いがします。 *オブジェクトによるプリミティブの置き換え* を実施してコードの意図を明確にしましょう。
+
+[quote, 新装版 リファクタリング]
+____
+基本データ型への執着
+
+オブジェクト指向のメリットとして、基本データ型とそれより大きなクラスとの境界を取り除くということがあります。プログラミング言語の組み込み（built-in）型と区別できないような小さなクラスを自分で定義することが容易です。
+____
+
+[quote, リファクタリング(第2版)]
+____
+基本データ型への執着
+
+興味深いことに、多くのプログラマは、対象としているドメインに役立つ、貨幣、座標、範囲などの基本的な型を導入するのを嫌がる傾向があります。
+____
+
 
 [source, ruby]
 ----
 class FizzBuzz
   MAX_NUMBER = 100
   attr_reader :list
+  attr_reader :type
 
   def initialize(type)
     @type = FizzBuzzType.create(type)
@@ -3119,6 +3140,7 @@ class FizzBuzz
 class FizzBuzz
   MAX_NUMBER = 100
   attr_reader :list
+  attr_reader :type
 
   def initialize(type)
     @type = type
@@ -3249,22 +3271,22 @@ class FizzBuzz {
     MAX_NUMBER = 100
     list
     type
-    generate()
+    generate(number)
     generate_list()
 }
 class FizzBuzzType {
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-    generate()
+    generate(number)
 }
 class FizzBuzzType02 {
-    generate()
+    generate(number)
 }
 class FizzBuzzType03 {
-    generate()
+    generate(number)
 }
 FizzBuzzType <|-- FizzBuzzType01
 FizzBuzzType <|-- FizzBuzzType02
@@ -3298,7 +3320,6 @@ class FizzBuzzType
 [source, ruby]
 ----
 ...
-
 class FizzBuzzType
   TYPE_01 = 1
   TYPE_02 = 2
@@ -3331,6 +3352,8 @@ Finished in 0.00909s
 32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+テストは壊れていないのでコミットします。
+
 [source, bash]
 ----
 $ git add .
@@ -3345,25 +3368,25 @@ class FizzBuzz {
     MAX_NUMBER = 100
     list
     type
-    generate()
+    generate(number)
     generate_list()
 }
 class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-    generate()
+    generate(number)
 }
 class FizzBuzzType02 {
-    generate()
+    generate(number)
 }
 class FizzBuzzType03 {
-    generate()
+    generate(number)
 }
 FizzBuzzType <|-- FizzBuzzType01
 FizzBuzzType <|-- FizzBuzzType02
@@ -3371,7 +3394,7 @@ FizzBuzzType <|-- FizzBuzzType03
 FizzBuzz *- FizzBuzzType
 ----
 
-次に *基本データ型への執着* の臭いがする箇所として `FizzBuzz#generate` メソッドが返すFizzBuzzの値が文字型である点です。*値オブジェクト* `FizzBuzzValue` を返すように変更します。
+次に *基本データ型への執着* の臭いがする箇所として `FizzBuzz#generate` メソッドが返すFizzBuzzの値が文字型である点です。文字列の代わりに *値オブジェクト* `FizzBuzzValue` を定義します。
 
 [source, ruby]
 ----
@@ -3401,33 +3424,35 @@ end
 [source, ruby]
 ----
 ...
-class FizzBuzzType
-  TYPE_01 = 1
-  TYPE_02 = 2
-  TYPE_03 = 3
+class FizzBuzzType01 < FizzBuzzType
+  def generate(number)
+    return 'FizzBuzz' if fizz?(number) && buzz?(number)
+    return 'Fizz' if fizz?(number)
+    return 'Buzz' if buzz?(number)
 
-  def self.create(type)
-    case type
-    when FizzBuzzType::TYPE_01
-      FizzBuzzType01.new
-    when FizzBuzzType::TYPE_02
-      FizzBuzzType02.new
-    when FizzBuzzType::TYPE_03
-      FizzBuzzType03.new
-    else
-      raise '該当するタイプは存在しません'
-    end
-  end
-
-  def fizz?(number)
-    number.modulo(3).zero?
-  end
-
-  def buzz?(number)
-    number.modulo(5).zero?
+    number.to_s
   end
 end
 
+class FizzBuzzType02 < FizzBuzzType
+  def generate(number)
+    number.to_s
+  end
+end
+
+class FizzBuzzType03 < FizzBuzzType
+  def generate(number)
+    return 'FizzBuzz' if fizz?(number) && buzz?(number)
+
+    number.to_s
+  end
+end
+...
+----
+
+[source, ruby]
+----
+...
 class FizzBuzzType01 < FizzBuzzType
   def generate(number)
     return FizzBuzzValue.new(number, 'FizzBuzz') if fizz?(number) && buzz?(number)
@@ -3627,7 +3652,7 @@ Finished in 0.00619s
 0 files inspected, no offenses detected
 ----
 
-テストコードをそれほど変更することなく　*値オブジェクト* を返すリファクタリングが出来ました。コミットしておきましょう。
+テストコードをそれほど変更することなく *値オブジェクト* を返すリファクタリングが出来ました。コミットしておきましょう。
 
 [source, bash]
 ----
@@ -3641,31 +3666,31 @@ class FizzBuzz {
     MAX_NUMBER = 100
     list
     type
-    generate()
+    generate(number)
     generate_list()
 }
 class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 FizzBuzzType <|-- FizzBuzzType01
 FizzBuzzType <|-- FizzBuzzType02

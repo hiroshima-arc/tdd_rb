@@ -10502,14 +10502,51 @@ $ git commit -m 'refactor: メソッドの移動'</code></pre>
 <pre class="CodeRay highlight"><code data-lang="ruby">fizz_buzz = <span class="constant">FizzBuzz</span>.new(<span class="integer">1</span>)</code></pre>
 </div>
 </div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>クラスとして定義された情報を元に具体的な値を伴ったオブジェクトを作成することをインスタンス化と呼び、生成されたオブジェクトのことをインスタンスと呼びます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; かんたんRuby
+</div>
+</div>
 <div class="paragraph">
 <p><strong>コンストラクタ</strong> の <strong>引数</strong> に渡される <code>1</code> は何を表しているのでしょうか？もちろんタイプですが初めてこのコードを見る人にはわからないでしょう。このような整数、浮動小数点、文字列などの基本データ（プリミティブ）型の使い方からは <strong>基本データ型への執着</strong> の臭いがします。 <strong>オブジェクトによるプリミティブの置き換え</strong> を実施してコードの意図を明確にしましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>基本データ型への執着</p>
+</div>
+<div class="paragraph">
+<p>オブジェクト指向のメリットとして、基本データ型とそれより大きなクラスとの境界を取り除くということがあります。プログラミング言語の組み込み（built-in）型と区別できないような小さなクラスを自分で定義することが容易です。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>基本データ型への執着</p>
+</div>
+<div class="paragraph">
+<p>興味深いことに、多くのプログラマは、対象としているドメインに役立つ、貨幣、座標、範囲などの基本的な型を導入するのを嫌がる傾向があります。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版)
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
   <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
   attr_reader <span class="symbol">:list</span>
+  attr_reader <span class="symbol">:type</span>
 
   <span class="keyword">def</span> <span class="function">initialize</span>(type)
     <span class="instance-variable">@type</span> = <span class="constant">FizzBuzzType</span>.create(type)
@@ -10522,6 +10559,7 @@ $ git commit -m 'refactor: メソッドの移動'</code></pre>
 <pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
   <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
   attr_reader <span class="symbol">:list</span>
+  attr_reader <span class="symbol">:type</span>
 
   <span class="keyword">def</span> <span class="function">initialize</span>(type)
     <span class="instance-variable">@type</span> = type
@@ -10653,7 +10691,7 @@ $ git commit -m 'refactor: オブジェクトによるプリミティブの置�
 <h5 id="_マジックナンバーの置き換え">マジックナンバーの置き換え</h5>
 <div class="imageblock">
 <div class="content">
-<img src="diag-8c51b913766b480e52dc0ad218c5e29a.png" alt="diag 8c51b913766b480e52dc0ad218c5e29a" width="470" height="251">
+<img src="diag-c24dbdafdc4766204e9b3fba9938dbba.png" alt="diag c24dbdafdc4766204e9b3fba9938dbba" width="470" height="251">
 </div>
 </div>
 <div class="paragraph">
@@ -10684,7 +10722,6 @@ $ git commit -m 'refactor: オブジェクトによるプリミティブの置�
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
-
 <span class="keyword">class</span> <span class="class">FizzBuzzType</span>
   <span class="constant">TYPE_01</span> = <span class="integer">1</span>
   <span class="constant">TYPE_02</span> = <span class="integer">2</span>
@@ -10717,6 +10754,9 @@ Finished in 0.00909s
 32 tests, 35 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストは壊れていないのでコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
@@ -10728,11 +10768,11 @@ $ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
 <h5 id="_オブジェクトによるプリミティブの置き換え_2">オブジェクトによるプリミティブの置き換え</h5>
 <div class="imageblock">
 <div class="content">
-<img src="diag-f981c240a38685122123bac1bc1d6cea.png" alt="diag f981c240a38685122123bac1bc1d6cea" width="470" height="264">
+<img src="diag-be7c345eb3b4de2cc3b4530da0d96f5d.png" alt="diag be7c345eb3b4de2cc3b4530da0d96f5d" width="470" height="264">
 </div>
 </div>
 <div class="paragraph">
-<p>次に <strong>基本データ型への執着</strong> の臭いがする箇所として <code>FizzBuzz#generate</code> メソッドが返すFizzBuzzの値が文字型である点です。<strong>値オブジェクト</strong> <code>FizzBuzzValue</code> を返すように変更します。</p>
+<p>次に <strong>基本データ型への執着</strong> の臭いがする箇所として <code>FizzBuzz#generate</code> メソッドが返すFizzBuzzの値が文字型である点です。文字列の代わりに <strong>値オブジェクト</strong> <code>FizzBuzzValue</code> を定義します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -10763,33 +10803,35 @@ $ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">FizzBuzzType</span>
-  <span class="constant">TYPE_01</span> = <span class="integer">1</span>
-  <span class="constant">TYPE_02</span> = <span class="integer">2</span>
-  <span class="constant">TYPE_03</span> = <span class="integer">3</span>
+<span class="keyword">class</span> <span class="class">FizzBuzzType01</span> &lt; <span class="constant">FizzBuzzType</span>
+  <span class="keyword">def</span> <span class="function">generate</span>(number)
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span> <span class="keyword">if</span> fizz?(number) &amp;&amp; buzz?(number)
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">Fizz</span><span class="delimiter">'</span></span> <span class="keyword">if</span> fizz?(number)
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">Buzz</span><span class="delimiter">'</span></span> <span class="keyword">if</span> buzz?(number)
 
-  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">create</span>(type)
-    <span class="keyword">case</span> type
-    <span class="keyword">when</span> <span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>
-      <span class="constant">FizzBuzzType01</span>.new
-    <span class="keyword">when</span> <span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_02</span>
-      <span class="constant">FizzBuzzType02</span>.new
-    <span class="keyword">when</span> <span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_03</span>
-      <span class="constant">FizzBuzzType03</span>.new
-    <span class="keyword">else</span>
-      raise <span class="string"><span class="delimiter">'</span><span class="content">該当するタイプは存在しません</span><span class="delimiter">'</span></span>
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">fizz?</span>(number)
-    number.modulo(<span class="integer">3</span>).zero?
-  <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">buzz?</span>(number)
-    number.modulo(<span class="integer">5</span>).zero?
+    number.to_s
   <span class="keyword">end</span>
 <span class="keyword">end</span>
 
+<span class="keyword">class</span> <span class="class">FizzBuzzType02</span> &lt; <span class="constant">FizzBuzzType</span>
+  <span class="keyword">def</span> <span class="function">generate</span>(number)
+    number.to_s
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FizzBuzzType03</span> &lt; <span class="constant">FizzBuzzType</span>
+  <span class="keyword">def</span> <span class="function">generate</span>(number)
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span> <span class="keyword">if</span> fizz?(number) &amp;&amp; buzz?(number)
+
+    number.to_s
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
 <span class="keyword">class</span> <span class="class">FizzBuzzType01</span> &lt; <span class="constant">FizzBuzzType</span>
   <span class="keyword">def</span> <span class="function">generate</span>(number)
     <span class="keyword">return</span> <span class="constant">FizzBuzzValue</span>.new(number, <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span>) <span class="keyword">if</span> fizz?(number) &amp;&amp; buzz?(number)
@@ -10991,7 +11033,7 @@ Finished in 0.00619s
 </div>
 </div>
 <div class="paragraph">
-<p>テストコードをそれほど変更することなく　<strong>値オブジェクト</strong> を返すリファクタリングが出来ました。コミットしておきましょう。</p>
+<p>テストコードをそれほど変更することなく <strong>値オブジェクト</strong> を返すリファクタリングが出来ました。コミットしておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -11001,7 +11043,7 @@ $ git commit -m 'refactor: オブジェクトによるプリミティブの置�
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-6784eef3a06015b3afd514181ea55821.png" alt="diag 6784eef3a06015b3afd514181ea55821" width="470" height="264">
+<img src="diag-719d1727313ce1fe35a0a3eaeca9a624.png" alt="diag 719d1727313ce1fe35a0a3eaeca9a624" width="470" height="264">
 </div>
 </div>
 </div>
