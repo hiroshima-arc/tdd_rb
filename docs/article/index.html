@@ -622,8 +622,8 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_ポリモーフィズムによる条件記述の置き換え_1">ポリモーフィズムによる条件記述の置き換え 1</a></li>
 <li><a href="#_ポリモーフィズムによる条件記述の置き換え_2">ポリモーフィズムによる条件記述の置き換え 2</a></li>
 <li><a href="#_ポリモーフィズムによる条件記述の置き換え_3">ポリモーフィズムによる条件記述の置き換え 3</a></li>
-<li><a href="#_サブクラスによるタイプコードの置き換え">サブクラスによるタイプコードの置き換え</a></li>
-<li><a href="#_委譲の隠蔽">委譲の隠蔽</a></li>
+<li><a href="#_ポリモーフィズムによる条件記述の置き換え_4">ポリモーフィズムによる条件記述の置き換え 4</a></li>
+<li><a href="#_state_strategyによるタイプコードの置き換え">State/Strategyによるタイプコードの置き換え</a></li>
 </ul>
 </li>
 <li><a href="#_継承">3.1.5. 継承</a>
@@ -8572,7 +8572,7 @@ puts list</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-532dd70b01a786c2d7867a5111338540.png" alt="diag 532dd70b01a786c2d7867a5111338540" width="147" height="104">
+<img src="diag-c63943e73aed75ba31adf85779eaf481.png" alt="diag c63943e73aed75ba31adf85779eaf481" width="138" height="104">
 </div>
 </div>
 <div class="paragraph">
@@ -8607,7 +8607,7 @@ puts list</code></pre>
 <h5 id="_フィールドのカプセル化">フィールドのカプセル化</h5>
 <div class="imageblock">
 <div class="content">
-<img src="diag-428f320ab235496eeeb0cec0082ca257.png" alt="diag 428f320ab235496eeeb0cec0082ca257" width="138" height="104">
+<img src="diag-c63943e73aed75ba31adf85779eaf481.png" alt="diag c63943e73aed75ba31adf85779eaf481" width="138" height="104">
 </div>
 </div>
 <div class="paragraph">
@@ -8842,7 +8842,7 @@ $ git commit -m 'refactor: フィールドのカプセル化'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-4aa8394c1d393b83d9ac6531ee8f0936.png" alt="diag 4aa8394c1d393b83d9ac6531ee8f0936" width="138" height="117">
+<img src="diag-102c44abf73ca5bda6fd8b87cc722ac9.png" alt="diag 102c44abf73ca5bda6fd8b87cc722ac9" width="138" height="117">
 </div>
 </div>
 <div class="paragraph">
@@ -9268,7 +9268,7 @@ $ git commit -m 'refactor: setterの削除'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-d857c2570af80a610c2a0d666fd904e0.png" alt="diag d857c2570af80a610c2a0d666fd904e0" width="147" height="130">
+<img src="diag-a8b45c800de2a31873f9eba1feac2184.png" alt="diag a8b45c800de2a31873f9eba1feac2184" width="138" height="130">
 </div>
 </div>
 </div>
@@ -9279,11 +9279,11 @@ $ git commit -m 'refactor: setterの削除'</code></pre>
 <h5 id="_ポリモーフィズムによる条件記述の置き換え_1">ポリモーフィズムによる条件記述の置き換え 1</h5>
 <div class="imageblock">
 <div class="content">
-<img src="diag-d857c2570af80a610c2a0d666fd904e0.png" alt="diag d857c2570af80a610c2a0d666fd904e0" width="147" height="130">
+<img src="diag-a8b45c800de2a31873f9eba1feac2184.png" alt="diag a8b45c800de2a31873f9eba1feac2184" width="138" height="130">
 </div>
 </div>
 <div class="paragraph">
-<p>リファクタリングによりデータとロジックを１つのクラスにまとめて <strong>カプセル化</strong> を進めることが出来ました。しかし、以下の警告メッセージが表示されたままです。<strong>ポリモーフィズム</strong> によるロジックのリファクタリングを実施していきましょう。</p>
+<p>リファクタリングによりデータとロジックを１つのクラスにまとめて <strong>カプセル化</strong> を進めることが出来ました。しかし、以下の警告メッセージが表示されたままです。<strong>ポリモーフィズム</strong> を使ったロジックのリファクタリングを実施していきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9342,7 +9342,49 @@ lib/fizz_buzz.rb:11:3: C: Metrics/PerceivedComplexity: Perceived complexity for 
 </div>
 </div>
 <div class="paragraph">
-<p>コードの不吉な臭いである <strong>重複したスイッチ文</strong> に該当するコードのようなのでここはリファクタリングカタログに従って <strong>ポリモーフィズムによる条件記述の置き換え</strong> を適用していきましょう。比較的大きなリファクタリングなのでいくつかのステップに分けて進めていきます。</p>
+<p>コードの不吉な臭いである <strong>スイッチ文</strong> に該当するコードのようなのでここはリファクタリングカタログに従って <strong>ポリモーフィズムによる条件記述の置き換え</strong> を適用していきましょう。比較的大きなリファクタリングなのでいくつかのステップに分けて進めていきます。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>スイッチ文</p>
+</div>
+<div class="paragraph">
+<p>オブジェクト指向プログラミングのメリットして、スイッチ文が従来にくらべて少なくなるということがあります。スイッチ文は重複したコードを生み出す問題児です。コードのあちらこちらに同じようなスイッチ文が見られることがあります。これでは新たな分岐を追加したときに、すべてのスイッチ文を探して似たような変更をしていかなければなりません。オブジェクト指向ではポリモーフィズムを使い、この問題をエレガントに解決できます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>重複したスイッチ文</p>
+</div>
+<div class="paragraph">
+<p>最近はポリモーフィズムも一般的となり、15年前に比べるとswitch文が単純に赤信号というわけでもなくなりました。また、多くのプログラミング言語が、基本データ型以外をサポートする、より洗練されたswitch文を提供してきています。そこで、今後問題とするのは、重複したswitch文のみとします。switch/case文や、ネストしたif/else文の形で、コードのさまざまな箇所に同じ条件分岐ロジックが書かれていれば、それは「不吉な臭い」です。重複した条件分岐が問題なのは、新たな分岐を追加したら、すべての重複した条件分岐を探して更新指定かなけれけならないからです。ポリモーフィズムは、そうした単調な繰り返しに誘うダークフォースに対抗するための、洗練された武器です。コードベースをよりモダンにしていきましょう。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版)
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>ポリモーフィズムによる条件記述の置き換え</p>
+</div>
+<div class="paragraph">
+<p>オブジェクトのタイプによって異なる振る舞いを選択する条件記述がある。</p>
+</div>
+<div class="paragraph">
+<p>条件記述の各アクション部をサブクラスでオーバーライドするメソッドに移動する。元のメソッドはabstractにする。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9360,6 +9402,7 @@ lib/fizz_buzz.rb:11:3: C: Metrics/PerceivedComplexity: Perceived complexity for 
 <pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
   <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
   attr_reader <span class="symbol">:list</span>
+  attr_reader <span class="symbol">:type</span>
 
   <span class="keyword">def</span> <span class="function">initialize</span>(type)
     <span class="instance-variable">@type</span> = type
@@ -9391,14 +9434,14 @@ $ git commit -m 'refactor(WIP): ポリモーフィズムによる条件記述の
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-58dc9cca953a08db2f3f6d80116b0b79.png" alt="diag 58dc9cca953a08db2f3f6d80116b0b79" width="627" height="191">
+<img src="diag-c83e15398192d4cb68c948dfda55870b.png" alt="diag c83e15398192d4cb68c948dfda55870b" width="627" height="191">
 </div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_ポリモーフィズムによる条件記述の置き換え_2">ポリモーフィズムによる条件記述の置き換え 2</h5>
 <div class="paragraph">
-<p>続いて、各タイプクラスにメソッドを実装します。ここでは <strong>case式</strong> の各処理をコピー&amp;ペーストしています。カット&amp;ペーストするとプロダクトコードが壊れたままリファクタリングを進めることになるのでここは慎重に進めていきます。</p>
+<p>続いて、各タイプクラスに <strong>インスタンスメソッド</strong> を実装します。ここでは <strong>case式</strong> の各処理をコピー&amp;ペーストしています。カット&amp;ペーストするとプロダクトコードが壊れたままリファクタリングを進めることになるのでここは慎重に進めていきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9415,7 +9458,7 @@ $ git commit -m 'refactor(WIP): ポリモーフィズムによる条件記述の
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
 <span class="keyword">class</span> <span class="class">FizzBuzzType01</span>
-  <span class="keyword">def</span> <span class="function">generate</span>(numbber)
+  <span class="keyword">def</span> <span class="function">generate</span>(number)
     is_fizz = number.modulo(<span class="integer">3</span>).zero?
     is_buzz = number.modulo(<span class="integer">5</span>).zero?
 
@@ -9449,7 +9492,7 @@ $ git commit -m 'refactor(WIP): ポリモーフィズムによる条件記述の
     is_buzz = number.modulo(<span class="integer">5</span>).zero?
 
     <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">FizzBuzz</span><span class="delimiter">'</span></span> <span class="keyword">if</span> is_fizz &amp;&amp; is_buzz
-。
+
     number.to_s
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
@@ -9466,7 +9509,7 @@ $ git commit -m 'refactor(WIP): ポリモーフィズムによる条件記述の
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-a8a0f7e73f6ccd50df57a6bf6d7e40df.png" alt="diag a8a0f7e73f6ccd50df57a6bf6d7e40df" width="627" height="191">
+<img src="diag-c9ffad9b803420dabdb72a8eaf15cb72.png" alt="diag c9ffad9b803420dabdb72a8eaf15cb72" width="627" height="191">
 </div>
 </div>
 </div>
@@ -9593,22 +9636,22 @@ Finished in 0.00559s
 </div>
 </div>
 <div class="paragraph">
-<p><strong>ポリモーフィズムによる条件記述の置き換え</strong> が完了したのでWIPを外してコミットします。</p>
+<p>コミットしておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
-$ git commit -m 'refactor: ポリモーフィズムによる条件記述の置き換え'</code></pre>
+$ git commit -m 'refactor(WIP): ポリモーフィズムによる条件記述の置き換え'</code></pre>
 </div>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-a8a0f7e73f6ccd50df57a6bf6d7e40df.png" alt="diag a8a0f7e73f6ccd50df57a6bf6d7e40df" width="627" height="191">
+<img src="diag-9dc6a0c2d41aa172e5d7922d8d3fd95e.png" alt="diag 9dc6a0c2d41aa172e5d7922d8d3fd95e" width="627" height="191">
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_サブクラスによるタイプコードの置き換え">サブクラスによるタイプコードの置き換え</h5>
+<h5 id="_ポリモーフィズムによる条件記述の置き換え_4">ポリモーフィズムによる条件記述の置き換え 4</h5>
 <div class="paragraph">
 <p>タイプごとにFizzBuzzを生成するクラスを用意したのでFizzBuzzクラスから呼び出せるようにしましょう。</p>
 </div>
@@ -9617,6 +9660,7 @@ $ git commit -m 'refactor: ポリモーフィズムによる条件記述の置�
 <pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
   <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
   attr_reader <span class="symbol">:list</span>
+  attr_reader <span class="symbol">:type</span>
 
   <span class="keyword">def</span> <span class="function">initialize</span>(type)
     <span class="instance-variable">@type</span> = type
@@ -9637,6 +9681,7 @@ $ git commit -m 'refactor: ポリモーフィズムによる条件記述の置�
 <pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
   <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
   attr_reader <span class="symbol">:list</span>
+  attr_reader <span class="symbol">:type</span>
 
   <span class="keyword">def</span> <span class="function">initialize</span>(type)
     <span class="instance-variable">@type</span> = <span class="constant">FizzBuzz</span>.create(type)
@@ -9670,6 +9715,7 @@ Minitest::UnexpectedError:         RuntimeError: 該当するタイプは存在�
 <pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
   <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
   attr_reader <span class="symbol">:list</span>
+  attr_reader <span class="symbol">:type</span>
 
   <span class="keyword">def</span> <span class="function">initialize</span>(type)
     <span class="instance-variable">@type</span> = <span class="constant">FizzBuzz</span>.create(type)
@@ -9704,23 +9750,42 @@ lib/fizz_buzz.rb:24:3: C: Metrics/PerceivedComplexity: Perceived complexity for 
 </div>
 </div>
 <div class="paragraph">
-<p>再びテストが通るようになりました。始めのうちはコードを少し変更しただけでなんで動くようになったの？と思うかもしれませんがこれが <strong>ポリモーフィズム</strong> です。この概念を感覚としてつかんで使いこなせるようになることがオブジェクト指向プログラムの第一歩です。感覚は意識して手を動かしていればそのうちつかめます（多分）。コミットしておきましょう。</p>
+<p>再びテストが通るようになりました。始めのうちはコードを少し変更しただけでなんで動くようになったの？と思うかもしれませんがこれが <strong>ポリモーフィズム</strong> です。この概念を感覚としてつかんで使いこなせるようになることがオブジェクト指向プログラムの第一歩です。感覚は意識して手を動かしていればそのうちつかめます（多分）。</p>
+</div>
+<div class="paragraph">
+<p><strong>ポリモーフィズムによる条件記述の置き換え</strong> が完了したのでWIPを外してコミットします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
-$ git commit -m 'refactor: サブクラスによるタイプコードの置き換え'</code></pre>
+$ git commit -m 'refactor ポリモーフィズムによる条件記述の置き換え'</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_委譲の隠蔽">委譲の隠蔽</h5>
+<h5 id="_state_strategyによるタイプコードの置き換え">State/Strategyによるタイプコードの置き換え</h5>
 <div class="paragraph">
-<p><strong>ポリモーフィズム</strong> を使って、警告メッセージを消すとしましょう。</p>
+<p>仕上げは　<strong>State/Strategyによるタイプコードの置き換え</strong> を適用して、警告メッセージを消すとしましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>State/Strategyによるタイプコードの置き換え</p>
+</div>
+<div class="paragraph">
+<p>クラスの振る舞いに影響するタイプコードがあるが、サブクラス化はできない。</p>
+</div>
+<div class="paragraph">
+<p>状態オブジェクトでタイプコードを置き換える</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-8a04c2b1c80ac0b9585ab2499676a39d.png" alt="diag 8a04c2b1c80ac0b9585ab2499676a39d" width="627" height="191">
+<img src="diag-852794d6dd3e17ad001905a500b520e3.png" alt="diag 852794d6dd3e17ad001905a500b520e3" width="627" height="191">
 </div>
 </div>
 <div class="listingblock">
@@ -9728,6 +9793,7 @@ $ git commit -m 'refactor: サブクラスによるタイプコードの置き�
 <pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FizzBuzz</span>
   <span class="constant">MAX_NUMBER</span> = <span class="integer">100</span>
   attr_reader <span class="symbol">:list</span>
+  attr_reader <span class="symbol">:type</span>
 
   <span class="keyword">def</span> <span class="function">initialize</span>(type)
     <span class="instance-variable">@type</span> = <span class="constant">FizzBuzz</span>.create(type)
@@ -9777,7 +9843,7 @@ $ git commit -m 'refactor: サブクラスによるタイプコードの置き�
 </div>
 </div>
 <div class="paragraph">
-<p>まず、<code>FizzBuzz#generate</code> のメソッド呼び出しを <strong>インスタンス変数</strong> <code>type</code> が参照するタイプクラスのメソッド <code>FizzBuzzTypeXX#generate</code> を呼び出すように変更します。</p>
+<p>まず、<code>FizzBuzz#generate</code> のメソッド呼び出しを <strong>インスタンス変数</strong> <code>type</code> が参照するタイプクラスのメソッド <code>FizzBuzzTypeXX#generate</code> に <strong>委譲</strong> するように変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9793,9 +9859,6 @@ $ git commit -m 'refactor: サブクラスによるタイプコードの置き�
 <span class="keyword">end</span>
 ...</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>警告が消えました。しかもテストも壊れていないようです。実は <code>FizzBuzz#generate</code> メソッドはどこからも使われていないためテストも壊れることが無いのですがこれでは不要なメソッドになってしまうので <strong>移譲の隠蔽</strong> を実施して、<code>FizzBuzz#generate_list</code> から呼び出すようにします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9815,6 +9878,22 @@ Finished in 0.00925s
  0/0 files |======================================= 100 =======================================&gt;| Time: 00:00:00
 
 0 files inspected, no offenses detected</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>警告が消えました。しかもテストも壊れていないようです。実は <code>FizzBuzz#generate</code> メソッドはどこからも使われていないためテストも壊れることが無いのですがこれでは不要なメソッドになってしまうので <strong>移譲の隠蔽</strong> を実施して、ロジックを <strong>カプセル化</strong> します。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>委譲の隠蔽</p>
+</div>
+<div class="paragraph">
+<p>オブジェクト指向について最初に教わる時、カプセル化とはフィールドを隠すことだと習うでしょう。しかし経験を積むにつれて、他にもカプセル化できるものがあることに気づきます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版)
 </div>
 </div>
 <div class="listingblock">
@@ -9899,27 +9978,59 @@ Finished in 0.00564s
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
-$ git commit -m 'refactor: 移譲の隠蔽'</code></pre>
+$ git commit -m 'refactor: State/Strategyによるタイプコードの置き換え'</code></pre>
 </div>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-8a04c2b1c80ac0b9585ab2499676a39d.png" alt="diag 8a04c2b1c80ac0b9585ab2499676a39d" width="627" height="191">
+<img src="diag-852794d6dd3e17ad001905a500b520e3.png" alt="diag 852794d6dd3e17ad001905a500b520e3" width="627" height="191">
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_継承">3.1.5. 継承</h4>
+<div class="paragraph">
+<p>分割したタイプクラスのメソッドに重複する処理があるので <strong>継承</strong> を使ってリファクタリングしましょう。ここでは <strong>スーパークラスの抽出</strong> を適用します。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>スーパークラスの抽出</p>
+</div>
+<div class="paragraph">
+<p>似通った特性を持つ２つのクラスがある。</p>
+</div>
+<div class="paragraph">
+<p>スーパークラスを作成して、共通の特性を移動する。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
+</div>
 <div class="sect4">
 <h5 id="_スーパークラスの抽出">スーパークラスの抽出</h5>
 <div class="imageblock">
 <div class="content">
-<img src="diag-8a04c2b1c80ac0b9585ab2499676a39d.png" alt="diag 8a04c2b1c80ac0b9585ab2499676a39d" width="627" height="191">
+<img src="diag-852794d6dd3e17ad001905a500b520e3.png" alt="diag 852794d6dd3e17ad001905a500b520e3" width="627" height="191">
 </div>
 </div>
 <div class="paragraph">
-<p>分割したタイプクラスのメソッドに重複する処理があるので <strong>継承</strong> を使ってリファクタリングしましょう。</p>
+<p>まずは、タイプクラスのスーパークラスとなる <code>FizzBuzzType</code> クラスを作成して各タイプクラスに継承させます。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>クラスベースのオブジェクト指向言語の多くはクラスの継承機能を有しています。クラスの継承とはあるクラスを元として、新しいクラスを定義することです。この時、継承元となるクラスを親クラスやスーパークラスと呼び、継承したクラスのことを子クラスやサブクラスと呼びます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; かんたんRuby
+</div>
+</div>
+<div class="paragraph">
+<p>Rubyの <strong>クラスの継承</strong> は以下のように書きます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9968,13 +10079,13 @@ Finished in 0.00860s
 7 files inspected, no offenses detected</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>まずは、タイプクラスのスーパークラスとなる <code>FizzBuzzType</code> クラスを作成して各タイプクラスに継承させます。</p>
-</div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-d34186f2c08c4af6d8e9f56e78b4be1b.png" alt="diag d34186f2c08c4af6d8e9f56e78b4be1b" width="470" height="264">
+<img src="diag-df749de89e01204bc0eab92419515a4c.png" alt="diag df749de89e01204bc0eab92419515a4c" width="470" height="264">
 </div>
+</div>
+<div class="paragraph">
+<p>次に <code>is_fizz</code> <code>is_buzz</code> 部分を共通メソッドとしてスーパークラスに定義して各タイプクラスで呼び出すように変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -10074,7 +10185,7 @@ lib/fizz_buzz.rb:39:7: C: Naming/PredicateName: Rename is_buzz to buzz?.
 </div>
 </div>
 <div class="paragraph">
-<p>次に <code>is_fizz</code> <code>is_buzz</code> 部分を共通メソッドとしてスーパークラスに定義して各タイプクラスで呼び出すように変更します。テストが壊れていないことが確認できたのでコミットしておきます。</p>
+<p>テストが壊れていないことが確認できたのでコミットしておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -10084,7 +10195,7 @@ $ git commit -m 'refactor: スーパークラスの抽出'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-c5562aee5c36f7a34fc92925fe057aa3.png" alt="diag c5562aee5c36f7a34fc92925fe057aa3" width="470" height="264">
+<img src="diag-119864cf3ef287a3cb00d3a5ae7f7768.png" alt="diag 119864cf3ef287a3cb00d3a5ae7f7768" width="470" height="264">
 </div>
 </div>
 </div>
@@ -10209,7 +10320,7 @@ $ git commit -m 'refactor: メソッド名の変更'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-d9160e6801276e2daab7185d2190252d.png" alt="diag d9160e6801276e2daab7185d2190252d" width="470" height="264">
+<img src="diag-d2cb27a201f2960f496c16739fd11db4.png" alt="diag d2cb27a201f2960f496c16739fd11db4" width="470" height="264">
 </div>
 </div>
 </div>
@@ -10217,6 +10328,35 @@ $ git commit -m 'refactor: メソッド名の変更'</code></pre>
 <h5 id="_メソッドの移動">メソッドの移動</h5>
 <div class="paragraph">
 <p><code>FizzBuzz</code> クラスの <strong>ファクトリメソッド</strong> ですが <strong>特性の横恋慕</strong> の臭いがするので <strong>メソッドの移動</strong> を実施します。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>特性の横恋慕</p>
+</div>
+<div class="paragraph">
+<p>オブジェクト指向には、処理および処理に必要なデータを１つにまとめてしまうという重要な考え方があります。あるメソッドが、自分のクラスより他のクラスに興味を持つような場合には、古典的な誤りを犯しています。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>メソッドの移動</p>
+</div>
+<div class="paragraph">
+<p>あるクラスでメソッドが定義されているが、現在または将来において、そのクラスの特性よりも他のクラスの特性の方が、そのメソッドを使ったり、そのメソッドから使われたりすることが多い。</p>
+</div>
+<div class="paragraph">
+<p>同様の本体を持つ新たなメソッドを、それを最も多用するクラスに作成する。元のメソッドは、単純な委譲とするか、またはまるごと取り除く。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -10340,7 +10480,7 @@ $ git commit -m 'refactor: メソッドの移動'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-337dc5ff5d03ee9f5eab82f0d3233fd0.png" alt="diag 337dc5ff5d03ee9f5eab82f0d3233fd0" width="470" height="251">
+<img src="diag-ba1b69256f8ec13b0140b339cd44bac8.png" alt="diag ba1b69256f8ec13b0140b339cd44bac8" width="470" height="251">
 </div>
 </div>
 </div>
@@ -10351,7 +10491,7 @@ $ git commit -m 'refactor: メソッドの移動'</code></pre>
 <h5 id="_オブジェクトによるプリミティブの置き換え">オブジェクトによるプリミティブの置き換え</h5>
 <div class="imageblock">
 <div class="content">
-<img src="diag-337dc5ff5d03ee9f5eab82f0d3233fd0.png" alt="diag 337dc5ff5d03ee9f5eab82f0d3233fd0" width="470" height="251">
+<img src="diag-ba1b69256f8ec13b0140b339cd44bac8.png" alt="diag ba1b69256f8ec13b0140b339cd44bac8" width="470" height="251">
 </div>
 </div>
 <div class="paragraph">
