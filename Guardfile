@@ -4,6 +4,7 @@
 #   watch(%r{file/path}) { `command(s)` }
 #
 guard :shell do
+  watch(%r{lib/(.*).rb}) { |_m| `rake test` }
 end
 
 guard :minitest do
@@ -14,4 +15,3 @@ end
 guard :rubocop, cli: %w[--auto-correct --format fuubar --format html -o ./tmp/rubocop_results.html] do
   watch(/(.*).rb/)
 end
-
