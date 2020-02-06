@@ -4167,7 +4167,17 @@ $ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>次に <strong>基本データ型への執着</strong> の臭いがする箇所として <code>FizzBuzz#generate</code> メソッドが返すFizzBuzzの値が文字型である点です。文字列の代わりに <strong>値オブジェクト</strong> <code>FizzBuzzValue</code> を定義します。</p>
+<p>次に <strong>基本データ型への執着</strong> の臭いがする箇所として <code>FizzBuzz#generate</code> メソッドが返すFizzBuzzの値が文字型である点です。文字列の代わりに <strong>値オブジェクト</strong> <code>FizzBuzzValue</code> クラスを定義します。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>値の種類ごとに専用の型を用意するとコードが安定し、コードの意図が明確になります。このように、値を扱うための専用クラスを作るやり方を値オブジェクト（ValueObject）と呼びます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 現場で役立つシステム設計の原則
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4483,11 +4493,37 @@ $ git commit -m 'test: 学習用テスト'</code></pre>
 <h4 id="_ファーストクラスコレクション">ファーストクラスコレクション</h4>
 <div class="imageblock">
 <div class="content">
-<img src="diag-6784eef3a06015b3afd514181ea55821.png" alt="diag 6784eef3a06015b3afd514181ea55821" width="470" height="264">
+<img src="diag-719d1727313ce1fe35a0a3eaeca9a624.png" alt="diag 719d1727313ce1fe35a0a3eaeca9a624" width="470" height="264">
 </div>
 </div>
 <div class="paragraph">
-<p><strong>値オブジェクト</strong> を扱うFizzBuzzリストですが <strong>ファーストクラスコレクション</strong> にしましょう。</p>
+<p><strong>値オブジェクト</strong> を扱うFizzBuzzリストですが <strong>コレクションのカプセル化</strong> を適用して <strong>ファーストクラスコレクション</strong> オブジェクトを追加しましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>コレクションのカプセル化</p>
+</div>
+<div class="paragraph">
+<p>メソッドがコレクションを返している。</p>
+</div>
+<div class="paragraph">
+<p>読み取り専用のビューを返して、追加と削除のメソッドを提供する。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>このように、コレクション型のデータとロジックを特別扱いにして、コレクションを１つだけ持つ専用クラスを作るやり方をコレクションオブジェクトあるいはファーストクラスコレクションと呼びます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 現場で役立つシステム設計の原則
+</div>
 </div>
 <div class="sect4">
 <h5 id="_コレクションのカプセル化">コレクションのカプセル化</h5>
@@ -4519,6 +4555,7 @@ end</code></pre>
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
   MAX_NUMBER = 100
   attr_reader :list
+  attr_reader :type
 
   def initialize(type)
     @type = type
@@ -4536,6 +4573,7 @@ end</code></pre>
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
   MAX_NUMBER = 100
   attr_reader :list
+  attr_reader :type
 
   def initialize(type)
     @type = type
@@ -4548,6 +4586,32 @@ end</code></pre>
     @list = @list.add((1..MAX_NUMBER).map { |n| @type.generate(n) })
   end
 end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>なんだか紛らわしい書き方になってしましました。配列を作るのに以前の配列を元に新しい配列を作るとか回りくどいことをしないで既存の配列を使い回せばいいじゃんと思うかもしれませんが <strong>変更可能なデータ</strong> はバグの原因となる傾向があります。変更可能な <strong>ミュータブル</strong> な変数ではなく 永続的に変更されない <strong>イミュータブル</strong> な変数を使うように心がけましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>変更可能なデータ</p>
+</div>
+<div class="paragraph">
+<p>データの変更はしばし予期せぬ結果結果や、厄介なバグを引き起こします。他で違う値を期待していることに気づかないままに、ソフトウェアのある箇所で値を変更してしまえば、それだけで動かなくなってしまいます。これは値が変わる条件がまれにしかない場合、特に見つけにくいバグとなります。そのため、ソフトウェア開発の一つの潮流である関数型プログラミングは、データは不変であるべきで、更新時は常に元にデータ構造のコピーを返すようにし、元データには手を触れないという思想に基づいています。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版)
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>値オブジェクトと同じようにコレクションオブジェクトも、できるだけ「不変」スタイルで設計します。そのほうがプログラムが安定します。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 現場で役立つシステム設計の原則
 </div>
 </div>
 <div class="listingblock">
@@ -4568,6 +4632,7 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `[]' for #&lt
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
   MAX_NUMBER = 100
   attr_reader :list
+  attr_reader :type
 
   def initialize(type)
     @type = type
@@ -4580,14 +4645,15 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `[]' for #&lt
 <div class="content">
 <pre class="highlight"><code class="language-ruby" data-lang="ruby">class FizzBuzz
   MAX_NUMBER = 100
+  attr_reader :type
+
+  def list
+    @list.value
+  end
 
   def initialize(type)
     @type = type
     @list = FizzBuzzList.new([])
-  end
-
-  def list
-    @list.value
   end
 ....</code></pre>
 </div>
@@ -4624,7 +4690,7 @@ $ git commit -m 'refactor: コレクションのカプセル化'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-c71f04d2bdaf08275832a101cabec792.png" alt="diag c71f04d2bdaf08275832a101cabec792" width="764" height="346">
+<img src="diag-f753577a92fab80607a2e63cf53e8389.png" alt="diag f753577a92fab80607a2e63cf53e8389" width="764" height="346">
 </div>
 </div>
 </div>
@@ -7667,7 +7733,7 @@ end</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-06 16:58:13 JST
+Last updated 2020-02-06 17:47:03 JST
 </div>
 </div>
 </body>

@@ -3394,7 +3394,12 @@ FizzBuzzType <|-- FizzBuzzType03
 FizzBuzz *- FizzBuzzType
 ----
 
-次に *基本データ型への執着* の臭いがする箇所として `FizzBuzz#generate` メソッドが返すFizzBuzzの値が文字型である点です。文字列の代わりに *値オブジェクト* `FizzBuzzValue` を定義します。
+次に *基本データ型への執着* の臭いがする箇所として `FizzBuzz#generate` メソッドが返すFizzBuzzの値が文字型である点です。文字列の代わりに *値オブジェクト* `FizzBuzzValue` クラスを定義します。
+
+[quote, 現場で役立つシステム設計の原則]
+____
+値の種類ごとに専用の型を用意するとコードが安定し、コードの意図が明確になります。このように、値を扱うための専用クラスを作るやり方を値オブジェクト（ValueObject）と呼びます。
+____
 
 [source, ruby]
 ----
@@ -3741,31 +3746,31 @@ class FizzBuzz {
     MAX_NUMBER = 100
     list
     type
-    generate()
+    generate(number)
     generate_list()
 }
 class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 FizzBuzzType <|-- FizzBuzzType01
 FizzBuzzType <|-- FizzBuzzType02
@@ -3774,7 +3779,21 @@ FizzBuzz *- FizzBuzzType
 FizzBuzzType -> FizzBuzzValue
 ----
 
-*値オブジェクト* を扱うFizzBuzzリストですが *ファーストクラスコレクション* にしましょう。
+*値オブジェクト* を扱うFizzBuzzリストですが *コレクションのカプセル化* を適用して *ファーストクラスコレクション* オブジェクトを追加しましょう。
+
+[quote, 新装版 リファクタリング]
+____
+コレクションのカプセル化
+
+メソッドがコレクションを返している。
+
+読み取り専用のビューを返して、追加と削除のメソッドを提供する。
+____
+
+[quote, 現場で役立つシステム設計の原則]
+____
+このように、コレクション型のデータとロジックを特別扱いにして、コレクションを１つだけ持つ専用クラスを作るやり方をコレクションオブジェクトあるいはファーストクラスコレクションと呼びます。
+____
 
 ===== コレクションのカプセル化
 
@@ -3805,6 +3824,7 @@ FizzBuzz配列を *ファーストクラスコレクション* から取得す�
 class FizzBuzz
   MAX_NUMBER = 100
   attr_reader :list
+  attr_reader :type
 
   def initialize(type)
     @type = type
@@ -3822,6 +3842,7 @@ end
 class FizzBuzz
   MAX_NUMBER = 100
   attr_reader :list
+  attr_reader :type
 
   def initialize(type)
     @type = type
@@ -3835,6 +3856,20 @@ class FizzBuzz
   end
 end
 ----
+
+なんだか紛らわしい書き方になってしましました。配列を作るのに以前の配列を元に新しい配列を作るとか回りくどいことをしないで既存の配列を使い回せばいいじゃんと思うかもしれませんが *変更可能なデータ* はバグの原因となる傾向があります。変更可能な *ミュータブル* な変数ではなく 永続的に変更されない *イミュータブル* な変数を使うように心がけましょう。
+
+[quote, リファクタリング(第2版)]
+____
+変更可能なデータ
+
+データの変更はしばし予期せぬ結果結果や、厄介なバグを引き起こします。他で違う値を期待していることに気づかないままに、ソフトウェアのある箇所で値を変更してしまえば、それだけで動かなくなってしまいます。これは値が変わる条件がまれにしかない場合、特に見つけにくいバグとなります。そのため、ソフトウェア開発の一つの潮流である関数型プログラミングは、データは不変であるべきで、更新時は常に元にデータ構造のコピーを返すようにし、元データには手を触れないという思想に基づいています。
+____
+
+[quote, 現場で役立つシステム設計の原則]
+____
+値オブジェクトと同じようにコレクションオブジェクトも、できるだけ「不変」スタイルで設計します。そのほうがプログラムが安定します。
+____
 
 [source, bash]
 ----
@@ -3853,6 +3888,7 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `[]' for #<Fi
 class FizzBuzz
   MAX_NUMBER = 100
   attr_reader :list
+  attr_reader :type
 
   def initialize(type)
     @type = type
@@ -3865,14 +3901,15 @@ class FizzBuzz
 ----
 class FizzBuzz
   MAX_NUMBER = 100
+  attr_reader :type
+
+  def list
+    @list.value
+  end
 
   def initialize(type)
     @type = type
     @list = FizzBuzzList.new([])
-  end
-
-  def list
-    @list.value
   end
 ....
 ----
@@ -3912,31 +3949,31 @@ class FizzBuzz {
     MAX_NUMBER = 100
     list
     type
-    generate()
+    generate(number)
     generate_list()
 }
 class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 class FizzBuzzList {
    value
