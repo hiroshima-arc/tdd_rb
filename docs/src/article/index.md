@@ -2286,7 +2286,7 @@ TODOリスト
 #### 配列や繰り返し処理の理解
 
 まだリファクタリングが残っているのですがその前にRubyの配列メソッドの理解をもう少し深めたいので **学習用テスト** を追加しましょう。
-:w
+
 ``` ruby
 class FizzBuzzTest < Minitest::Test
   describe 'FizzBuzz' do
