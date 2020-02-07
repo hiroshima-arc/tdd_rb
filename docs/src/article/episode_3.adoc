@@ -4445,6 +4445,7 @@ class FizzBuzzList {
    add(value)
 }
 Interface FizzBuzzCommand {
+  execute()
 }
 class FizzBuzzValueCommand {
   type
@@ -4642,6 +4643,7 @@ class FizzBuzzList {
    add(value)
 }
 Interface FizzBuzzCommand {
+  execute()
 }
 class FizzBuzzValueCommand {
   type
@@ -4790,7 +4792,6 @@ OCP:オープン・クローズドの原則
 言い換えれば、ソフトウェアの振る舞いは、既存の成果物を変更せず拡張できるようにすべきである、ということだ。
 ____
 
-
 ==== 例外
 
 [plantuml]
@@ -4824,6 +4825,7 @@ class FizzBuzzList {
    add(value)
 }
 Interface FizzBuzzCommand {
+  execute()
 }
 class FizzBuzzValueCommand {
   type
@@ -4847,7 +4849,15 @@ FizzBuzzCommand *- FizzBuzzType
 ----
 
 ここまでは、正常系をリファクタリングして設計を改善してきました。しかし、アプリケーションは例外系も考慮する必要があります。
-続いて、例外系のリファクタリングに取り組むとしましょう。
+続いて、*アサーションの導入* を適用した例外系のリファクタリングに取り組むとしましょう。
+
+[quote, リファクタリング(第2版)]
+____
+アサーションの導入
+
+前提を明示するためのすぐれたテクニックとして、アサーションを記述する方法があります。
+____
+
 
 ===== アサーションの導入
 
@@ -4871,15 +4881,15 @@ end
 
 [source, bash]
 ----
- FAIL["test_値は正の値のみ許可する", #<Minitest::Reporters::Suite:0x0000565140f5fa40 @name="FizzBuzz::数を文字列にして返す::例外ケース">, 0.0028807210037484765]
- test_値は正の値のみ許可する#FizzBuzz::数を文字列にして返す::例外ケース (0.00s)
-        Assertions::AssertionFailedError expected but nothing was raised.
-        /workspace/tdd_rb/test/fizz_buzz_test.rb:143:in `test_値は正の値のみ許可する'
+ERROR["test_値は正の値のみ許可する", #<Minitest::Reporters::Suite:0x00007fadf30c45d8 @name="例外ケース">, 0.006546000000525964]
+ test_値は正の値のみ許可する#例外ケース (0.01s)
+Minitest::UnexpectedError:         NameError: uninitialized constant FizzBuzzTest::Assertions
+            /Users/k2works/Projects/sandbox/tdd_rb/test/fizz_buzz_test.rb:249:in `test_値は正の値のみ許可する'
 
-  36/36: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+  36/36: [=========================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00705s
-36 tests, 40 assertions, 1 failures, 0 errors, 0 skips
+Finished in 0.03159s
+36 tests, 39 assertions, 0 failures, 1 errors, 0 skips
 ----
 
 テストを通すためアサーションモジュールを追加します。
@@ -4897,6 +4907,21 @@ end
 
 class FizzBuzzValue
 ...
+----
+
+アサーションモジュールを追加してエラーはなくなりましたがテストは失敗したままです。
+
+[source, bash]
+----
+ FAIL["test_値は正の値のみ許可する", #<Minitest::Reporters::Suite:0x00007fdcfc0c2548 @name="例外ケース">, 0.005800000000817818]
+ test_値は正の値のみ許可する#例外ケース (0.01s)
+        Assertions::AssertionFailedError expected but nothing was raised.
+        /Users/k2works/Projects/sandbox/tdd_rb/test/fizz_buzz_test.rb:249:in `test_値は正の値のみ許可する'
+
+============================================================================================================|
+
+Finished in 0.00621s
+36 tests, 40 assertions, 1 failures, 0 errors, 0 skips
 ----
 
 追加したモジュールを `FizzBuzzValue` クラスをに *Mix-in* します。そして、*コンストラクタ* 実行時に数値は0以上であるアサーションを追加します。
@@ -4955,24 +4980,24 @@ class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 class FizzBuzzList {
    value
@@ -4980,6 +5005,7 @@ class FizzBuzzList {
    add(value)
 }
 Interface FizzBuzzCommand {
+  execute()
 }
 class FizzBuzzValueCommand {
   type
@@ -5194,24 +5220,24 @@ class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 class FizzBuzzList {
    value
@@ -5219,6 +5245,7 @@ class FizzBuzzList {
    add(value)
 }
 Interface FizzBuzzCommand {
+  execute()
 }
 class FizzBuzzValueCommand {
   execute(number)
@@ -5245,6 +5272,15 @@ FizzBuzzList --|> Assertions
 ----
 
 *アサーションの導入* とは別のアプローチとして *例外* を返す方法もあります。 *例外によるエラーコードの置き換え* を適用してアサーションモジュールを削除しましょう。
+
+[quote, 新装版 リファクタリング]
+____
+例外によるエラーコードの置き換え
+
+エラーを示す特別なコードをメソッドがリターンしている。
+
+代わりに例外を発生させる。
+____
 
 ===== 例外によるエラーコードの置き換え
 
@@ -5409,24 +5445,24 @@ class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 class FizzBuzzList {
    value
@@ -5434,6 +5470,7 @@ class FizzBuzzList {
    add(value)
 }
 Interface FizzBuzzCommand {
+  execute()
 }
 class FizzBuzzValueCommand {
   execute(number)
@@ -5457,6 +5494,15 @@ FizzBuzzCommand *- FizzBuzzType
 ===== アルゴリズムの置き換え
 
 テストは通りますが警告が表示されるようになりました。 `Style/NumericPredicate: Use number.negative? instead of number < 0.` とのことなので *アルゴリズムの置き換え* を適用しておきましょう。
+
+[quote, 新装版 リファクタリング]
+____
+アルゴリズムの取り替え
+
+アルゴリズムをよりわかりやすいものに置き換えたい
+
+メソッドの本体を新たなアルゴリズムで置き換える。
+____
 
 [source, bash]
 ----
@@ -5500,6 +5546,8 @@ class FizzBuzzValue
 1 file inspected, no offenses detected
 ----
 
+警告が消えたのでコミットします。
+
 [source, bash]
 ----
 $ git add .
@@ -5509,6 +5557,15 @@ $ git commit -m 'refactor: アルゴリズムの置き換え'
 ===== マジックナンバーの置き換え
 
 件数に *リテラル* を使っています。ここは *マジックナンバーの置き換え* を適用するべきですね。
+
+[quote, 新装版 リファクタリング]
+____
+シンボリック定数によるマジックナンバーの置き換え
+
+特別な意味を持った数字のリテラルがある。
+
+定数を作り、それにふさわしい名前をつけて、そのリテラルを置き換える。
+____
 
 [source, ruby]
 ----
@@ -5569,7 +5626,6 @@ class FizzBuzzList
 
 [source, bash]
 ----
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
 Started with run options --seed 5525
 
 
@@ -5591,24 +5647,24 @@ class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 class FizzBuzzList {
    MAX_COUNT = 100
@@ -5617,6 +5673,7 @@ class FizzBuzzList {
    add(value)
 }
 Interface FizzBuzzCommand {
+  execute()
 }
 class FizzBuzzValueCommand {
   execute(number)
@@ -5640,6 +5697,25 @@ FizzBuzzCommand *- FizzBuzzType
 ===== 特殊ケースの導入
 
 最後に *ポリモーフィズム* の応用としてタイプクラスが未定義の場合に *例外* ではなく未定義のタイプクラスを返す *特殊ケースの導入* を適用してみましょう。
+
+[quote, 新装版 リファクタリング]
+____
+ヌルオブジェクトの導入
+
+null値のチェックが繰り返し現れる。
+
+そのnull値をヌルオブジェクトで置き換える。
+____
+
+[quote, リファクタリング(第2版)]
+____
+特殊ケースの導入
+
+旧：ヌルオブジェクトの導入
+
+特殊ケースの処理を要する典型的な値がnullなので、このパターンをヌルオブジェクトパターンと呼ぶことがあります、しかし、通常の特殊ケースとアプローチは同じです。いわばヌルオブジェクトは「特殊ケース」の特殊ケースです。
+____
+
 
 まず、それ以外のタイプの場合の振る舞いを変更します。
 
@@ -5687,7 +5763,7 @@ Finished in 0.00780s
 37 tests, 41 assertions, 0 failures, 1 errors, 0 skips
 ----
 
-現時点では *例外* を投げるので未定義タイプ `FizzBuzzTypeNotDefined` を作成して *ファクトリメソッド* の処理変更します。
+現時点では *例外* を投げるので未定義タイプ `FizzBuzzTypeNotDefined` を作成して *ファクトリメソッド* を変更します。
 
 [source, ruby]
 ----
@@ -5751,12 +5827,13 @@ class FizzBuzzTypeNotDefined < FizzBuzzType
     '未定義'
   end
 end
+
+class FizzBuzzValue
 ...
 ----
 
 [source, bash]
 ----
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
 Started with run options --seed 33939
 
 
@@ -5811,7 +5888,14 @@ Finished in 0.00747s
 
 `FizzBuzzTypeNotDefined` オブジェクトは *Null Objectパターン* と適用したものです。
 
-*開放/閉鎖原則* に従って未定義のタイプである *Null Object* を安全に追加することが出来ました。
+[quote, テスト駆動開発]
+____
+Null Objectパターン
+
+特殊な状況をオブジェクトで表現するにはどうすればよいだろうか---その特殊な状況を表現するオブジェクトを作り、通常のオブジェクトと同じプロトコル（メソッド群）を実装しよう。
+____
+
+*オープン・クローズドの原則* に従って未定義のタイプである *Null Object* を安全に追加することが出来ました。
 
 コミットしましょう。
 
@@ -5857,6 +5941,7 @@ class FizzBuzzList {
    add(value)
 }
 Interface FizzBuzzCommand {
+  execute()
 }
 class FizzBuzzValueCommand {
   execute(number)
@@ -5917,6 +6002,7 @@ class FizzBuzzList {
    add(value)
 }
 Interface FizzBuzzCommand {
+  execute()
 }
 class FizzBuzzValueCommand {
   execute(number)

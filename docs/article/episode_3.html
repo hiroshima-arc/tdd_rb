@@ -5065,7 +5065,7 @@ $ git commit -m 'refactor: メソッドオブジェクトによるメソッド�
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-a947d69f5b77e949e94ac694372b7088.png" alt="diag a947d69f5b77e949e94ac694372b7088" width="1162" height="411">
+<img src="diag-4a094b5dcd7f922c01a8ad5b39f6839d.png" alt="diag 4a094b5dcd7f922c01a8ad5b39f6839d" width="1162" height="424">
 </div>
 </div>
 </div>
@@ -5218,7 +5218,7 @@ $ git commit -m 'refactor: デッドコードの削除'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-3f6ea14c1285f7e8efd8ac05a519e327.png" alt="diag 3f6ea14c1285f7e8efd8ac05a519e327" width="876" height="437">
+<img src="diag-cd1dbf997043a35c9bb55b407c0a2af9.png" alt="diag cd1dbf997043a35c9bb55b407c0a2af9" width="876" height="437">
 </div>
 </div>
 </div>
@@ -5337,12 +5337,25 @@ $ git commit -m 'refactor: デッドコードの削除'</code></pre>
 <h4 id="_例外">例外</h4>
 <div class="imageblock">
 <div class="content">
-<img src="diag-3f6ea14c1285f7e8efd8ac05a519e327.png" alt="diag 3f6ea14c1285f7e8efd8ac05a519e327" width="876" height="437">
+<img src="diag-cd1dbf997043a35c9bb55b407c0a2af9.png" alt="diag cd1dbf997043a35c9bb55b407c0a2af9" width="876" height="437">
 </div>
 </div>
 <div class="paragraph">
 <p>ここまでは、正常系をリファクタリングして設計を改善してきました。しかし、アプリケーションは例外系も考慮する必要があります。
-続いて、例外系のリファクタリングに取り組むとしましょう。</p>
+続いて、<strong>アサーションの導入</strong> を適用した例外系のリファクタリングに取り組むとしましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>アサーションの導入</p>
+</div>
+<div class="paragraph">
+<p>前提を明示するためのすぐれたテクニックとして、アサーションを記述する方法があります。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版)
+</div>
 </div>
 <div class="sect4">
 <h5 id="_アサーションの導入">アサーションの導入</h5>
@@ -5367,15 +5380,15 @@ end</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash"> FAIL["test_値は正の値のみ許可する", #&lt;Minitest::Reporters::Suite:0x0000565140f5fa40 @name="FizzBuzz::数を文字列にして返す::例外ケース"&gt;, 0.0028807210037484765]
- test_値は正の値のみ許可する#FizzBuzz::数を文字列にして返す::例外ケース (0.00s)
-        Assertions::AssertionFailedError expected but nothing was raised.
-        /workspace/tdd_rb/test/fizz_buzz_test.rb:143:in `test_値は正の値のみ許可する'
+<pre class="highlight"><code class="language-bash" data-lang="bash">ERROR["test_値は正の値のみ許可する", #&lt;Minitest::Reporters::Suite:0x00007fadf30c45d8 @name="例外ケース"&gt;, 0.006546000000525964]
+ test_値は正の値のみ許可する#例外ケース (0.01s)
+Minitest::UnexpectedError:         NameError: uninitialized constant FizzBuzzTest::Assertions
+            /Users/k2works/Projects/sandbox/tdd_rb/test/fizz_buzz_test.rb:249:in `test_値は正の値のみ許可する'
 
-  36/36: [=================================================================] 100% Time: 00:00:00, Time: 00:00:00
+  36/36: [=========================================================================] 100% Time: 00:00:00, Time: 00:00:00
 
-Finished in 0.00705s
-36 tests, 40 assertions, 1 failures, 0 errors, 0 skips</code></pre>
+Finished in 0.03159s
+36 tests, 39 assertions, 0 failures, 1 errors, 0 skips</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5394,6 +5407,22 @@ end
 
 class FizzBuzzValue
 ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>アサーションモジュールを追加してエラーはなくなりましたがテストは失敗したままです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"> FAIL["test_値は正の値のみ許可する", #&lt;Minitest::Reporters::Suite:0x00007fdcfc0c2548 @name="例外ケース"&gt;, 0.005800000000817818]
+ test_値は正の値のみ許可する#例外ケース (0.01s)
+        Assertions::AssertionFailedError expected but nothing was raised.
+        /Users/k2works/Projects/sandbox/tdd_rb/test/fizz_buzz_test.rb:249:in `test_値は正の値のみ許可する'
+
+============================================================================================================|
+
+Finished in 0.00621s
+36 tests, 40 assertions, 1 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5450,7 +5479,7 @@ $ git commit -m 'refactor: アサーションの導入'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-c01981e741cde9a0b10a8c3fef7785e5.png" alt="diag c01981e741cde9a0b10a8c3fef7785e5" width="876" height="558">
+<img src="diag-31809a5e0bf909bd8ffd6bf80e82857a.png" alt="diag 31809a5e0bf909bd8ffd6bf80e82857a" width="876" height="558">
 </div>
 </div>
 <div class="paragraph">
@@ -5644,11 +5673,27 @@ $ git commit -m 'refactor: アサーションの導入'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-f90bf5dd89f4aba1044d05004d7588fa.png" alt="diag f90bf5dd89f4aba1044d05004d7588fa" width="876" height="545">
+<img src="diag-58a36db185b5379fe6bf8a2c7015df26.png" alt="diag 58a36db185b5379fe6bf8a2c7015df26" width="876" height="545">
 </div>
 </div>
 <div class="paragraph">
 <p><strong>アサーションの導入</strong> とは別のアプローチとして <strong>例外</strong> を返す方法もあります。 <strong>例外によるエラーコードの置き換え</strong> を適用してアサーションモジュールを削除しましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>例外によるエラーコードの置き換え</p>
+</div>
+<div class="paragraph">
+<p>エラーを示す特別なコードをメソッドがリターンしている。</p>
+</div>
+<div class="paragraph">
+<p>代わりに例外を発生させる。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
 </div>
 </div>
 <div class="sect4">
@@ -5813,7 +5858,7 @@ $ git commit -m 'refactor:  例外によるエラーコードの置き換え'</c
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-0bacf9102c81d63f8f7ebed6200fa1d3.png" alt="diag 0bacf9102c81d63f8f7ebed6200fa1d3" width="876" height="424">
+<img src="diag-885ec2f9aa251a8f47c0c6031a6959ec.png" alt="diag 885ec2f9aa251a8f47c0c6031a6959ec" width="876" height="424">
 </div>
 </div>
 </div>
@@ -5821,6 +5866,22 @@ $ git commit -m 'refactor:  例外によるエラーコードの置き換え'</c
 <h5 id="_アルゴリズムの置き換え">アルゴリズムの置き換え</h5>
 <div class="paragraph">
 <p>テストは通りますが警告が表示されるようになりました。 <code>Style/NumericPredicate: Use number.negative? instead of number &lt; 0.</code> とのことなので <strong>アルゴリズムの置き換え</strong> を適用しておきましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>アルゴリズムの取り替え</p>
+</div>
+<div class="paragraph">
+<p>アルゴリズムをよりわかりやすいものに置き換えたい</p>
+</div>
+<div class="paragraph">
+<p>メソッドの本体を新たなアルゴリズムで置き換える。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5864,6 +5925,9 @@ class FizzBuzzValue
 1 file inspected, no offenses detected</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>警告が消えたのでコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ git add .
@@ -5875,6 +5939,22 @@ $ git commit -m 'refactor: アルゴリズムの置き換え'</code></pre>
 <h5 id="_マジックナンバーの置き換え_2">マジックナンバーの置き換え</h5>
 <div class="paragraph">
 <p>件数に <strong>リテラル</strong> を使っています。ここは <strong>マジックナンバーの置き換え</strong> を適用するべきですね。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>シンボリック定数によるマジックナンバーの置き換え</p>
+</div>
+<div class="paragraph">
+<p>特別な意味を持った数字のリテラルがある。</p>
+</div>
+<div class="paragraph">
+<p>定数を作り、それにふさわしい名前をつけて、そのリテラルを置き換える。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5937,8 +6017,7 @@ Minitest::UnexpectedError:         RuntimeError: 上限は10件までです
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb"
-Started with run options --seed 5525
+<pre class="highlight"><code class="language-bash" data-lang="bash">Started with run options --seed 5525
 
 
 Progress: |====================================================================================================|
@@ -5955,7 +6034,7 @@ $ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-cbf143a596f96d524e0c352a13abc7d4.png" alt="diag cbf143a596f96d524e0c352a13abc7d4" width="876" height="424">
+<img src="diag-6bf8472e32170eef5221f30056447b6c.png" alt="diag 6bf8472e32170eef5221f30056447b6c" width="876" height="424">
 </div>
 </div>
 </div>
@@ -5963,6 +6042,38 @@ $ git commit -m 'refactor: マジックナンバーの置き換え'</code></pre>
 <h5 id="_特殊ケースの導入">特殊ケースの導入</h5>
 <div class="paragraph">
 <p>最後に <strong>ポリモーフィズム</strong> の応用としてタイプクラスが未定義の場合に <strong>例外</strong> ではなく未定義のタイプクラスを返す <strong>特殊ケースの導入</strong> を適用してみましょう。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>ヌルオブジェクトの導入</p>
+</div>
+<div class="paragraph">
+<p>null値のチェックが繰り返し現れる。</p>
+</div>
+<div class="paragraph">
+<p>そのnull値をヌルオブジェクトで置き換える。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 新装版 リファクタリング
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>特殊ケースの導入</p>
+</div>
+<div class="paragraph">
+<p>旧：ヌルオブジェクトの導入</p>
+</div>
+<div class="paragraph">
+<p>特殊ケースの処理を要する典型的な値がnullなので、このパターンをヌルオブジェクトパターンと呼ぶことがあります、しかし、通常の特殊ケースとアプローチは同じです。いわばヌルオブジェクトは「特殊ケース」の特殊ケースです。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版)
+</div>
 </div>
 <div class="paragraph">
 <p>まず、それ以外のタイプの場合の振る舞いを変更します。</p>
@@ -6012,7 +6123,7 @@ Finished in 0.00780s
 </div>
 </div>
 <div class="paragraph">
-<p>現時点では <strong>例外</strong> を投げるので未定義タイプ <code>FizzBuzzTypeNotDefined</code> を作成して <strong>ファクトリメソッド</strong> の処理変更します。</p>
+<p>現時点では <strong>例外</strong> を投げるので未定義タイプ <code>FizzBuzzTypeNotDefined</code> を作成して <strong>ファクトリメソッド</strong> を変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6076,13 +6187,14 @@ class FizzBuzzTypeNotDefined &lt; FizzBuzzType
     '未定義'
   end
 end
+
+class FizzBuzzValue
 ...</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb"
-Started with run options --seed 33939
+<pre class="highlight"><code class="language-bash" data-lang="bash">Started with run options --seed 33939
 
 
 Progress: |=====================================================================================================|
@@ -6138,8 +6250,21 @@ Finished in 0.00747s
 <div class="paragraph">
 <p><code>FizzBuzzTypeNotDefined</code> オブジェクトは <strong>Null Objectパターン</strong> と適用したものです。</p>
 </div>
+<div class="quoteblock">
+<blockquote>
 <div class="paragraph">
-<p><strong>開放/閉鎖原則</strong> に従って未定義のタイプである <strong>Null Object</strong> を安全に追加することが出来ました。</p>
+<p>Null Objectパターン</p>
+</div>
+<div class="paragraph">
+<p>特殊な状況をオブジェクトで表現するにはどうすればよいだろうか---その特殊な状況を表現するオブジェクトを作り、通常のオブジェクトと同じプロトコル（メソッド群）を実装しよう。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; テスト駆動開発
+</div>
+</div>
+<div class="paragraph">
+<p><strong>オープン・クローズドの原則</strong> に従って未定義のタイプである <strong>Null Object</strong> を安全に追加することが出来ました。</p>
 </div>
 <div class="paragraph">
 <p>コミットしましょう。</p>
@@ -6152,7 +6277,7 @@ $ git commit -m 'refactor: 特殊ケースの導入'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-633a043c1664b9f55569102a3c998076.png" alt="diag 633a043c1664b9f55569102a3c998076" width="1088" height="437">
+<img src="diag-6fed39397704942f77a640a6a30b0624.png" alt="diag 6fed39397704942f77a640a6a30b0624" width="1088" height="437">
 </div>
 </div>
 </div>
@@ -6161,7 +6286,7 @@ $ git commit -m 'refactor: 特殊ケースの導入'</code></pre>
 <h4 id="_モジュールの分割">モジュールの分割</h4>
 <div class="imageblock">
 <div class="content">
-<img src="diag-633a043c1664b9f55569102a3c998076.png" alt="diag 633a043c1664b9f55569102a3c998076" width="1088" height="437">
+<img src="diag-6fed39397704942f77a640a6a30b0624.png" alt="diag 6fed39397704942f77a640a6a30b0624" width="1088" height="437">
 </div>
 </div>
 <div class="paragraph">
@@ -7860,7 +7985,7 @@ end</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-06 19:06:26 JST
+Last updated 2020-02-07 16:09:46 JST
 </div>
 </div>
 </body>
