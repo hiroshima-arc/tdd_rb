@@ -670,16 +670,13 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_アプリケーション">アプリケーション</a></li>
 <li><a href="#_テスト">テスト</a></li>
 <li><a href="#_エントリーポイント">エントリーポイント</a></li>
-<li><a href="#_application">Application</a></li>
-<li><a href="#_domain">Domain</a></li>
-<li><a href="#_test">Test</a></li>
 </ul>
 </li>
 <li><a href="#_ふりかえり_2">3.1.11. ふりかえり</a>
 <ul class="sectlevel4">
 <li><a href="#_オブジェクト指向プログラム_2">オブジェクト指向プログラム</a></li>
 <li><a href="#_オブジェクト指向設計_2">オブジェクト指向設計</a></li>
-<li><a href="#_ドメインモデル_2">ドメインモデル</a></li>
+<li><a href="#_モジュールの分割_2">モジュールの分割</a></li>
 </ul>
 </li>
 </ul>
@@ -13379,7 +13376,7 @@ $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
       application/
            |
            -- fizz_buzz_value_command_test.rb
-           -- fizz_buzz_list_command._test.rb
+           -- fizz_buzz_list_command_test.rb
       domain/
            |
            model/
@@ -14047,8 +14044,44 @@ $ git commit -m 'refactor: モジュール分割'</code></pre>
 </div>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_ふりかえり_2">3.1.11. ふりかえり</h4>
+<div class="paragraph">
+<p>今回、 <strong>オブジェクト指向プログラム</strong> から <strong>オブジェクト指向設計</strong> そして <strong>モジュールの分割</strong> を <strong>テスト駆動開発</strong> を通じて実践しました。</p>
+</div>
 <div class="sect4">
-<h5 id="_application">Application</h5>
+<h5 id="_オブジェクト指向プログラム_2">オブジェクト指向プログラム</h5>
+<div class="paragraph">
+<p>エピソード1で作成したプログラムの追加仕様を <strong>テスト駆動開発</strong> で実装しました。 次に <strong>手続き型コード</strong> との比較から <strong>オブジェクト指向プログラム</strong> を構成する <strong>カプセル化</strong> <strong>ポリモフィズム</strong> <strong>継承</strong> という概念をコードの <strong>リファクタリング</strong> を通じて解説しました。</p>
+</div>
+<div class="paragraph">
+<p>具体的には <strong>フィールドのカプセル</strong> から <strong>setterの削除</strong> を適用することにより <strong>カプセル化</strong> を実現しました。続いて、 <strong>ポリモーフィズムによる条件記述の置き換え</strong> から <strong>State/Strategyによるタイプコードの置き換え</strong> を適用することにより <strong>ポリモーフィズム</strong> の効果を体験しました。そして、 <strong>スーパークラスの抽出</strong> から <strong>メソッド名の変更</strong> <strong>メソッドの移動</strong> の適用を通して <strong>継承</strong> の使い方を体験しました。さらに <strong>値オブジェクト</strong> と <strong>ファーストクラス</strong> というオブジェクト指向プログラムツールの使い方も学習しました。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_オブジェクト指向設計_2">オブジェクト指向設計</h5>
+<div class="paragraph">
+<p>次に設計の観点から <strong>単一責任の原則</strong> に違反している <code>FizzBuzz</code> クラスを <strong>デザインパターン</strong> の1つである <strong>Commandパターン</strong> を使ったリファクタリングである <strong>メソッドオブジェクトによるメソッドの置き換え</strong> を適用してクラスの責務を分割しました。オブジェクト指向設計のイデオムである <strong>デザインパターン</strong> として <strong>Commandパターン</strong> 以外に <strong>Value Objectパターン</strong> <strong>Factory Methodパターン</strong> <strong>Strategyパターン</strong> を <strong>リファクタリング</strong> を適用する過程ですでに実現していたことを説明しました。そして、<strong>オープン・クローズドの原則</strong> を満たすコードに <strong>リファクタリング</strong> されているので既存のコードを変更することなく振る舞いを変更できるようになりました。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_モジュールの分割_2">モジュールの分割</h5>
+<div class="paragraph">
+<p>最後に、<strong>モノリシック</strong> なファイルから個別のクラスモジュールへの分割を <strong>ドメインオブジェクト</strong> の抽出を通して <strong>ドメインモデル</strong> へと整理することにより <strong>モジュールの分割</strong> を実現しました。最終的にプログラムからアプリケーションへと体裁を整えることが出来ました。以下が最終的なモジュール構造とコードです。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-c335939a7cce862d0b767629390a1852.png" alt="diag c335939a7cce862d0b767629390a1852" width="1593" height="396">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Application</p>
+</li>
+</ul>
+</div>
 <div class="listingblock">
 <div class="title">/main.rb</div>
 <div class="content">
@@ -14102,9 +14135,13 @@ command.execute(<span class="integer">100</span>).each { |i| puts i.value }</cod
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>Domain</p>
+</li>
+</ul>
 </div>
-<div class="sect4">
-<h5 id="_domain">Domain</h5>
 <div class="listingblock">
 <div class="title">/lib/domain/model/fizz_buzz_value.rb</div>
 <div class="content">
@@ -14248,9 +14285,13 @@ command.execute(<span class="integer">100</span>).each { |i| puts i.value }</cod
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>Test</p>
+</li>
+</ul>
 </div>
-<div class="sect4">
-<h5 id="_test">Test</h5>
 <div class="listingblock">
 <div class="title">/test/application/fizz_buzz_value_command_test.rb</div>
 <div class="content">
@@ -14576,21 +14617,6 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_ふりかえり_2">3.1.11. ふりかえり</h4>
-<div class="sect4">
-<h5 id="_オブジェクト指向プログラム_2">オブジェクト指向プログラム</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_オブジェクト指向設計_2">オブジェクト指向設計</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_ドメインモデル_2">ドメインモデル</h5>
-
 </div>
 </div>
 </div>

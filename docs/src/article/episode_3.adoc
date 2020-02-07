@@ -6533,7 +6533,7 @@ FizzBuzzCommand *- FizzBuzzType
        application/
             |
             -- fizz_buzz_value_command_test.rb
-            -- fizz_buzz_list_command._test.rb
+            -- fizz_buzz_list_command_test.rb
        domain/
             |
             model/
@@ -7230,7 +7230,78 @@ FizzBuzzListCommand --> FizzBuzzList
 FizzBuzzCommand *- FizzBuzzType
 ----
 
-===== Application
+==== ふりかえり
+
+今回、 *オブジェクト指向プログラム* から *オブジェクト指向設計* そして *モジュールの分割* を *テスト駆動開発* を通じて実践しました。
+
+===== オブジェクト指向プログラム
+
+エピソード1で作成したプログラムの追加仕様を *テスト駆動開発* で実装しました。 次に *手続き型コード* との比較から *オブジェクト指向プログラム* を構成する *カプセル化* *ポリモフィズム* *継承* という概念をコードの *リファクタリング* を通じて解説しました。
+
+具体的には *フィールドのカプセル* から *setterの削除* を適用することにより *カプセル化* を実現しました。続いて、 *ポリモーフィズムによる条件記述の置き換え* から *State/Strategyによるタイプコードの置き換え* を適用することにより *ポリモーフィズム* の効果を体験しました。そして、 *スーパークラスの抽出* から *メソッド名の変更* *メソッドの移動* の適用を通して *継承* の使い方を体験しました。さらに *値オブジェクト* と *ファーストクラス* というオブジェクト指向プログラムツールの使い方も学習しました。
+
+===== オブジェクト指向設計
+
+次に設計の観点から *単一責任の原則* に違反している `FizzBuzz` クラスを *デザインパターン* の1つである *Commandパターン* を使ったリファクタリングである *メソッドオブジェクトによるメソッドの置き換え* を適用してクラスの責務を分割しました。オブジェクト指向設計のイデオムである *デザインパターン* として *Commandパターン* 以外に *Value Objectパターン* *Factory Methodパターン* *Strategyパターン* を *リファクタリング* を適用する過程ですでに実現していたことを説明しました。そして、*オープン・クローズドの原則* を満たすコードに *リファクタリング* されているので既存のコードを変更することなく振る舞いを変更できるようになりました。
+
+===== モジュールの分割
+
+最後に、*モノリシック* なファイルから個別のクラスモジュールへの分割を *ドメインオブジェクト* の抽出を通して *ドメインモデル* へと整理することにより *モジュールの分割* を実現しました。最終的にプログラムからアプリケーションへと体裁を整えることが出来ました。以下が最終的なモジュール構造とコードです。
+
+[plantuml]
+----
+package "lib" {
+  package "Application" {
+    class FizzBuzzCommand {
+    }
+    class FizzBuzzValueCommand {
+    }
+    class FizzBuzzListCommand {
+    }
+  }
+  package "Domain" {
+    package "Model" {
+      class FizzBuzzValue {
+      }
+      class FizzBuzzList {
+      }
+    }
+    package "Type" {
+      class FizzBuzzType {
+      }
+      class FizzBuzzType01 {
+      }
+      class FizzBuzzType02 {
+      }
+      class FizzBuzzType03 {
+      }
+      class FizzBuzzTypeNotDefined {
+      }
+    }
+  }
+}
+package "test" {
+  class FizzBuzzValueCommandTest {
+  }
+  class FizzBuzzListCommandTest {
+  }
+}
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzType <|-- FizzBuzzTypeNotDefined
+FizzBuzzType01 --> FizzBuzzValue
+FizzBuzzType02 --> FizzBuzzValue
+FizzBuzzType03 --> FizzBuzzValue
+FizzBuzzTypeNotDefined --> FizzBuzzValue
+FizzBuzzList *- FizzBuzzValue
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzListCommand --> FizzBuzzList
+FizzBuzzCommand *- FizzBuzzType
+----
+
+- Application
 
 ./main.rb
 [source, ruby]
@@ -7256,7 +7327,7 @@ include::./code/episode_3/lib/application/fizz_buzz_value_command.rb[]
 include::./code/episode_3/lib/application/fizz_buzz_list_command.rb[]
 ----
 
-===== Domain
+- Domain
 
 ./lib/domain/model/fizz_buzz_value.rb
 [source, ruby]
@@ -7300,7 +7371,7 @@ include::./code/episode_3/lib/domain/type/fizz_buzz_type_03.rb[]
 include::./code/episode_3/lib/domain/type/fizz_buzz_type_not_defined.rb[]
 ----
 
-===== Test
+- Test
 
 ./test/application/fizz_buzz_value_command_test.rb
 [source, ruby]
@@ -7331,11 +7402,3 @@ include::./code/episode_3/test/domain/model/fizz_buzz_list_test.rb[]
 ----
 include::./code/episode_3/test/learning_test.rb[]
 ----
-
-==== ふりかえり
-
-===== オブジェクト指向プログラム
-
-===== オブジェクト指向設計
-
-===== ドメインモデル
