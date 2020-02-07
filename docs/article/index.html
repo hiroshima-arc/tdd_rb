@@ -12882,7 +12882,7 @@ $ git commit -m 'refactor: 特殊ケースの導入'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-6fed39397704942f77a640a6a30b0624.png" alt="diag 6fed39397704942f77a640a6a30b0624" width="1088" height="437">
+<img src="diag-caae288ae2de78d48a071c3e4fbafe51.png" alt="diag caae288ae2de78d48a071c3e4fbafe51" width="1088" height="437">
 </div>
 </div>
 </div>
@@ -12891,7 +12891,7 @@ $ git commit -m 'refactor: 特殊ケースの導入'</code></pre>
 <h4 id="_モジュールの分割">3.1.10. モジュールの分割</h4>
 <div class="imageblock">
 <div class="content">
-<img src="diag-6fed39397704942f77a640a6a30b0624.png" alt="diag 6fed39397704942f77a640a6a30b0624" width="1088" height="437">
+<img src="diag-caae288ae2de78d48a071c3e4fbafe51.png" alt="diag caae288ae2de78d48a071c3e4fbafe51" width="1088" height="437">
 </div>
 </div>
 <div class="paragraph">
@@ -12952,7 +12952,30 @@ $ git commit -m 'fix: プリントする'</code></pre>
 <div class="sect4">
 <h5 id="_ドメインモデル">ドメインモデル</h5>
 <div class="paragraph">
-<p><code>fizz_buzz.rb</code> ファイル内のクラスモジュールをファイルとして分割していきます。まずは <strong>ドメインモデル</strong> から分割しましょう。既存のテストを壊さないように１つづつコピー&amp;ペーストしていきます。</p>
+<p><code>fizz_buzz.rb</code> ファイル内のクラスモジュールをファイルとして分割していきます。まずは <strong>ドメインオブジェクト</strong> を抽出して <strong>ドメインモデル</strong> として整理しましょう。既存のテストを壊さないように１つづつコピー&amp;ペーストしていきます。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>関連する業務データと業務ロジックを１つにまとめたこのようなオブジェクトをドメインオブジェクトと呼びます。</p>
+</div>
+<div class="paragraph">
+<p>「ドメイン」とは、対象領域とか問題領域という意味です。業務アプリケーションの場合、そのアプリケーションが対象とる業務活動全体がドメインです。業務活動という問題領域（ドメイン）で扱うデータと業務ロジックを、オブジェクトとして表現したものドメインオブジェクトです。ドメインオブジェクトは、業務データと業務ロジックを密接に関係づけます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 現場で役立つシステム設計の原則
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>このように業務アプリケーションの対象領域（ドメイン）をオブジェクトのモデルとして整理したものをドメインモデルと呼びます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 現場で役立つシステム設計の原則
+</div>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -12988,6 +13011,9 @@ $ git commit -m 'fix: プリントする'</code></pre>
       |
        -- fizz_buzz_test.rb</pre>
 </div>
+</div>
+<div class="paragraph">
+<p><strong>値オブジェクトクラス</strong> と <strong>タイプクラス</strong> を <code>domain</code> フォルダ以下に配置します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -13035,38 +13061,6 @@ $ git commit -m 'fix: プリントする'</code></pre>
 
   <span class="keyword">def</span> <span class="function">add</span>(value)
     <span class="constant">FizzBuzzList</span>.new(<span class="instance-variable">@value</span> + value)
-  <span class="keyword">end</span>
-<span class="keyword">end</span></code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
-
-<span class="keyword">class</span> <span class="class">FizzBuzzType</span>
-  <span class="constant">TYPE_01</span> = <span class="integer">1</span>
-  <span class="constant">TYPE_02</span> = <span class="integer">2</span>
-  <span class="constant">TYPE_03</span> = <span class="integer">3</span>
-
-  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">create</span>(type)
-    <span class="keyword">case</span> type
-    <span class="keyword">when</span> <span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>
-      <span class="constant">FizzBuzzType01</span>.new
-    <span class="keyword">when</span> <span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_02</span>
-      <span class="constant">FizzBuzzType02</span>.new
-    <span class="keyword">when</span> <span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_03</span>
-      <span class="constant">FizzBuzzType03</span>.new
-    <span class="keyword">else</span>
-      <span class="constant">FizzBuzzTypeNotDefined</span>.new
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">fizz?</span>(number)
-    number.modulo(<span class="integer">3</span>).zero?
-  <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">buzz?</span>(number)
-    number.modulo(<span class="integer">5</span>).zero?
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
@@ -13206,6 +13200,16 @@ $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
 <div class="paragraph">
 <p>続いて <strong>アプリケーション層</strong> の分割を行います。</p>
 </div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>データクラスと機能クラスを分ける手続き型の設計では、アプリケーション層のクラスに業務ロジックの詳細を記述します。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 現場で役立つシステム設計の原則
+</div>
+</div>
 <div class="literalblock">
 <div class="content">
 <pre>/main.rb
@@ -13256,6 +13260,9 @@ $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
       |
        -- fizz_buzz_test.rb</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>ここでは <strong>ドメインオブジェクト</strong> を操作する <strong>メソッドオブジェクト</strong> を <code>application</code> フォルダ以下に配置します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -13611,6 +13618,30 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
 require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
 
+<span class="keyword">class</span> <span class="class">FizzBuzzListTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_新しいインスタンスが作られる</span>
+    command = <span class="constant">FizzBuzzListCommand</span>.new(<span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>))
+    array = command.execute(<span class="integer">50</span>)
+    list1 = <span class="constant">FizzBuzzList</span>.new(array)
+    list2 = list1.add(array)
+
+    assert_equal <span class="integer">50</span>, list1.value.count
+    assert_equal <span class="integer">100</span>, list2.value.count
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+require <span class="string"><span class="delimiter">'</span><span class="content">simplecov</span><span class="delimiter">'</span></span>
+<span class="constant">SimpleCov</span>.start
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/reporters</span><span class="delimiter">'</span></span>
+<span class="constant">Minitest</span>::<span class="constant">Reporters</span>.use!
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
+
 <span class="keyword">class</span> <span class="class">LearningTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   describe <span class="string"><span class="delimiter">'</span><span class="content">配列や繰り返し処理を理解する</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
     <span class="keyword">def</span> <span class="function">test_繰り返し処理</span>
@@ -13690,30 +13721,6 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
       result = [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span>].reduce { |total, n| total + n }
       assert_equal <span class="integer">15</span>, result
     <span class="keyword">end</span>
-  <span class="keyword">end</span>
-<span class="keyword">end</span></code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
-
-require <span class="string"><span class="delimiter">'</span><span class="content">simplecov</span><span class="delimiter">'</span></span>
-<span class="constant">SimpleCov</span>.start
-require <span class="string"><span class="delimiter">'</span><span class="content">minitest/reporters</span><span class="delimiter">'</span></span>
-<span class="constant">Minitest</span>::<span class="constant">Reporters</span>.use!
-require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
-require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fizz_buzz</span><span class="delimiter">'</span></span>
-
-<span class="keyword">class</span> <span class="class">FizzBuzzListTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
-  <span class="keyword">def</span> <span class="function">test_新しいインスタンスが作られる</span>
-    command = <span class="constant">FizzBuzzListCommand</span>.new(<span class="constant">FizzBuzzType</span>.create(<span class="constant">FizzBuzzType</span>::<span class="constant">TYPE_01</span>))
-    array = command.execute(<span class="integer">50</span>)
-    list1 = <span class="constant">FizzBuzzList</span>.new(array)
-    list2 = list1.add(array)
-
-    assert_equal <span class="integer">50</span>, list1.value.count
-    assert_equal <span class="integer">100</span>, list2.value.count
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>

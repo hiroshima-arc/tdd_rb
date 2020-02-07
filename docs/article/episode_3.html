@@ -6277,7 +6277,7 @@ $ git commit -m 'refactor: 特殊ケースの導入'</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-6fed39397704942f77a640a6a30b0624.png" alt="diag 6fed39397704942f77a640a6a30b0624" width="1088" height="437">
+<img src="diag-caae288ae2de78d48a071c3e4fbafe51.png" alt="diag caae288ae2de78d48a071c3e4fbafe51" width="1088" height="437">
 </div>
 </div>
 </div>
@@ -6286,7 +6286,7 @@ $ git commit -m 'refactor: 特殊ケースの導入'</code></pre>
 <h4 id="_モジュールの分割">モジュールの分割</h4>
 <div class="imageblock">
 <div class="content">
-<img src="diag-6fed39397704942f77a640a6a30b0624.png" alt="diag 6fed39397704942f77a640a6a30b0624" width="1088" height="437">
+<img src="diag-caae288ae2de78d48a071c3e4fbafe51.png" alt="diag caae288ae2de78d48a071c3e4fbafe51" width="1088" height="437">
 </div>
 </div>
 <div class="paragraph">
@@ -6347,7 +6347,30 @@ $ git commit -m 'fix: プリントする'</code></pre>
 <div class="sect4">
 <h5 id="_ドメインモデル">ドメインモデル</h5>
 <div class="paragraph">
-<p><code>fizz_buzz.rb</code> ファイル内のクラスモジュールをファイルとして分割していきます。まずは <strong>ドメインモデル</strong> から分割しましょう。既存のテストを壊さないように１つづつコピー&amp;ペーストしていきます。</p>
+<p><code>fizz_buzz.rb</code> ファイル内のクラスモジュールをファイルとして分割していきます。まずは <strong>ドメインオブジェクト</strong> を抽出して <strong>ドメインモデル</strong> として整理しましょう。既存のテストを壊さないように１つづつコピー&amp;ペーストしていきます。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>関連する業務データと業務ロジックを１つにまとめたこのようなオブジェクトをドメインオブジェクトと呼びます。</p>
+</div>
+<div class="paragraph">
+<p>「ドメイン」とは、対象領域とか問題領域という意味です。業務アプリケーションの場合、そのアプリケーションが対象とる業務活動全体がドメインです。業務活動という問題領域（ドメイン）で扱うデータと業務ロジックを、オブジェクトとして表現したものドメインオブジェクトです。ドメインオブジェクトは、業務データと業務ロジックを密接に関係づけます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 現場で役立つシステム設計の原則
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>このように業務アプリケーションの対象領域（ドメイン）をオブジェクトのモデルとして整理したものをドメインモデルと呼びます。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 現場で役立つシステム設計の原則
+</div>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -6383,6 +6406,9 @@ $ git commit -m 'fix: プリントする'</code></pre>
       |
        -- fizz_buzz_test.rb</pre>
 </div>
+</div>
+<div class="paragraph">
+<p><strong>値オブジェクトクラス</strong> と <strong>タイプクラス</strong> を <code>domain</code> フォルダ以下に配置します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6430,38 +6456,6 @@ class FizzBuzzList
 
   def add(value)
     FizzBuzzList.new(@value + value)
-  end
-end</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
-
-class FizzBuzzType
-  TYPE_01 = 1
-  TYPE_02 = 2
-  TYPE_03 = 3
-
-  def self.create(type)
-    case type
-    when FizzBuzzType::TYPE_01
-      FizzBuzzType01.new
-    when FizzBuzzType::TYPE_02
-      FizzBuzzType02.new
-    when FizzBuzzType::TYPE_03
-      FizzBuzzType03.new
-    else
-      FizzBuzzTypeNotDefined.new
-    end
-  end
-
-  def fizz?(number)
-    number.modulo(3).zero?
-  end
-
-  def buzz?(number)
-    number.modulo(5).zero?
   end
 end</code></pre>
 </div>
@@ -6601,6 +6595,16 @@ $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
 <div class="paragraph">
 <p>続いて <strong>アプリケーション層</strong> の分割を行います。</p>
 </div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>データクラスと機能クラスを分ける手続き型の設計では、アプリケーション層のクラスに業務ロジックの詳細を記述します。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; 現場で役立つシステム設計の原則
+</div>
+</div>
 <div class="literalblock">
 <div class="content">
 <pre>/main.rb
@@ -6651,6 +6655,9 @@ $ git commit -m 'refactor(WIP): モジュール分割'</code></pre>
       |
        -- fizz_buzz_test.rb</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>ここでは <strong>ドメインオブジェクト</strong> を操作する <strong>メソッドオブジェクト</strong> を <code>application</code> フォルダ以下に配置します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7006,6 +7013,30 @@ Minitest::Reporters.use!
 require 'minitest/autorun'
 require './lib/fizz_buzz'
 
+class FizzBuzzListTest &lt; Minitest::Test
+  def test_新しいインスタンスが作られる
+    command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    array = command.execute(50)
+    list1 = FizzBuzzList.new(array)
+    list2 = list1.add(array)
+
+    assert_equal 50, list1.value.count
+    assert_equal 100, list2.value.count
+  end
+end</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
+
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
 class LearningTest &lt; Minitest::Test
   describe '配列や繰り返し処理を理解する' do
     def test_繰り返し処理
@@ -7085,30 +7116,6 @@ class LearningTest &lt; Minitest::Test
       result = [1, 2, 3, 4, 5].reduce { |total, n| total + n }
       assert_equal 15, result
     end
-  end
-end</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby"># frozen_string_literal: true
-
-require 'simplecov'
-SimpleCov.start
-require 'minitest/reporters'
-Minitest::Reporters.use!
-require 'minitest/autorun'
-require './lib/fizz_buzz'
-
-class FizzBuzzListTest &lt; Minitest::Test
-  def test_新しいインスタンスが作られる
-    command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    array = command.execute(50)
-    list1 = FizzBuzzList.new(array)
-    list2 = list1.add(array)
-
-    assert_equal 50, list1.value.count
-    assert_equal 100, list2.value.count
   end
 end</code></pre>
 </div>
@@ -7985,7 +7992,7 @@ end</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-07 16:09:46 JST
+Last updated 2020-02-07 17:47:49 JST
 </div>
 </div>
 </body>

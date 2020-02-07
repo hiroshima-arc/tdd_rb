@@ -5911,28 +5911,28 @@ class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzTypeNotDefined {
-   generate()
+   generate(number)
    to_s()
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 class FizzBuzzList {
    MAX_COUNT = 100
@@ -5972,28 +5972,28 @@ class FizzBuzzType {
     TYPE_01 = 1
     TYPE_02 = 2
     TYPE_03 = 3
-    {static} create()
-    fizz?()
-    buzz?()
+    {static} create(type)
+    fizz?(number)
+    buzz?(number)
 }
 class FizzBuzzType01 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType02 {
-   generate()
+   generate(number)
 }
 class FizzBuzzType03 {
-   generate()
+   generate(number)
 }
 class FizzBuzzTypeNotDefined {
-   generate()
+   generate(number)
    to_s()
 }
 class FizzBuzzValue {
    number
    value
    to_s()
-   eql?()
+   eql?(other)
 }
 class FizzBuzzList {
    MAX_COUNT = 100
@@ -6079,7 +6079,19 @@ $ git commit -m 'fix: プリントする'
 
 ===== ドメインモデル
 
-`fizz_buzz.rb` ファイル内のクラスモジュールをファイルとして分割していきます。まずは *ドメインモデル* から分割しましょう。既存のテストを壊さないように１つづつコピー&ペーストしていきます。
+`fizz_buzz.rb` ファイル内のクラスモジュールをファイルとして分割していきます。まずは *ドメインオブジェクト* を抽出して *ドメインモデル* として整理しましょう。既存のテストを壊さないように１つづつコピー&ペーストしていきます。
+
+[quote, 現場で役立つシステム設計の原則]
+____
+関連する業務データと業務ロジックを１つにまとめたこのようなオブジェクトをドメインオブジェクトと呼びます。
+
+「ドメイン」とは、対象領域とか問題領域という意味です。業務アプリケーションの場合、そのアプリケーションが対象とる業務活動全体がドメインです。業務活動という問題領域（ドメイン）で扱うデータと業務ロジックを、オブジェクトとして表現したものドメインオブジェクトです。ドメインオブジェクトは、業務データと業務ロジックを密接に関係づけます。
+____
+
+[quote, 現場で役立つシステム設計の原則]
+____
+このように業務アプリケーションの対象領域（ドメイン）をオブジェクトのモデルとして整理したものをドメインモデルと呼びます。
+____
 
  /main.rb
    |--lib/
@@ -6109,6 +6121,8 @@ $ git commit -m 'fix: プリントする'
    |--test/
        |
         -- fizz_buzz_test.rb
+
+*値オブジェクトクラス* と *タイプクラス* を `domain` フォルダ以下に配置します。
 
 [source, ruby]
 ----
@@ -6156,38 +6170,6 @@ class FizzBuzzList
 
   def add(value)
     FizzBuzzList.new(@value + value)
-  end
-end
-----
-
-[source, ruby]
-----
-# frozen_string_literal: true
-
-class FizzBuzzType
-  TYPE_01 = 1
-  TYPE_02 = 2
-  TYPE_03 = 3
-
-  def self.create(type)
-    case type
-    when FizzBuzzType::TYPE_01
-      FizzBuzzType01.new
-    when FizzBuzzType::TYPE_02
-      FizzBuzzType02.new
-    when FizzBuzzType::TYPE_03
-      FizzBuzzType03.new
-    else
-      FizzBuzzTypeNotDefined.new
-    end
-  end
-
-  def fizz?(number)
-    number.modulo(3).zero?
-  end
-
-  def buzz?(number)
-    number.modulo(5).zero?
   end
 end
 ----
@@ -6352,6 +6334,11 @@ FizzBuzzList *- FizzBuzzValue
 
 続いて *アプリケーション層* の分割を行います。
 
+[quote, 現場で役立つシステム設計の原則]
+____
+データクラスと機能クラスを分ける手続き型の設計では、アプリケーション層のクラスに業務ロジックの詳細を記述します。
+____
+
  /main.rb
    |--lib/
        |
@@ -6396,6 +6383,8 @@ FizzBuzzList *- FizzBuzzValue
    |--test/
        |
         -- fizz_buzz_test.rb
+
+ここでは *ドメインオブジェクト* を操作する *メソッドオブジェクト* を `application` フォルダ以下に配置します。
 
 [source, ruby]
 ----
@@ -6782,6 +6771,30 @@ Minitest::Reporters.use!
 require 'minitest/autorun'
 require './lib/fizz_buzz'
 
+class FizzBuzzListTest < Minitest::Test
+  def test_新しいインスタンスが作られる
+    command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+    array = command.execute(50)
+    list1 = FizzBuzzList.new(array)
+    list2 = list1.add(array)
+
+    assert_equal 50, list1.value.count
+    assert_equal 100, list2.value.count
+  end
+end
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+require './lib/fizz_buzz'
+
 class LearningTest < Minitest::Test
   describe '配列や繰り返し処理を理解する' do
     def test_繰り返し処理
@@ -6861,31 +6874,6 @@ class LearningTest < Minitest::Test
       result = [1, 2, 3, 4, 5].reduce { |total, n| total + n }
       assert_equal 15, result
     end
-  end
-end
-----
-
-
-[source, ruby]
-----
-# frozen_string_literal: true
-
-require 'simplecov'
-SimpleCov.start
-require 'minitest/reporters'
-Minitest::Reporters.use!
-require 'minitest/autorun'
-require './lib/fizz_buzz'
-
-class FizzBuzzListTest < Minitest::Test
-  def test_新しいインスタンスが作られる
-    command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    array = command.execute(50)
-    list1 = FizzBuzzList.new(array)
-    list2 = list1.add(array)
-
-    assert_equal 50, list1.value.count
-    assert_equal 100, list2.value.count
   end
 end
 ----
