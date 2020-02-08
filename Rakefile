@@ -7,7 +7,7 @@ RuboCop::RakeTask.new
 task default: [:guard]
 
 Rake::TestTask.new do |test|
-  test.test_files = Dir['./test/fizz_buzz_test.rb']
+  test.test_files = Dir['./test/**/*_test.rb']
   test.verbose = true
 end
 
