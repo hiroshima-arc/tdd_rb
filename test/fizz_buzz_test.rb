@@ -243,4 +243,14 @@ class FizzBuzzTest < Minitest::Test
       assert_equal 200, list2.value.count
     end
   end
+
+  describe '例外ケース' do
+    def test_値は正の値のみ許可する
+      assert_raises Assertions::AssertionFailedError do
+        FizzBuzzValueCommand.new(
+          FizzBuzzType.create(FizzBuzzType::TYPE_01)
+        ).execute(-1)
+      end
+    end
+  end
 end
