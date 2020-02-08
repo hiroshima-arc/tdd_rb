@@ -14,7 +14,7 @@ class FizzBuzzType
     when FizzBuzzType::TYPE_03
       FizzBuzzType03.new
     else
-      raise '該当するタイプは存在しません'
+      FizzBuzzTypeNotDefined.new
     end
   end
 
@@ -48,6 +48,16 @@ class FizzBuzzType03 < FizzBuzzType
     return FizzBuzzValue.new(number, 'FizzBuzz') if fizz?(number) && buzz?(number)
 
     FizzBuzzValue.new(number, number.to_s)
+  end
+end
+
+class FizzBuzzTypeNotDefined < FizzBuzzType
+  def generate(number)
+    FizzBuzzValue.new(number, '')
+  end
+
+  def to_s
+    '未定義'
   end
 end
 

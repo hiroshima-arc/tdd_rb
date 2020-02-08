@@ -127,12 +127,17 @@ class FizzBuzzTest < Minitest::Test
     end
 
     describe 'それ以外のタイプの場合' do
-      def test_例外を返す
-        e = assert_raises RuntimeError do
-          FizzBuzzType.create(4)
-        end
+      def test_未定義のタイプを返す
+        fizzbuzz = FizzBuzzType.create(4)
 
-        assert_equal '該当するタイプは存在しません', e.message
+        assert_equal '未定義', fizzbuzz.to_s
+      end
+
+      def test_空の文字列を返す
+        type = FizzBuzzType.create(4)
+        command = FizzBuzzValueCommand.new(type)
+
+        assert_equal '', command.execute(3)
       end
     end
   end
