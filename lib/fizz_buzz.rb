@@ -1,28 +1,5 @@
 # frozen_string_literal: true
 
-class FizzBuzz
-  MAX_NUMBER = 100
-  attr_reader :type
-
-  def list
-    @list.value
-  end
-
-  def initialize(type)
-    @type = type
-    @list = FizzBuzzList.new([])
-  end
-
-  def generate(number)
-    @type.generate(number)
-  end
-
-  def generate_list
-    # 1から最大値までのFizzBuzz配列を1発で作る
-    @list = @list.add((1..MAX_NUMBER).map { |n| @type.generate(n) })
-  end
-end
-
 class FizzBuzzType
   TYPE_01 = 1
   TYPE_02 = 2

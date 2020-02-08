@@ -218,32 +218,26 @@ class FizzBuzzTest < Minitest::Test
   end
 
   describe 'FizzBuzzValue' do
-    def setup
-      @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
-
     def test_同じで値である
-      value1 = @fizzbuzz.generate(1)
-      value2 = @fizzbuzz.generate(1)
+      value1 = FizzBuzzValue.new(1, '1')
+      value2 = FizzBuzzValue.new(1, '1')
 
       assert value1.eql?(value2)
     end
 
     def test_to_stringメソッド
-      value = @fizzbuzz.generate(3)
+      value = FizzBuzzValue.new(3, 'Fizz')
 
       assert_equal '3:Fizz', value.to_s
     end
   end
 
   describe 'FizzBuzzValueList' do
-    def setup
-      @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
-    end
-
     def test_新しいインスタンスが作られる
-      list1 = @fizzbuzz.generate_list
-      list2 = list1.add(list1.value)
+      command = FizzBuzzListCommand.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
+      array = command.execute(100)
+      list1 = FizzBuzzList.new(array)
+      list2 = list1.add(array)
 
       assert_equal 100, list1.value.count
       assert_equal 200, list2.value.count
