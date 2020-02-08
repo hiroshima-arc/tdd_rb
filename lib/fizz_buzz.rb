@@ -2,11 +2,15 @@
 
 class FizzBuzz
   MAX_NUMBER = 100
-  attr_reader :list
   attr_reader :type
+
+  def list
+    @list.value
+  end
 
   def initialize(type)
     @type = type
+    @list = FizzBuzzList.new([])
   end
 
   def generate(number)
@@ -15,7 +19,7 @@ class FizzBuzz
 
   def generate_list
     # 1から最大値までのFizzBuzz配列を1発で作る
-    @list = (1..MAX_NUMBER).map { |n| generate(n) }
+    @list = @list.add((1..MAX_NUMBER).map { |n| @type.generate(n) })
   end
 end
 
@@ -87,4 +91,20 @@ class FizzBuzzValue
   end
 
   alias eql? ==
+end
+
+class FizzBuzzList
+  attr_reader :value
+
+  def initialize(list)
+    @value = list
+  end
+
+  def to_s
+    @value.to_s
+  end
+
+  def add(value)
+    FizzBuzzList.new(@value + value)
+  end
 end
