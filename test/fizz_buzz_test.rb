@@ -40,9 +40,8 @@ class FizzBuzzTest < Minitest::Test
 
       describe '1から100までのFizzBuzzの配列を返す' do
         def setup
-          fizzbuzz = FizzBuzz.new(FizzBuzzType01.new)
-          fizzbuzz.generate_list
-          @result = fizzbuzz.list
+          fizzbuzz = FizzBuzzListCommand.new(FizzBuzzType01.new)
+          @result = fizzbuzz.execute(100)
         end
 
         def test_配列の初めは文字列の1を返す
