@@ -6,7 +6,7 @@ class FizzBuzz
   attr_reader :type
 
   def initialize(type)
-    @type = FizzBuzzType.create(type)
+    @type = type
   end
 
   def generate(number)
