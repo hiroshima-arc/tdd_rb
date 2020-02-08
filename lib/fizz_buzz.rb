@@ -2,8 +2,9 @@
 
 class FizzBuzz
   MAX_NUMBER = 100
+  attr_accessor :list
 
-  def self.generate(number, type = 1)
+  def generate(number, type = 1)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
 
@@ -25,8 +26,8 @@ class FizzBuzz
     end
   end
 
-  def self.generate_list
+  def generate_list
     # 1から最大値までのFizzBuzz配列を1発で作る
-    (1..MAX_NUMBER).map { |n| generate(n) }
+    @list = (1..MAX_NUMBER).map { |n| generate(n) }
   end
 end

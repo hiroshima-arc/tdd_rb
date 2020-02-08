@@ -11,7 +11,7 @@ class FizzBuzzTest < Minitest::Test
   describe '数を文字列にして返す' do
     describe 'タイプ1の場合' do
       def setup
-        @fizzbuzz = FizzBuzz
+        @fizzbuzz = FizzBuzz.new
       end
 
       describe '三の倍数の場合' do
@@ -40,7 +40,9 @@ class FizzBuzzTest < Minitest::Test
 
       describe '1から100までのFizzBuzzの配列を返す' do
         def setup
-          @result = FizzBuzz.generate_list
+          fizzbuzz = FizzBuzz.new
+          fizzbuzz.generate_list
+          @result = fizzbuzz.list
         end
 
         def test_配列の初めは文字列の1を返す
@@ -67,7 +69,7 @@ class FizzBuzzTest < Minitest::Test
 
     describe 'タイプ2の場合' do
       def setup
-        @fizzbuzz = FizzBuzz
+        @fizzbuzz = FizzBuzz.new
       end
 
       describe '三の倍数の場合' do
@@ -97,7 +99,7 @@ class FizzBuzzTest < Minitest::Test
 
     describe 'タイプ3の場合' do
       def setup
-        @fizzbuzz = FizzBuzz
+        @fizzbuzz = FizzBuzz.new
       end
 
       describe '三の倍数の場合' do
@@ -127,7 +129,7 @@ class FizzBuzzTest < Minitest::Test
 
     describe 'それ以外のタイプの場合' do
       def setup
-        @fizzbuzz = FizzBuzz
+        @fizzbuzz = FizzBuzz.new
       end
 
       def test_例外を返す
