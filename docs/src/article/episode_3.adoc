@@ -12,7 +12,7 @@
   タイプごとに出力を切り替えることができる。
   タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz の場合のみをプリントする。
 
-早速開発に取り掛かりましょう。エピソード2で自動化しているので以下のコマンドを実行するだけで開始することができます。
+早速開発に取り掛かりましょう。エピソード2で開発環境の自動化をしているので以下のコマンドを実行するだけで開発を始めることができます。
 
 [source, bash]
 ----
@@ -45,7 +45,7 @@ TODOリスト
 
 *テストファースト* *アサートファースト* で最初に失敗するテストから始めます。テストを追加しましょう。
 
-ここでは既存の `FizzBuzz.generate` メソッドにタイプを *引数* として追加することで対応できるように変更してみたいと思います。
+ここでは既存の `FizzBuzz.generate` メソッドにタイプを *引数* として追加することで対応できるように変更してみたいと思います。まず、 `fizz_buzz_test.rb` ファイルに以下のテストコードを追加します。
 
 [source, ruby]
 ----
@@ -697,7 +697,7 @@ class FizzBuzz
 
 [source, bash]
 ----
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+...
 Started with run options --seed 12137
 
 
@@ -715,6 +715,7 @@ lib/fizz_buzz.rb:6:3: C: Metrics/PerceivedComplexity: Perceived complexity for g
  1/1 file |=========================== 100 ============================>| Time: 00:00:00 
 
 1 file inspected, 2 offenses detected
+...
 ----
 
 テストは通りましたが新しい警告が表示されるようになりました。とりあえずコミットしておきます。
@@ -742,7 +743,6 @@ ____
 
 それを式の外側に移動する。
 ____
-
 
 [source, ruby]
 ----
@@ -881,7 +881,7 @@ Finished in 0.00609s
 ...
 ----
 
-*case式* に該当しない場合は *例外を発生させる* ようにします。
+*case式* に該当しないタイプが指定された場合は *例外を発生させる* ようにします。
 
 [quote, かんたんRuby]
 ____
@@ -953,7 +953,7 @@ TODOリスト
 
 ===== 手続き型プログラム
 
-オブジェクト指向の解説の前に以下のコードを御覧ください。いわゆる手続き型で書かれたコードですが、これも追加仕様を満たしています。
+*オブジェクト指向* の解説の前に以下のコードを御覧ください。いわゆる *手続き型* で書かれたコードですが、これも追加仕様を満たしています。
 
 [source, ruby]
 ----
@@ -984,7 +984,7 @@ MAX_NUMBER.times do |i|
       r = i.to_s
     end
   else
-    raise '該当するタイプは存在しません'
+    r = '該当するタイプは存在しません'
   end
 
   list.push(r)
@@ -1017,10 +1017,10 @@ repeat
     if (カウンタが3と5で割り切れる) then (yes)
       :変数にFizzBuzzをセットする;
     else
-      :変数にカウンタをセットする;
+      :変数にカウンタを文字列にしてセットする;
     endif
   else (no)
-    :該当するタイプは存在しません;
+   :変数に該当するタイプは存在しませんをセットする;
   endif
 
   :カウンタを1増やす;
@@ -1031,7 +1031,7 @@ stop
 
 ===== オブジェクト指向プログラム
 
-続いて、これまでに作ってきたコードがこちらになります。上記の手続き型コードとの大きな違いとして `class` というキーワードでくくられている部分があります。
+続いて、これまでに作ってきたコードがこちらになります。上記の *手続き型コード* との大きな違いとして `class` というキーワードでくくられている部分があります。
 
 [quote, かんたんRuby]
 ____
@@ -1072,7 +1072,7 @@ class FizzBuzz
 end
 ----
 
-UMLを使って上記のコードの構造をクラス図として表現しました。
+https://ja.wikipedia.org/wiki/%E7%B5%B1%E4%B8%80%E3%83%A2%E3%83%87%E3%83%AA%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9E[UML^] を使って上記のコードの構造をクラス図として表現しました。
 
 [plantuml]
 ----
@@ -1101,13 +1101,13 @@ A <<-- B : list
 deactivate B
 ----
 
-手続き型コードのフローチャートと比べてどう思われましたか？具体的な記述が少なくデータや処理の概要だけを表現しているけどFizzBuzzのルールを知っている人であれば何をやろうとしているかのイメージはつかみやすいのではないでしょうか？これがオブジェクト指向であるというわけではありません、現時点では *抽象化* がキーワードだという程度の認識で十分です。
+*手続き型コード* のフローチャートと比べてどう思われましたか？具体的な記述が少なくデータや処理の概要だけを表現しているけどFizzBuzzのルールを知っている人であれば何をやろうとしているかのイメージはつかみやすいのではないでしょうか？だから何？と思われるかもしれませんが現時点では *オブジェクト指向* において *抽象化* がキーワードだという程度の認識で十分です。
 
 オブジェクト指向の理解を深める取り掛かりにはこちらの記事を参照してください。
 
 * https://qiita.com/nrslib/items/73bf176147192c402049[オブジェクト指向のいろは^]
 
-オブジェクト指向の詳細は控えるとして、ここでは *カプセル化* *ポリモフィズム* *継承* というオブジェクト指向で言及される概念をリファクタリングを通して体験してもらい、オブジェクト指向プログラムの感覚を掴んでもらうことを目的に解説を進めて行きたいと思います。
+オブジェクト指向の詳細は控えるとして、ここでは *カプセル化* *ポリモフィズム* *継承* というオブジェクト指向で言及される概念をリファクタリングを通して体験してもらい、オブジェクト指向プログラムの感覚を掴んでもらうことを目的に解説を進めていきたいと思います。
 
 ==== カプセル化
 
@@ -1135,6 +1135,16 @@ class FizzBuzz {
 まず、 *インスタンス変数* 追加します。
 
 次に `self` キーワードを外して *クラスメソッド* から *インスタンスメソッド* に変更します。
+
+[quote, かんたんRuby]
+____
+クラスメソッドはいくつか定義方法がありますが、どの方法を使ってもクラスメソッドとして定義されれば「クラス名.メソッド名」という形で呼び出せます。
+____
+
+[quote, かんたんRuby]
+____
+インスタンスメソッドはコンストラクタと同じようにクラス内でdefキーワードを使ってメソッドを定義するだけで作成できます。
+____
 
 [source, ruby]
 ----
@@ -1283,7 +1293,7 @@ Finished in 0.00616s
 ...
 ----
 
-テストが直りました。*クラスメソッド* *インスタンスメソッド* *インスタンス変数* *インスタンス* などいろんな単語が出てきて戸惑ってしまったかもしれませんが、ピンとこないうちは *クラス* に値や状態を保持させるためには *インスタンス化* する必要があってそのためには `new` メソッドを使わないといけないのね程度の理解で十分です。大概のことは手を動かしているうちにピン来るようになります。
+テストが直りました。*クラスメソッド* *インスタンスメソッド* *インスタンス変数* *インスタンス* などいろんな単語が出てきて戸惑ってしまったかもしれませんが、ピンとこないうちは *クラス* に値や状態を保持させるためには *インスタンス化* する必要があってそのためには `new` メソッドを使わないといけないのね程度の理解で十分です。大概のことは手を動かしているうちにピンと来るようになります。
 
 *インスタンス変数* に直接アクセスしているのでここは *アクセッサメソッド* を使って *フィールドのカプセル化* を適用しておきます。
 
@@ -1663,14 +1673,32 @@ class FizzBuzz
 
 [source, bash]
 ----
+...
  FAIL["test_配列の2番目は文字列のFizzを返す", #<Minitest::Reporters::Suite:0x0000563c29a8a8c0 @name="数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す">, 0.005137628992088139]
  test_配列の2番目は文字列のFizzを返す#数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す (0.01s)
         Expected: "Fizz"
           Actual: nil
         /workspace/tdd_rb/test/fizz_buzz_test.rb:58:in `test_配列の2番目は文字列のFizzを返す'
+...
 ----
 
 FizzBuzz配列が初期化されてしまいました。*アクセッサメソッド* に参照のための *getter* と 更新するための *setter* が許可されているため　*カプセル化* が破られてしまいました。ここは *setterの削除* を適用して外部からの更新を出来ないようにしておきましょう。
+
+
+[quote, かんたんRuby]
+____
+getterを定義するには、「attr_reader」を使います。このメソッドにインスタンス変数の「@」を除いた名称をシンボル表現にしたものを列挙します。複数ある場合はカンマで区切って複数の値を指定することができます。
+____
+
+[quote, かんたんRuby]
+____
+setterを定義するには、「attr_writer」を使います。このメソッドもattr_readerと同じくインスタンス変数名の「@」を除いた名称をシンボル表現にしたものを列挙します。複数ある場合はカンマで区切って複数の値を指定することができます。
+____
+
+[quote, かんたんRuby]
+____
+getter/setterの両方を定義する場合、そのインスタンスは属しているクラス外から自由に参照や更新ができてしまいます。これはカプセル化の観点には反した挙動なので、できる限りattr_readerだけで済ませられないか検討しましょう。
+____
 
 [quote, リファクタリング(第2版)]
 ____
@@ -1778,10 +1806,10 @@ lib/fizz_buzz.rb:11:3: C: Metrics/PerceivedComplexity: Perceived complexity for 
 ...
 ----
 
+https://ja.wikipedia.org/wiki/%E5%BE%AA%E7%92%B0%E7%9A%84%E8%A4%87%E9%9B%91%E5%BA%A6[循環的複雑度^] が高く可読性が低く複雑なコードと警告されているようです。対象となっている　`FizzBuzz#generate` を確認してみましょう。
+
 * https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricscyclomaticcomplexity[Metrics/CyclomaticComplexity^]
 * https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsperceivedcomplexity[Metrics/PerceivedComplexity^]
-
-https://ja.wikipedia.org/wiki/%E5%BE%AA%E7%92%B0%E7%9A%84%E8%A4%87%E9%9B%91%E5%BA%A6[循環的複雑度^] が高く可読性が低く複雑なコードと警告されているようです。対象となっている　`FizzBuzz#generate` を確認してみましょう。
 
 [source, ruby]
 ----
@@ -1847,6 +1875,8 @@ class FizzBuzzType02; end
 class FizzBuzzType03; end
 ----
 
+まず、タイプごとのクラスを定義します。
+
 [source, ruby]
 ----
 class FizzBuzz
@@ -1869,11 +1899,11 @@ class FizzBuzz
     else
       raise '該当するタイプは存在しません'
     end
-  end
+  
 ...
 ----
 
-まず、タイプごとのクラスを定義してそれを *インスタンス化* する *ファクトリメソッド* をFizzBuzzクラスに追加します。この時点では新しいクラスとメソッドの追加だけなのでテストは壊れていないはずです（警告は出ていますが・・・）。ここでコミットしておきますがリファクタリング作業としては https://ja.wikipedia.org/wiki/%E4%BB%95%E6%8E%9B%E5%93%81[仕掛^] なのでWIP(Work In Progress)をメッセージに追加してコミットします。
+次に、タイプごとのクラスを *インスタンス化* する *ファクトリメソッド* をFizzBuzzクラスに追加します。この時点では新しいクラスとメソッドの追加だけなのでテストは壊れていないはずです（警告は出ていますが・・・）。ここでコミットしておきますがリファクタリング作業としては https://ja.wikipedia.org/wiki/%E4%BB%95%E6%8E%9B%E5%93%81[仕掛^] なのでWIP(Work In Progress)をメッセージに追加してコミットします。
 
 [source, bash]
 ----
@@ -2097,6 +2127,7 @@ Finished in 0.00685s
 
 [source, bash]
 ----
+...
 08:18:08 - INFO - Running: all tests
 Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 37 / 42 LOC (88.1%) covered.
 Started with run options --guard --seed 40171
@@ -2105,6 +2136,7 @@ Started with run options --guard --seed 40171
 
 Finished in 0.00559s
 32 tests, 35 assertions, 0 failures, 0 errors, 0 skips
+...
 ----
 
 コミットしておきましょう。
@@ -2235,7 +2267,7 @@ lib/fizz_buzz.rb:24:3: C: Metrics/PerceivedComplexity: Perceived complexity for 
 1 file inspected, 2 offenses detected
 ----
 
-再びテストが通るようになりました。始めのうちはコードを少し変更しただけでなんで動くようになったの？と思うかもしれませんがこれが *ポリモーフィズム* です。この概念を感覚としてつかんで使いこなせるようになることがオブジェクト指向プログラムの第一歩です。感覚は意識して手を動かしていればそのうちつかめます（多分）。
+再びテストが通るようになりました。始めのうちはコードを少し変更しただけでなんで動くようになったの？と思うかもしれませんがこれが *ポリモーフィズム* の威力です。この概念を感覚としてつかんで使いこなせるようになることがオブジェクト指向プログラミングの第一歩です。感覚は意識して手を動かしていればそのうちつかめます（多分）。
 
 *ポリモーフィズムによる条件記述の置き換え* が完了したのでWIPを外してコミットします。
 
@@ -2355,7 +2387,7 @@ end
 
 [source, bash]
 ----
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+...
 Started with run options --seed 49543
 
 
@@ -2370,10 +2402,11 @@ Finished in 0.00925s
 06:34:29 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
  0/0 files |======================================= 100 =======================================>| Time: 00:00:00 
 
-0 files inspected, no offenses detected
+0 files inspected, no offenses detecte
+...
 ----
 
-警告が消えました。しかもテストも壊れていないようです。実は `FizzBuzz#generate` メソッドはどこからも使われていないためテストも壊れることが無いのですがこれでは不要なメソッドになってしまうので *移譲の隠蔽* を実施して、ロジックを *カプセル化* します。
+警告が消えました。しかもテストは壊れていないようです。実は `FizzBuzz#generate` メソッドはどこからも使われていないためテストも壊れることが無いのですがこれでは不要なメソッドになってしまうので *移譲の隠蔽* を実施して、ロジックを *カプセル化* します。
 
 [quote, リファクタリング(第2版)]
 ____
@@ -2441,6 +2474,7 @@ class FizzBuzzTest < Minitest::Test
 
 [source, bash]
 ----
+...
 08:32:17 - INFO - Running: all tests
 Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 32 / 32 LOC (100.0%) covered.
 Started with run options --guard --seed 63863
@@ -2454,6 +2488,7 @@ Finished in 0.00564s
  7/7 files |====================================== 100 =======================================>| Time: 00:00:00 
 
 7 files inspected, no offenses detected
+...
 ----
 
 *ポリモーフィズム* の感覚がつかめないうちは `FizzBuzz#generate` のコードが一行になったのに既存のテストも壊れず動いていることが不思議に思うかもしれません。しかしコードとしてはFizzBuzzクラスの `generate` メソッドは任意のタイプクラスの `generate` メソッドを呼び出しているだけで処理の詳細は理解しなくても振る舞いを理解できる *抽象化* された読みやすいコードになりました。静的コード解析も可読性が高くシンプルなコードとみなしてくれているようです。
@@ -2566,6 +2601,8 @@ class FizzBuzzType03 < FizzBuzzType
 ...
 end
 ----
+
+スーパークラス `FizzBuzzType` を定義して各サブクラスに継承させます。
 
 [source, bash]
 ----
@@ -2869,7 +2906,7 @@ class FizzBuzz {
     MAX_NUMBER = 100
     list
     type
-    {static} create()
+    {static} create(type)
     generate(number)
     generate_list()
 }
@@ -3062,8 +3099,6 @@ FizzBuzz -> FizzBuzzType
 
 ==== 値オブジェクト
 
-===== オブジェクトによるプリミティブの置き換え
-
 [plantuml]
 ----
 class FizzBuzz {
@@ -3093,6 +3128,8 @@ FizzBuzzType <|-- FizzBuzzType03
 FizzBuzz -> FizzBuzzType
 ----
 
+===== オブジェクトによるプリミティブの置き換え
+
 `FizzBuzz` クラスを *インスタンス化* するには以下のように書きます。
 
 [source, ruby]
@@ -3119,6 +3156,24 @@ ____
 基本データ型への執着
 
 興味深いことに、多くのプログラマは、対象としているドメインに役立つ、貨幣、座標、範囲などの基本的な型を導入するのを嫌がる傾向があります。
+____
+
+[quote, 新装版 リファクタリング]
+____
+オブジェクトによるデータ値の置き換え
+
+追加のデータや振る舞いが必要なデータ項目がある。
+
+そのデータ項目をオブジェクトに変える。
+____
+
+[quote, リファクタリング(第2版)]
+____
+オブジェクトによるプリミティブの置き換え
+
+旧：オブジェクトによるデータ値の置き換え
+
+旧：クラスによるタイプコードの置き換え
 ____
 
 
@@ -3243,6 +3298,8 @@ class FizzBuzzTest < Minitest::Test
   end
 ----
 
+それ以外のタイプの場合は *ファクトリメソッド* 経由でないと *例外* を出さなくなるので注意してください。
+
 [source, bash]
 ----
 09:09:40 - INFO - Running: all tests
@@ -3360,8 +3417,6 @@ $ git add .
 $ git commit -m 'refactor: マジックナンバーの置き換え'
 ----
 
-===== オブジェクトによるプリミティブの置き換え
-
 [plantuml]
 ----
 class FizzBuzz {
@@ -3393,6 +3448,8 @@ FizzBuzzType <|-- FizzBuzzType02
 FizzBuzzType <|-- FizzBuzzType03
 FizzBuzz *- FizzBuzzType
 ----
+
+===== オブジェクトによるプリミティブの置き換え
 
 次に *基本データ型への執着* の臭いがする箇所として `FizzBuzz#generate` メソッドが返すFizzBuzzの値が文字型である点です。文字列の代わりに *値オブジェクト* `FizzBuzzValue` クラスを定義します。
 
@@ -3779,6 +3836,8 @@ FizzBuzz *- FizzBuzzType
 FizzBuzzType -> FizzBuzzValue
 ----
 
+===== コレクションのカプセル化
+
 *値オブジェクト* を扱うFizzBuzzリストですが *コレクションのカプセル化* を適用して *ファーストクラスコレクション* オブジェクトを追加しましょう。
 
 [quote, 新装版 リファクタリング]
@@ -3795,7 +3854,7 @@ ____
 このように、コレクション型のデータとロジックを特別扱いにして、コレクションを１つだけ持つ専用クラスを作るやり方をコレクションオブジェクトあるいはファーストクラスコレクションと呼びます。
 ____
 
-===== コレクションのカプセル化
+まず、 *ファーストクラスコレクション* クラスを追加します。
 
 [source, ruby]
 ----
@@ -3882,6 +3941,20 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `[]' for #<Fi
 ----
 
 *ファーストクラスコレクション* 経由で取得するようになったので *アクセッサメソッド* を変更する必要があります。
+
+[source, ruby]
+----
+class FizzBuzz
+  MAX_NUMBER = 100
+  attr_reader :list
+  attr_reader :type
+
+  def initialize(type)
+    @type = type
+  end
+...
+----
+
 
 [source, ruby]
 ----
@@ -3991,10 +4064,11 @@ FizzBuzz -> FizzBuzzList
 
 ===== 学習用テスト
 
-*ファーストクラスコレクション* を理解するため *学習用テスト* を追加します。
+*ファーストクラスコレクション* を理解するため *学習用テスト* を追加しておきましょう。
 
 [source, ruby]
 ----
+...
   describe 'FizzBuzzValueList' do
     def setup
       @fizzbuzz = FizzBuzz.new(FizzBuzzType.create(FizzBuzzType::TYPE_01))
@@ -4080,10 +4154,13 @@ SRP: 単一責任の原則
   モジュールはたったひとりのユーザーやステークホルダーに対して責任を負うべきである。
 
 残念ながら「たったひとりのユーザーやステークホルダー」という表現は適切ではない。複数のユーザーやステークホルダーがシステムを同じように変更したいと考えることもある。ここでは、変更を望む人たちをひとまとめにしたグループとして扱いたい。このグループのことをアクターと呼ぶことにしよう。
+これを踏まえると、最終的な単一責任の原則（SRP）は以下のようになる。
 
   モジュールはたったひとつのアクターに対して責任を負うべきである。
 
-残念さて、ここでいう「モジュール」とは何のことだろう？端的に言えば、モジュールとはソースファイルのことである。たいていの場合は、この定義で問題ないだろう。だが、ソースファイル以外のところにコードを格納する言語や開発環境も存在する。そのような場合の「モジュール」は、いくつかの関数やデータをまとめた凝集性のあるものだと考えよう。
+さて、ここでいう「モジュール」とは何のことだろう？端的に言えば、モジュールとはソースファイルのことである。たいていの場合は、この定義で問題ないだろう。だが、ソースファイル以外のところにコードを格納する言語や開発環境も存在する。そのような場合の「モジュール」は、いくつかの関数やデータをまとめた凝集性のあるものだと考えよう。
+
+「凝集性のある」という言葉が単一責任の原則（SRP）を匂わせる。凝集性が、ひとつのアクターに対する責務を負うコードをまとめるフォースとなる。
 ____
 
 [quote, テスト駆動開発]
@@ -4101,7 +4178,6 @@ ____
 
 メソッド自身をオブジェクトとし、すべてのローカル変数をそのオブジェクトのフィールドとする。そうすれば、そのメソッドを同じオブジェクト中のメソッド群に分解できる。
 ____
-
 
 ===== メソッドオブジェクトによるメソッドの置き換え
 
@@ -4265,6 +4341,7 @@ class FizzBuzzTest < Minitest::Test
 
 [source, bash]
 ----
+...
 09:56:19 - INFO - Running: all tests
 Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 60 / 63 LOC (95.24%) covered.
 Started with run options --guard --seed 27353
@@ -4280,6 +4357,7 @@ Finished in 0.00692s
 7 files inspected, no offenses detected
 09:56:21 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/loading_background.png coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/border.png
  0/0 files |======================================= 100 =======================================>| Time: 00:00:00 
+ ...
 ----
 
 `FizzBuzzValueCommand` の抽出ができたのでコミットしておきます。
@@ -4495,11 +4573,20 @@ class FizzBuzz
     @list = @list.add((1..MAX_NUMBER).map { |n| @type.generate(n) })
   end
 end
+
+class FizzBuzzType
+...
+----
+
+[source, ruby]
+----
+class FizzBuzzType
 ...
 ----
 
 [source, bash]
 ----
+...
 ERROR["test_同じで値である", #<Minitest::Reporters::Suite:0x0000562fd34f7848 @name="FizzBuzzValue">, 0.008059715997660533]
  test_同じで値である#FizzBuzzValue (0.01s)
 Minitest::UnexpectedError:         NameError: uninitialized constant FizzBuzzTest::FizzBuzz
@@ -4519,6 +4606,7 @@ Minitest::UnexpectedError:         NameError: uninitialized constant FizzBuzzTes
 
 Finished in 0.03539s
 35 tests, 35 assertions, 0 failures, 3 errors, 0 skips
+...
 ----
 
 テストが失敗しました。これは *学習用テスト* で `FizzBuzz` クラスを使っている箇所があるからですね。 *メソッドオブジェクト* 呼び出しに変更しておきましょう。
@@ -4594,6 +4682,7 @@ end
 
 [source, bash]
 ----
+...
 01:35:22 - INFO - Running: all tests
 Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 50 / 56 LOC (89.29%) covered.
 Started with run options --guard --seed 10411
@@ -4602,9 +4691,22 @@ Started with run options --guard --seed 10411
 
 Finished in 0.00704s
 35 tests, 39 assertions, 0 failures, 0 errors, 0 skips
+...
 ----
 
 不要なコードを残しておくとメンテナンスの時に削除していいのかわからなくなり可読性を落とし原因となります。削除できる時に削除しておきましょう。後で必要になったとしてもバージョン管理システムを使えば問題ありません。ということでコミットします。
+
+[quote, リファクタリング(第2版)]
+____
+デッドコードの削除
+
+コードが使用されなくなったら削除すべきです。そのコードが将来必要になるかもしれないなどという心配はしません。必要になったらいつでも、バージョン管理システムから再び掘り起こせるからです。
+
+（中略）
+
+デッドコードのコメントアウトは、かつては一般的な習慣でした。それは、バージョン管理システムが広く使用される以前の時代や、使いづらかった時代には有用でした。現在では、とても小さなコードベースでもバージョン管理システムに置けるため、もはや必要のない習慣です。
+____
+
 
 [source, bash]
 ----
@@ -4727,7 +4829,7 @@ Strategy <|-- ConcreateStrategyA
 Strategy <|-- ConcreateStrategyB
 ----
 
-パターンと完全に一致しているわけではありませんし、Rubyのような動的言語ではもっと簡単な実現方法もありますがここでは先人の考えた設計パターンというものがありオブジェクト指向設計の https://ja.wikipedia.org/wiki/%E3%82%A4%E3%83%87%E3%82%A3%E3%82%AA%E3%83%A0[イデオム^] として使えること。そしてテスト駆動開発では一般的な設計アプローチとは異なる形で導かれているということくらいを頭に残しておけば結構です。どのパターンをいつ適用するかはリファクタリングを繰り返しているうちに思いつくようになってきます（多分）。
+作成したコードはパターンと完全に一致しているわけではありませんし、Rubyのような動的言語ではもっと簡単な実現方法もありますがここでは先人の考えた設計パターンというものがありオブジェクト指向設計の https://ja.wikipedia.org/wiki/%E3%82%A4%E3%83%87%E3%82%A3%E3%82%AA%E3%83%A0[イデオム^] として使えること。そしてテスト駆動開発では一般的な設計アプローチとは異なる形で導かれているということくらいを頭に残しておけば結構です。どのパターンをいつ適用するかはリファクタリングを繰り返しているうちに思いつくようになってきます（多分）。
 
 [quote, テスト駆動開発]
 ____
@@ -4858,7 +4960,6 @@ ____
 前提を明示するためのすぐれたテクニックとして、アサーションを記述する方法があります。
 ____
 
-
 ===== アサーションの導入
 
 まず、 *メソッドオブジェクト* の `FizzBuzzValueCommand` にマイナスの値が渡された場合の振る舞いをどうするか考えます。ここでは正の値のみ許可する振る舞いにしたいので以下のテストコードを追加します。
@@ -4881,6 +4982,7 @@ end
 
 [source, bash]
 ----
+...
 ERROR["test_値は正の値のみ許可する", #<Minitest::Reporters::Suite:0x00007fadf30c45d8 @name="例外ケース">, 0.006546000000525964]
  test_値は正の値のみ許可する#例外ケース (0.01s)
 Minitest::UnexpectedError:         NameError: uninitialized constant FizzBuzzTest::Assertions
@@ -4890,9 +4992,21 @@ Minitest::UnexpectedError:         NameError: uninitialized constant FizzBuzzTes
 
 Finished in 0.03159s
 36 tests, 39 assertions, 0 failures, 1 errors, 0 skips
+...
 ----
 
-テストを通すためアサーションモジュールを追加します。
+テストを通すためアサーションモジュールを追加します。Rubyでは *モジュール* を使います。
+
+[quote, かんたんRuby]
+____
+モジュールはクラスと非常によく似ていますが、以下の二点が異なります。
+
+* モジュールはインスタンス化できない
+* 本章後半可能なのは include や extend が可能なのはモジュールだけ
+
+それ以外のクラスメソッドや定数の定義などはクラスと同じように定義することができます。
+____
+
 
 [source, ruby]
 ----
@@ -4913,6 +5027,7 @@ class FizzBuzzValue
 
 [source, bash]
 ----
+...
  FAIL["test_値は正の値のみ許可する", #<Minitest::Reporters::Suite:0x00007fdcfc0c2548 @name="例外ケース">, 0.005800000000817818]
  test_値は正の値のみ許可する#例外ケース (0.01s)
         Assertions::AssertionFailedError expected but nothing was raised.
@@ -4922,9 +5037,15 @@ class FizzBuzzValue
 
 Finished in 0.00621s
 36 tests, 40 assertions, 1 failures, 0 errors, 0 skips
+...
 ----
 
 追加したモジュールを `FizzBuzzValue` クラスをに *Mix-in* します。そして、*コンストラクタ* 実行時に数値は0以上であるアサーションを追加します。
+
+[quote, かんたんRuby]
+____
+Rubyでの継承は一種類、単一継承しか実行できませんが、複数のクラスを継承する多重継承の代わりにMix-inというメソッドの共有方法を提供します。
+____
 
 [source, ruby]
 ----
@@ -4956,7 +5077,7 @@ end
 
 [source, bash]
 ----
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/fizz_buzz_test.rb" 
+...
 Started with run options --seed 37354
 
 
@@ -4964,6 +5085,7 @@ Progress: |=====================================================================
 
 Finished in 0.01433s
 36 tests, 40 assertions, 0 failures, 0 errors, 0 skips
+...
 ----
 
 アサーションが機能するようになりました、コミットしておきます。
@@ -5075,6 +5197,7 @@ class FizzBuzzList
 
 [source, bash]
 ----
+...
 ERROR["test_新しいインスタンスが作られる", #<Minitest::Reporters::Suite:0x00005558ca6e8e80 @name="FizzBuzzValueList">, 0.010412617004476488]
  test_新しいインスタンスが作られる#FizzBuzzValueList (0.01s)
 Minitest::UnexpectedError:         Assertions::AssertionFailedError: Assertion Failed
@@ -5088,9 +5211,10 @@ Minitest::UnexpectedError:         Assertions::AssertionFailedError: Assertion F
 
 Finished in 0.01238s
 36 tests, 38 assertions, 0 failures, 1 errors, 0 skips
+...
 ----
 
-追加したテストはパスするようになりましたが既存のテストコードでエラーが出るようになりました。該当するテストコードを見たところ100件より多い *ファーストクラスコレクション* を作ろうとしたため `AssertionFailedError` を発生させたようです。テストコードを修正しておきましょう。
+追加したテストはパスするようになりましたが既存のテストコードでエラーが出るようになりました。該当するテストコードを見たところ100件より多い *学習用テスト* で *ファーストクラスコレクション* を作ろうとしたため `AssertionFailedError` を発生させたようです。テストコードを修正しておきましょう。
 
 [source, ruby]
 ----
@@ -5196,6 +5320,7 @@ Finished in 0.00809s
 
 [source, bash]
 ----
+...
 01:58:57 - INFO - Running: all tests
 Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 61 / 64 LOC (95.31%) covered.
 Started with run options --guard --seed 44956
@@ -5204,6 +5329,7 @@ Started with run options --guard --seed 44956
 
 Finished in 0.00717s
 36 tests, 40 assertions, 0 failures, 0 errors, 0 skips
+...
 ----
 
 仕様変更による反映が出来たのでコミットしましょう。
@@ -5351,6 +5477,7 @@ end
 
 [source, bash]
 ----
+...
 ERROR["test_値は正の値のみ許可する", #<Minitest::Reporters::Suite:0x000055d30f0b8a50 @name="FizzBuzz::数を文字列にして返す::例外ケース">, 0.004186890990240499]
  test_値は正の値のみ許可する#FizzBuzz::数を文字列にして返す::例外ケース (0.00s)
 Minitest::UnexpectedError:         NameError: uninitialized constant FizzBuzzTest::Assertions
@@ -5365,6 +5492,7 @@ Minitest::UnexpectedError:         NameError: uninitialized constant FizzBuzzTes
 
 Finished in 0.01731s
 37 tests, 39 assertions, 0 failures, 2 errors, 0 skips
+...
 ----
 
 アサーションモジュールを削除したのでエラーが発生しています。テストコードを修正しましょう。
@@ -5421,6 +5549,7 @@ end
 
 [source, bash]
 ----
+...
 02:13:46 - INFO - Running: all tests
 Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 55 / 58 LOC (94.83%) covered.
 Started with run options --guard --seed 55179
@@ -5429,6 +5558,7 @@ Started with run options --guard --seed 55179
 
 Finished in 0.00738s
 37 tests, 43 assertions, 0 failures, 0 errors, 0 skips
+...
 ----
 
 再びテストが通るようになったのでコミットしておきます。
@@ -5493,17 +5623,6 @@ FizzBuzzCommand *- FizzBuzzType
 
 ===== アルゴリズムの置き換え
 
-テストは通りますが警告が表示されるようになりました。 `Style/NumericPredicate: Use number.negative? instead of number < 0.` とのことなので *アルゴリズムの置き換え* を適用しておきましょう。
-
-[quote, 新装版 リファクタリング]
-____
-アルゴリズムの取り替え
-
-アルゴリズムをよりわかりやすいものに置き換えたい
-
-メソッドの本体を新たなアルゴリズムで置き換える。
-____
-
 [source, bash]
 ----
 02:13:46 - INFO - Inspecting Ruby code style: test/fizz_buzz_test.rb lib/fizz_buzz.rb
@@ -5514,6 +5633,17 @@ lib/fizz_buzz.rb:58:26: C: Style/NumericPredicate: Use number.negative? instead 
 
 2 files inspected, 1 offense detected
 ----
+
+テストは通りますが警告が表示されるようになりました。 `Style/NumericPredicate: Use number.negative? instead of number < 0.` とのことなので *アルゴリズムの置き換え* を適用しておきましょう。
+
+[quote, 新装版 リファクタリング]
+____
+アルゴリズムの取り替え
+
+アルゴリズムをよりわかりやすいものに置き換えたい
+
+メソッドの本体を新たなアルゴリズムで置き換える。
+____
 
 [source, ruby]
 ----
@@ -5581,6 +5711,15 @@ class FizzBuzzList
 ...
 ----
 
+*式展開* を使ってメッセージ内容も定数から参照するようにしましょう。
+
+[quote, かんたんRuby]
+____
+式展開
+
+式展開とは、「#{}」の書式で文字列中に何らかの変数や式を埋め込むことが可能な機能です。これは、ダブルクオートを使用した場合のみの機能です。
+____
+
 [source, ruby]
 ----
 class FizzBuzzList
@@ -5606,6 +5745,7 @@ class FizzBuzzList
 
 [source, bash]
 ----
+...
 ERROR["test_配列の14番目は文字列のFizzBuzzを返す", #<Minitest::Reporters::Suite:0x000055942ab5e230 @name="FizzBuzz::数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す">, 0.008073228993453085]
  test_配列の14番目は文字列のFizzBuzzを返す#FizzBuzz::数を文字列にして返す::タイプ1の場合::1から100までのFizzBuzzの配列を返す (0.01s)
 Minitest::UnexpectedError:         RuntimeError: 上限は10件までです
@@ -5613,6 +5753,7 @@ Minitest::UnexpectedError:         RuntimeError: 上限は10件までです
             /workspace/tdd_rb/lib/fizz_buzz.rb:112:in `new'
             /workspace/tdd_rb/lib/fizz_buzz.rb:112:in `execute'
             /workspace/tdd_rb/test/fizz_buzz_test.rb:45:in `setup'
+...
 ----
 
 想定通りのエラーが発生したのでコードを元に戻してコミットしましょう。
@@ -5626,6 +5767,7 @@ class FizzBuzzList
 
 [source, bash]
 ----
+...
 Started with run options --seed 5525
 
 
@@ -5633,6 +5775,7 @@ Progress: |=====================================================================
 
 Finished in 0.01262s
 37 tests, 43 assertions, 0 failures, 0 errors, 0 skips
+...
 ----
 
 [source, bash]
@@ -5751,6 +5894,7 @@ ____
 
 [source, bash]
 ----
+...
 ERROR["test_未定義のタイプを返す", #<Minitest::Reporters::Suite:0x00005593e21297d0 @name="数を文字列にして返す::それ以外のタイプの場合">, 0.0065623498521745205]
  test_未定義のタイプを返す#数を文字列にして返す::それ以外のタイプの場合 (0.01s)
 Minitest::UnexpectedError:         RuntimeError: 該当するタイプは存在しません
@@ -5761,6 +5905,7 @@ Minitest::UnexpectedError:         RuntimeError: 該当するタイプは存在�
 
 Finished in 0.00780s
 37 tests, 41 assertions, 0 failures, 1 errors, 0 skips
+...
 ----
 
 現時点では *例外* を投げるので未定義タイプ `FizzBuzzTypeNotDefined` を作成して *ファクトリメソッド* を変更します。
@@ -5834,6 +5979,7 @@ class FizzBuzzValue
 
 [source, bash]
 ----
+...
 Started with run options --seed 33939
 
 
@@ -5849,6 +5995,7 @@ Finished in 0.01193s
  0/0 files |======================================= 100 =======================================>| Time: 00:00:00 
 
 0 files inspected, no offenses detected
+...
 ----
 
 テストが通るようになりました。 *メソッドオブジェクト* から実行された場合の振る舞いも明記しておきましょう。
@@ -5876,6 +6023,7 @@ Finished in 0.01193s
 
 [source, bash]
 ----
+...
 06:48:54 - INFO - Running: all tests
 Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 62 / 65 LOC (95.38%) covered.
 Started with run options --guard --seed 18202
@@ -5884,9 +6032,10 @@ Started with run options --guard --seed 18202
 
 Finished in 0.00747s
 38 tests, 43 assertions, 0 failures, 0 errors, 0 skips
+...
 ----
 
-`FizzBuzzTypeNotDefined` オブジェクトは *Null Objectパターン* と適用したものです。
+`FizzBuzzTypeNotDefined` オブジェクトは *Null Objectパターン* を適用したものです。
 
 [quote, テスト駆動開発]
 ____
@@ -5895,9 +6044,7 @@ Null Objectパターン
 特殊な状況をオブジェクトで表現するにはどうすればよいだろうか---その特殊な状況を表現するオブジェクトを作り、通常のオブジェクトと同じプロトコル（メソッド群）を実装しよう。
 ____
 
-*オープン・クローズドの原則* に従って未定義のタイプである *Null Object* を安全に追加することが出来ました。
-
-コミットしましょう。
+*オープン・クローズドの原則* に従って未定義のタイプである *Null Object* を安全に追加することができたのでコミットしておきます。
 
 [source, bash]
 ----
@@ -5965,7 +6112,7 @@ FizzBuzzCommand *- FizzBuzzType
 ----
 
 
-==== モジュールの分割
+==== モジュール分割
 [plantuml]
 ----
 class FizzBuzzType {
@@ -6085,7 +6232,7 @@ $ git commit -m 'fix: プリントする'
 ____
 関連する業務データと業務ロジックを１つにまとめたこのようなオブジェクトをドメインオブジェクトと呼びます。
 
-「ドメイン」とは、対象領域とか問題領域という意味です。業務アプリケーションの場合、そのアプリケーションが対象とる業務活動全体がドメインです。業務活動という問題領域（ドメイン）で扱うデータと業務ロジックを、オブジェクトとして表現したものドメインオブジェクトです。ドメインオブジェクトは、業務データと業務ロジックを密接に関係づけます。
+「ドメイン」とは、対象領域とか問題領域という意味です。業務アプリケーションの場合、そのアプリケーションが対象となる業務活動全体がドメインです。業務活動という問題領域（ドメイン）で扱うデータと業務ロジックを、オブジェクトとして表現したものドメインオブジェクトです。ドメインオブジェクトは、業務データと業務ロジックを密接に関係づけます。
 ____
 
 [quote, 現場で役立つシステム設計の原則]
@@ -6262,6 +6409,7 @@ end
 
 [source, bash]
 ----
+...
 07:29:03 - INFO - Inspecting Ruby code style: coverage/assets/0.10.2/colorbox/controls.png coverage/assets/0.10.2/colorbox/border.png coverage/assets/0.10.2/colorbox/loading.gif coverage/assets/0.10.2/colorbox/loading_background.png lib/domain/type/fizz_buzz_type_not_defined.rb lib/domain/type/fizz_buzz_type_03.rb lib/domain/type/fizz_buzz_type_02.rb lib/domain/type/fizz_buzz_type_01.rb lib/domain/type/fizz_buzz_type.rb lib/domain/model/fizz_buzz_list.rb lib/domain/model/fizz_buzz_value.rb
 lib/domain/type/fizz_buzz_type_not_defined.rb:3:1: C: Style/Documentation: Missing top-level class documentation comment.
 class FizzBuzzTypeNotDefined < FizzBuzzType
@@ -6287,6 +6435,7 @@ class FizzBuzzValue
  7/7 files |======================== 100 =========================>| Time: 00:00:00 
 
 7 files inspected, 7 offenses detected
+...
 ----
 
 テストは壊れていないようですが警告が出るようになりました。まだ仕掛ですが一旦コミットしておきます。
@@ -6907,6 +7056,7 @@ test/learning_test.rb:85:20: C: Naming/AsciiIdentifiers: Use only ascii symbols 
  15/15 files |======================= 100 ========================>| Time: 00:00:00 
 
 15 files inspected, 87 offenses detected
+...
 ----
 
 これらはテストコードに関する警告がほとんどなので `.rubocop.yml` を編集してチェック対象から外しておきましょう。
@@ -6935,6 +7085,7 @@ Documentation:
 
 [source, bash]
 ----
+...
 08:21:55 - INFO - Running: all tests
 Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 144 / 215 LOC (66.98%) covered.
 Started with run options --guard --seed 55977
@@ -6954,12 +7105,14 @@ Finished in 0.01518s
  0/0 files |======================== 100 =========================>| Time: 00:00:00 
 
 0 files inspected, no offenses detected
+...
 ----
 
 警告は消えました、仕上げに `fizz_buzz_test.rb` ファイルを削除します。
 
 [source, bash]
 ----
+...
 08:24:12 - INFO - Running: all tests
 Coverage report generated for MiniTest, Unit Tests to /workspace/tdd_rb/coverage. 135 / 201 LOC (67.16%) covered.
 Started with run options --guard --seed 40104
@@ -6979,6 +7132,7 @@ Finished in 0.00601s
  0/0 files |======================== 100 =========================>| Time: 00:00:00 
 
 0 files inspected, no offenses detected
+...
 ----
 
 テストの分割も完了したのでコミットしておきます。
@@ -7066,7 +7220,7 @@ $ git commit -m 'refactor(WIP): モジュール分割'
         -- learning_test.rb
         -- test_helper.rb
 
-`fizz_buzz.rb` のファイルを内容クラスモジュール読み込みに変更します。
+`fizz_buzz.rb` ファイルの内容をクラスモジュール読み込みに変更します。
 
 [source, ruby]
 ----
@@ -7084,6 +7238,7 @@ require './lib/domain/type/fizz_buzz_type_not_defined.rb'
 
 [source, bash]
 ----
+...
 08:34:32 - INFO - Running: all tests
 Coverage report generated for MiniTest to /workspace/tdd_rb/coverage. 119 / 211 LOC (56.4%) covered.
 Started with run options --guard --seed 18696
@@ -7092,6 +7247,7 @@ Started with run options --guard --seed 18696
 
 Finished in 0.00561s
 32 tests, 36 assertions, 0 failures, 0 errors, 0 skips
+....
 ----
 
 コードカバレッジがうまく機能していないようなので、`test_helper.rb` を追加して共通分を書くファイルから読み込むように変更します。
@@ -7132,7 +7288,6 @@ require './lib/fizz_buzz'
 [source, bash]
 ----
 $ rake test
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb"
 ----
 
 テスト対象をテストディレクトリ内のすべてのテストコードに変更します。
@@ -7160,7 +7315,6 @@ end
 [source, bash]
 ----
 $ rake test
-/home/gitpod/.rvm/rubies/ruby-2.6.3/bin/ruby -w -I"lib" -I"/workspace/.rvm/gems/rake-13.0.1/lib" "/workspace/.rvm/gems/rake-13.0.1/lib/rake/rake_test_loader.rb" "./test/domain/model/fizz_buzz_value_test.rb" "./test/domain/model/fizz_buzz_list_test.rb" "./test/application/fizz_buzz_value_command_test.rb" "./test/learning_test.rb" 
 Started with run options --seed 46929
 
   32/32: [=====================================] 100% Time: 00:00:00, Time: 00:00:00
@@ -7232,21 +7386,23 @@ FizzBuzzCommand *- FizzBuzzType
 
 ==== ふりかえり
 
-今回、 *オブジェクト指向プログラム* から *オブジェクト指向設計* そして *モジュールの分割* を *テスト駆動開発* を通じて実践しました。
+今回、 *オブジェクト指向プログラム* から *オブジェクト指向設計* そして *モジュール分割* を *テスト駆動開発* を通じて実践しました。各トピックを振り返ってみましょう。
 
 ===== オブジェクト指向プログラム
 
-エピソード1で作成したプログラムの追加仕様を *テスト駆動開発* で実装しました。 次に *手続き型コード* との比較から *オブジェクト指向プログラム* を構成する *カプセル化* *ポリモフィズム* *継承* という概念をコードの *リファクタリング* を通じて解説しました。
+エピソード1で作成したプログラムの追加仕様を *テスト駆動開発* で実装しました。 次に *手続き型コード* との比較から *オブジェクト指向プログラム* を構成する *カプセル化* *ポリモフィズム* *継承* という概念をコードベースの *リファクタリング* を通じて解説しました。
 
-具体的には *フィールドのカプセル* から *setterの削除* を適用することにより *カプセル化* を実現しました。続いて、 *ポリモーフィズムによる条件記述の置き換え* から *State/Strategyによるタイプコードの置き換え* を適用することにより *ポリモーフィズム* の効果を体験しました。そして、 *スーパークラスの抽出* から *メソッド名の変更* *メソッドの移動* の適用を通して *継承* の使い方を体験しました。さらに *値オブジェクト* と *ファーストクラス* というオブジェクト指向プログラムツールの使い方も学習しました。
+具体的には *フィールドのカプセル* から *setterの削除* を適用することにより *カプセル化* を実現しました。続いて、 *ポリモーフィズムによる条件記述の置き換え* から *State/Strategyによるタイプコードの置き換え* を適用することにより *ポリモーフィズム* の効果を体験しました。そして、 *スーパークラスの抽出* から *メソッド名の変更* *メソッドの移動* の適用を通して *継承* の使い方を体験しました。さらに *値オブジェクト* と *ファーストクラス* というオブジェクト指向プログラミングに必要なツールの使い方も学習しました。
 
 ===== オブジェクト指向設計
 
-次に設計の観点から *単一責任の原則* に違反している `FizzBuzz` クラスを *デザインパターン* の1つである *Commandパターン* を使ったリファクタリングである *メソッドオブジェクトによるメソッドの置き換え* を適用してクラスの責務を分割しました。オブジェクト指向設計のイデオムである *デザインパターン* として *Commandパターン* 以外に *Value Objectパターン* *Factory Methodパターン* *Strategyパターン* を *リファクタリング* を適用する過程ですでに実現していたことを説明しました。そして、*オープン・クローズドの原則* を満たすコードに *リファクタリング* されているので既存のコードを変更することなく振る舞いを変更できるようになりました。
+次に設計の観点から *単一責任の原則* に違反している `FizzBuzz` クラスを *デザインパターン* の1つである *Commandパターン* を使ったリファクタリングである *メソッドオブジェクトによるメソッドの置き換え* を適用してクラスの責務を分割しました。オブジェクト指向設計のイデオムである *デザインパターン* として *Commandパターン* 以外に *Value Objectパターン* *Factory Methodパターン* *Strategyパターン* を *リファクタリング* を適用する過程ですでに実現していたことを説明しました。そして、*オープン・クローズドの原則* を満たすコードに *リファクタリング* されたことで既存のコードを変更することなく振る舞いを変更できるようになりました。
+
+加えて、正常系の設計を改善した後 *アサーションの導入* *例外によるエラーコードの置き換え* といった例外系の *リファクタリング* を適用しました。最後に *ポリモーフィズム* の応用として *特殊ケースの導入* の適用による *Null Objectパターン* を使った *オープン・クローズドの原則* に従った安全なコードの追加方法を解説しました。
 
 ===== モジュールの分割
 
-最後に、*モノリシック* なファイルから個別のクラスモジュールへの分割を *ドメインオブジェクト* の抽出を通して *ドメインモデル* へと整理することにより *モジュールの分割* を実現しました。最終的にプログラムからアプリケーションへと体裁を整えることが出来ました。以下が最終的なモジュール構造とコードです。
+仕上げに、*モノリシック* なファイルから個別のクラスモジュールへの分割を *ドメインオブジェクト* の抽出を通して *ドメインモデル* へと整理することにより *モジュール分割* を実現しました。最終的にプログラムからアプリケーションへと体裁を整えることが出来ました。以下が最終的なモジュール構造とコードです。
 
 [plantuml]
 ----
@@ -7402,3 +7558,45 @@ include::./code/episode_3/test/domain/model/fizz_buzz_list_test.rb[]
 ----
 include::./code/episode_3/test/learning_test.rb[]
 ----
+
+===== 良い設計
+
+エピソード1では *良いコード* について考えました。
+
+[quote, テスト駆動開発]
+____
+TDDは「より良いコードを書けば、よりうまくいく」という素朴で奇妙な仮設によって成り立っている
+____
+
+[quote, テスト駆動開発]
+____
+「動作するきれいなコード」。RonJeffriesのこの簡潔な言葉が、テスト駆動開発(TDD)のゴールだ。動作するきれいなコードはあらゆる意味で価値がある。
+____
+
+[quote, リファクタリング(第2版)]
+____
+良いコードかどうかは、変更がどれだけ容易なのかで決まる。
+____
+
+[quote, リーダブルコード]
+____
+コードは理解しやすくなければいけない。
+____
+
+本エピソードでは *テスト駆動開発* による *オブジェクト指向プログラミング* の *リファクタリング* を経てコードベースを改善してきました。そして *オブジェクト指向設計* により *良いコード* のプログラムを *良い設計* のアプリケーションへと進化させることができました。
+
+[quote, 現場で役立つシステム設計の原則]
+____
+どこに何が書いてあるかをわかりやすくし、変更の影響を狭い範囲に閉じ込め、安定して動作する部品を柔軟に組み合わせながらソフトウェアを構築する技法がオブジェクト指向設計です。
+____
+
+[quote, 現場で役立つシステム設計の原則]
+____
+設計の良し悪しは、ソフトウェアを変更するときにはっきりします。
+
+構造が入り組んだわかりづらいプログラムは内容の理解に時間がかかります。重複したコードをあちこちで修正する作業が増え、変更の副作用に悩まされます。
+
+一方、うまく設計されたプログラムは変更が楽で安全です。変更すべき箇所がかんたんにわかり、変更するコード量が少なく、変更の影響を狭い範囲に限定できます。
+
+プログラムの修正に３日かかるか、それとも半日で済むか。その違いを生むのが「設計」なのです。
+____
