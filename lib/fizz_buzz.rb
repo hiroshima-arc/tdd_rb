@@ -9,6 +9,19 @@ class FizzBuzz
     @type = type
   end
 
+  def self.create(type)
+    case type
+    when 1
+      FizzBuzzType01.new
+    when 2
+      FizzBuzzType02.new
+    when 3
+      FizzBuzzType03.new
+    else
+      raise '該当するタイプは存在しません'
+    end
+  end
+
   def generate(number)
     is_fizz = number.modulo(3).zero?
     is_buzz = number.modulo(5).zero?
@@ -36,3 +49,7 @@ class FizzBuzz
     @list = (1..MAX_NUMBER).map { |n| generate(n) }
   end
 end
+
+class FizzBuzzType01; end
+class FizzBuzzType02; end
+class FizzBuzzType03; end
