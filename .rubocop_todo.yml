@@ -20,6 +20,8 @@ Metrics/AbcSize:
 # ExcludedMethods: refine
 Metrics/BlockLength:
   Max: 62
+  Exclude:
+    - 'test/fizz_buzz_test.rb'
 
 # Offense count: 3
 # Configuration parameters: CountComments.
