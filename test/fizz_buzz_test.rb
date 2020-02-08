@@ -124,6 +124,20 @@ class FizzBuzzTest < Minitest::Test
         end
       end
     end
+
+    describe 'それ以外のタイプの場合' do
+      def setup
+        @fizzbuzz = FizzBuzz
+      end
+
+      def test_例外を返す
+        e = assert_raises RuntimeError do
+          @fizzbuzz.generate(1, 4)
+        end
+
+        assert_equal '該当するタイプは存在しません', e.message
+      end
+    end
   end
 
   describe '配列や繰り返し処理を理解する' do
