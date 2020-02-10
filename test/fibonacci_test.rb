@@ -24,6 +24,6 @@ class Fibonacci < Minitest::Test
   end
 
   def test_return_102334155_when_40
-    assert_equal 102334155, fib(40)
+    assert_equal 102_334_155, fib(40)
   end
 end
