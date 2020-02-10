@@ -5,11 +5,11 @@ Minitest::Reporters.use!
 require 'minitest/autorun'
 
 class Fibonacci < Minitest::Test
-  def fib(n, memo = {})
-    return 0 if n.zero?
-    return 1 if n <= 2
+  def fib(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number <= 2
 
-    memo[n] ||= fib(n - 1, memo) + fib(n - 2, memo)
+    memo[number] ||= fib(number - 1, memo) + fib(number - 2, memo)
   end
 
   def test_fibonacci
