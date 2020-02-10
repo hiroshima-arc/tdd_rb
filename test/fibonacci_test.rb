@@ -6,10 +6,13 @@ require 'minitest/autorun'
 
 class Fibonacci < Minitest::Test
   def fib(n)
-    0
+    return 0 if n.zero?
+
+    1
   end
 
   def test_fibonacci
     assert_equal 0, fib(0)
+    assert_equal 1, fib(1)
   end
 end
