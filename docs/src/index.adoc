@@ -21,11 +21,12 @@
 
 == 詳細
 
-=== link:./article/index.html[テスト駆動開発開発始めるRuby入門]
+=== link:./article/index.html[テスト駆動開発から始めるRuby入門]
 
 ==== link:./article/episode_1.html[エピソード1][[anchor-1-1]]
 ==== link:./article/episode_2.html[エピソード2][[anchor-1-2]]
 ==== link:./article/episode_3.html[エピソード3][[anchor-1-3]]
+==== link:./article/episode_x.html[外伝][[anchor-1-3]]
 
 == 参照
 * http://asciidoctor.org/[Asciidoctor^]
