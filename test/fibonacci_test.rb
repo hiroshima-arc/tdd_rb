@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 require 'minitest/reporters'
 Minitest::Reporters.use!
 require 'minitest/autorun'
@@ -21,5 +20,9 @@ class Fibonacci < Minitest::Test
 
   def test_return_89_when_11
     assert_equal 89, fib(11)
+  end
+
+  def test_return_102334155_when_40
+    assert_equal 102334155, fib(40)
   end
 end
