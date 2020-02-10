@@ -5,11 +5,11 @@ Minitest::Reporters.use!
 require 'minitest/autorun'
 
 class Fibonacci < Minitest::Test
-  def greeting
-    'hello world'
+  def fib(n)
+    0
   end
 
-  def test_greeting
-    assert_equal 'hello world', greeting
+  def test_fibonacci
+    assert_equal 0, fib(0)
   end
 end
