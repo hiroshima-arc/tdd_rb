@@ -9,7 +9,7 @@ class Fibonacci < Minitest::Test
     return 0 if n.zero?
     return 1 if n <= 2
 
-    2
+    1 + 1
   end
 
   def test_fibonacci
