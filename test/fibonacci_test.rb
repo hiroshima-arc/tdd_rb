@@ -13,7 +13,7 @@ class Fibonacci < Minitest::Test
   end
 
   def test_fibonacci
-    cases = [[0, 0], [1, 1], [2, 1], [3, 2]]
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3]]
     cases.each do |i|
       assert_equal i[1], fib(i[0])
     end
