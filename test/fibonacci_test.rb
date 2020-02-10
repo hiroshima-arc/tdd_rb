@@ -19,10 +19,6 @@ class Fibonacci < Minitest::Test
     end
   end
 
-  def test_return_89_when_11
-    assert_equal 89, fib(11)
-  end
-
   def test_return_102334155_when_40
     assert_equal 102_334_155, fib(40)
   end
