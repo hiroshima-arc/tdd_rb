@@ -11,7 +11,7 @@ class FibonacciTest < Minitest::Test
   end
 
   def fib(number, memo = {})
-    @fib.fib(number, memo)
+    Fibonacci.calc(number, memo)
   end
 
   def test_fibonacci
