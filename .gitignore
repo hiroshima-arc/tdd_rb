@@ -74,3 +74,5 @@ dist
 public
 .vagrant
 tmp
+
+docs
