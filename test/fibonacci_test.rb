@@ -18,4 +18,8 @@ class Fibonacci < Minitest::Test
       assert_equal i[1], fib(i[0])
     end
   end
+
+  def test_return_89_when_11
+    assert_equal 89, fib(11)
+  end
 end
