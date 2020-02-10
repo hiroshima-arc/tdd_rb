@@ -1,21 +1,665 @@
 :toc: left
 :toclevels: 5
 :sectnums:
+:source-highlighter: coderay
 
 === パフォーマンスチューニングから始めるテスト駆動開発
 
+https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A3%E3%83%9C%E3%83%8A%E3%83%83%E3%83%81%E6%95%B0[フィボナッチ数] を計算するプログラムを作ります。
+
 ==== 仕様
+
+[quote, Wikipedia]
+____
+n 番目のフィボナッチ数を Fn で表すと、Fn は再帰的に
+
+F0 = 0,
+
+F1 = 1,
+
+Fn + 2 = Fn + Fn + 1 (n ≧ 0)
+
+で定義される。これは、2つの初期条件を持つ漸化式である。
+
+この数列 (Fn)はフィボナッチ数列（フィボナッチすうれつ、（英: Fibonacci sequence）と呼ばれ、
+
+0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, …（オンライン整数列大辞典の数列 A45）
+と続く。最初の二項は 0, 1 であり、以後どの項もその直前の2つの項の和となっている。
+____
 
 ==== TODOリスト
 
+[width="15%"]
+|=======
+|0 |1 |2 |3 |4 |5 |6 |7  |8  |9 |10 |11 |12  |13  |14  |15  |16  |18    |19   
+|0 |1 |1 |2 |3 |5 |8 |13 |21 |34 |55 |89 |144 |233 |377 |610 | 987| 1597 |2584 
+|=======
+
+[width="15%"]
+|=======
+|0 | ...
+|0 | ...
+|=======
+
+* 0を渡したら0を返す
+
+[width="15%"]
+|=======
+|0 |1 | ...
+|0 |1 | ...
+|=======
+
+* 1を渡したら1を返す
+
+[width="15%"]
+|=======
+|0 |1 |2 | ...
+|0 |1 |1 | ...
+|=======
+
+* 2を渡したら1を返す
+
 ==== 仮実装
+
+* 0を渡したら0を返す
+* 1を渡したら1を返す
+* 2を渡したら1を返す
+
+`test/fibonacci_test.rb`
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+
+class Fibonacci < Minitest::Test
+  def greeting
+    'hello world'
+  end
+
+  def test_greeting
+    assert_equal 'hello world', greeting
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 28548
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01040s
+1 tests, 1 assertions, 0 failures, 0 errors, 0 skips
+...
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+
+class Fibonacci < Minitest::Test
+  def greeting
+    'hello world!'
+  end
+
+  def test_greeting
+    assert_equal 'hello world', greeting
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 30787
+
+ FAIL["test_greeting", #<Minitest::Reporters::Suite:0x000055eaefeef5e0 @name="Fibonacci">, 0.003157061990350485]
+ test_greeting#Fibonacci (0.00s)
+        Expected: "hello world"
+          Actual: "hello world!"
+        test/fibonacci_test.rb:13:in `test_greeting`
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00398s
+1 tests, 1 assertions, 1 failures, 0 errors, 0 skips
+----
+
+[source, ruby]
+----
+...
+class FibonacciTest < Minitest::Test
+  def fib(n)
+    0
+  end
+
+  def test_fibonacci
+    assert_equal 0, fib(0)
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 2885
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00352s
+1 tests, 1 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'test: 0を渡したら0を返す'
+----
 
 ==== 三角測量
 
+* [line-through]_0を渡したら0を返す_
+* 1を渡したら1を返す
+* 2を渡したら1を返す
+
+
+[source, ruby]
+----
+...
+class Fibonacci < Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+
+    1
+  end
+
+  def test_fibonacci
+    assert_equal 0, fib(0)
+    assert_equal 1, fib(1)
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 58331
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00169s
+1 tests, 2 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'test: 1を渡したら1を返す'
+----
+
+[source, ruby]
+----
+...
+class Fibonacci < Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+
+    1
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 5991
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00200s
+1 tests, 2 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'refactor: アルゴリズムの置き換え'
+----
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+
+class Fibonacci < Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+
+    1
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 26882
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00287s
+1 tests, 3 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'test: 1を渡したら2を返す'
+----
+
+
 ==== 明白な実装
+
+* [line-through]_0を渡したら0を返す_
+* [line-through]_1を渡したら1を返す_
+* [line-through]_2を渡したら1を返す_
+
+[width="15%"]
+|=======
+|0 |1 |2 |3 | ...
+|0 |1 |1 |2 | ...
+|=======
+
+* 3を渡したら2を返す
+
+[source, ruby]
+----
+class Fibonacci < Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n <= 2
+
+    1
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 26066
+
+ FAIL["test_fibonacci", #<Minitest::Reporters::Suite:0x0000562bc96ee330 @name="Fibonacci">, 0.0055934099946171045]
+ test_fibonacci#Fibonacci (0.01s)
+        Expected: 2
+          Actual: 1
+        test/fibonacci_test.rb:24:in `block in test_fibonacci'
+        test/fibonacci_test.rb:23:in `each'
+        test/fibonacci_test.rb:23:in `test_fibonacci'
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00882s
+1 tests, 4 assertions, 1 failures, 0 errors, 0 skips
+----
+
+[source, ruby]
+----
+class Fibonacci < Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n <= 2
+
+    2
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 25117
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01680s
+1 tests, 4 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'test: 3を渡したら2を返す'
+----
+
+[width="15%"]
+|=======
+|0 |1 |2 |3 |4 | ...
+|0 |1 |1 |2 |3 | ...
+|=======
+
+* 4を渡したら3を返す
+
+[source, ruby]
+----
+...
+class Fibonacci < Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n <= 2
+
+    2
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 34595
+
+ FAIL["test_fibonacci", #<Minitest::Reporters::Suite:0x0000564fdbd6dfe0 @name="Fibonacci">, 0.005386559059843421]
+ test_fibonacci#Fibonacci (0.01s)
+        Expected: 3
+          Actual: 2
+        test/fibonacci_test.rb:24:in `block in test_fibonacci'
+        test/fibonacci_test.rb:23:in `each'
+        test/fibonacci_test.rb:23:in `test_fibonacci'
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01030s
+1 tests, 5 assertions, 1 failures, 0 errors, 0 skips
+----
+
+[source, ruby]
+----
+...
+class Fibonacci < Minitest::Test 
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n <= 2
+
+    1 + 1
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 10848
+
+ FAIL["test_fibonacci", #<Minitest::Reporters::Suite:0x00005621247c9f48 @name="Fibonacci">, 0.0007573128677904606]
+ test_fibonacci#Fibonacci (0.00s)
+        Expected: 3
+          Actual: 2
+        test/fibonacci_test.rb:24:in `block in test_fibonacci'
+        test/fibonacci_test.rb:23:in `each'
+        test/fibonacci_test.rb:23:in `test_fibonacci'
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00130s
+1 tests, 5 assertions, 1 failures, 0 errors, 0 skips
+----
+
+[source, ruby]
+----
+...
+class Fibonacci < Minitest::Test 
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n <= 2
+
+    fib(n - 1) + 1
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 25629
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00467s
+1 tests, 5 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[width="15%"]
+|=======
+|0 |1 |2 |3 |4 |5 | ...
+|0 |1 |1 |2 |3 |5 | ...
+|=======
+
+* 5を渡したら5を返す
+
+[source, ruby]
+----
+...
+class Fibonacci < Minitest::Test 
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n <= 2
+
+    fib(n - 1) + 1
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 54754
+
+ FAIL["test_fibonacci", #<Minitest::Reporters::Suite:0x000055c42397e108 @name="Fibonacci">, 0.00174815789796412]
+ test_fibonacci#Fibonacci (0.00s)
+        Expected: 5
+          Actual: 4
+        test/fibonacci_test.rb:24:in `block in test_fibonacci'
+        test/fibonacci_test.rb:23:in `each'
+        test/fibonacci_test.rb:23:in `test_fibonacci'
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00237s
+1 tests, 6 assertions, 1 failures, 0 errors, 0 skips
+----
+
+[source, ruby]
+----
+...
+class Fibonacci < Minitest::Test 
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n <= 2
+
+    fib(n - 1) + fib(n - 2)
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 8399
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00107s
+1 tests, 6 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, ruby]
+----
+...
+class Fibonacci < Minitest::Test 
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n <= 2
+
+    fib(n - 1) + 1
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end
+----
+
+[source, ruby]
+----
+...
+class Fibonacci < Minitest::Test 
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n <= 2
+
+    fib(n - 1) + 1
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end
+----
+
+[source, ruby]
+----
+...
+class Fibonacci < Minitest::Test 
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n == 1
+
+    fib(n - 1) + 1
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 42476
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00162s
+1 tests, 6 assertions, 0 failures, 0 errors, 0 skips
+----
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'feat: フィボナッチ数計算'
+----
 
 ==== リファクタリング
 
 ==== パフォーマンスチューニング
+
+[width="15%"]
+|=======
+|... |5 | ... |10 |11 |12  | ...
+|... |5 | ... |55 |89 |144 | ...
+|=======
+
+* 12を渡したら144を返す
+
+[source, ruby]
+----
+
+----
+
 
 ==== リリース

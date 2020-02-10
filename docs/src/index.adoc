@@ -32,3 +32,4 @@
 * http://asciidoctor.org/[Asciidoctor^]
 * http://www.plantuml.com[PlantUML^]
 * https://about.draw.io/[draw.io^]
+* https://takumon.github.io/asciidoc-syntax-quick-reference-japanese-translation/[Asciidoctor 文法クイックリファレンス(日本語訳)^]
