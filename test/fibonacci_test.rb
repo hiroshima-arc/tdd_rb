@@ -3,13 +3,15 @@
 require 'minitest/reporters'
 Minitest::Reporters.use!
 require 'minitest/autorun'
+require './lib/fibonacci'
 
-class Fibonacci < Minitest::Test
+class FibonacciTest < Minitest::Test
+  def setup
+    @fib = Fibonacci
+  end
+
   def fib(number, memo = {})
-    return 0 if number.zero?
-    return 1 if number <= 2
-
-    memo[number] ||= fib(number - 1, memo) + fib(number - 2, memo)
+    @fib.fib(number, memo)
   end
 
   def test_fibonacci
