@@ -1,14 +1,15 @@
 # frozen_string_literal: true
+
 require 'minitest/reporters'
 Minitest::Reporters.use!
 require 'minitest/autorun'
 
 class Fibonacci < Minitest::Test
-  def fib(n)
+  def fib(n, memo = {})
     return 0 if n.zero?
     return 1 if n <= 2
 
-    fib(n - 1) + fib(n - 2)
+    memo[n] ||= fib(n - 1, memo) + fib(n - 2, memo)
   end
 
   def test_fibonacci
