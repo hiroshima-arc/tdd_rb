@@ -4409,6 +4409,7 @@ Interface FizzBuzzCommand {
   execute()
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 FizzBuzzType <|-- FizzBuzzType01
@@ -5374,9 +5375,11 @@ Interface FizzBuzzCommand {
   execute()
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 class FizzBuzzListCommand {
+  type
   execute(number)
 }
 class Assertions {
@@ -5603,9 +5606,11 @@ Interface FizzBuzzCommand {
   execute()
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 class FizzBuzzListCommand {
+  type
   execute(number)
 }
 FizzBuzzType <|-- FizzBuzzType01
@@ -5819,9 +5824,11 @@ Interface FizzBuzzCommand {
   execute()
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 class FizzBuzzListCommand {
+  type
   execute(number)
 }
 FizzBuzzType <|-- FizzBuzzType01
@@ -6091,9 +6098,11 @@ Interface FizzBuzzCommand {
   execute()
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 class FizzBuzzListCommand {
+  type
   execute(number)
 }
 FizzBuzzType <|-- FizzBuzzType01
@@ -6152,9 +6161,11 @@ Interface FizzBuzzCommand {
   execute()
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 class FizzBuzzListCommand {
+  type
   execute(number)
 }
 FizzBuzzType <|-- FizzBuzzType01
