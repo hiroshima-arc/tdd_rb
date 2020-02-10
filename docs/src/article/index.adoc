@@ -45,6 +45,7 @@ include::episode_3.adoc[]
 - https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b[RuboCop is 何？]
 - https://qiita.com/abcb2/items/9905449ab3fcf5d27ace[ruby rake の使い方]
 - https://qiita.com/tbpgr/items/443fe45f0dbe02aa768a[RuboCopのrake taskを使う]
+- https://qiita.com/nrslib/items/73bf176147192c402049[オブジェクト指向のいろは]
 
 === 参考図書
 

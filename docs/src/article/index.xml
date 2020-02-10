@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>テスト駆動開発から始めるRuby入門</title>
-<date>2020-02-08</date>
+<date>2020-02-10</date>
 </info>
 <simpara>これはとあるプログラマがどのような思考を経てテスト駆動開発でアプリケーションを構築していったかを解説した内容である。隣りに座って話を聞きながらコードを追いかけているイメージで読み進めてみてださい。</simpara>
 <section xml:id="_エピソード1">
@@ -5546,7 +5546,7 @@ deactivate B</screen>
 <simpara><link xl:href="https://qiita.com/nrslib/items/73bf176147192c402049">オブジェクト指向のいろは</link></simpara>
 </listitem>
 </itemizedlist>
-<simpara>オブジェクト指向の詳細は控えるとして、ここでは <emphasis role="strong">カプセル化</emphasis> <emphasis role="strong">ポリモフィズム</emphasis> <emphasis role="strong">継承</emphasis> というオブジェクト指向で言及される概念をリファクタリングを通して体験してもらい、オブジェクト指向プログラムの感覚を掴んでもらうことを目的に解説を進めていきたいと思います。</simpara>
+<simpara>オブジェクト指向の詳細は控えるとして、ここでは <emphasis role="strong">カプセル化</emphasis> <emphasis role="strong">ポリモフィズム</emphasis> <emphasis role="strong">継承</emphasis> というオブジェクト指向プログラムで原則とされる概念をリファクタリングを通して体験してもらい、オブジェクト指向プログラムの感覚を掴んでもらうことを目的に解説を進めていきたいと思います。</simpara>
 </section>
 </section>
 <section xml:id="_カプセル化">
@@ -5563,8 +5563,7 @@ deactivate B</screen>
           fizzbuzz.generate_list
           @result = fizzbuzz.list
 ...</programlisting>
-<simpara>まず、 <emphasis role="strong">インスタンス変数</emphasis> 追加します。</simpara>
-<simpara>次に <literal>self</literal> キーワードを外して <emphasis role="strong">クラスメソッド</emphasis> から <emphasis role="strong">インスタンスメソッド</emphasis> に変更します。</simpara>
+<simpara>まず、 <emphasis role="strong">インスタンス変数</emphasis> 追加します。次に <literal>self</literal> キーワードを外して <emphasis role="strong">クラスメソッド</emphasis> から <emphasis role="strong">インスタンスメソッド</emphasis> に変更します。</simpara>
 <blockquote>
 <attribution>
 かんたんRuby
@@ -7314,9 +7313,6 @@ Finished in 0.00687s
 <simpara>初めてコードを見る人でもテストコードを見ればコードの意図が読み取れるようになりましたのでコミットします。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">$ git add .
 $ git commit -m 'refactor: オブジェクトによるプリミティブの置き換え'</programlisting>
-</section>
-<section xml:id="_マジックナンバーの置き換え">
-<title>マジックナンバーの置き換え</title>
 <screen>class FizzBuzz {
     MAX_NUMBER = 100
     list
@@ -7342,8 +7338,10 @@ FizzBuzzType &lt;|-- FizzBuzzType01
 FizzBuzzType &lt;|-- FizzBuzzType02
 FizzBuzzType &lt;|-- FizzBuzzType03
 FizzBuzz *- FizzBuzzType</screen>
-<simpara>まだプリミティグ型を使っている部分があります。</simpara>
-<simpara>ここは <emphasis role="strong">マジックナンバーの置き換え</emphasis> を実施して可読性を上げておきましょう。</simpara>
+</section>
+<section xml:id="_マジックナンバーの置き換え">
+<title>マジックナンバーの置き換え</title>
+<simpara>まだプリミティグ型を使っている部分があります。ここは <emphasis role="strong">マジックナンバーの置き換え</emphasis> を実施して可読性を上げておきましょう。</simpara>
 <programlisting language="ruby" linenumbering="unnumbered">...
 class FizzBuzzType
   def self.create(type)
@@ -8247,6 +8245,7 @@ Interface FizzBuzzCommand {
   execute()
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 FizzBuzzType &lt;|-- FizzBuzzType01
@@ -9029,9 +9028,11 @@ Interface FizzBuzzCommand {
   execute()
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 class FizzBuzzListCommand {
+  type
   execute(number)
 }
 class Assertions {
@@ -9222,9 +9223,11 @@ Interface FizzBuzzCommand {
   execute()
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 class FizzBuzzListCommand {
+  type
   execute(number)
 }
 FizzBuzzType &lt;|-- FizzBuzzType01
@@ -9380,9 +9383,11 @@ Interface FizzBuzzCommand {
   execute()
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 class FizzBuzzListCommand {
+  type
   execute(number)
 }
 FizzBuzzType &lt;|-- FizzBuzzType01
@@ -9604,9 +9609,11 @@ Interface FizzBuzzCommand {
   execute()
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 class FizzBuzzListCommand {
+  type
   execute(number)
 }
 FizzBuzzType &lt;|-- FizzBuzzType01
@@ -9663,9 +9670,11 @@ Interface FizzBuzzCommand {
   execute()
 }
 class FizzBuzzValueCommand {
+  type
   execute(number)
 }
 class FizzBuzzListCommand {
+  type
   execute(number)
 }
 FizzBuzzType &lt;|-- FizzBuzzType01
@@ -9681,8 +9690,7 @@ FizzBuzzCommand &lt;|-- FizzBuzzValueCommand
 FizzBuzzCommand &lt;|-- FizzBuzzListCommand
 FizzBuzzListCommand --&gt; FizzBuzzList
 FizzBuzzCommand *- FizzBuzzType</screen>
-<simpara>アプリケーションはだいたいこんなところでしょう。
-ここでアプリケーションを実行してみましょう。</simpara>
+<simpara>クラスモジュールの抽出によってアプリケーションの構造が <emphasis role="strong">抽象化</emphasis> された結果、視覚的に把握できるようになりました。ここでアプリケーションをを実行してみましょう。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb
 Traceback (most recent call last):
 main.rb:5:in `&lt;main&gt;': uninitialized constant FizzBuzz (NameError)
@@ -10612,7 +10620,7 @@ Started with run options --guard --seed 18696
 Finished in 0.00561s
 32 tests, 36 assertions, 0 failures, 0 errors, 0 skips
 ....</programlisting>
-<simpara>コードカバレッジがうまく機能していないようなので、<literal>test_helper.rb</literal> を追加して共通分を書くファイルから読み込むように変更します。</simpara>
+<simpara>コードカバレッジがうまく機能していないようなので、<literal>test_helper.rb</literal> を追加して共通部分を各テストファイルから読み込むように変更します。</simpara>
 <programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
 
 require 'simplecov'
@@ -11353,6 +11361,13 @@ end</programlisting>
 <simpara>一方、うまく設計されたプログラムは変更が楽で安全です。変更すべき箇所がかんたんにわかり、変更するコード量が少なく、変更の影響を狭い範囲に限定できます。</simpara>
 <simpara>プログラムの修正に３日かかるか、それとも半日で済むか。その違いを生むのが「設計」なのです。</simpara>
 </blockquote>
+<simpara>では、いつ設計をしていたのでしょうか？ わかりますよね、このエピソードの始まりから終わりまで常に設計をしていたのです。</simpara>
+<blockquote>
+<attribution>
+テスト駆動開発
+</attribution>
+<simpara>TDDは分析技法であり、設計技法であり、実際には開発のすべてのアクティビティを構造化する技法なのだ。</simpara>
+</blockquote>
 </section>
 </section>
 </section>
@@ -11436,6 +11451,9 @@ end</programlisting>
 </listitem>
 <listitem>
 <simpara><link xl:href="https://qiita.com/tbpgr/items/443fe45f0dbe02aa768a">RuboCopのrake taskを使う</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://qiita.com/nrslib/items/73bf176147192c402049">オブジェクト指向のいろは</link></simpara>
 </listitem>
 </itemizedlist>
 </section>

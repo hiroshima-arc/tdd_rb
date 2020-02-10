@@ -1993,7 +1993,7 @@ end</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>オブジェクト指向の詳細は控えるとして、ここでは <strong>カプセル化</strong> <strong>ポリモフィズム</strong> <strong>継承</strong> というオブジェクト指向で言及される概念をリファクタリングを通して体験してもらい、オブジェクト指向プログラムの感覚を掴んでもらうことを目的に解説を進めていきたいと思います。</p>
+<p>オブジェクト指向の詳細は控えるとして、ここでは <strong>カプセル化</strong> <strong>ポリモフィズム</strong> <strong>継承</strong> というオブジェクト指向プログラムで原則とされる概念をリファクタリングを通して体験してもらい、オブジェクト指向プログラムの感覚を掴んでもらうことを目的に解説を進めていきたいと思います。</p>
 </div>
 </div>
 </div>
@@ -2018,10 +2018,7 @@ end</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>まず、 <strong>インスタンス変数</strong> 追加します。</p>
-</div>
-<div class="paragraph">
-<p>次に <code>self</code> キーワードを外して <strong>クラスメソッド</strong> から <strong>インスタンスメソッド</strong> に変更します。</p>
+<p>まず、 <strong>インスタンス変数</strong> 追加します。次に <code>self</code> キーワードを外して <strong>クラスメソッド</strong> から <strong>インスタンスメソッド</strong> に変更します。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -4180,19 +4177,16 @@ Finished in 0.00687s
 $ git commit -m 'refactor: オブジェクトによるプリミティブの置き換え'</code></pre>
 </div>
 </div>
-</div>
-<div class="sect4">
-<h5 id="_マジックナンバーの置き換え">マジックナンバーの置き換え</h5>
 <div class="imageblock">
 <div class="content">
 <img src="diag-c24dbdafdc4766204e9b3fba9938dbba.png" alt="diag c24dbdafdc4766204e9b3fba9938dbba" width="470" height="251">
 </div>
 </div>
-<div class="paragraph">
-<p>まだプリミティグ型を使っている部分があります。</p>
 </div>
+<div class="sect4">
+<h5 id="_マジックナンバーの置き換え">マジックナンバーの置き換え</h5>
 <div class="paragraph">
-<p>ここは <strong>マジックナンバーの置き換え</strong> を実施して可読性を上げておきましょう。</p>
+<p>まだプリミティグ型を使っている部分があります。ここは <strong>マジックナンバーの置き換え</strong> を実施して可読性を上げておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6512,8 +6506,7 @@ $ git commit -m 'refactor: 特殊ケースの導入'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>アプリケーションはだいたいこんなところでしょう。
-ここでアプリケーションを実行してみましょう。</p>
+<p>クラスモジュールの抽出によってアプリケーションの構造が <strong>抽象化</strong> された結果、視覚的に把握できるようになりました。ここでアプリケーションをを実行してみましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7581,7 +7574,7 @@ Finished in 0.00561s
 </div>
 </div>
 <div class="paragraph">
-<p>コードカバレッジがうまく機能していないようなので、<code>test_helper.rb</code> を追加して共通分を書くファイルから読み込むように変更します。</p>
+<p>コードカバレッジがうまく機能していないようなので、<code>test_helper.rb</code> を追加して共通部分を各テストファイルから読み込むように変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8325,13 +8318,26 @@ end</code></pre>
 &#8212; 現場で役立つシステム設計の原則
 </div>
 </div>
+<div class="paragraph">
+<p>では、いつ設計をしていたのでしょうか？ わかりますよね、このエピソードの始まりから終わりまで常に設計をしていたのです。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>TDDは分析技法であり、設計技法であり、実際には開発のすべてのアクティビティを構造化する技法なのだ。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; テスト駆動開発
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-10 09:26:46 JST
+Last updated 2020-02-10 11:54:33 JST
 </div>
 </div>
 </body>
