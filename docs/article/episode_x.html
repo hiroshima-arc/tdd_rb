@@ -576,6 +576,19 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="sect3">
 <h4 id="_todoリスト">1.2. TODOリスト</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>TODOリスト</p>
+</div>
+<div class="paragraph">
+<p>何をテストすべきだろうか----着手する前に、必要になりそうなテストをリストに書き出しておこう。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; テスト駆動開発
+</div>
+</div>
 <table class="tableblock frame-all grid-all" style="width: 15%;">
 <colgroup>
 <col style="width: 5.2631%;">
@@ -724,6 +737,19 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="sect3">
 <h4 id="_仮実装">1.3. 仮実装</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>仮実装を経て本実装へ</p>
+</div>
+<div class="paragraph">
+<p>失敗するテストを書いてから、最初に行う実装はどのようなものだろうか----ベタ書きの値を返そう。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; テスト駆動開発
+</div>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -841,6 +867,19 @@ $ git commit -m 'test: 0を渡したら0を返す'</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_三角測量">1.4. 三角測量</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>三角測量</p>
+</div>
+<div class="paragraph">
+<p>テストから最も慎重に一般化を引き出すやり方はどのようなものだろうか----２つ以上の例があるときだけ、一般化を行うようにしよう。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; テスト駆動開発
+</div>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -968,6 +1007,24 @@ $ git commit -m 'test: 1を渡したら2を返す'</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_明白な実装">1.5. 明白な実装</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>明白な実装</p>
+</div>
+<div class="paragraph">
+<p>シンプルな操作を実現するにはどうすればいいだろうか----そのまま実装しよう。</p>
+</div>
+<div class="paragraph">
+<p>仮実装や三角測量は、細かく細かく刻んだ小さなステップだ。だが、ときには実装をどうすべきか既に見えていることが。
+そのまま進もう。例えば先ほどのplusメソッドくらいシンプルなものを仮実装する必要が本当にあるだろうか。
+普通は、その必要はない。頭に浮かんだ明白な実装をただ単にコードに落とすだけだ。もしもレッドバーが出て驚いたら、あらためてもう少し歩幅を小さくしよう。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; テスト駆動開発
+</div>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -1419,6 +1476,26 @@ $ git commit -m 'feat: フィボナッチ数計算'</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_リファクタリング">1.6. リファクタリング</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>リファクタリング(名詞) 外部から見たときの振る舞いを保ちつつ、理解や修正が簡単になるように、ソフトウェアの内部構造を変化させること。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版)
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>リファクタリングする(動詞) 一連のリファクタリングを適用して、外部から見た振る舞いの変更なしに、ソフトウェアを再構築すること。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版
+</div>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -1681,6 +1758,16 @@ $ git commit -m 'refactor: メソッド名の変更'</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_パフォーマンスチューニング">1.7. パフォーマンスチューニング</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>心がけるべきことは、他のパフォーマンス分析とおなじように、実際のデータを使い、リアルな利用パターンを試し、プロファイリングを行ってからでないと、パフォーマンスを問題にする資格はない、ということだ。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; テスト駆動開発
+</div>
+</div>
 <div class="paragraph">
 <p><a href="http://www.suguru.jp/Fibonacci/Fib100.html" target="_blank" rel="noopener">１００番目までのフィボナッチ数列</a></p>
 </div>
@@ -2898,7 +2985,7 @@ $ git commit -m 'feat: モジュール分割'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-11 18:19:09 JST
+Last updated 2020-02-11 18:59:16 JST
 </div>
 </div>
 </body>

@@ -7,7 +7,10 @@ require './lib/fibonacci'
 
 class FibonacciTest < Minitest::Test
   def setup
-    @fib = Fibonacci
+    @fib = Fibonacci::Command.new(Fibonacci::Recursive.new)
+    @recursive = Fibonacci::Command.new(Fibonacci::Recursive.new)
+    @loop = Fibonacci::Command.new(Fibonacci::Loop.new)
+    @general_term = Fibonacci::Command.new(Fibonacci::GeneralTerm.new)
   end
 
   def test_fibonacci
@@ -17,7 +20,15 @@ class FibonacciTest < Minitest::Test
     end
   end
 
-  def test_return_102334155_when_40
-    assert_equal 102_334_155, @fib.calc(40)
+  def test_large_number_recursive
+    assert_equal 102_334_155, @recursive.calc(40)
+  end
+
+  def test_large_number_loop
+    assert_equal 102_334_155, @loop.calc(40)
+  end
+
+  def test_large_number_general_term
+    assert_equal 102_334_155, @general_term.calc(40)
   end
 end

@@ -14,3 +14,5 @@ gem 'minitest-reporters'
 gem 'rake'
 gem 'rubocop', require: false
 gem 'simplecov', require: false, group: :test
+gem 'debase'
+gem 'ruby-debug-ide'
