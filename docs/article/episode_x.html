@@ -529,8 +529,8 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_三角測量">1.4. 三角測量</a></li>
 <li><a href="#_明白な実装">1.5. 明白な実装</a></li>
 <li><a href="#_リファクタリング">1.6. リファクタリング</a></li>
-<li><a href="#_パフォーマンスチューニング">1.7. パフォーマンスチューニング</a></li>
-<li><a href="#_リリース">1.8. リリース</a></li>
+<li><a href="#_リリース">1.7. リリース</a></li>
+<li><a href="#_パフォーマンスチューニング">1.8. パフォーマンスチューニング</a></li>
 </ul>
 </li>
 </ul>
@@ -540,7 +540,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect2">
 <h3 id="_パフォーマンスチューニングから始めるテスト駆動開発">1. パフォーマンスチューニングから始めるテスト駆動開発</h3>
 <div class="paragraph">
-<p><a href="https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A3%E3%83%9C%E3%83%8A%E3%83%83%E3%83%81%E6%95%B0">フィボナッチ数</a> を計算するプログラムを作ります。</p>
+<p><a href="https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A3%E3%83%9C%E3%83%8A%E3%83%83%E3%83%81%E6%95%B0" target="_blank" rel="noopener">フィボナッチ数</a> を計算するプログラムを作ります。</p>
 </div>
 <div class="sect3">
 <h4 id="_仕様">1.1. 仕様</h4>
@@ -748,7 +748,7 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 <span class="constant">Minitest</span>::<span class="constant">Reporters</span>.use!
 require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
 
-<span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">greeting</span>
     <span class="string"><span class="delimiter">'</span><span class="content">hello world</span><span class="delimiter">'</span></span>
   <span class="keyword">end</span>
@@ -795,7 +795,7 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 <pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
 Started with run options --seed 30787
 
- FAIL[&quot;test_greeting&quot;, #&lt;Minitest::Reporters::Suite:0x000055eaefeef5e0 @name=&quot;Fibonacci&quot;&gt;, 0.003157061990350485]
+ FAIL[&quot;test_greeting&quot;, &lt;Minitest::Reporters::Suite:0x000055eaefeef5e0 @name=&quot;Fibonacci&quot;&gt;, 0.003157061990350485]
  test_greeting#Fibonacci (0.00s)
         Expected: &quot;hello world&quot;
           Actual: &quot;hello world!&quot;
@@ -857,7 +857,7 @@ $ git commit -m 'test: 0を渡したら0を返す'</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
 
@@ -932,7 +932,7 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 <span class="constant">Minitest</span>::<span class="constant">Reporters</span>.use!
 require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
 
-<span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
 
@@ -1015,7 +1015,7 @@ $ git commit -m 'test: 1を渡したら2を返す'</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n &lt;= <span class="integer">2</span>
@@ -1037,13 +1037,13 @@ $ git commit -m 'test: 1を渡したら2を返す'</code></pre>
 <pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
 Started with run options --seed 26066
 
- FAIL[&quot;test_fibonacci&quot;, #&lt;Minitest::Reporters::Suite:0x0000562bc96ee330 @name=&quot;Fibonacci&quot;&gt;, 0.0055934099946171045]
+ FAIL[&quot;test_fibonacci&quot;, &lt;Minitest::Reporters::Suite:0x0000562bc96ee330 @name=&quot;Fibonacci&quot;&gt;, 0.0055934099946171045]
  test_fibonacci#Fibonacci (0.01s)
         Expected: 2
           Actual: 1
         test/fibonacci_test.rb:24:in `block in test_fibonacci'
         test/fibonacci_test.rb:23:in `each'
-        test/fibonacci_test.rb:23:in `test_fibonacci'
+        test/fibonacci_test.rb:23:in `test_fibonacci''
 
   1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
 
@@ -1053,7 +1053,7 @@ Finished in 0.00882s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n &lt;= <span class="integer">2</span>
@@ -1125,7 +1125,7 @@ $ git commit -m 'test: 3を渡したら2を返す'</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n &lt;= <span class="integer">2</span>
@@ -1147,13 +1147,13 @@ $ git commit -m 'test: 3を渡したら2を返す'</code></pre>
 <pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
 Started with run options --seed 34595
 
- FAIL[&quot;test_fibonacci&quot;, #&lt;Minitest::Reporters::Suite:0x0000564fdbd6dfe0 @name=&quot;Fibonacci&quot;&gt;, 0.005386559059843421]
+ FAIL[&quot;test_fibonacci&quot;, &lt;Minitest::Reporters::Suite:0x0000564fdbd6dfe0 @name=&quot;Fibonacci&quot;&gt;, 0.005386559059843421]
  test_fibonacci#Fibonacci (0.01s)
         Expected: 3
           Actual: 2
         test/fibonacci_test.rb:24:in `block in test_fibonacci'
         test/fibonacci_test.rb:23:in `each'
-        test/fibonacci_test.rb:23:in `test_fibonacci'
+        test/fibonacci_test.rb:23:in `test_fibonacci''
 
   1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
 
@@ -1164,7 +1164,7 @@ Finished in 0.01030s
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n &lt;= <span class="integer">2</span>
@@ -1186,13 +1186,13 @@ Finished in 0.01030s
 <pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
 Started with run options --seed 10848
 
- FAIL[&quot;test_fibonacci&quot;, #&lt;Minitest::Reporters::Suite:0x00005621247c9f48 @name=&quot;Fibonacci&quot;&gt;, 0.0007573128677904606]
+ FAIL[&quot;test_fibonacci&quot;, &lt;Minitest::Reporters::Suite:0x00005621247c9f48 @name=&quot;Fibonacci&quot;&gt;, 0.0007573128677904606]
  test_fibonacci#Fibonacci (0.00s)
         Expected: 3
           Actual: 2
         test/fibonacci_test.rb:24:in `block in test_fibonacci'
         test/fibonacci_test.rb:23:in `each'
-        test/fibonacci_test.rb:23:in `test_fibonacci'
+        test/fibonacci_test.rb:23:in `test_fibonacci''
 
   1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
 
@@ -1203,7 +1203,7 @@ Finished in 0.00130s
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n &lt;= <span class="integer">2</span>
@@ -1272,7 +1272,7 @@ Finished in 0.00467s
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n &lt;= <span class="integer">2</span>
@@ -1294,13 +1294,13 @@ Finished in 0.00467s
 <pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
 Started with run options --seed 54754
 
- FAIL[&quot;test_fibonacci&quot;, #&lt;Minitest::Reporters::Suite:0x000055c42397e108 @name=&quot;Fibonacci&quot;&gt;, 0.00174815789796412]
+ FAIL[&quot;test_fibonacci&quot;, &lt;Minitest::Reporters::Suite:0x000055c42397e108 @name=&quot;Fibonacci&quot;&gt;, 0.00174815789796412]
  test_fibonacci#Fibonacci (0.00s)
         Expected: 5
           Actual: 4
         test/fibonacci_test.rb:24:in `block in test_fibonacci'
         test/fibonacci_test.rb:23:in `each'
-        test/fibonacci_test.rb:23:in `test_fibonacci'
+        test/fibonacci_test.rb:23:in `test_fibonacci''
 
   1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
 
@@ -1311,7 +1311,7 @@ Finished in 0.00237s
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n &lt;= <span class="integer">2</span>
@@ -1342,7 +1342,7 @@ Finished in 0.00107s
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n &lt;= <span class="integer">2</span>
@@ -1362,7 +1362,7 @@ Finished in 0.00107s
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n &lt;= <span class="integer">2</span>
@@ -1382,7 +1382,7 @@ Finished in 0.00107s
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n == <span class="integer">1</span>
@@ -1419,10 +1419,272 @@ $ git commit -m 'feat: フィボナッチ数計算'</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_リファクタリング">1.6. リファクタリング</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">0を渡したら0を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">1を渡したら1を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">2を渡したら1を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">3を渡したら2を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">4を渡したら3を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">5を渡したら5を返す</em></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">fib</span>(n)
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n == <span class="integer">1</span>
+
+    fib(n - <span class="integer">1</span>) + <span class="integer">1</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], fib(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="function">fib</span>(n)
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n == <span class="integer">1</span>
+
+    fib(n - <span class="integer">1</span>) + fib(n - <span class="integer">2</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">fib</span>(n)
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n == <span class="integer">1</span>
+
+    fib(n - <span class="integer">1</span>) + fib(n - <span class="integer">2</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], fib(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">fib</span>(n)
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n == <span class="integer">1</span>
+
+    fib(n - <span class="integer">1</span>) + fib(n - <span class="integer">2</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">fib</span>(n)
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n == <span class="integer">1</span>
+
+    fib(n - <span class="integer">1</span>) + fib(n - <span class="integer">2</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.fib(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">fib</span>(n)
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n == <span class="integer">1</span>
+
+    fib(n - <span class="integer">1</span>) + fib(n - <span class="integer">2</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.fib(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
+Started with run options --seed 40694
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00393s
+1 tests, 6 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'refactor: 関数群のクラスへの集約'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">fib</span>(number)
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    fib(number - <span class="integer">1</span>) + fib(number - <span class="integer">2</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.fib(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
+Started with run options --seed 37760
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00744s
+1 tests, 6 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'refactor: 変数名の変更'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">fib</span>(number)
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    fib(number - <span class="integer">1</span>) + fib(number - <span class="integer">2</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.fib(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc</span>(number)
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    calc(number - <span class="integer">1</span>) + calc(number - <span class="integer">2</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.calc(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
+Started with run options --seed 15099
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00285s
+1 tests, 6 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'refactor: メソッド名の変更'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_リリース">1.7. リリース</h4>
 
 </div>
 <div class="sect3">
-<h4 id="_パフォーマンスチューニング">1.7. パフォーマンスチューニング</h4>
+<h4 id="_パフォーマンスチューニング">1.8. パフォーマンスチューニング</h4>
 <table class="tableblock frame-all grid-all" style="width: 15%;">
 <colgroup>
 <col style="width: 14.2857%;">
@@ -1467,15 +1729,11 @@ $ git commit -m 'feat: フィボナッチ数計算'</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_リリース">1.8. リリース</h4>
-
-</div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-11 13:01:51 JST
+Last updated 2020-02-11 13:45:05 JST
 </div>
 </div>
 </body>
