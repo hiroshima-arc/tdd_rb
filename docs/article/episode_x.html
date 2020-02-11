@@ -529,8 +529,8 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_三角測量">1.4. 三角測量</a></li>
 <li><a href="#_明白な実装">1.5. 明白な実装</a></li>
 <li><a href="#_リファクタリング">1.6. リファクタリング</a></li>
-<li><a href="#_リリース">1.7. リリース</a></li>
-<li><a href="#_パフォーマンスチューニング">1.8. パフォーマンスチューニング</a></li>
+<li><a href="#_パフォーマンスチューニング">1.7. パフォーマンスチューニング</a></li>
+<li><a href="#_リリース">1.8. リリース</a></li>
 </ul>
 </li>
 </ul>
@@ -1680,11 +1680,10 @@ $ git commit -m 'refactor: メソッド名の変更'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_リリース">1.7. リリース</h4>
-
+<h4 id="_パフォーマンスチューニング">1.7. パフォーマンスチューニング</h4>
+<div class="paragraph">
+<p><a href="http://www.suguru.jp/Fibonacci/Fib100.html" target="_blank" rel="noopener">１００番目までのフィボナッチ数列</a></p>
 </div>
-<div class="sect3">
-<h4 id="_パフォーマンスチューニング">1.8. パフォーマンスチューニング</h4>
 <table class="tableblock frame-all grid-all" style="width: 15%;">
 <colgroup>
 <col style="width: 14.2857%;">
@@ -1697,21 +1696,21 @@ $ git commit -m 'refactor: メソッド名の変更'</code></pre>
 </colgroup>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">11</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">38</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">39</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">40</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">55</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">89</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">144</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">39088169</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">63245986</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">102334155</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
 </tr>
 </tbody>
@@ -1719,21 +1718,127 @@ $ git commit -m 'refactor: メソッド名の変更'</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>12を渡したら144を返す</p>
+<p>大きな数値を計算する</p>
 </li>
 </ul>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="ruby"></code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc</span>(number)
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    calc(number - <span class="integer">1</span>) + calc(number - <span class="integer">2</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.calc(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby -r profile test/fibonacci_test.rb
+Started with run options --seed 42383
+
+  2/1: [======================                      ] 50% Time: 00:00:00,  ETA: 00:00:00</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">...
+  %   cumulative   self              self     total
+ time   seconds   seconds    calls  ms/call  ms/call  name
+192.39    25.50     25.50        2 12750.69 12750.69  Thread::Queue#pop
+ 75.32    35.49      9.98   246940     0.04     1.65  Fibonacci.calc
+....</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc</span>(number, memo = {})
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.calc(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby -r profile test/fibonacci_test.rb
+Started with run options --seed 20468
+
+  2/2: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.04214s
+2 tests, 7 assertions, 0 failures, 0 errors, 0 skips
+  %   cumulative   self              self     total
+ time   seconds   seconds    calls  ms/call  ms/call  name
+...
+ 12.09     0.06      0.06        2    32.09    32.09  Thread::Queue#pop
+...
+  1.33     0.26      0.01      105     0.07     1.41  Fibonacci.calc
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'perf: メモ化によるパフォーマンス改善'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_リリース">1.8. リリース</h4>
+
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-11 13:45:05 JST
+Last updated 2020-02-11 14:19:25 JST
 </div>
 </div>
 </body>
