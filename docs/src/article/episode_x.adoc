@@ -1858,7 +1858,7 @@ class FibonacciTestBenchmark < Minitest::Benchmark
   end
 
   def bench_recursive
-    assert_performance_constant do |n|
+    assert_performance_constant do |_n|
       1000.times do |i|
         @recursive.calc(i)
       end
@@ -1906,5 +1906,152 @@ $ git add .
 $ git commit -m 'perf: ベンチマークの実施'
 ----
 
-==== リリース
+==== モジュール分割
 
+ /
+   |--lib/
+       |
+        -- fibonacci.rb
+   |--test/
+       |
+        -- fibonacci_test.rb
+        -- fibonacci_benchmark.rb
+
+`lib/fibonacci/command.rb`
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+module Fibonacci
+  # Fibonacci Calcultor
+  class Command
+    def initialize(algorithm)
+      @algorithm = algorithm
+    end
+
+    def calc(number)
+      @algorithm.calc(number)
+    end
+  end
+end
+----
+
+`lib/fibonacci/recursive.rb`
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+module Fibonacci
+  # Fibonacci Recursive algorithm
+  class Recursive
+    def calc(number, memo = {})
+      return 0 if number.zero?
+      return 1 if number == 1
+
+      memo[number] ||= calc(number - 1, memo) + calc(number - 2, memo)
+    end
+  end
+end
+----
+
+`lib/fibonacci/loop.rb`
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+module Fibonacci
+  # Fibonacci Loop algorithm
+  class Loop
+    def calc(number)
+      a = 0
+      b = 1
+      c = 0
+      (0...number).each do |_i|
+        a = b
+        b = c
+        c = a + b
+      end
+      c
+    end
+  end
+end
+----
+
+`lib/fibonacci/general_term.rb`
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+module Fibonacci
+  # Fibonacci General Term algorithm
+  class GeneralTerm
+    def calc(number)
+      a = ((1 + Math.sqrt(5)) / 2)**number
+      b = ((1 - Math.sqrt(5)) / 2)**number
+      ((a - b) / Math.sqrt(5)).round
+    end
+  end
+end
+----
+
+`lib/fibonacci.rb`
+
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require './lib/fibonacci/command'
+require './lib/fibonacci/recursive'
+require './lib/fibonacci/loop'
+require './lib/fibonacci/general_term'
+----
+
+`main.rb`
+
+[source, ruby]
+----
+require './lib/fibonacci'
+
+number = ARGV[0].to_i
+command = Fibonacci::Command.new(Fibonacci::GeneralTerm.new)
+puts command.calc(number)
+----
+
+[source, bash]
+----
+$ ruby main.rb 0
+0
+$ ruby main.rb 1
+1
+$ ruby main.rb 2
+1
+$ ruby main.rb 3
+2
+$ ruby main.rb 4
+3
+----
+
+ /main.rb
+   |--lib/
+       |
+        -- fibonacci.rb
+      fibonacci/
+       |
+        -- command.rb
+        -- general_term.rb
+        -- loop.rb
+        -- recursive.rb
+   |--test/
+       |
+        -- fibonacci_test.rb
+        -- fibonacci_benchmark.rb
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'feat: モジュール分割'
+----
