@@ -1829,6 +1829,907 @@ Finished in 0.04214s
 $ git commit -m 'perf: メモ化によるパフォーマンス改善'</code></pre>
 </div>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc</span>(number, memo = {})
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc2</span>(number)
+    a = <span class="integer">0</span>
+    b = <span class="integer">1</span>
+    c = <span class="integer">0</span>
+    (<span class="integer">0</span>...number).each <span class="keyword">do</span> |i|
+      a = b
+      b = c
+      c = a + b
+    <span class="keyword">end</span>
+    c
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.calc(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_calc2</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.calc2(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb -n test_large_number_calc2 Started with run options -n test_large_number_calc2 --seed 18167
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00123s
+1 tests, 1 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'feat: ループ処理による実装'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc</span>(number, memo = {})
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc2</span>(number)
+    a = <span class="integer">0</span>
+    b = <span class="integer">1</span>
+    c = <span class="integer">0</span>
+    (<span class="integer">0</span>...number).each <span class="keyword">do</span> |i|
+      a = b
+      b = c
+      c = a + b
+    <span class="keyword">end</span>
+    c
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc3</span>(number)
+    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>) ** number
+    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>) ** number
+    ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.calc(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_calc2</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.calc2(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_calc3</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.calc3(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb -n test_large_number_calc3
+Started with run options -n test_large_number_calc3 --seed 55659
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00111s
+1 tests, 1 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'feat: 一般項による実装'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">recursive</span>(number, memo = {})
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    memo[number] ||= recursive(number - <span class="integer">1</span>, memo) + recursive(number - <span class="integer">2</span>, memo)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc2</span>(number)
+    a = <span class="integer">0</span>
+    b = <span class="integer">1</span>
+    c = <span class="integer">0</span>
+    (<span class="integer">0</span>...number).each <span class="keyword">do</span> |i|
+      a = b
+      b = c
+      c = a + b
+    <span class="keyword">end</span>
+    c
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc3</span>(number)
+    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>) ** number
+    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>) ** number
+    ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.recursive(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.recursive(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_calc2</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.calc2(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_calc3</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.calc3(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
+Started with run options --seed 15174
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00137s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">recursive</span>(number, memo = {})
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    memo[number] ||= recursive(number - <span class="integer">1</span>, memo) + recursive(number - <span class="integer">2</span>, memo)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">loop</span>(number)
+    a = <span class="integer">0</span>
+    b = <span class="integer">1</span>
+    c = <span class="integer">0</span>
+    (<span class="integer">0</span>...number).each <span class="keyword">do</span> |i|
+      a = b
+      b = c
+      c = a + b
+    <span class="keyword">end</span>
+    c
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc3</span>(number)
+    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>) ** number
+    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>) ** number
+    ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.recursive(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.recursive(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_loop</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.loop(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_calc3</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.calc3(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
+Started with run options --seed 28586
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00188s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">recursive</span>(number, memo = {})
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    memo[number] ||= recursive(number - <span class="integer">1</span>, memo) + recursive(number - <span class="integer">2</span>, memo)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">loop</span>(number)
+    a = <span class="integer">0</span>
+    b = <span class="integer">1</span>
+    c = <span class="integer">0</span>
+    (<span class="integer">0</span>...number).each <span class="keyword">do</span> |i|
+      a = b
+      b = c
+      c = a + b
+    <span class="keyword">end</span>
+    c
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">general_term</span>(number)
+    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>) ** number
+    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>) ** number
+    ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.recursive(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.recursive(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_loop</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.loop(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_general_term</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.general_term(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
+Started with run options --seed 42729
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00736s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'refactor: メソッド名の変更'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">recursive</span>(number, memo = {})
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    memo[number] ||= recursive(number - <span class="integer">1</span>, memo) + recursive(number - <span class="integer">2</span>, memo)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">loop</span>(number)
+    a = <span class="integer">0</span>
+    b = <span class="integer">1</span>
+    c = <span class="integer">0</span>
+    (<span class="integer">0</span>...number).each <span class="keyword">do</span> |_i|
+      a = b
+      b = c
+      c = a + b
+    <span class="keyword">end</span>
+    c
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">general_term</span>(number)
+    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciRecursive</span>
+  <span class="keyword">def</span> <span class="function">calc</span>(number, memo = {})
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+    <span class="instance-variable">@recursive</span> = <span class="constant">FibonacciRecursive</span>.new
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@recursive</span>.calc(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_loop</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.loop(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_general_term</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.general_term(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
+Started with run options --seed 12762
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00130s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">loop</span>(number)
+    a = <span class="integer">0</span>
+    b = <span class="integer">1</span>
+    c = <span class="integer">0</span>
+    (<span class="integer">0</span>...number).each <span class="keyword">do</span> |_i|
+      a = b
+      b = c
+      c = a + b
+    <span class="keyword">end</span>
+    c
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">general_term</span>(number)
+    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciRecursive</span>
+  <span class="keyword">def</span> <span class="function">calc</span>(number, memo = {})
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+    <span class="instance-variable">@recursive</span> = <span class="constant">FibonacciRecursive</span>.new
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@recursive</span>.calc(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_loop</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.loop(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_general_term</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.general_term(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置き換え'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">general_term</span>(number)
+    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciRecursive</span>
+  <span class="keyword">def</span> <span class="function">calc</span>(number, memo = {})
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciLoop</span>
+  <span class="keyword">def</span> <span class="function">calc</span>(number)
+    a = <span class="integer">0</span>
+    b = <span class="integer">1</span>
+    c = <span class="integer">0</span>
+    (<span class="integer">0</span>...number).each <span class="keyword">do</span> |_i|
+      a = b
+      b = c
+      c = a + b
+    <span class="keyword">end</span>
+    c
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+    <span class="instance-variable">@recursive</span> = <span class="constant">FibonacciRecursive</span>.new
+    <span class="instance-variable">@loop</span> = <span class="constant">FibonacciLoop</span>.new
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@recursive</span>.calc(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_loop</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@loop</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_general_term</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.general_term(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rbStarted with run options --seed 33171
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00337s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置き換え'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciRecursive</span>
+  <span class="keyword">def</span> <span class="function">calc</span>(number, memo = {})
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciLoop</span>
+  <span class="keyword">def</span> <span class="function">calc</span>(number)
+    a = <span class="integer">0</span>
+    b = <span class="integer">1</span>
+    c = <span class="integer">0</span>
+    (<span class="integer">0</span>...number).each <span class="keyword">do</span> |_i|
+      a = b
+      b = c
+      c = a + b
+    <span class="keyword">end</span>
+    c
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciGeneralTerm</span>
+  <span class="keyword">def</span> <span class="function">calc</span>(number)
+    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
+    <span class="instance-variable">@recursive</span> = <span class="constant">FibonacciRecursive</span>.new
+    <span class="instance-variable">@loop</span> = <span class="constant">FibonacciLoop</span>.new
+    <span class="instance-variable">@general_term</span> = <span class="constant">FibonacciGeneralTerm</span>.new
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@recursive</span>.calc(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_loop</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@loop</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_general_term</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@general_term</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rbStarted with run options --seed 65058
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01576s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置き換え'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="function">initialize</span>(algorithm)
+    <span class="instance-variable">@algorithm</span> = algorithm
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">calc</span>(number)
+    <span class="instance-variable">@algorithm</span>.calc(number)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciRecursive</span>
+  <span class="keyword">def</span> <span class="function">calc</span>(number, memo = {})
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciLoop</span>
+  <span class="keyword">def</span> <span class="function">calc</span>(number)
+    a = <span class="integer">0</span>
+    b = <span class="integer">1</span>
+    c = <span class="integer">0</span>
+    (<span class="integer">0</span>...number).each <span class="keyword">do</span> |_i|
+      a = b
+      b = c
+      c = a + b
+    <span class="keyword">end</span>
+    c
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciGeneralTerm</span>
+  <span class="keyword">def</span> <span class="function">calc</span>(number)
+    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciRecursive</span>.new)
+    <span class="instance-variable">@recursive</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciRecursive</span>.new)
+    <span class="instance-variable">@loop</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciLoop</span>.new)
+    <span class="instance-variable">@general_term</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciGeneralTerm</span>.new)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.calc(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_loop</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@loop</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_general_term</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@general_term</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'refactor: サブクラスによるタイプコードの置き換え'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>lib/fibonacci.rb</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="comment"># Fibonacci Calcultor</span>
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="function">initialize</span>(algorithm)
+    <span class="instance-variable">@algorithm</span> = algorithm
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">calc</span>(number)
+    <span class="instance-variable">@algorithm</span>.calc(number)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment"># Fibonacci Recursive algorithm</span>
+<span class="keyword">class</span> <span class="class">FibonacciRecursive</span>
+  <span class="keyword">def</span> <span class="function">calc</span>(number, memo = {})
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment"># Fibonacci Loop algorithm</span>
+<span class="keyword">class</span> <span class="class">FibonacciLoop</span>
+  <span class="keyword">def</span> <span class="function">calc</span>(number)
+    a = <span class="integer">0</span>
+    b = <span class="integer">1</span>
+    c = <span class="integer">0</span>
+    (<span class="integer">0</span>...number).each <span class="keyword">do</span> |_i|
+      a = b
+      b = c
+      c = a + b
+    <span class="keyword">end</span>
+    c
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment"># Fibonacci General Term algorithm</span>
+<span class="keyword">class</span> <span class="class">FibonacciGeneralTerm</span>
+  <span class="keyword">def</span> <span class="function">calc</span>(number)
+    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>test/fibonacci_test.rb</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/reporters</span><span class="delimiter">'</span></span>
+<span class="constant">Minitest</span>::<span class="constant">Reporters</span>.use!
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fibonacci</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciRecursive</span>.new)
+    <span class="instance-variable">@recursive</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciRecursive</span>.new)
+    <span class="instance-variable">@loop</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciLoop</span>.new)
+    <span class="instance-variable">@general_term</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciGeneralTerm</span>.new)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.calc(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_loop</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@loop</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_general_term</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@general_term</span>.calc(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
+Started with run options --seed 39723
+
+  4/4: [==========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00227s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'feat: ファイル分割'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>test/fibonacci_test.rb</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/benchmark</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fibonacci</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTestBenchmark</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Benchmark</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@recursive</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciRecursive</span>.new)
+    <span class="instance-variable">@loop</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciLoop</span>.new)
+    <span class="instance-variable">@general_term</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciGeneralTerm</span>.new)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">bench_recursive</span>
+    assert_performance_constant <span class="keyword">do</span> |n|
+      <span class="integer">1000</span>.times <span class="keyword">do</span> |i|
+        <span class="instance-variable">@recursive</span>.calc(i)
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">bench_loop</span>
+    assert_performance_constant <span class="keyword">do</span> |_n|
+      <span class="integer">1000</span>.times.each <span class="keyword">do</span> |i|
+        <span class="instance-variable">@loop</span>.calc(i)
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">bench_general_term</span>
+    assert_performance_constant <span class="keyword">do</span> |_n|
+      <span class="integer">1000</span>.times.each <span class="keyword">do</span> |i|
+        <span class="instance-variable">@general_term</span>.calc(i)
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_benchmark.rb
+Run options: --seed 1009
+
+# Running:
+
+bench_recursive  0.438420        0.436003        0.437170        0.453267        0.428123
+.bench_loop      0.157816        0.160366        0.159504        0.160275        0.162165
+.bench_general_term      0.001215        0.001200        0.001255        0.001204      0.001184
+.
+
+Finished in 3.074021s, 0.9759 runs/s, 0.9759 assertions/s.
+
+3 runs, 3 assertions, 0 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'perf: ベンチマークの実施'</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_リリース">1.8. リリース</h4>
@@ -1838,7 +2739,7 @@ $ git commit -m 'perf: メモ化によるパフォーマンス改善'</code></pr
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-11 14:19:25 JST
+Last updated 2020-02-11 17:31:33 JST
 </div>
 </div>
 </body>
