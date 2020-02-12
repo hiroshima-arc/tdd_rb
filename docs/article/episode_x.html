@@ -523,14 +523,15 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel2">
 <li><a href="#_パフォーマンスチューニングから始めるテスト駆動開発">1. パフォーマンスチューニングから始めるテスト駆動開発</a>
 <ul class="sectlevel3">
-<li><a href="#_仕様">1.1. 仕様</a></li>
-<li><a href="#_todoリスト">1.2. TODOリスト</a></li>
-<li><a href="#_仮実装">1.3. 仮実装</a></li>
-<li><a href="#_三角測量">1.4. 三角測量</a></li>
-<li><a href="#_明白な実装">1.5. 明白な実装</a></li>
-<li><a href="#_リファクタリング">1.6. リファクタリング</a></li>
-<li><a href="#_パフォーマンスチューニング">1.7. パフォーマンスチューニング</a></li>
-<li><a href="#_モジュール分割">1.8. モジュール分割</a></li>
+<li><a href="#_概要">1.1. 概要</a></li>
+<li><a href="#_仕様">1.2. 仕様</a></li>
+<li><a href="#_todoリスト">1.3. TODOリスト</a></li>
+<li><a href="#_仮実装">1.4. 仮実装</a></li>
+<li><a href="#_三角測量">1.5. 三角測量</a></li>
+<li><a href="#_明白な実装">1.6. 明白な実装</a></li>
+<li><a href="#_リファクタリング">1.7. リファクタリング</a></li>
+<li><a href="#_パフォーマンスチューニング">1.8. パフォーマンスチューニング</a></li>
+<li><a href="#_モジュール分割">1.9. モジュール分割</a></li>
 </ul>
 </li>
 </ul>
@@ -539,11 +540,26 @@ table.CodeRay td.code>pre{padding:0}
 <div id="content">
 <div class="sect2">
 <h3 id="_パフォーマンスチューニングから始めるテスト駆動開発">1. パフォーマンスチューニングから始めるテスト駆動開発</h3>
+<div class="sect3">
+<h4 id="_概要">1.1. 概要</h4>
 <div class="paragraph">
-<p><a href="https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A3%E3%83%9C%E3%83%8A%E3%83%83%E3%83%81%E6%95%B0" target="_blank" rel="noopener">フィボナッチ数</a> を計算するプログラムを作ります。</p>
+<p><a href="https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A3%E3%83%9C%E3%83%8A%E3%83%83%E3%83%81%E6%95%B0" target="_blank" rel="noopener">フィボナッチ数</a> を計算するプログラムを <strong>テスト駆動開発</strong> で作ります。</p>
+</div>
+<div class="paragraph">
+<p>初めに <strong>TODOリスト</strong> をプログラミング作業をリストアップします。次に、最初に失敗するテストを作成します。 その後 <strong>仮実装</strong> でベタ書き値を返すテストを実行します。 それから <strong>三角測量</strong> を使って慎重にアルゴリズムを一般化していきます。そして、 <strong>明白な実装</strong> によりアルゴリズムを完成させます。</p>
+</div>
+<div class="paragraph">
+<p>アルゴリズムが完成したら <strong>リファクタリング</strong> を実施してコードベースを <strong>動作するきれいなコード</strong> に洗練していきます。</p>
+</div>
+<div class="paragraph">
+<p><strong>動作するきれいなコード</strong> になったらパフォーマンスの検証をするためパフォーマンスチューニングを実施します。 パフォーマンスチューニングでは <strong>プロファイラ</strong> を使ったプログラムのボトルネック調査を実施します。アルゴリズムのパフォーマンスを改善したら別途追加したアルゴリズムと <strong>ベンチマーク</strong> を実施してどのアルゴリズムを採用するかを決定します。</p>
+</div>
+<div class="paragraph">
+<p>仕上げは、 <strong>モジュール分割</strong> によりRubyアプリケーションとしてリリースします。</p>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_仕様">1.1. 仕様</h4>
+<h4 id="_仕様">1.2. 仕様</h4>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -575,7 +591,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect3">
-<h4 id="_todoリスト">1.2. TODOリスト</h4>
+<h4 id="_todoリスト">1.3. TODOリスト</h4>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -736,7 +752,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect3">
-<h4 id="_仮実装">1.3. 仮実装</h4>
+<h4 id="_仮実装">1.4. 仮実装</h4>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -866,7 +882,7 @@ $ git commit -m 'test: 0を渡したら0を返す'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_三角測量">1.4. 三角測量</h4>
+<h4 id="_三角測量">1.5. 三角測量</h4>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -1006,7 +1022,7 @@ $ git commit -m 'test: 1を渡したら2を返す'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_明白な実装">1.5. 明白な実装</h4>
+<h4 id="_明白な実装">1.6. 明白な実装</h4>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -1475,7 +1491,7 @@ $ git commit -m 'feat: フィボナッチ数計算'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_リファクタリング">1.6. リファクタリング</h4>
+<h4 id="_リファクタリング">1.7. リファクタリング</h4>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -1757,7 +1773,7 @@ $ git commit -m 'refactor: メソッド名の変更'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_パフォーマンスチューニング">1.7. パフォーマンスチューニング</h4>
+<h4 id="_パフォーマンスチューニング">1.8. パフォーマンスチューニング</h4>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -2819,7 +2835,7 @@ $ git commit -m 'perf: ベンチマークの実施'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_モジュール分割">1.8. モジュール分割</h4>
+<h4 id="_モジュール分割">1.9. モジュール分割</h4>
 <div class="literalblock">
 <div class="content">
 <pre>/
@@ -2985,7 +3001,7 @@ $ git commit -m 'feat: モジュール分割'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-11 18:59:16 JST
+Last updated 2020-02-12 13:00:05 JST
 </div>
 </div>
 </body>
