@@ -842,6 +842,12 @@ ____
 リファクタリングする(動詞) 一連のリファクタリングを適用して、外部から見た振る舞いの変更なしに、ソフトウェアを再構築すること。
 ____
 
+アルゴリズムの実装は出来ましたがアプリケーションとしては不十分なので *リファクタリング* を適用してコードを *動作するきれいなコード* に洗練していきます。
+
+===== クラスの抽出
+
+まず、テストケース内でメソッドを定義していますがこれでは一つのクラスでアルゴリズムの実行とテストの実行という２つの責務を `FibonacciTest` クラスが担当しています。 *単一責任の原則* に違反しているので *クラスの抽出* を実施して責務を分担させましょう。
+
 [source, ruby]
 ----
 ...
@@ -862,11 +868,13 @@ class FibonacciTest < Minitest::Test
 end
 ----
 
+`Fibonacci` クラスを作成して *クラスメソッド* の `Fibonacci.fib` をコピー＆ペーストで作成します。
+
 [source, ruby]
 ----
 ...
 class Fibonacci
-  def fib(n)
+  def self.fib(n)
     return 0 if n.zero?
     return 1 if n == 1
 
@@ -891,38 +899,7 @@ class FibonacciTest < Minitest::Test
 end
 ----
 
-[source, ruby]
-----
-...
-class Fibonacci
-  def self.fib(n)
-    return 0 if n.zero?
-    return 1 if n == 1
-
-    fib(n - 1) + fib(n - 2)
-  end
-end
-
-class FibonacciTest < Minitest::Test
-  def setup
-    @fib = Fibonacci
-  end
-
-  def fib(n)
-    return 0 if n.zero?
-    return 1 if n == 1
-
-    fib(n - 1) + fib(n - 2)
-  end
-
-  def test_fibonacci
-    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
-    cases.each do |i|
-      assert_equal i[1], @fib.fib(i[0])
-    end
-  end
-end
-----
+テストが壊れていないことを確認したら `FibonacciTest` クラス内の *クラスメソッド* `FIbonacciTest.fib` を削除して *フィクスチャー* `setup` メソッドを作成して *インスタンス変数* `@fib` に `Fibonacci` クラスの参照を代入します。
 
 [source, ruby]
 ----
@@ -949,6 +926,8 @@ class FibonacciTest < Minitest::Test
   end
 end
 ----
+
+テストが壊れていないかを確認します。
 
 [source, bash]
 ----
@@ -961,11 +940,33 @@ Finished in 0.00393s
 1 tests, 6 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+*クラスの抽出* の *リファクタリング* 適用が完了したのでコミットします。
+
 [source, bash]
 ----
 $ git add .
-$ git commit -m 'refactor: 関数群のクラスへの集約'
+$ git commit -m 'refactor: クラスの抽出'
 ----
+
+===== 変数名の変更
+
+続いて、 `Fibonacci` クラスに移動した *クラスメソッド* ですが引数が `n` というのは分かりづらいですね。
+
+[source, ruby]
+----
+...
+class Fibonacci
+  def self.fib(n)
+    return 0 if n.zero?
+    return 1 if n == 1
+
+    fib(n - 1) + fib(n - 2)
+  end
+end
+...
+----
+
+ここは省略せず、引数の型を表す名前に変更して可読性を上げておきましょう。
 
 [source, ruby]
 ----
@@ -978,20 +979,10 @@ class Fibonacci
     fib(number - 1) + fib(number - 2)
   end
 end
-
-class FibonacciTest < Minitest::Test
-  def setup
-    @fib = Fibonacci
-  end
-
-  def test_fibonacci
-    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
-    cases.each do |i|
-      assert_equal i[1], @fib.fib(i[0])
-    end
-  end
-end
+...
 ----
+
+テストが壊れていないか確認します。
 
 [source, bash]
 ----
@@ -1004,11 +995,17 @@ Finished in 0.00744s
 1 tests, 6 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+コミットします。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'refactor: 変数名の変更'
 ----
+
+===== メソッド名の変更
+
+`Fibonacci` クラスの *クラスメソッド* `Fibonacci.fib` はフィボナッチ数を計算するメソッドですが名前が紛らわしいので *メソッド名の変更* を適用します。
 
 [source, ruby]
 ----
@@ -1035,6 +1032,8 @@ class FibonacciTest < Minitest::Test
   end
 end
 ----
+
+*インスタンスメソッド* を `fib` から `calc` に変更します。今回は呼び出し先の `FibonacciTest` のテストコードも修正する必要があります。
 
 [source, ruby]
 ----
@@ -1062,6 +1061,8 @@ class FibonacciTest < Minitest::Test
 end
 ----
 
+テストが壊れていないか確認します。
+
 [source, bash]
 ----
 $ ruby test/fibonacci_test.rb
@@ -1072,6 +1073,8 @@ Started with run options --seed 15099
 Finished in 0.00285s
 1 tests, 6 assertions, 0 failures, 0 errors, 0 skips
 ----
+
+*メソッド名の変更* の適用が完了したのでコミットします。
 
 [source, bash]
 ----

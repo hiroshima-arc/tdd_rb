@@ -544,7 +544,13 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_フィボナッチ数計算">フィボナッチ数計算</a></li>
 </ul>
 </li>
-<li><a href="#_リファクタリング_2">1.7. リファクタリング</a></li>
+<li><a href="#_リファクタリング_2">1.7. リファクタリング</a>
+<ul class="sectlevel4">
+<li><a href="#_クラスの抽出">クラスの抽出</a></li>
+<li><a href="#_変数名の変更">変数名の変更</a></li>
+<li><a href="#_メソッド名の変更">メソッド名の変更</a></li>
+</ul>
+</li>
 <li><a href="#_パフォーマンスチューニング">1.8. パフォーマンスチューニング</a></li>
 <li><a href="#_モジュール分割">1.9. モジュール分割</a></li>
 </ul>
@@ -1867,6 +1873,14 @@ $ git commit -m 'feat: フィボナッチ数計算'</code></pre>
 &#8212; リファクタリング(第2版
 </div>
 </div>
+<div class="paragraph">
+<p>アルゴリズムの実装は出来ましたがアプリケーションとしては不十分なので <strong>リファクタリング</strong> を適用してコードを <strong>動作するきれいなコード</strong> に洗練していきます。</p>
+</div>
+<div class="sect4">
+<h5 id="_クラスの抽出">クラスの抽出</h5>
+<div class="paragraph">
+<p>まず、テストケース内でメソッドを定義していますがこれでは一つのクラスでアルゴリズムの実行とテストの実行という２つの責務を <code>FibonacciTest</code> クラスが担当しています。 <strong>単一責任の原則</strong> に違反しているので <strong>クラスの抽出</strong> を実施して責務を分担させましょう。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
@@ -1887,11 +1901,14 @@ $ git commit -m 'feat: フィボナッチ数計算'</code></pre>
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><code>Fibonacci</code> クラスを作成して <strong>クラスメソッド</strong> の <code>Fibonacci.fib</code> をコピー＆ペーストで作成します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
 <span class="keyword">class</span> <span class="class">Fibonacci</span>
-  <span class="keyword">def</span> <span class="function">fib</span>(n)
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n == <span class="integer">1</span>
 
@@ -1916,38 +1933,8 @@ $ git commit -m 'feat: フィボナッチ数計算'</code></pre>
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">Fibonacci</span>
-  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">fib</span>(n)
-    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
-    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n == <span class="integer">1</span>
-
-    fib(n - <span class="integer">1</span>) + fib(n - <span class="integer">2</span>)
-  <span class="keyword">end</span>
-<span class="keyword">end</span>
-
-<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
-  <span class="keyword">def</span> <span class="function">setup</span>
-    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
-  <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">fib</span>(n)
-    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
-    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n == <span class="integer">1</span>
-
-    fib(n - <span class="integer">1</span>) + fib(n - <span class="integer">2</span>)
-  <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
-    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
-    cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.fib(i[<span class="integer">0</span>])
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
-<span class="keyword">end</span></code></pre>
-</div>
+<div class="paragraph">
+<p>テストが壊れていないことを確認したら <code>FibonacciTest</code> クラス内の <strong>クラスメソッド</strong> <code>FIbonacciTest.fib</code> を削除して <strong>フィクスチャー</strong> <code>setup</code> メソッドを作成して <strong>インスタンス変数</strong> <code>@fib</code> に <code>Fibonacci</code> クラスの参照を代入します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1974,6 +1961,9 @@ $ git commit -m 'feat: フィボナッチ数計算'</code></pre>
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストが壊れていないかを確認します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1986,11 +1976,37 @@ Finished in 0.00393s
 1 tests, 6 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><strong>クラスの抽出</strong> の <strong>リファクタリング</strong> 適用が完了したのでコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
-$ git commit -m 'refactor: 関数群のクラスへの集約'</code></pre>
+$ git commit -m 'refactor: クラスの抽出'</code></pre>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_変数名の変更">変数名の変更</h5>
+<div class="paragraph">
+<p>続いて、 <code>Fibonacci</code> クラスに移動した <strong>クラスメソッド</strong> ですが引数が <code>n</code> というのは分かりづらいですね。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">Fibonacci</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">fib</span>(n)
+    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
+    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n == <span class="integer">1</span>
+
+    fib(n - <span class="integer">1</span>) + fib(n - <span class="integer">2</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ここは省略せず、引数の型を表す名前に変更して可読性を上げておきましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2003,20 +2019,11 @@ $ git commit -m 'refactor: 関数群のクラスへの集約'</code></pre>
     fib(number - <span class="integer">1</span>) + fib(number - <span class="integer">2</span>)
   <span class="keyword">end</span>
 <span class="keyword">end</span>
-
-<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
-  <span class="keyword">def</span> <span class="function">setup</span>
-    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
-  <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
-    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
-    cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.fib(i[<span class="integer">0</span>])
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
-<span class="keyword">end</span></code></pre>
+...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストが壊れていないか確認します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2029,11 +2036,20 @@ Finished in 0.00744s
 1 tests, 6 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>コミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'refactor: 変数名の変更'</code></pre>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_メソッド名の変更">メソッド名の変更</h5>
+<div class="paragraph">
+<p><code>Fibonacci</code> クラスの <strong>クラスメソッド</strong> <code>Fibonacci.fib</code> はフィボナッチ数を計算するメソッドですが名前が紛らわしいので <strong>メソッド名の変更</strong> を適用します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2060,6 +2076,9 @@ $ git commit -m 'refactor: 変数名の変更'</code></pre>
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><strong>インスタンスメソッド</strong> を <code>fib</code> から <code>calc</code> に変更します。今回は呼び出し先の <code>FibonacciTest</code> のテストコードも修正する必要があります。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2087,6 +2106,9 @@ $ git commit -m 'refactor: 変数名の変更'</code></pre>
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストが壊れていないか確認します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
@@ -2098,10 +2120,14 @@ Finished in 0.00285s
 1 tests, 6 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><strong>メソッド名の変更</strong> の適用が完了したのでコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'refactor: メソッド名の変更'</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -3334,7 +3360,7 @@ $ git commit -m 'feat: モジュール分割'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-12 15:30:00 JST
+Last updated 2020-02-12 16:11:02 JST
 </div>
 </div>
 </body>
