@@ -2210,6 +2210,10 @@ $ git commit -m 'perf: ベンチマークの実施'
 
 ==== モジュール分割
 
+===== アプリケーションのリリース
+
+*動作するきれいなコード* をリリースするにあたってクラスモジュールごとにファイル分割して *エントリーポイント* からアプリケーションを実行できるようにしたいと思います。
+
  /
    |--lib/
        |
@@ -2218,6 +2222,8 @@ $ git commit -m 'perf: ベンチマークの実施'
        |
         -- fibonacci_test.rb
         -- fibonacci_benchmark.rb
+
+まず、 `lib` に `fibonacci` フォルダを追加します。クラスモジュールは `Fibonacci` の *名前空間* で管理するようにします。
 
 `lib/fibonacci/command.rb`
 
@@ -2232,8 +2238,8 @@ module Fibonacci
       @algorithm = algorithm
     end
 
-    def calc(number)
-      @algorithm.calc(number)
+    def exec(number)
+      @algorithm.exec(number)
     end
   end
 end
@@ -2248,11 +2254,11 @@ end
 module Fibonacci
   # Fibonacci Recursive algorithm
   class Recursive
-    def calc(number, memo = {})
+    def exec(number, memo = {})
       return 0 if number.zero?
       return 1 if number == 1
 
-      memo[number] ||= calc(number - 1, memo) + calc(number - 2, memo)
+      memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
     end
   end
 end
@@ -2267,7 +2273,7 @@ end
 module Fibonacci
   # Fibonacci Loop algorithm
   class Loop
-    def calc(number)
+    def exec(number)
       a = 0
       b = 1
       c = 0
@@ -2291,7 +2297,7 @@ end
 module Fibonacci
   # Fibonacci General Term algorithm
   class GeneralTerm
-    def calc(number)
+    def exec(number)
       a = ((1 + Math.sqrt(5)) / 2)**number
       b = ((1 - Math.sqrt(5)) / 2)**number
       ((a - b) / Math.sqrt(5)).round
@@ -2299,6 +2305,8 @@ module Fibonacci
   end
 end
 ----
+
+`fibonacci.rb` は分割したクラスモジュールを読み込むエントリーポイントに変更します。
 
 `lib/fibonacci.rb`
 
@@ -2312,6 +2320,71 @@ require './lib/fibonacci/loop'
 require './lib/fibonacci/general_term'
 ----
 
+*名前空間* を変更して呼び出すクラスが変わったのでテストとベンチマークを修正します。
+
+[source, ruby]
+----
+...
+require './lib/fibonacci'
+
+class FibonacciTest < Minitest::Test
+  def setup
+    @recursive = Fibonacci.new(FibonacciRecursive.new)
+    @loop = Fibonacci.new(FibonacciLoop.new)
+    @general_term = Fibonacci.new(FibonacciGeneralTerm.new)
+  end
+...
+----
+
+まず、テストを修正してテストが通ることを確認します。
+
+[source, ruby]
+----
+...
+require './lib/fibonacci'
+
+class FibonacciTest < Minitest::Test
+  def setup
+    @recursive = Fibonacci::Command.new(Fibonacci::Recursive.new)
+    @loop = Fibonacci::Command.new(Fibonacci::Loop.new)
+    @general_term = Fibonacci::Command.new(Fibonacci::GeneralTerm.new)
+  end
+...
+----
+
+[source, ruby]
+----
+...
+require './lib/fibonacci'
+
+class FibonacciTestBenchmark < Minitest::Benchmark
+  def setup
+    @recursive = Fibonacci.new(FibonacciRecursive.new)
+    @loop = Fibonacci.new(FibonacciLoop.new)
+    @general_term = Fibonacci.new(FibonacciGeneralTerm.new)
+  end
+...
+----
+
+続いてベンチマークを修正して実行できることを確認します。
+
+[source, ruby]
+----
+...
+require './lib/fibonacci'
+
+class FibonacciTestBenchmark < Minitest::Benchmark
+  def setup
+    @recursive = Fibonacci::Command.new(Fibonacci::Recursive.new)
+    @loop = Fibonacci::Command.new(Fibonacci::Loop.new)
+    @general_term = Fibonacci::Command.new(Fibonacci::GeneralTerm.new)
+  end
+...
+----
+
+仕上げはコマンドラインから実行できるようにします。 ルート直下に `main.rb` を追加して以下のコードを追加します。
+ここでは *ベンチマーク* で一番良い結果の出た一般項のアルゴリズムを使うことにします。
+
 `main.rb`
 
 [source, ruby]
@@ -2320,8 +2393,10 @@ require './lib/fibonacci'
 
 number = ARGV[0].to_i
 command = Fibonacci::Command.new(Fibonacci::GeneralTerm.new)
-puts command.calc(number)
+puts command.exec(number)
 ----
+
+コマンドラインから引数に番号を指定して実行します。
 
 [source, bash]
 ----
@@ -2335,6 +2410,45 @@ $ ruby main.rb 3
 2
 $ ruby main.rb 4
 3
+----
+
+アプリケーションの完成したのでコミットします。
+
+[source, bash]
+----
+$ git add .
+$ git commit -m 'feat: モジュール分割'
+----
+
+===== アプリケーションの構成
+
+[plantuml]
+----
+package Fibonacci {
+  abstract class Protocol {
+  }
+  Protocol <--r Command
+  Protocol <|-- Recursive
+  Protocol <|-- Loop
+  Protocol <|-- GeneralTerm
+}
+main --> Command
+
+package Fibonacci {
+  class Command {
+  -algorithm
+  exec()
+  }
+  class Recursive {
+  exec()
+  }
+  class Loop {
+  exec()
+  }
+  class GeneralTerm {
+  exec()
+  }
+}
 ----
 
  /main.rb
@@ -2352,8 +2466,52 @@ $ ruby main.rb 4
         -- fibonacci_test.rb
         -- fibonacci_benchmark.rb
 
-[source, bash]
+./main.rb
+[source, ruby]
 ----
-$ git add .
-$ git commit -m 'feat: モジュール分割'
+include::./code/episode_x/main.rb[]
 ----
+
+./lib/fibonacci.rb
+[source, ruby]
+----
+include::./code/episode_x/lib/fibonacci.rb[]
+----
+
+./lib/fibonacci/command.rb
+[source, ruby]
+----
+include::./code/episode_x/lib/fibonacci/command.rb[]
+----
+
+./lib/fibonacci/recursive.rb
+[source, ruby]
+----
+include::./code/episode_x/lib/fibonacci/recursive.rb[]
+----
+
+./lib/fibonacci/loop.rb
+[source, ruby]
+----
+include::./code/episode_x/lib/fibonacci/loop.rb[]
+----
+
+./lib/fibonacci/general_term.rb
+[source, ruby]
+----
+include::./code/episode_x/lib/fibonacci/general_term.rb[]
+----
+
+./test/fibonacci_test.rb
+[source, ruby]
+----
+include::./code/episode_x/test/fibonacci_test.rb[]
+----
+
+./test/fibonacci_benchmark.rb
+[source, ruby]
+----
+include::./code/episode_x/test/fibonacci_benchmark.rb[]
+----
+
+

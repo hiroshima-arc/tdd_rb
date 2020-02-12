@@ -15,7 +15,7 @@ class FibonacciTestBenchmark < Minitest::Benchmark
   def bench_recursive
     assert_performance_constant do |_n|
       1000.times do |i|
-        @recursive.calc(i)
+        @recursive.exec(i)
       end
     end
   end
@@ -23,7 +23,7 @@ class FibonacciTestBenchmark < Minitest::Benchmark
   def bench_loop
     assert_performance_constant do |_n|
       1000.times.each do |i|
-        @loop.calc(i)
+        @loop.exec(i)
       end
     end
   end
@@ -31,8 +31,9 @@ class FibonacciTestBenchmark < Minitest::Benchmark
   def bench_general_term
     assert_performance_constant do |_n|
       1000.times.each do |i|
-        @general_term.calc(i)
+        @general_term.exec(i)
       end
     end
   end
 end
+

@@ -7,8 +7,8 @@ module Fibonacci
       @algorithm = algorithm
     end
 
-    def calc(number)
-      @algorithm.calc(number)
+    def exec(number)
+      @algorithm.exec(number)
     end
   end
 end

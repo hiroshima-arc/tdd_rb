@@ -3,7 +3,7 @@
 module Fibonacci
   # Fibonacci Loop algorithm
   class Loop
-    def calc(number)
+    def exec(number)
       a = 0
       b = 1
       c = 0

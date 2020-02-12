@@ -569,7 +569,12 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_ベンチマークの実施">ベンチマークの実施</a></li>
 </ul>
 </li>
-<li><a href="#_モジュール分割">1.10. モジュール分割</a></li>
+<li><a href="#_モジュール分割">1.10. モジュール分割</a>
+<ul class="sectlevel4">
+<li><a href="#_アプリケーションのリリース">アプリケーションのリリース</a></li>
+<li><a href="#_アプリケーションの構成">アプリケーションの構成</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -3343,6 +3348,11 @@ $ git commit -m 'perf: ベンチマークの実施'</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_モジュール分割">1.10. モジュール分割</h4>
+<div class="sect4">
+<h5 id="_アプリケーションのリリース">アプリケーションのリリース</h5>
+<div class="paragraph">
+<p><strong>動作するきれいなコード</strong> をリリースするにあたってクラスモジュールごとにファイル分割して <strong>エントリーポイント</strong> からアプリケーションを実行できるようにしたいと思います。</p>
+</div>
 <div class="literalblock">
 <div class="content">
 <pre>/
@@ -3354,6 +3364,9 @@ $ git commit -m 'perf: ベンチマークの実施'</code></pre>
        -- fibonacci_test.rb
        -- fibonacci_benchmark.rb</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>まず、 <code>lib</code> に <code>fibonacci</code> フォルダを追加します。クラスモジュールは <code>Fibonacci</code> の <strong>名前空間</strong> で管理するようにします。</p>
 </div>
 <div class="paragraph">
 <p><code>lib/fibonacci/command.rb</code></p>
@@ -3369,8 +3382,8 @@ $ git commit -m 'perf: ベンチマークの実施'</code></pre>
       <span class="instance-variable">@algorithm</span> = algorithm
     <span class="keyword">end</span>
 
-    <span class="keyword">def</span> <span class="function">calc</span>(number)
-      <span class="instance-variable">@algorithm</span>.calc(number)
+    <span class="keyword">def</span> <span class="function">exec</span>(number)
+      <span class="instance-variable">@algorithm</span>.exec(number)
     <span class="keyword">end</span>
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
@@ -3386,11 +3399,11 @@ $ git commit -m 'perf: ベンチマークの実施'</code></pre>
 <span class="keyword">module</span> <span class="class">Fibonacci</span>
   <span class="comment"># Fibonacci Recursive algorithm</span>
   <span class="keyword">class</span> <span class="class">Recursive</span>
-    <span class="keyword">def</span> <span class="function">calc</span>(number, memo = {})
+    <span class="keyword">def</span> <span class="function">exec</span>(number, memo = {})
       <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
       <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
 
-      memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+      memo[number] ||= exec(number - <span class="integer">1</span>, memo) + exec(number - <span class="integer">2</span>, memo)
     <span class="keyword">end</span>
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
@@ -3406,7 +3419,7 @@ $ git commit -m 'perf: ベンチマークの実施'</code></pre>
 <span class="keyword">module</span> <span class="class">Fibonacci</span>
   <span class="comment"># Fibonacci Loop algorithm</span>
   <span class="keyword">class</span> <span class="class">Loop</span>
-    <span class="keyword">def</span> <span class="function">calc</span>(number)
+    <span class="keyword">def</span> <span class="function">exec</span>(number)
       a = <span class="integer">0</span>
       b = <span class="integer">1</span>
       c = <span class="integer">0</span>
@@ -3431,7 +3444,7 @@ $ git commit -m 'perf: ベンチマークの実施'</code></pre>
 <span class="keyword">module</span> <span class="class">Fibonacci</span>
   <span class="comment"># Fibonacci General Term algorithm</span>
   <span class="keyword">class</span> <span class="class">GeneralTerm</span>
-    <span class="keyword">def</span> <span class="function">calc</span>(number)
+    <span class="keyword">def</span> <span class="function">exec</span>(number)
       a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
       b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
       ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
@@ -3439,6 +3452,9 @@ $ git commit -m 'perf: ベンチマークの実施'</code></pre>
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>fibonacci.rb</code> は分割したクラスモジュールを読み込むエントリーポイントに変更します。</p>
 </div>
 <div class="paragraph">
 <p><code>lib/fibonacci.rb</code></p>
@@ -3454,6 +3470,75 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 </div>
 </div>
 <div class="paragraph">
+<p><strong>名前空間</strong> を変更して呼び出すクラスが変わったのでテストとベンチマークを修正します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fibonacci</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@recursive</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciRecursive</span>.new)
+    <span class="instance-variable">@loop</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciLoop</span>.new)
+    <span class="instance-variable">@general_term</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciGeneralTerm</span>.new)
+  <span class="keyword">end</span>
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>まず、テストを修正してテストが通ることを確認します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fibonacci</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@recursive</span> = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">Recursive</span>.new)
+    <span class="instance-variable">@loop</span> = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">Loop</span>.new)
+    <span class="instance-variable">@general_term</span> = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">GeneralTerm</span>.new)
+  <span class="keyword">end</span>
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fibonacci</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTestBenchmark</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Benchmark</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@recursive</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciRecursive</span>.new)
+    <span class="instance-variable">@loop</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciLoop</span>.new)
+    <span class="instance-variable">@general_term</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciGeneralTerm</span>.new)
+  <span class="keyword">end</span>
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>続いてベンチマークを修正して実行できることを確認します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fibonacci</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTestBenchmark</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Benchmark</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@recursive</span> = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">Recursive</span>.new)
+    <span class="instance-variable">@loop</span> = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">Loop</span>.new)
+    <span class="instance-variable">@general_term</span> = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">GeneralTerm</span>.new)
+  <span class="keyword">end</span>
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>仕上げはコマンドラインから実行できるようにします。 ルート直下に <code>main.rb</code> を追加して以下のコードを追加します。
+ここでは <strong>ベンチマーク</strong> で一番良い結果の出た一般項のアルゴリズムを使うことにします。</p>
+</div>
+<div class="paragraph">
 <p><code>main.rb</code></p>
 </div>
 <div class="listingblock">
@@ -3462,8 +3547,11 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 
 number = <span class="predefined-constant">ARGV</span>[<span class="integer">0</span>].to_i
 command = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">GeneralTerm</span>.new)
-puts command.calc(number)</code></pre>
+puts command.exec(number)</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>コマンドラインから引数に番号を指定して実行します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3477,6 +3565,23 @@ $ ruby main.rb 3
 2
 $ ruby main.rb 4
 3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>アプリケーションの完成したのでコミットします。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
+$ git commit -m 'feat: モジュール分割'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_アプリケーションの構成">アプリケーションの構成</h5>
+<div class="imageblock">
+<div class="content">
+<img src="diag-7e042e6c62bb11af0c26498efef6d39b.png" alt="diag 7e042e6c62bb11af0c26498efef6d39b" width="377" height="330">
 </div>
 </div>
 <div class="literalblock">
@@ -3498,9 +3603,183 @@ $ ruby main.rb 4
 </div>
 </div>
 <div class="listingblock">
+<div class="title">/main.rb</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ git add .
-$ git commit -m 'feat: モジュール分割'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fibonacci</span><span class="delimiter">'</span></span>
+
+number = <span class="predefined-constant">ARGV</span>[<span class="integer">0</span>].to_i
+command = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">GeneralTerm</span>.new)
+puts command.exec(number)</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/fibonacci.rb</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fibonacci/command</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fibonacci/recursive</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fibonacci/loop</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fibonacci/general_term</span><span class="delimiter">'</span></span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/fibonacci/command.rb</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">module</span> <span class="class">Fibonacci</span>
+  <span class="comment"># Fibonacci Calcultor</span>
+  <span class="keyword">class</span> <span class="class">Command</span>
+    <span class="keyword">def</span> <span class="function">initialize</span>(algorithm)
+      <span class="instance-variable">@algorithm</span> = algorithm
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">exec</span>(number)
+      <span class="instance-variable">@algorithm</span>.exec(number)
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/fibonacci/recursive.rb</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">module</span> <span class="class">Fibonacci</span>
+  <span class="comment"># Fibonacci Recursive algorithm</span>
+  <span class="keyword">class</span> <span class="class">Recursive</span>
+    <span class="keyword">def</span> <span class="function">exec</span>(number, memo = {})
+      <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
+      <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
+
+      memo[number] ||= exec(number - <span class="integer">1</span>, memo) + exec(number - <span class="integer">2</span>, memo)
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/fibonacci/loop.rb</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">module</span> <span class="class">Fibonacci</span>
+  <span class="comment"># Fibonacci Loop algorithm</span>
+  <span class="keyword">class</span> <span class="class">Loop</span>
+    <span class="keyword">def</span> <span class="function">exec</span>(number)
+      a = <span class="integer">0</span>
+      b = <span class="integer">1</span>
+      c = <span class="integer">0</span>
+      (<span class="integer">0</span>...number).each <span class="keyword">do</span> |_i|
+        a = b
+        b = c
+        c = a + b
+      <span class="keyword">end</span>
+      c
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/lib/fibonacci/general_term.rb</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+<span class="keyword">module</span> <span class="class">Fibonacci</span>
+  <span class="comment"># Fibonacci General Term algorithm</span>
+  <span class="keyword">class</span> <span class="class">GeneralTerm</span>
+    <span class="keyword">def</span> <span class="function">exec</span>(number)
+      a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+      b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+      ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/test/fibonacci_test.rb</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/reporters</span><span class="delimiter">'</span></span>
+<span class="constant">Minitest</span>::<span class="constant">Reporters</span>.use!
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fibonacci</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@recursive</span> = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">Recursive</span>.new)
+    <span class="instance-variable">@loop</span> = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">Loop</span>.new)
+    <span class="instance-variable">@general_term</span> = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">GeneralTerm</span>.new)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@recursive</span>.exec(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.exec(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_loop</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@loop</span>.exec(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_large_number_general_term</span>
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@general_term</span>.exec(<span class="integer">40</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">/test/fibonacci_benchmark.rb</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
+
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">minitest/benchmark</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">./lib/fibonacci</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">FibonacciTestBenchmark</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Benchmark</span>
+  <span class="keyword">def</span> <span class="function">setup</span>
+    <span class="instance-variable">@recursive</span> = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">Recursive</span>.new)
+    <span class="instance-variable">@loop</span> = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">Loop</span>.new)
+    <span class="instance-variable">@general_term</span> = <span class="constant">Fibonacci</span>::<span class="constant">Command</span>.new(<span class="constant">Fibonacci</span>::<span class="constant">GeneralTerm</span>.new)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">bench_recursive</span>
+    assert_performance_constant <span class="keyword">do</span> |_n|
+      <span class="integer">1000</span>.times <span class="keyword">do</span> |i|
+        <span class="instance-variable">@recursive</span>.exec(i)
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">bench_loop</span>
+    assert_performance_constant <span class="keyword">do</span> |_n|
+      <span class="integer">1000</span>.times.each <span class="keyword">do</span> |i|
+        <span class="instance-variable">@loop</span>.exec(i)
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">bench_general_term</span>
+    assert_performance_constant <span class="keyword">do</span> |_n|
+      <span class="integer">1000</span>.times.each <span class="keyword">do</span> |i|
+        <span class="instance-variable">@general_term</span>.exec(i)
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -3508,7 +3787,7 @@ $ git commit -m 'feat: モジュール分割'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-12 18:26:53 JST
+Last updated 2020-02-12 19:09:14 JST
 </div>
 </div>
 </body>

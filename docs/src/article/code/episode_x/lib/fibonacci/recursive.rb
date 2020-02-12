@@ -3,11 +3,11 @@
 module Fibonacci
   # Fibonacci Recursive algorithm
   class Recursive
-    def calc(number, memo = {})
+    def exec(number, memo = {})
       return 0 if number.zero?
       return 1 if number == 1
 
-      memo[number] ||= calc(number - 1, memo) + calc(number - 2, memo)
+      memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
     end
   end
 end
