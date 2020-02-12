@@ -526,10 +526,25 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_概要">1.1. 概要</a></li>
 <li><a href="#_仕様">1.2. 仕様</a></li>
 <li><a href="#_todoリスト">1.3. TODOリスト</a></li>
-<li><a href="#_仮実装">1.4. 仮実装</a></li>
-<li><a href="#_三角測量">1.5. 三角測量</a></li>
-<li><a href="#_明白な実装">1.6. 明白な実装</a></li>
-<li><a href="#_リファクタリング">1.7. リファクタリング</a></li>
+<li><a href="#_仮実装">1.4. 仮実装</a>
+<ul class="sectlevel4">
+<li><a href="#_0を渡したら0を返す">0を渡したら0を返す</a></li>
+</ul>
+</li>
+<li><a href="#_三角測量">1.5. 三角測量</a>
+<ul class="sectlevel4">
+<li><a href="#_1を渡したら1を返す">1を渡したら1を返す</a></li>
+<li><a href="#_リファクタリング">リファクタリング</a></li>
+<li><a href="#_1を渡したら2を返す">1を渡したら2を返す</a></li>
+</ul>
+</li>
+<li><a href="#_明白な実装">1.6. 明白な実装</a>
+<ul class="sectlevel4">
+<li><a href="#_3を渡したら2を返す">3を渡したら2を返す</a></li>
+<li><a href="#_フィボナッチ数計算">フィボナッチ数計算</a></li>
+</ul>
+</li>
+<li><a href="#_リファクタリング_2">1.7. リファクタリング</a></li>
 <li><a href="#_パフォーマンスチューニング">1.8. パフォーマンスチューニング</a></li>
 <li><a href="#_モジュール分割">1.9. モジュール分割</a></li>
 </ul>
@@ -850,6 +865,8 @@ table.CodeRay td.code>pre{padding:0}
 &#8212; テスト駆動開発
 </div>
 </div>
+<div class="sect4">
+<h5 id="_0を渡したら0を返す">0を渡したら0を返す</h5>
 <div class="paragraph">
 <p>早速、 <strong>TODOリスト</strong> の１つ目から片付けていくとしましょう。</p>
 </div>
@@ -1020,6 +1037,20 @@ Finished in 0.00352s
 $ git commit -m 'test: 0を渡したら0を返す'</code></pre>
 </div>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">0を渡したら0を返す</em></p>
+</li>
+<li>
+<p>1を渡したら1を返す</p>
+</li>
+<li>
+<p>2を渡したら1を返す</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_三角測量">1.5. 三角測量</h4>
@@ -1036,18 +1067,64 @@ $ git commit -m 'test: 0を渡したら0を返す'</code></pre>
 &#8212; テスト駆動開発
 </div>
 </div>
+<div class="sect4">
+<h5 id="_1を渡したら1を返す">1を渡したら1を返す</h5>
+<div class="paragraph">
+<p>１つ目の <strong>TODOリスト</strong> を片付けたので２つ目の <strong>TODOリスト</strong> に取り掛かるとしましょう。</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
 <p><em class="line-through">0を渡したら0を返す</em></p>
 </li>
 <li>
-<p>1を渡したら1を返す</p>
+<p><strong>1を渡したら1を返す</strong></p>
 </li>
 <li>
 <p>2を渡したら1を返す</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p><strong>テストファースト</strong>　<strong>アサーションファースト</strong> なのでまずはテストを追加するとこから始めます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">fib</span>(n)
+    <span class="integer">0</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    assert_equal <span class="integer">0</span>, fib(<span class="integer">0</span>)
+    assert_equal <span class="integer">1</span>, fib(<span class="integer">1</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストは失敗します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
+Started with run options --seed 21207
+
+ FAIL[&quot;test_fibonacci&quot;, &lt;Minitest::Reporters::Suite:0x000056525007ccb0 @name=&quot;FibonacciTest&quot;&gt;, 0.0014098359970375896]
+ test_fibonacci#FibonacciTest (0.00s)
+        Expected: 1
+          Actual: 0
+        test/fibonacci_test.rb:14:in `test_fibonacci`
+
+  1/1: [========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00196s
+1 tests, 2 assertions, 1 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>仮実装</strong> で0しか返さないベタ書きのコードなのだから当然ですよね。0ならば0を返してそれ以外の場合は1を返すようにプログラムを変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1058,13 +1135,12 @@ $ git commit -m 'test: 0を渡したら0を返す'</code></pre>
 
     <span class="integer">1</span>
   <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
-    assert_equal <span class="integer">0</span>, fib(<span class="integer">0</span>)
-    assert_equal <span class="integer">1</span>, fib(<span class="integer">1</span>)
-  <span class="keyword">end</span>
+...
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>プログラムの変更によりテストはレッドからグリーンに戻りました。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1077,22 +1153,39 @@ Finished in 0.00169s
 1 tests, 2 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>ここでコミットしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'test: 1を渡したら1を返す'</code></pre>
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_リファクタリング">リファクタリング</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">0を渡したら0を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">1を渡したら1を返す</em></p>
+</li>
+<li>
+<p>2を渡したら1を返す</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>次の <strong>TODOリスト</strong> に着手する前にテストケース内の重複が気になり始めたので、共通部分をアサーションからくくり出して、入力値と期待値の組でテストを回すようにテストコードを <strong>リファクタリング</strong> します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
 <span class="keyword">class</span> <span class="class">Fibonacci</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
-  <span class="keyword">def</span> <span class="function">fib</span>(n)
-    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
-
-    <span class="integer">1</span>
-  <span class="keyword">end</span>
-
+...
   <span class="keyword">def</span> <span class="function">test_fibonacci</span>
     cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>]]
     cases.each <span class="keyword">do</span> |i|
@@ -1101,6 +1194,9 @@ $ git commit -m 'test: 1を渡したら1を返す'</code></pre>
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストを実行してプログラムが壊れていないことを確認します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1113,20 +1209,37 @@ Finished in 0.00200s
 1 tests, 2 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>プログラムが壊れていないことが確認できたのでコミットしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'refactor: アルゴリズムの置き換え'</code></pre>
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_1を渡したら2を返す">1を渡したら2を返す</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">0を渡したら0を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">1を渡したら1を返す</em></p>
+</li>
+<li>
+<p><strong>2を渡したら1を返す</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>テストコードの　<strong>リファクタリング</strong> を実施したので続いて　<strong>TODOリスト</strong> の３つ目に着手します。まずは <strong>アサーション</strong> の追加ですね。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># frozen_string_literal: true</span>
-
-require <span class="string"><span class="delimiter">'</span><span class="content">minitest/reporters</span><span class="delimiter">'</span></span>
-<span class="constant">Minitest</span>::<span class="constant">Reporters</span>.use!
-require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
-
+<pre class="CodeRay highlight"><code data-lang="ruby">...
 <span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
@@ -1143,6 +1256,9 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>おや、今回はプロダクトコードを変更しなくてもテストは通るようです。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
@@ -1154,10 +1270,27 @@ Finished in 0.00287s
 1 tests, 3 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>ここでコミットしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'test: 1を渡したら2を返す'</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">0を渡したら0を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">1を渡したら1を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">2を渡したら1を返す</em></p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -1181,18 +1314,10 @@ $ git commit -m 'test: 1を渡したら2を返す'</code></pre>
 &#8212; テスト駆動開発
 </div>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p><em class="line-through">0を渡したら0を返す</em></p>
-</li>
-<li>
-<p><em class="line-through">1を渡したら1を返す</em></p>
-</li>
-<li>
-<p><em class="line-through">2を渡したら1を返す</em></p>
-</li>
-</ul>
+<div class="sect4">
+<h5 id="_3を渡したら2を返す">3を渡したら2を返す</h5>
+<div class="paragraph">
+<p>最初に定義した <strong>TODOリスト</strong> の内容は完了しましたがプログラムの一般化にはまだテストケースが足りないでしょう。3を渡した場合のテストケースを追加します。</p>
 </div>
 <table class="tableblock frame-all grid-all" style="width: 15%;">
 <colgroup>
@@ -1222,9 +1347,60 @@ $ git commit -m 'test: 1を渡したら2を返す'</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>3を渡したら2を返す</p>
+<p><em class="line-through">0を渡したら0を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">1を渡したら1を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">2を渡したら1を返す</em></p>
+</li>
+<li>
+<p><strong>3を渡したら2を返す</strong></p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>テストケースを追加してテストを実施します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+...
+  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
+    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>]]
+    cases.each <span class="keyword">do</span> |i|
+      assert_equal i[<span class="integer">1</span>], fib(i[<span class="integer">0</span>])
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>テストが失敗しました。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
+Started with run options --seed 7598
+
+ FAIL[&quot;test_fibonacci&quot;, &lt;Minitest::Reporters::Suite:0x000055c987498120 @name=&quot;FibonacciTest&quot;&gt;, 0.00104286998976022]
+ test_fibonacci#FibonacciTest (0.00s)
+        Expected: 2
+          Actual: 1
+        test/fibonacci_test.rb:17:in `block in test_fibonacci''
+        test/fibonacci_test.rb:16:in `each'
+        test/fibonacci_test.rb:16:in `test_fibonacci'
+
+  1/1: [========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00160s
+1 tests, 4 assertions, 1 failures, 0 errors, 0 skips</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>2までは1を返すので条件分岐を追加します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1235,15 +1411,12 @@ $ git commit -m 'test: 1を渡したら2を返す'</code></pre>
 
     <span class="integer">1</span>
   <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
-    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>]]
-    cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], fib(i[<span class="integer">0</span>])
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
+...
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>まだ、失敗したままです。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1264,24 +1437,25 @@ Finished in 0.00882s
 1 tests, 4 assertions, 1 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>どの条件にも該当としない場合は2を返すように変更します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+<pre class="CodeRay highlight"><code data-lang="ruby">...
+<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">fib</span>(n)
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n &lt;= <span class="integer">2</span>
 
     <span class="integer">2</span>
   <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
-    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>]]
-    cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], fib(i[<span class="integer">0</span>])
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
+...
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>グリーンになりました。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1294,11 +1468,36 @@ Finished in 0.01680s
 1 tests, 4 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>ここでコミットしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'test: 3を渡したら2を返す'</code></pre>
 </div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em class="line-through">0を渡したら0を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">1を渡したら1を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">2を渡したら1を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">3を渡したら2を返す</em></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_フィボナッチ数計算">フィボナッチ数計算</h5>
+<div class="paragraph">
+<p>そろそろゴールが見えてきました。<strong>TODOリスト</strong> を追加してフィボナッチ数計算アルゴリズムを完成させましょう。</p>
 </div>
 <table class="tableblock frame-all grid-all" style="width: 15%;">
 <colgroup>
@@ -1331,9 +1530,24 @@ $ git commit -m 'test: 3を渡したら2を返す'</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>4を渡したら3を返す</p>
+<p><em class="line-through">0を渡したら0を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">1を渡したら1を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">2を渡したら1を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">3を渡したら2を返す</em></p>
+</li>
+<li>
+<p><strong>4を渡したら3を返す</strong></p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p><strong>テストファースト</strong> <strong>アサートファースト</strong> です。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1374,6 +1588,9 @@ Finished in 0.01030s
 1 tests, 5 assertions, 1 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>最後に2を返すのではなく合計値をかえすのだから</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
@@ -1384,13 +1601,7 @@ Finished in 0.01030s
 
     <span class="integer">1</span> + <span class="integer">1</span>
   <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
-    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>]]
-    cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], fib(i[<span class="integer">0</span>])
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
+...
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
@@ -1413,6 +1624,9 @@ Finished in 0.00130s
 1 tests, 5 assertions, 1 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>一つ前の <code>fib</code> の結果を足すのだから</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
@@ -1423,15 +1637,12 @@ Finished in 0.00130s
 
     fib(n - <span class="integer">1</span>) + <span class="integer">1</span>
   <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
-    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>]]
-    cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], fib(i[<span class="integer">0</span>])
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
+...
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>グリーンになりました。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1443,6 +1654,9 @@ Started with run options --seed 25629
 Finished in 0.00467s
 1 tests, 5 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>ここでコミット。。。しないで今回は更に進めます。 <strong>TODOリスト</strong> を追加します。</p>
 </div>
 <table class="tableblock frame-all grid-all" style="width: 15%;">
 <colgroup>
@@ -1478,21 +1692,33 @@ Finished in 0.00467s
 <div class="ulist">
 <ul>
 <li>
-<p>5を渡したら5を返す</p>
+<p><em class="line-through">0を渡したら0を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">1を渡したら1を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">2を渡したら1を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">3を渡したら2を返す</em></p>
+</li>
+<li>
+<p><em class="line-through">4を渡したら3を返す</em></p>
+</li>
+<li>
+<p><strong>5を渡したら5を返す</strong></p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>テストケースを追加して</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
 <span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
-  <span class="keyword">def</span> <span class="function">fib</span>(n)
-    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
-    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n &lt;= <span class="integer">2</span>
-
-    fib(n - <span class="integer">1</span>) + <span class="integer">1</span>
-  <span class="keyword">end</span>
-
+...
   <span class="keyword">def</span> <span class="function">test_fibonacci</span>
     cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
     cases.each <span class="keyword">do</span> |i|
@@ -1501,6 +1727,9 @@ Finished in 0.00467s
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>レッド</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1521,6 +1750,9 @@ Finished in 0.00237s
 1 tests, 6 assertions, 1 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>結局1つ前と2つ前の <code>fib</code> の結果を合計して返しているのだから</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
@@ -1531,15 +1763,12 @@ Finished in 0.00237s
 
     fib(n - <span class="integer">1</span>) + fib(n - <span class="integer">2</span>)
   <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
-    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
-    cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], fib(i[<span class="integer">0</span>])
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
+...
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>グリーン</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1552,45 +1781,8 @@ Finished in 0.00107s
 1 tests, 6 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
-  <span class="keyword">def</span> <span class="function">fib</span>(n)
-    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
-    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n &lt;= <span class="integer">2</span>
-
-    fib(n - <span class="integer">1</span>) + <span class="integer">1</span>
-  <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
-    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
-    cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], fib(i[<span class="integer">0</span>])
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
-<span class="keyword">end</span></code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
-  <span class="keyword">def</span> <span class="function">fib</span>(n)
-    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
-    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n &lt;= <span class="integer">2</span>
-
-    fib(n - <span class="integer">1</span>) + <span class="integer">1</span>
-  <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
-    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
-    cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], fib(i[<span class="integer">0</span>])
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
-<span class="keyword">end</span></code></pre>
-</div>
+<div class="paragraph">
+<p>一般化ができたので0の場合と1の場合は与えらた値を返せば良くなったので</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1600,17 +1792,14 @@ Finished in 0.00107s
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> n.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> n == <span class="integer">1</span>
 
-    fib(n - <span class="integer">1</span>) + <span class="integer">1</span>
+    fib(n - <span class="integer">1</span>) + fib(n - <span class="integer">2</span>)
   <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
-    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
-    cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], fib(i[<span class="integer">0</span>])
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
+...
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>リファクター</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1623,33 +1812,13 @@ Finished in 0.00162s
 1 tests, 6 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>フィボナッチ数計算アルゴリズムが完成したのでコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'feat: フィボナッチ数計算'</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_リファクタリング">1.7. リファクタリング</h4>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>リファクタリング(名詞) 外部から見たときの振る舞いを保ちつつ、理解や修正が簡単になるように、ソフトウェアの内部構造を変化させること。</p>
-</div>
-</blockquote>
-<div class="attribution">
-&#8212; リファクタリング(第2版)
-</div>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>リファクタリングする(動詞) 一連のリファクタリングを適用して、外部から見た振る舞いの変更なしに、ソフトウェアを再構築すること。</p>
-</div>
-</blockquote>
-<div class="attribution">
-&#8212; リファクタリング(第2版
 </div>
 </div>
 <div class="ulist">
@@ -1673,6 +1842,30 @@ $ git commit -m 'feat: フィボナッチ数計算'</code></pre>
 <p><em class="line-through">5を渡したら5を返す</em></p>
 </li>
 </ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_リファクタリング_2">1.7. リファクタリング</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>リファクタリング(名詞) 外部から見たときの振る舞いを保ちつつ、理解や修正が簡単になるように、ソフトウェアの内部構造を変化させること。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版)
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>リファクタリングする(動詞) 一連のリファクタリングを適用して、外部から見た振る舞いの変更なしに、ソフトウェアを再構築すること。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3141,7 +3334,7 @@ $ git commit -m 'feat: モジュール分割'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-12 14:06:24 JST
+Last updated 2020-02-12 15:30:00 JST
 </div>
 </div>
 </body>

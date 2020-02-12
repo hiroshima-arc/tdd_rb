@@ -102,6 +102,8 @@ ____
 失敗するテストを書いてから、最初に行う実装はどのようなものだろうか----ベタ書きの値を返そう。
 ____
 
+===== 0を渡したら0を返す
+
 早速、 *TODOリスト* の１つ目から片付けていくとしましょう。
 
 * **0を渡したら0を返す**
@@ -251,6 +253,10 @@ $ git add .
 $ git commit -m 'test: 0を渡したら0を返す'
 ----
 
+* [line-through]_0を渡したら0を返す_
+* 1を渡したら1を返す
+* 2を渡したら1を返す
+
 ==== 三角測量
 
 [quote, テスト駆動開発]
@@ -260,11 +266,51 @@ ____
 テストから最も慎重に一般化を引き出すやり方はどのようなものだろうか----２つ以上の例があるときだけ、一般化を行うようにしよう。
 ____
 
+===== 1を渡したら1を返す
+
+１つ目の *TODOリスト* を片付けたので２つ目の *TODOリスト* に取り掛かるとしましょう。
 
 * [line-through]_0を渡したら0を返す_
-* 1を渡したら1を返す
+* **1を渡したら1を返す**
 * 2を渡したら1を返す
 
+*テストファースト*　*アサーションファースト* なのでまずはテストを追加するとこから始めます。
+
+[source, ruby]
+----
+...
+class FibonacciTest < Minitest::Test
+  def fib(n)
+    0
+  end
+
+  def test_fibonacci
+    assert_equal 0, fib(0)
+    assert_equal 1, fib(1)
+  end
+end
+----
+
+テストは失敗します。
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 21207
+
+ FAIL["test_fibonacci", <Minitest::Reporters::Suite:0x000056525007ccb0 @name="FibonacciTest">, 0.0014098359970375896]
+ test_fibonacci#FibonacciTest (0.00s)
+        Expected: 1
+          Actual: 0
+        test/fibonacci_test.rb:14:in `test_fibonacci`
+
+  1/1: [========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00196s
+1 tests, 2 assertions, 1 failures, 0 errors, 0 skips
+----
+
+*仮実装* で0しか返さないベタ書きのコードなのだから当然ですよね。0ならば0を返してそれ以外の場合は1を返すようにプログラムを変更します。
 
 [source, ruby]
 ----
@@ -275,13 +321,11 @@ class FibonacciTest < Minitest::Test
 
     1
   end
-
-  def test_fibonacci
-    assert_equal 0, fib(0)
-    assert_equal 1, fib(1)
-  end
+...
 end
 ----
+
+プログラムの変更によりテストはレッドからグリーンに戻りました。
 
 [source, bash]
 ----
@@ -294,22 +338,27 @@ Finished in 0.00169s
 1 tests, 2 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+ここでコミットしておきます。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'test: 1を渡したら1を返す'
 ----
 
+===== リファクタリング
+
+* [line-through]_0を渡したら0を返す_
+* [line-through]_1を渡したら1を返す_
+* 2を渡したら1を返す
+
+次の *TODOリスト* に着手する前にテストケース内の重複が気になり始めたので、共通部分をアサーションからくくり出して、入力値と期待値の組でテストを回すようにテストコードを *リファクタリング* します。
+
 [source, ruby]
 ----
 ...
 class Fibonacci < Minitest::Test
-  def fib(n)
-    return 0 if n.zero?
-
-    1
-  end
-
+...
   def test_fibonacci
     cases = [[0, 0], [1, 1]]
     cases.each do |i|
@@ -318,6 +367,8 @@ class Fibonacci < Minitest::Test
   end
 end
 ----
+
+テストを実行してプログラムが壊れていないことを確認します。
 
 [source, bash]
 ----
@@ -330,20 +381,25 @@ Finished in 0.00200s
 1 tests, 2 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+プログラムが壊れていないことが確認できたのでコミットしておきます。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'refactor: アルゴリズムの置き換え'
 ----
 
+===== 1を渡したら2を返す
+
+* [line-through]_0を渡したら0を返す_
+* [line-through]_1を渡したら1を返す_
+* **2を渡したら1を返す**
+
+テストコードの　*リファクタリング* を実施したので続いて　*TODOリスト* の３つ目に着手します。まずは *アサーション* の追加ですね。
+
 [source, ruby]
 ----
-# frozen_string_literal: true
-
-require 'minitest/reporters'
-Minitest::Reporters.use!
-require 'minitest/autorun'
-
+...
 class FibonacciTest < Minitest::Test
   def fib(n)
     return 0 if n.zero?
@@ -360,6 +416,8 @@ class FibonacciTest < Minitest::Test
 end
 ----
 
+おや、今回はプロダクトコードを変更しなくてもテストは通るようです。
+
 [source, bash]
 ----
 $ ruby test/fibonacci_test.rb 
@@ -371,12 +429,17 @@ Finished in 0.00287s
 1 tests, 3 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+ここでコミットしておきます。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'test: 1を渡したら2を返す'
 ----
 
+* [line-through]_0を渡したら0を返す_
+* [line-through]_1を渡したら1を返す_
+* [line-through]_2を渡したら1を返す_
 
 ==== 明白な実装
 
@@ -391,10 +454,9 @@ ____
 普通は、その必要はない。頭に浮かんだ明白な実装をただ単にコードに落とすだけだ。もしもレッドバーが出て驚いたら、あらためてもう少し歩幅を小さくしよう。
 ____
 
+===== 3を渡したら2を返す
 
-* [line-through]_0を渡したら0を返す_
-* [line-through]_1を渡したら1を返す_
-* [line-through]_2を渡したら1を返す_
+最初に定義した *TODOリスト* の内容は完了しましたがプログラムの一般化にはまだテストケースが足りないでしょう。3を渡した場合のテストケースを追加します。
 
 [width="15%"]
 |=======
@@ -402,7 +464,49 @@ ____
 |0 |1 |1 |2 | ...
 |=======
 
-* 3を渡したら2を返す
+* [line-through]_0を渡したら0を返す_
+* [line-through]_1を渡したら1を返す_
+* [line-through]_2を渡したら1を返す_
+* **3を渡したら2を返す**
+
+テストケースを追加してテストを実施します。
+
+[source, ruby]
+----
+...
+class FibonacciTest < Minitest::Test
+...
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end
+----
+
+テストが失敗しました。
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 7598
+
+ FAIL["test_fibonacci", <Minitest::Reporters::Suite:0x000055c987498120 @name="FibonacciTest">, 0.00104286998976022]
+ test_fibonacci#FibonacciTest (0.00s)
+        Expected: 2
+          Actual: 1
+        test/fibonacci_test.rb:17:in `block in test_fibonacci''
+        test/fibonacci_test.rb:16:in `each'
+        test/fibonacci_test.rb:16:in `test_fibonacci'
+
+  1/1: [========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00160s
+1 tests, 4 assertions, 1 failures, 0 errors, 0 skips
+----
+
+2までは1を返すので条件分岐を追加します。
 
 [source, ruby]
 ----
@@ -413,15 +517,11 @@ class FibonacciTest < Minitest::Test
 
     1
   end
-
-  def test_fibonacci
-    cases = [[0, 0], [1, 1], [2, 1], [3, 2]]
-    cases.each do |i|
-      assert_equal i[1], fib(i[0])
-    end
-  end
+...
 end
 ----
+
+まだ、失敗したままです。
 
 [source, bash]
 ----
@@ -442,8 +542,11 @@ Finished in 0.00882s
 1 tests, 4 assertions, 1 failures, 0 errors, 0 skips
 ----
 
+どの条件にも該当としない場合は2を返すように変更します。
+
 [source, ruby]
 ----
+...
 class FibonacciTest < Minitest::Test
   def fib(n)
     return 0 if n.zero?
@@ -451,15 +554,11 @@ class FibonacciTest < Minitest::Test
 
     2
   end
-
-  def test_fibonacci
-    cases = [[0, 0], [1, 1], [2, 1], [3, 2]]
-    cases.each do |i|
-      assert_equal i[1], fib(i[0])
-    end
-  end
+...
 end
 ----
+
+グリーンになりました。
 
 [source, bash]
 ----
@@ -472,11 +571,22 @@ Finished in 0.01680s
 1 tests, 4 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+ここでコミットしておきます。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'test: 3を渡したら2を返す'
 ----
+
+* [line-through]_0を渡したら0を返す_
+* [line-through]_1を渡したら1を返す_
+* [line-through]_2を渡したら1を返す_
+* [line-through]_3を渡したら2を返す_
+
+===== フィボナッチ数計算
+
+そろそろゴールが見えてきました。*TODOリスト* を追加してフィボナッチ数計算アルゴリズムを完成させましょう。
 
 [width="15%"]
 |=======
@@ -484,7 +594,13 @@ $ git commit -m 'test: 3を渡したら2を返す'
 |0 |1 |1 |2 |3 | ...
 |=======
 
-* 4を渡したら3を返す
+* [line-through]_0を渡したら0を返す_
+* [line-through]_1を渡したら1を返す_
+* [line-through]_2を渡したら1を返す_
+* [line-through]_3を渡したら2を返す_
+* **4を渡したら3を返す**
+
+*テストファースト* *アサートファースト* です。
 
 [source, ruby]
 ----
@@ -525,6 +641,8 @@ Finished in 0.01030s
 1 tests, 5 assertions, 1 failures, 0 errors, 0 skips
 ----
 
+最後に2を返すのではなく合計値をかえすのだから
+
 [source, ruby]
 ----
 ...
@@ -535,13 +653,7 @@ class FibonacciTest < Minitest::Test
 
     1 + 1
   end
-
-  def test_fibonacci
-    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3]]
-    cases.each do |i|
-      assert_equal i[1], fib(i[0])
-    end
-  end
+...
 end
 ----
 
@@ -564,25 +676,23 @@ Finished in 0.00130s
 1 tests, 5 assertions, 1 failures, 0 errors, 0 skips
 ----
 
+一つ前の `fib` の結果を足すのだから
+
 [source, ruby]
 ----
 ...
-class FibonacciTest < Minitest::Test 
+class FibonacciTest < Minitest::Test
   def fib(n)
     return 0 if n.zero?
     return 1 if n <= 2
 
     fib(n - 1) + 1
   end
-
-  def test_fibonacci
-    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3]]
-    cases.each do |i|
-      assert_equal i[1], fib(i[0])
-    end
-  end
+...
 end
 ----
+
+グリーンになりました。
 
 [source, bash]
 ----
@@ -595,25 +705,28 @@ Finished in 0.00467s
 1 tests, 5 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+ここでコミット。。。しないで今回は更に進めます。 *TODOリスト* を追加します。
+
 [width="15%"]
 |=======
 |0 |1 |2 |3 |4 |5 | ...
 |0 |1 |1 |2 |3 |5 | ...
 |=======
 
-* 5を渡したら5を返す
+* [line-through]_0を渡したら0を返す_
+* [line-through]_1を渡したら1を返す_
+* [line-through]_2を渡したら1を返す_
+* [line-through]_3を渡したら2を返す_
+* [line-through]_4を渡したら3を返す_
+* **5を渡したら5を返す**
+
+テストケースを追加して
 
 [source, ruby]
 ----
 ...
 class FibonacciTest < Minitest::Test 
-  def fib(n)
-    return 0 if n.zero?
-    return 1 if n <= 2
-
-    fib(n - 1) + 1
-  end
-
+...
   def test_fibonacci
     cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
     cases.each do |i|
@@ -622,6 +735,8 @@ class FibonacciTest < Minitest::Test
   end
 end
 ----
+
+レッド
 
 [source, bash]
 ----
@@ -642,6 +757,8 @@ Finished in 0.00237s
 1 tests, 6 assertions, 1 failures, 0 errors, 0 skips
 ----
 
+結局1つ前と2つ前の `fib` の結果を合計して返しているのだから
+
 [source, ruby]
 ----
 ...
@@ -652,15 +769,11 @@ class FibonacciTest < Minitest::Test
 
     fib(n - 1) + fib(n - 2)
   end
-
-  def test_fibonacci
-    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
-    cases.each do |i|
-      assert_equal i[1], fib(i[0])
-    end
-  end
+...
 end
 ----
+
+グリーン
 
 [source, bash]
 ----
@@ -673,45 +786,7 @@ Finished in 0.00107s
 1 tests, 6 assertions, 0 failures, 0 errors, 0 skips
 ----
 
-[source, ruby]
-----
-...
-class FibonacciTest < Minitest::Test 
-  def fib(n)
-    return 0 if n.zero?
-    return 1 if n <= 2
-
-    fib(n - 1) + 1
-  end
-
-  def test_fibonacci
-    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
-    cases.each do |i|
-      assert_equal i[1], fib(i[0])
-    end
-  end
-end
-----
-
-[source, ruby]
-----
-...
-class FibonacciTest < Minitest::Test 
-  def fib(n)
-    return 0 if n.zero?
-    return 1 if n <= 2
-
-    fib(n - 1) + 1
-  end
-
-  def test_fibonacci
-    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
-    cases.each do |i|
-      assert_equal i[1], fib(i[0])
-    end
-  end
-end
-----
+一般化ができたので0の場合と1の場合は与えらた値を返せば良くなったので
 
 [source, ruby]
 ----
@@ -721,17 +796,13 @@ class FibonacciTest < Minitest::Test
     return 0 if n.zero?
     return 1 if n == 1
 
-    fib(n - 1) + 1
+    fib(n - 1) + fib(n - 2)
   end
-
-  def test_fibonacci
-    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
-    cases.each do |i|
-      assert_equal i[1], fib(i[0])
-    end
-  end
+...
 end
 ----
+
+リファクター
 
 [source, bash]
 ----
@@ -744,11 +815,21 @@ Finished in 0.00162s
 1 tests, 6 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+フィボナッチ数計算アルゴリズムが完成したのでコミットします。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'feat: フィボナッチ数計算'
 ----
+
+* [line-through]_0を渡したら0を返す_
+* [line-through]_1を渡したら1を返す_
+* [line-through]_2を渡したら1を返す_
+* [line-through]_3を渡したら2を返す_
+* [line-through]_4を渡したら3を返す_
+* [line-through]_5を渡したら5を返す_
+
 ==== リファクタリング
 
 [quote, リファクタリング(第2版)]
@@ -760,13 +841,6 @@ ____
 ____
 リファクタリングする(動詞) 一連のリファクタリングを適用して、外部から見た振る舞いの変更なしに、ソフトウェアを再構築すること。
 ____
-
-* [line-through]_0を渡したら0を返す_
-* [line-through]_1を渡したら1を返す_
-* [line-through]_2を渡したら1を返す_
-* [line-through]_3を渡したら2を返す_
-* [line-through]_4を渡したら3を返す_
-* [line-through]_5を渡したら5を返す_
 
 [source, ruby]
 ----
