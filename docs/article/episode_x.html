@@ -556,7 +556,19 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_メモ化によるパフォーマンス改善">メモ化によるパフォーマンス改善</a></li>
 </ul>
 </li>
-<li><a href="#_ベンチマーク">1.9. ベンチマーク</a></li>
+<li><a href="#_ベンチマーク">1.9. ベンチマーク</a>
+<ul class="sectlevel4">
+<li><a href="#_ループ処理による実装">ループ処理による実装</a></li>
+<li><a href="#_一般項による実装">一般項による実装</a></li>
+<li><a href="#_メソッド名の変更_2">メソッド名の変更</a></li>
+<li><a href="#_サブクラスによるタイプコードの置き換え_1">サブクラスによるタイプコードの置き換え 1</a></li>
+<li><a href="#_サブクラスによるタイプコードの置き換え_2">サブクラスによるタイプコードの置き換え 2</a></li>
+<li><a href="#_サブクラスによるタイプコードの置き換え_3">サブクラスによるタイプコードの置き換え 3</a></li>
+<li><a href="#_サブクラスによるタイプコードの置き換え_4">サブクラスによるタイプコードの置き換え 4</a></li>
+<li><a href="#_ファイル分割">ファイル分割</a></li>
+<li><a href="#_ベンチマークの実施">ベンチマークの実施</a></li>
+</ul>
+</li>
 <li><a href="#_モジュール分割">1.10. モジュール分割</a></li>
 </ul>
 </li>
@@ -2302,7 +2314,7 @@ Finished in 0.04214s
 </div>
 </div>
 <div class="paragraph">
-<p>一気に再帰呼び出し回数が減りパフォーマンスを改善することが出来ました。コミットします。</p>
+<p>一気に再帰呼び出し回数が減りパフォーマンスを改善することが出来ましたのでコミットします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2314,6 +2326,14 @@ $ git commit -m 'perf: メモ化によるパフォーマンス改善'</code></pr
 </div>
 <div class="sect3">
 <h4 id="_ベンチマーク">1.9. ベンチマーク</h4>
+<div class="paragraph">
+<p>続いて、異なるフィボナッチ数計算アルゴリズムを実装してどのアルゴリズムを採用するべきかを <a href="https://ja.wikipedia.org/wiki/%E3%83%99%E3%83%B3%E3%83%81%E3%83%9E%E3%83%BC%E3%82%AF" target="_blank" rel="noopener">ベンチマーク</a> を取って判断したいと思います。</p>
+</div>
+<div class="sect4">
+<h5 id="_ループ処理による実装">ループ処理による実装</h5>
+<div class="paragraph">
+<p>まずはループ処理によるフィボナッチ数計算のアルゴリズムを実装します。以下が <strong>テストファースト</strong> <strong>アサートファースト</strong> で作成したコードです。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
@@ -2370,11 +2390,20 @@ Finished in 0.00123s
 1 tests, 1 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストが通ることを確認したらコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'feat: ループ処理による実装'</code></pre>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_一般項による実装">一般項による実装</h5>
+<div class="paragraph">
+<p><a href="https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A3%E3%83%9C%E3%83%8A%E3%83%83%E3%83%81%E6%95%B0#%E4%B8%80%E8%88%AC%E9%A0%85" target="_blank" rel="noopener">フィボナッチ数列の一般項</a> で定義されているのでこれを <strong>テストファースト</strong> <strong>アサートファースト</strong> で実装します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2400,8 +2429,8 @@ $ git commit -m 'feat: ループ処理による実装'</code></pre>
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc3</span>(number)
-    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>) ** number
-    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>) ** number
+    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
     ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
   <span class="keyword">end</span>
 <span class="keyword">end</span>
@@ -2443,11 +2472,20 @@ Finished in 0.00111s
 1 tests, 1 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストが壊れていないか確認したらコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'feat: 一般項による実装'</code></pre>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_メソッド名の変更_2">メソッド名の変更</h5>
+<div class="paragraph">
+<p>各アルゴリズムのメソッド名が <code>calc</code> では分かりづらいので <strong>メソッド名の変更</strong> を適用して <strong>リファクタリング</strong> します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2473,8 +2511,8 @@ $ git commit -m 'feat: 一般項による実装'</code></pre>
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc3</span>(number)
-    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>) ** number
-    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>) ** number
+    a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
+    b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
     ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
   <span class="keyword">end</span>
 <span class="keyword">end</span>
@@ -2505,6 +2543,9 @@ $ git commit -m 'feat: 一般項による実装'</code></pre>
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>まず、最初に実装した再帰呼び出しアルゴリズムのメソッド名を <code>Fibonacci.calc</code> から <code>Fibonacci.recursive</code> に変更します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
@@ -2515,6 +2556,9 @@ Started with run options --seed 15174
 Finished in 0.00137s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>続いて、ループアルゴリズムのメソッド名を <code>Fibonacci.calc2</code> から <code>Fibonacci.loop</code> に変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2581,6 +2625,9 @@ Started with run options --seed 28586
 Finished in 0.00188s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>最後に、一般項アルゴリズムのメソッド名を <code>Fibonacci.calc3</code> から <code>Fibonacci.general_term</code> に変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2649,11 +2696,20 @@ Finished in 0.00736s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>変更によりテストが壊れていないことを確認したらコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'refactor: メソッド名の変更'</code></pre>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_サブクラスによるタイプコードの置き換え_1">サブクラスによるタイプコードの置き換え 1</h5>
+<div class="paragraph">
+<p>現在の <code>Fibonacci</code> クラスはアルゴリズムを追加する場合クラスを編集する必要があります。その際に既存のアルゴリズムを壊してしまう可能性があります。これは <strong>オープン・クローズド原則</strong> に違反しているので <strong>サブクラスによるタイプコードの置き換え</strong> を適用してアルゴリズムを <strong>カプセル化</strong> して、安全に追加・変更できる設計に <strong>リファクタリング</strong> します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2732,6 +2788,9 @@ Finished in 0.00130s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>まず、<strong>クラスの抽出</strong> により再帰呼び出しアルゴリズムの <strong>メソッドオブジェクト</strong> <code>FibonacciRecursive</code> クラスを作成して テスト <strong>フィクスチャー</strong> で <strong>インスタンス化</strong> して <strong>インスタンス変数</strong> にオブジェクトの参照を代入します。ここではメソッドの呼び出しが <code>exec</code> に変更されているのでテストコードもそれに合わせて変更します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
@@ -2756,11 +2815,11 @@ Finished in 0.00130s
 <span class="keyword">end</span>
 
 <span class="keyword">class</span> <span class="class">FibonacciRecursive</span>
-  <span class="keyword">def</span> <span class="function">calc</span>(number, memo = {})
+  <span class="keyword">def</span> <span class="function">exec</span>(number, memo = {})
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
 
-    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+    memo[number] ||= exec(number - <span class="integer">1</span>, memo) + exec(number - <span class="integer">2</span>, memo)
   <span class="keyword">end</span>
 <span class="keyword">end</span>
 
@@ -2773,12 +2832,12 @@ Finished in 0.00130s
   <span class="keyword">def</span> <span class="function">test_fibonacci</span>
     cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
     cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@recursive</span>.calc(i[<span class="integer">0</span>])
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@recursive</span>.exec(i[<span class="integer">0</span>])
     <span class="keyword">end</span>
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
-    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.calc(<span class="integer">40</span>)
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.exec(<span class="integer">40</span>)
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">test_large_number_loop</span>
@@ -2791,11 +2850,20 @@ Finished in 0.00130s
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>まだ、 仕掛ですがコードが壊れていない状態でコミットをしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置き換え'</code></pre>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_サブクラスによるタイプコードの置き換え_2">サブクラスによるタイプコードの置き換え 2</h5>
+<div class="paragraph">
+<p>続いて、 <strong>メソッドオブジェクト</strong> <code>FibonacciLoop</code> クラスを抽出します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2809,16 +2877,16 @@ $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置
 <span class="keyword">end</span>
 
 <span class="keyword">class</span> <span class="class">FibonacciRecursive</span>
-  <span class="keyword">def</span> <span class="function">calc</span>(number, memo = {})
+  <span class="keyword">def</span> <span class="function">exec</span>(number, memo = {})
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
 
-    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+    memo[number] ||= exec(number - <span class="integer">1</span>, memo) + exec(number - <span class="integer">2</span>, memo)
   <span class="keyword">end</span>
 <span class="keyword">end</span>
 
 <span class="keyword">class</span> <span class="class">FibonacciLoop</span>
-  <span class="keyword">def</span> <span class="function">calc</span>(number)
+  <span class="keyword">def</span> <span class="function">exec</span>(number)
     a = <span class="integer">0</span>
     b = <span class="integer">1</span>
     c = <span class="integer">0</span>
@@ -2841,16 +2909,16 @@ $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置
   <span class="keyword">def</span> <span class="function">test_fibonacci</span>
     cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
     cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@recursive</span>.calc(i[<span class="integer">0</span>])
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@recursive</span>.exec(i[<span class="integer">0</span>])
     <span class="keyword">end</span>
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
-    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.calc(<span class="integer">40</span>)
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.exec(<span class="integer">40</span>)
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">test_large_number_loop</span>
-    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@loop</span>.calc(<span class="integer">40</span>)
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@loop</span>.exec(<span class="integer">40</span>)
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">test_large_number_general_term</span>
@@ -2869,11 +2937,20 @@ Finished in 0.00337s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>コミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置き換え'</code></pre>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_サブクラスによるタイプコードの置き換え_3">サブクラスによるタイプコードの置き換え 3</h5>
+<div class="paragraph">
+<p>続いて、 <strong>メソッドオブジェクト</strong> <code>FibonacciGeneralTerm</code> クラスを抽出します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2882,16 +2959,16 @@ $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置
 <span class="keyword">end</span>
 
 <span class="keyword">class</span> <span class="class">FibonacciRecursive</span>
-  <span class="keyword">def</span> <span class="function">calc</span>(number, memo = {})
+  <span class="keyword">def</span> <span class="function">exec</span>(number, memo = {})
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
 
-    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+    memo[number] ||= exec(number - <span class="integer">1</span>, memo) + exec(number - <span class="integer">2</span>, memo)
   <span class="keyword">end</span>
 <span class="keyword">end</span>
 
 <span class="keyword">class</span> <span class="class">FibonacciLoop</span>
-  <span class="keyword">def</span> <span class="function">calc</span>(number)
+  <span class="keyword">def</span> <span class="function">exec</span>(number)
     a = <span class="integer">0</span>
     b = <span class="integer">1</span>
     c = <span class="integer">0</span>
@@ -2905,7 +2982,7 @@ $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置
 <span class="keyword">end</span>
 
 <span class="keyword">class</span> <span class="class">FibonacciGeneralTerm</span>
-  <span class="keyword">def</span> <span class="function">calc</span>(number)
+  <span class="keyword">def</span> <span class="function">exec</span>(number)
     a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
     b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
     ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
@@ -2923,20 +3000,20 @@ $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置
   <span class="keyword">def</span> <span class="function">test_fibonacci</span>
     cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
     cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@recursive</span>.calc(i[<span class="integer">0</span>])
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@recursive</span>.exec(i[<span class="integer">0</span>])
     <span class="keyword">end</span>
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
-    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.calc(<span class="integer">40</span>)
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.exec(<span class="integer">40</span>)
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">test_large_number_loop</span>
-    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@loop</span>.calc(<span class="integer">40</span>)
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@loop</span>.exec(<span class="integer">40</span>)
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">test_large_number_general_term</span>
-    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@general_term</span>.calc(<span class="integer">40</span>)
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@general_term</span>.exec(<span class="integer">40</span>)
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
@@ -2951,10 +3028,27 @@ Finished in 0.01576s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>コミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置き換え'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_サブクラスによるタイプコードの置き換え_4">サブクラスによるタイプコードの置き換え 4</h5>
+<div class="paragraph">
+<p>最後に、 <code>Fibonacci</code> クラスに <strong>Strategyパターン</strong> を適用して各アルゴリズムの実行を <strong>委譲</strong> します。</p>
+</div>
+<div class="paragraph">
+<p><a href="https://ja.wikipedia.org/wiki/Strategy_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3" target="_blank" rel="noopener">Strategy パターン</a></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-1920e49402f00498cd78146b97e18f18.png" alt="diag 1920e49402f00498cd78146b97e18f18" width="500" height="212">
 </div>
 </div>
 <div class="listingblock">
@@ -2965,22 +3059,22 @@ $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置
     <span class="instance-variable">@algorithm</span> = algorithm
   <span class="keyword">end</span>
 
-  <span class="keyword">def</span> <span class="function">calc</span>(number)
-    <span class="instance-variable">@algorithm</span>.calc(number)
+  <span class="keyword">def</span> <span class="function">exec</span>(number)
+    <span class="instance-variable">@algorithm</span>.exec(number)
   <span class="keyword">end</span>
 <span class="keyword">end</span>
 
 <span class="keyword">class</span> <span class="class">FibonacciRecursive</span>
-  <span class="keyword">def</span> <span class="function">calc</span>(number, memo = {})
+  <span class="keyword">def</span> <span class="function">exec</span>(number, memo = {})
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
 
-    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+    memo[number] ||= exec(number - <span class="integer">1</span>, memo) + exec(number - <span class="integer">2</span>, memo)
   <span class="keyword">end</span>
 <span class="keyword">end</span>
 
 <span class="keyword">class</span> <span class="class">FibonacciLoop</span>
-  <span class="keyword">def</span> <span class="function">calc</span>(number)
+  <span class="keyword">def</span> <span class="function">exec</span>(number)
     a = <span class="integer">0</span>
     b = <span class="integer">1</span>
     c = <span class="integer">0</span>
@@ -2994,7 +3088,7 @@ $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置
 <span class="keyword">end</span>
 
 <span class="keyword">class</span> <span class="class">FibonacciGeneralTerm</span>
-  <span class="keyword">def</span> <span class="function">calc</span>(number)
+  <span class="keyword">def</span> <span class="function">exec</span>(number)
     a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
     b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
     ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
@@ -3003,7 +3097,6 @@ $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置
 
 <span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
   <span class="keyword">def</span> <span class="function">setup</span>
-    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciRecursive</span>.new)
     <span class="instance-variable">@recursive</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciRecursive</span>.new)
     <span class="instance-variable">@loop</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciLoop</span>.new)
     <span class="instance-variable">@general_term</span> = <span class="constant">Fibonacci</span>.new(<span class="constant">FibonacciGeneralTerm</span>.new)
@@ -3012,29 +3105,38 @@ $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置
   <span class="keyword">def</span> <span class="function">test_fibonacci</span>
     cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
     cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.calc(i[<span class="integer">0</span>])
+      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@recursive</span>.exec(i[<span class="integer">0</span>])
     <span class="keyword">end</span>
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">test_large_number_recursive</span>
-    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.calc(<span class="integer">40</span>)
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@recursive</span>.exec(<span class="integer">40</span>)
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">test_large_number_loop</span>
-    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@loop</span>.calc(<span class="integer">40</span>)
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@loop</span>.exec(<span class="integer">40</span>)
   <span class="keyword">end</span>
 
   <span class="keyword">def</span> <span class="function">test_large_number_general_term</span>
-    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@general_term</span>.calc(<span class="integer">40</span>)
+    assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@general_term</span>.exec(<span class="integer">40</span>)
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><strong>サブクラスによるタイプコードの置き換え</strong> の適用が完了したのでコメントから <code>(WIP)</code> を外してコミットします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'refactor: サブクラスによるタイプコードの置き換え'</code></pre>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_ファイル分割">ファイル分割</h5>
+<div class="paragraph">
+<p>続いてテストとアプリケーションを分割します。 <code>lib</code> ディレクトリを作成して <code>fibonacci.rb</code> ファイルを追加してアプリケーションコード部分をカット＆ペーストします。</p>
 </div>
 <div class="paragraph">
 <p><code>lib/fibonacci.rb</code></p>
@@ -3049,24 +3151,24 @@ $ git commit -m 'refactor: サブクラスによるタイプコードの置き�
     <span class="instance-variable">@algorithm</span> = algorithm
   <span class="keyword">end</span>
 
-  <span class="keyword">def</span> <span class="function">calc</span>(number)
-    <span class="instance-variable">@algorithm</span>.calc(number)
+  <span class="keyword">def</span> <span class="function">exec</span>(number)
+    <span class="instance-variable">@algorithm</span>.exec(number)
   <span class="keyword">end</span>
 <span class="keyword">end</span>
 
 <span class="comment"># Fibonacci Recursive algorithm</span>
 <span class="keyword">class</span> <span class="class">FibonacciRecursive</span>
-  <span class="keyword">def</span> <span class="function">calc</span>(number, memo = {})
+  <span class="keyword">def</span> <span class="function">exec</span>(number, memo = {})
     <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
     <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
 
-    memo[number] ||= calc(number - <span class="integer">1</span>, memo) + calc(number - <span class="integer">2</span>, memo)
+    memo[number] ||= exec(number - <span class="integer">1</span>, memo) + exec(number - <span class="integer">2</span>, memo)
   <span class="keyword">end</span>
 <span class="keyword">end</span>
 
 <span class="comment"># Fibonacci Loop algorithm</span>
 <span class="keyword">class</span> <span class="class">FibonacciLoop</span>
-  <span class="keyword">def</span> <span class="function">calc</span>(number)
+  <span class="keyword">def</span> <span class="function">exec</span>(number)
     a = <span class="integer">0</span>
     b = <span class="integer">1</span>
     c = <span class="integer">0</span>
@@ -3081,13 +3183,17 @@ $ git commit -m 'refactor: サブクラスによるタイプコードの置き�
 
 <span class="comment"># Fibonacci General Term algorithm</span>
 <span class="keyword">class</span> <span class="class">FibonacciGeneralTerm</span>
-  <span class="keyword">def</span> <span class="function">calc</span>(number)
+  <span class="keyword">def</span> <span class="function">exec</span>(number)
     a = ((<span class="integer">1</span> + <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
     b = ((<span class="integer">1</span> - <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)) / <span class="integer">2</span>)**number
     ((a - b) / <span class="constant">Math</span>.sqrt(<span class="integer">5</span>)).round
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>続いて、分割した <code>fibonacci.rb</code> ファイル内に定義されたクラスを読み込むようにテストクラスを修正します。
+ファイルの読み込みには <code>require</code> を使います。</p>
 </div>
 <div class="paragraph">
 <p><code>test/fibonacci_test.rb</code></p>
@@ -3141,14 +3247,23 @@ Finished in 0.00227s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>分割したファイルからクラスが読み込まれテストが通ることを確認したらコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'feat: ファイル分割'</code></pre>
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_ベンチマークの実施">ベンチマークの実施</h5>
 <div class="paragraph">
-<p><code>test/fibonacci_test.rb</code></p>
+<p><strong>ベンチマーク</strong> を実施する準備が出来たので <code>test</code> ディレクトリに以下の <code>fibonacci_benchmark.rb</code> ファイルを追加します。</p>
+</div>
+<div class="paragraph">
+<p><code>test/fibonacci_benchmark.rb</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3169,7 +3284,7 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
   <span class="keyword">def</span> <span class="function">bench_recursive</span>
     assert_performance_constant <span class="keyword">do</span> |_n|
       <span class="integer">1000</span>.times <span class="keyword">do</span> |i|
-        <span class="instance-variable">@recursive</span>.calc(i)
+        <span class="instance-variable">@recursive</span>.exec(i)
       <span class="keyword">end</span>
     <span class="keyword">end</span>
   <span class="keyword">end</span>
@@ -3177,7 +3292,7 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
   <span class="keyword">def</span> <span class="function">bench_loop</span>
     assert_performance_constant <span class="keyword">do</span> |_n|
       <span class="integer">1000</span>.times.each <span class="keyword">do</span> |i|
-        <span class="instance-variable">@loop</span>.calc(i)
+        <span class="instance-variable">@loop</span>.exec(i)
       <span class="keyword">end</span>
     <span class="keyword">end</span>
   <span class="keyword">end</span>
@@ -3185,12 +3300,15 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
   <span class="keyword">def</span> <span class="function">bench_general_term</span>
     assert_performance_constant <span class="keyword">do</span> |_n|
       <span class="integer">1000</span>.times.each <span class="keyword">do</span> |i|
-        <span class="instance-variable">@general_term</span>.calc(i)
+        <span class="instance-variable">@general_term</span>.exec(i)
       <span class="keyword">end</span>
     <span class="keyword">end</span>
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><strong>ベンチマーク</strong> を実行します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3209,10 +3327,17 @@ Finished in 3.074021s, 0.9759 runs/s, 0.9759 assertions/s.
 3 runs, 3 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>結果を見たところ、再帰処理アルゴリズムが一番遅く、一般項アルゴリズムが一番早く実行されるようです。</p>
+</div>
+<div class="paragraph">
+<p><strong>ベンチマーク</strong> を実施してアルゴリズムの性能を比較できたのでコミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'perf: ベンチマークの実施'</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -3383,7 +3508,7 @@ $ git commit -m 'feat: モジュール分割'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-12 16:48:24 JST
+Last updated 2020-02-12 18:26:53 JST
 </div>
 </div>
 </body>

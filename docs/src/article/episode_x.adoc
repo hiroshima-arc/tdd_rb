@@ -1204,7 +1204,7 @@ Finished in 0.04214s
 ...
 ----
 
-一気に再帰呼び出し回数が減りパフォーマンスを改善することが出来ました。コミットします。
+一気に再帰呼び出し回数が減りパフォーマンスを改善することが出来ましたのでコミットします。
 
 [source, bash]
 ----
@@ -1213,6 +1213,12 @@ $ git commit -m 'perf: メモ化によるパフォーマンス改善'
 ----
 
 ==== ベンチマーク
+
+続いて、異なるフィボナッチ数計算アルゴリズムを実装してどのアルゴリズムを採用するべきかを https://ja.wikipedia.org/wiki/%E3%83%99%E3%83%B3%E3%83%81%E3%83%9E%E3%83%BC%E3%82%AF[ベンチマーク^] を取って判断したいと思います。
+
+===== ループ処理による実装
+
+まずはループ処理によるフィボナッチ数計算のアルゴリズムを実装します。以下が *テストファースト* *アサートファースト* で作成したコードです。
 
 [source, ruby]
 ----
@@ -1270,11 +1276,17 @@ Finished in 0.00123s
 1 tests, 1 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+テストが通ることを確認したらコミットします。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'feat: ループ処理による実装'
 ----
+
+===== 一般項による実装
+
+https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A3%E3%83%9C%E3%83%8A%E3%83%83%E3%83%81%E6%95%B0#%E4%B8%80%E8%88%AC%E9%A0%85[フィボナッチ数列の一般項^] で定義されているのでこれを *テストファースト* *アサートファースト* で実装します。
 
 [source, ruby]
 ----
@@ -1300,8 +1312,8 @@ class Fibonacci
   end
 
   def self.calc3(number)
-    a = ((1 + Math.sqrt(5)) / 2) ** number
-    b = ((1 - Math.sqrt(5)) / 2) ** number
+    a = ((1 + Math.sqrt(5)) / 2)**number
+    b = ((1 - Math.sqrt(5)) / 2)**number
     ((a - b) / Math.sqrt(5)).round
   end
 end
@@ -1343,11 +1355,17 @@ Finished in 0.00111s
 1 tests, 1 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+テストが壊れていないか確認したらコミットします。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'feat: 一般項による実装'
 ----
+
+===== メソッド名の変更
+
+各アルゴリズムのメソッド名が `calc` では分かりづらいので *メソッド名の変更* を適用して *リファクタリング* します。
 
 [source, ruby]
 ----
@@ -1373,8 +1391,8 @@ class Fibonacci
   end
 
   def self.calc3(number)
-    a = ((1 + Math.sqrt(5)) / 2) ** number
-    b = ((1 - Math.sqrt(5)) / 2) ** number
+    a = ((1 + Math.sqrt(5)) / 2)**number
+    b = ((1 - Math.sqrt(5)) / 2)**number
     ((a - b) / Math.sqrt(5)).round
   end
 end
@@ -1405,6 +1423,8 @@ class FibonacciTest < Minitest::Test
 end
 ----
 
+まず、最初に実装した再帰呼び出しアルゴリズムのメソッド名を `Fibonacci.calc` から `Fibonacci.recursive` に変更します。
+
 [source, bash]
 ----
 $ ruby test/fibonacci_test.rb
@@ -1415,6 +1435,8 @@ Started with run options --seed 15174
 Finished in 0.00137s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips
 ----
+
+続いて、ループアルゴリズムのメソッド名を `Fibonacci.calc2` から `Fibonacci.loop` に変更します。
 
 [source, ruby]
 ----
@@ -1481,6 +1503,8 @@ Started with run options --seed 28586
 Finished in 0.00188s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips
 ----
+
+最後に、一般項アルゴリズムのメソッド名を `Fibonacci.calc3` から `Fibonacci.general_term` に変更します。
 
 [source, ruby]
 ----
@@ -1549,11 +1573,17 @@ Finished in 0.00736s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+変更によりテストが壊れていないことを確認したらコミットします。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'refactor: メソッド名の変更'
 ----
+
+===== サブクラスによるタイプコードの置き換え 1
+
+現在の `Fibonacci` クラスはアルゴリズムを追加する場合クラスを編集する必要があります。その際に既存のアルゴリズムを壊してしまう可能性があります。これは *オープン・クローズド原則* に違反しているので *サブクラスによるタイプコードの置き換え* を適用してアルゴリズムを *カプセル化* して、安全に追加・変更できる設計に *リファクタリング* します。
 
 [source, ruby]
 ----
@@ -1632,6 +1662,8 @@ Finished in 0.00130s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+まず、*クラスの抽出* により再帰呼び出しアルゴリズムの *メソッドオブジェクト* `FibonacciRecursive` クラスを作成して テスト *フィクスチャー* で *インスタンス化* して *インスタンス変数* にオブジェクトの参照を代入します。ここではメソッドの呼び出しが `exec` に変更されているのでテストコードもそれに合わせて変更します。
+
 [source, ruby]
 ----
 ...
@@ -1656,11 +1688,11 @@ class Fibonacci
 end
 
 class FibonacciRecursive
-  def calc(number, memo = {})
+  def exec(number, memo = {})
     return 0 if number.zero?
     return 1 if number == 1
 
-    memo[number] ||= calc(number - 1, memo) + calc(number - 2, memo)
+    memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
   end
 end
 
@@ -1673,12 +1705,12 @@ class FibonacciTest < Minitest::Test
   def test_fibonacci
     cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
     cases.each do |i|
-      assert_equal i[1], @recursive.calc(i[0])
+      assert_equal i[1], @recursive.exec(i[0])
     end
   end
 
   def test_large_number_recursive
-    assert_equal 102_334_155, @recursive.calc(40)
+    assert_equal 102_334_155, @recursive.exec(40)
   end
 
   def test_large_number_loop
@@ -1691,11 +1723,17 @@ class FibonacciTest < Minitest::Test
 end
 ----
 
+まだ、 仕掛ですがコードが壊れていない状態でコミットをしておきます。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置き換え'
 ----
+
+===== サブクラスによるタイプコードの置き換え 2
+
+続いて、 *メソッドオブジェクト* `FibonacciLoop` クラスを抽出します。
 
 [source, ruby]
 ----
@@ -1709,16 +1747,16 @@ class Fibonacci
 end
 
 class FibonacciRecursive
-  def calc(number, memo = {})
+  def exec(number, memo = {})
     return 0 if number.zero?
     return 1 if number == 1
 
-    memo[number] ||= calc(number - 1, memo) + calc(number - 2, memo)
+    memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
   end
 end
 
 class FibonacciLoop
-  def calc(number)
+  def exec(number)
     a = 0
     b = 1
     c = 0
@@ -1741,16 +1779,16 @@ class FibonacciTest < Minitest::Test
   def test_fibonacci
     cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
     cases.each do |i|
-      assert_equal i[1], @recursive.calc(i[0])
+      assert_equal i[1], @recursive.exec(i[0])
     end
   end
 
   def test_large_number_recursive
-    assert_equal 102_334_155, @recursive.calc(40)
+    assert_equal 102_334_155, @recursive.exec(40)
   end
 
   def test_large_number_loop
-    assert_equal 102_334_155, @loop.calc(40)
+    assert_equal 102_334_155, @loop.exec(40)
   end
 
   def test_large_number_general_term
@@ -1769,11 +1807,17 @@ Finished in 0.00337s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+コミットします。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置き換え'
 ----
+
+===== サブクラスによるタイプコードの置き換え 3
+
+続いて、 *メソッドオブジェクト* `FibonacciGeneralTerm` クラスを抽出します。
 
 [source, ruby]
 ----
@@ -1782,16 +1826,16 @@ class Fibonacci
 end
 
 class FibonacciRecursive
-  def calc(number, memo = {})
+  def exec(number, memo = {})
     return 0 if number.zero?
     return 1 if number == 1
 
-    memo[number] ||= calc(number - 1, memo) + calc(number - 2, memo)
+    memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
   end
 end
 
 class FibonacciLoop
-  def calc(number)
+  def exec(number)
     a = 0
     b = 1
     c = 0
@@ -1805,7 +1849,7 @@ class FibonacciLoop
 end
 
 class FibonacciGeneralTerm
-  def calc(number)
+  def exec(number)
     a = ((1 + Math.sqrt(5)) / 2)**number
     b = ((1 - Math.sqrt(5)) / 2)**number
     ((a - b) / Math.sqrt(5)).round
@@ -1823,20 +1867,20 @@ class FibonacciTest < Minitest::Test
   def test_fibonacci
     cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
     cases.each do |i|
-      assert_equal i[1], @recursive.calc(i[0])
+      assert_equal i[1], @recursive.exec(i[0])
     end
   end
 
   def test_large_number_recursive
-    assert_equal 102_334_155, @recursive.calc(40)
+    assert_equal 102_334_155, @recursive.exec(40)
   end
 
   def test_large_number_loop
-    assert_equal 102_334_155, @loop.calc(40)
+    assert_equal 102_334_155, @loop.exec(40)
   end
 
   def test_large_number_general_term
-    assert_equal 102_334_155, @general_term.calc(40)
+    assert_equal 102_334_155, @general_term.exec(40)
   end
 end
 ----
@@ -1851,10 +1895,41 @@ Finished in 0.01576s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+コミットします。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置き換え'
+----
+
+===== サブクラスによるタイプコードの置き換え 4
+
+最後に、 `Fibonacci` クラスに *Strategyパターン* を適用して各アルゴリズムの実行を *委譲* します。
+
+https://ja.wikipedia.org/wiki/Strategy_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3[Strategy パターン^]
+[plantuml]
+----
+abstract class Protocol {
+}
+Protocol <--r Fibonacci
+Protocol <|-- FibonacciRecursive
+Protocol <|-- FibonacciLoop
+Protocol <|-- FibonacciGeneralTerm
+
+class Fibonacci {
+-algorithm
+exec()
+}
+class FibonacciRecursive {
+exec()
+}
+class FibonacciLoop {
+exec()
+}
+class FibonacciGeneralTerm {
+exec()
+}
 ----
 
 [source, ruby]
@@ -1865,22 +1940,22 @@ class Fibonacci
     @algorithm = algorithm
   end
 
-  def calc(number)
-    @algorithm.calc(number)
+  def exec(number)
+    @algorithm.exec(number)
   end
 end
 
 class FibonacciRecursive
-  def calc(number, memo = {})
+  def exec(number, memo = {})
     return 0 if number.zero?
     return 1 if number == 1
 
-    memo[number] ||= calc(number - 1, memo) + calc(number - 2, memo)
+    memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
   end
 end
 
 class FibonacciLoop
-  def calc(number)
+  def exec(number)
     a = 0
     b = 1
     c = 0
@@ -1894,7 +1969,7 @@ class FibonacciLoop
 end
 
 class FibonacciGeneralTerm
-  def calc(number)
+  def exec(number)
     a = ((1 + Math.sqrt(5)) / 2)**number
     b = ((1 - Math.sqrt(5)) / 2)**number
     ((a - b) / Math.sqrt(5)).round
@@ -1903,7 +1978,6 @@ end
 
 class FibonacciTest < Minitest::Test
   def setup
-    @fib = Fibonacci.new(FibonacciRecursive.new)
     @recursive = Fibonacci.new(FibonacciRecursive.new)
     @loop = Fibonacci.new(FibonacciLoop.new)
     @general_term = Fibonacci.new(FibonacciGeneralTerm.new)
@@ -1912,29 +1986,35 @@ class FibonacciTest < Minitest::Test
   def test_fibonacci
     cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
     cases.each do |i|
-      assert_equal i[1], @fib.calc(i[0])
+      assert_equal i[1], @recursive.exec(i[0])
     end
   end
 
   def test_large_number_recursive
-    assert_equal 102_334_155, @recursive.calc(40)
+    assert_equal 102_334_155, @recursive.exec(40)
   end
 
   def test_large_number_loop
-    assert_equal 102_334_155, @loop.calc(40)
+    assert_equal 102_334_155, @loop.exec(40)
   end
 
   def test_large_number_general_term
-    assert_equal 102_334_155, @general_term.calc(40)
+    assert_equal 102_334_155, @general_term.exec(40)
   end
 end
 ----
+
+*サブクラスによるタイプコードの置き換え* の適用が完了したのでコメントから `(WIP)` を外してコミットします。
 
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'refactor: サブクラスによるタイプコードの置き換え'
 ----
+
+===== ファイル分割
+
+続いてテストとアプリケーションを分割します。 `lib` ディレクトリを作成して `fibonacci.rb` ファイルを追加してアプリケーションコード部分をカット＆ペーストします。
 
 `lib/fibonacci.rb`
 
@@ -1948,24 +2028,24 @@ class Fibonacci
     @algorithm = algorithm
   end
 
-  def calc(number)
-    @algorithm.calc(number)
+  def exec(number)
+    @algorithm.exec(number)
   end
 end
 
 # Fibonacci Recursive algorithm
 class FibonacciRecursive
-  def calc(number, memo = {})
+  def exec(number, memo = {})
     return 0 if number.zero?
     return 1 if number == 1
 
-    memo[number] ||= calc(number - 1, memo) + calc(number - 2, memo)
+    memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
   end
 end
 
 # Fibonacci Loop algorithm
 class FibonacciLoop
-  def calc(number)
+  def exec(number)
     a = 0
     b = 1
     c = 0
@@ -1980,13 +2060,17 @@ end
 
 # Fibonacci General Term algorithm
 class FibonacciGeneralTerm
-  def calc(number)
+  def exec(number)
     a = ((1 + Math.sqrt(5)) / 2)**number
     b = ((1 - Math.sqrt(5)) / 2)**number
     ((a - b) / Math.sqrt(5)).round
   end
 end
 ----
+
+
+続いて、分割した `fibonacci.rb` ファイル内に定義されたクラスを読み込むようにテストクラスを修正します。
+ファイルの読み込みには `require` を使います。
 
 `test/fibonacci_test.rb`
 
@@ -2039,13 +2123,19 @@ Finished in 0.00227s
 4 tests, 9 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+分割したファイルからクラスが読み込まれテストが通ることを確認したらコミットします。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'feat: ファイル分割'
 ----
 
-`test/fibonacci_test.rb`
+===== ベンチマークの実施
+
+*ベンチマーク* を実施する準備が出来たので `test` ディレクトリに以下の `fibonacci_benchmark.rb` ファイルを追加します。
+
+`test/fibonacci_benchmark.rb`
 
 [source, ruby]
 ----
@@ -2066,7 +2156,7 @@ class FibonacciTestBenchmark < Minitest::Benchmark
   def bench_recursive
     assert_performance_constant do |_n|
       1000.times do |i|
-        @recursive.calc(i)
+        @recursive.exec(i)
       end
     end
   end
@@ -2074,7 +2164,7 @@ class FibonacciTestBenchmark < Minitest::Benchmark
   def bench_loop
     assert_performance_constant do |_n|
       1000.times.each do |i|
-        @loop.calc(i)
+        @loop.exec(i)
       end
     end
   end
@@ -2082,12 +2172,14 @@ class FibonacciTestBenchmark < Minitest::Benchmark
   def bench_general_term
     assert_performance_constant do |_n|
       1000.times.each do |i|
-        @general_term.calc(i)
+        @general_term.exec(i)
       end
     end
   end
 end
 ----
+
+*ベンチマーク* を実行します。
 
 [source, bash]
 ----
@@ -2105,6 +2197,10 @@ Finished in 3.074021s, 0.9759 runs/s, 0.9759 assertions/s.
 
 3 runs, 3 assertions, 0 failures, 0 errors, 0 skips
 ----
+
+結果を見たところ、再帰処理アルゴリズムが一番遅く、一般項アルゴリズムが一番早く実行されるようです。
+
+*ベンチマーク* を実施してアルゴリズムの性能を比較できたのでコミットします。
 
 [source, bash]
 ----
