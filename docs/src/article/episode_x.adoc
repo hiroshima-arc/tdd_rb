@@ -1089,8 +1089,11 @@ ____
 心がけるべきことは、他のパフォーマンス分析とおなじように、実際のデータを使い、リアルな利用パターンを試し、プロファイリングを行ってからでないと、パフォーマンスを問題にする資格はない、ということだ。
 ____
 
+これまでのテストケースでは小さな値を使ってきましたが大きな値の場合のプログラムの挙動が問題無いか確認しておく必要があります http://www.suguru.jp/Fibonacci/Fib100.html[１００番目までのフィボナッチ数列^] を参考に大きな値の場合のテストケースを追加してアプリケーションのパフォーマンスを検証しましょう。
 
-http://www.suguru.jp/Fibonacci/Fib100.html[１００番目までのフィボナッチ数列^]
+===== メモ化によるパフォーマンス改善
+
+*TODOリスト* に新しいタスクを追加します。
 
 [width="15%"]
 |=======
@@ -1100,40 +1103,34 @@ http://www.suguru.jp/Fibonacci/Fib100.html[１００番目までのフィボナ�
 
 * 大きな数値を計算する
 
+テストケースを追加します。
+
 [source, ruby]
 ----
 ...
-class Fibonacci
-  def self.calc(number)
-    return 0 if number.zero?
-    return 1 if number == 1
-
-    calc(number - 1) + calc(number - 2)
-  end
-end
-
 class FibonacciTest < Minitest::Test
-  def setup
-    @fib = Fibonacci
-  end
-
-  def test_fibonacci
-    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
-    cases.each do |i|
-      assert_equal i[1], @fib.calc(i[0])
-    end
-  end
-
+...
   def test_large_number
     assert_equal 102_334_155, @fib.calc(40)
   end
 end
 ----
 
+テストを実行します
+
 [source, bash]
 ----
 $ ruby test/fibonacci_test.rb 
+Started with run options --seed 1160
+
+  2/2: [=========================================] 100% Time: 00:00:51, Time: 00:00:51
+
+Finished in 51.15914s
+2 tests, 7 assertions, 0 failures, 0 errors, 0 skips
 ----
+
+テストが完了するのが随分遅くなってしまいました。これはアルゴリズムを改善する必要がありそうです。
+まずは *プロファイラ* を使って実行状況を確認します。今回は https://docs.ruby-lang.org/ja/latest/library/profile.html[profileライブラリ^] を使います。
 
 [source, bash]
 ----
@@ -1142,6 +1139,8 @@ Started with run options --seed 42383
 
   2/1: [======================                      ] 50% Time: 00:00:00,  ETA: 00:00:00
 ----
+
+処理が終わらないようなら `ctr-c` で強制終了すれば結果が出力されます。出力内容の `Fibonacci.calc` がフィボナッチ数計算メソッド実行部分です。
 
 [source, bash]
 ----
@@ -1152,6 +1151,8 @@ Started with run options --seed 42383
  75.32    35.49      9.98   246940     0.04     1.65  Fibonacci.calc
 ....
 ----
+
+再帰呼び出しが何度も実行された結果パフォーマンスを低下させているようです。ここは https://ja.wikipedia.org/wiki/%E3%83%A1%E3%83%A2%E5%8C%96[メモ化^] を使ってパフォーマンスを改善させましょう。
 
 [source, ruby]
 ----
@@ -1183,6 +1184,8 @@ class FibonacciTest < Minitest::Test
 end
 ----
 
+*プロファイラ* で確認します。
+
 [source, bash]
 ----
 $ ruby -r profile test/fibonacci_test.rb 
@@ -1201,11 +1204,15 @@ Finished in 0.04214s
 ...
 ----
 
+一気に再帰呼び出し回数が減りパフォーマンスを改善することが出来ました。コミットします。
+
 [source, bash]
 ----
 $ git add .
 $ git commit -m 'perf: メモ化によるパフォーマンス改善'
 ----
+
+==== ベンチマーク
 
 [source, ruby]
 ----

@@ -551,8 +551,13 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_メソッド名の変更">メソッド名の変更</a></li>
 </ul>
 </li>
-<li><a href="#_パフォーマンスチューニング">1.8. パフォーマンスチューニング</a></li>
-<li><a href="#_モジュール分割">1.9. モジュール分割</a></li>
+<li><a href="#_パフォーマンスチューニング">1.8. パフォーマンスチューニング</a>
+<ul class="sectlevel4">
+<li><a href="#_メモ化によるパフォーマンス改善">メモ化によるパフォーマンス改善</a></li>
+</ul>
+</li>
+<li><a href="#_ベンチマーク">1.9. ベンチマーク</a></li>
+<li><a href="#_モジュール分割">1.10. モジュール分割</a></li>
 </ul>
 </li>
 </ul>
@@ -2144,7 +2149,12 @@ $ git commit -m 'refactor: メソッド名の変更'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><a href="http://www.suguru.jp/Fibonacci/Fib100.html" target="_blank" rel="noopener">１００番目までのフィボナッチ数列</a></p>
+<p>これまでのテストケースでは小さな値を使ってきましたが大きな値の場合のプログラムの挙動が問題無いか確認しておく必要があります <a href="http://www.suguru.jp/Fibonacci/Fib100.html" target="_blank" rel="noopener">１００番目までのフィボナッチ数列</a> を参考に大きな値の場合のテストケースを追加してアプリケーションのパフォーマンスを検証しましょう。</p>
+</div>
+<div class="sect4">
+<h5 id="_メモ化によるパフォーマンス改善">メモ化によるパフォーマンス改善</h5>
+<div class="paragraph">
+<p><strong>TODOリスト</strong> に新しいタスクを追加します。</p>
 </div>
 <table class="tableblock frame-all grid-all" style="width: 15%;">
 <colgroup>
@@ -2184,40 +2194,37 @@ $ git commit -m 'refactor: メソッド名の変更'</code></pre>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>テストケースを追加します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
-<span class="keyword">class</span> <span class="class">Fibonacci</span>
-  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">calc</span>(number)
-    <span class="keyword">return</span> <span class="integer">0</span> <span class="keyword">if</span> number.zero?
-    <span class="keyword">return</span> <span class="integer">1</span> <span class="keyword">if</span> number == <span class="integer">1</span>
-
-    calc(number - <span class="integer">1</span>) + calc(number - <span class="integer">2</span>)
-  <span class="keyword">end</span>
-<span class="keyword">end</span>
-
 <span class="keyword">class</span> <span class="class">FibonacciTest</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
-  <span class="keyword">def</span> <span class="function">setup</span>
-    <span class="instance-variable">@fib</span> = <span class="constant">Fibonacci</span>
-  <span class="keyword">end</span>
-
-  <span class="keyword">def</span> <span class="function">test_fibonacci</span>
-    cases = [[<span class="integer">0</span>, <span class="integer">0</span>], [<span class="integer">1</span>, <span class="integer">1</span>], [<span class="integer">2</span>, <span class="integer">1</span>], [<span class="integer">3</span>, <span class="integer">2</span>], [<span class="integer">4</span>, <span class="integer">3</span>], [<span class="integer">5</span>, <span class="integer">5</span>]]
-    cases.each <span class="keyword">do</span> |i|
-      assert_equal i[<span class="integer">1</span>], <span class="instance-variable">@fib</span>.calc(i[<span class="integer">0</span>])
-    <span class="keyword">end</span>
-  <span class="keyword">end</span>
-
+...
   <span class="keyword">def</span> <span class="function">test_large_number</span>
     assert_equal <span class="integer">102_334_155</span>, <span class="instance-variable">@fib</span>.calc(<span class="integer">40</span>)
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>テストを実行します</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby test/fibonacci_test.rb
+Started with run options --seed 1160
+
+  2/2: [=========================================] 100% Time: 00:00:51, Time: 00:00:51
+
+Finished in 51.15914s
+2 tests, 7 assertions, 0 failures, 0 errors, 0 skips</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>テストが完了するのが随分遅くなってしまいました。これはアルゴリズムを改善する必要がありそうです。
+まずは <strong>プロファイラ</strong> を使って実行状況を確認します。今回は <a href="https://docs.ruby-lang.org/ja/latest/library/profile.html" target="_blank" rel="noopener">profileライブラリ</a> を使います。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2226,6 +2233,9 @@ Started with run options --seed 42383
 
   2/1: [======================                      ] 50% Time: 00:00:00,  ETA: 00:00:00</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>処理が終わらないようなら <code>ctr-c</code> で強制終了すれば結果が出力されます。出力内容の <code>Fibonacci.calc</code> がフィボナッチ数計算メソッド実行部分です。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2236,6 +2246,9 @@ Started with run options --seed 42383
  75.32    35.49      9.98   246940     0.04     1.65  Fibonacci.calc
 ....</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>再帰呼び出しが何度も実行された結果パフォーマンスを低下させているようです。ここは <a href="https://ja.wikipedia.org/wiki/%E3%83%A1%E3%83%A2%E5%8C%96" target="_blank" rel="noopener">メモ化</a> を使ってパフォーマンスを改善させましょう。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2267,6 +2280,9 @@ Started with run options --seed 42383
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><strong>プロファイラ</strong> で確認します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ ruby -r profile test/fibonacci_test.rb
@@ -2285,12 +2301,19 @@ Finished in 0.04214s
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>一気に再帰呼び出し回数が減りパフォーマンスを改善することが出来ました。コミットします。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ git add .
 $ git commit -m 'perf: メモ化によるパフォーマンス改善'</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ベンチマーク">1.9. ベンチマーク</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">...
@@ -3194,7 +3217,7 @@ $ git commit -m 'perf: ベンチマークの実施'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_モジュール分割">1.9. モジュール分割</h4>
+<h4 id="_モジュール分割">1.10. モジュール分割</h4>
 <div class="literalblock">
 <div class="content">
 <pre>/
@@ -3360,7 +3383,7 @@ $ git commit -m 'feat: モジュール分割'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-12 16:11:02 JST
+Last updated 2020-02-12 16:48:24 JST
 </div>
 </div>
 </body>
