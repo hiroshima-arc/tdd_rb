@@ -19,6 +19,8 @@ https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A3%E3%83%9C%E3%83%8A%E3%83%83%E3%8
 
 ==== 仕様
 
+仕様は以下の通りです。
+
 [quote, Wikipedia]
 ____
 n 番目のフィボナッチ数を Fn で表すと、Fn は再帰的に
@@ -37,6 +39,14 @@ Fn + 2 = Fn + Fn + 1 (n ≧ 0)
 と続く。最初の二項は 0, 1 であり、以後どの項もその直前の2つの項の和となっている。
 ____
 
+表形式にすると以下のようになります。
+
+[width="15%"]
+|=======
+|0 |1 |2 |3 |4 |5 |6 |7  |8  |9 |10 |11 |12  |13  |14  |15  |16  |18    |19 | ...
+|0 |1 |1 |2 |3 |5 |8 |13 |21 |34 |55 |89 |144 |233 |377 |610 | 987| 1597 |2584 | ...
+|=======
+
 ==== TODOリスト
 
 [quote, テスト駆動開発]
@@ -46,12 +56,16 @@ TODOリスト
 何をテストすべきだろうか----着手する前に、必要になりそうなテストをリストに書き出しておこう。
 ____
 
+*TODOリスト* を書き出す取っ掛かりとして仕様で定義されている内容からプログラムで実施できる内容に分解してきましょう。
+仕様では以下のように定義されているので。
 
 [width="15%"]
 |=======
-|0 |1 |2 |3 |4 |5 |6 |7  |8  |9 |10 |11 |12  |13  |14  |15  |16  |18    |19   
-|0 |1 |1 |2 |3 |5 |8 |13 |21 |34 |55 |89 |144 |233 |377 |610 | 987| 1597 |2584 
+|0 |1 |2 |3 |4 |5 |6 |7  |8  |9 |10 |11 |12  |13  |14  |15  |16  |18    |19 | ...
+|0 |1 |1 |2 |3 |5 |8 |13 |21 |34 |55 |89 |144 |233 |377 |610 | 987| 1597 |2584 | ...
 |=======
+
+最初のタスクは `0を渡したら0を返す` 振る舞いをするプログラムを作ることにしましょう。
 
 [width="15%"]
 |=======
@@ -59,15 +73,13 @@ ____
 |0 | ...
 |=======
 
-* 0を渡したら0を返す
+同様のパターンで他のタスクも切り出してみましょう。
 
 [width="15%"]
 |=======
 |0 |1 | ...
 |0 |1 | ...
 |=======
-
-* 1を渡したら1を返す
 
 [width="15%"]
 |=======
@@ -75,6 +87,10 @@ ____
 |0 |1 |1 | ...
 |=======
 
+とりあえず、３件ほどタスクとして切り出したので *TODOリスト* の作成は一旦終了してプログラミング作業に入るとしましょう。
+
+* 0を渡したら0を返す
+* 1を渡したら1を返す
 * 2を渡したら1を返す
 
 ==== 仮実装
@@ -86,10 +102,13 @@ ____
 失敗するテストを書いてから、最初に行う実装はどのようなものだろうか----ベタ書きの値を返そう。
 ____
 
+早速、 *TODOリスト* の１つ目から片付けていくとしましょう。
 
-* 0を渡したら0を返す
+* **0を渡したら0を返す**
 * 1を渡したら1を返す
 * 2を渡したら1を返す
+
+まずは最初に失敗するテストを書きますがまずは以下のサンプルコードを使ってテスティングフレームワークの動作確認をしておきましょう。今回利用するRubyのテスティングフレームワークは https://github.com/seattlerb/minitest[minitest^] です。 `test` フォルダ以下に `fibonacci_test.rb` ファイルを追加して以下のコードを入力します。
 
 `test/fibonacci_test.rb`
 
@@ -112,6 +131,15 @@ class FibonacciTest < Minitest::Test
 end
 ----
 
+今回テスト結果を見やすくするため `minitest/reporters` というgemを使っているのでまずインストールしておきます。
+
+[source, bash]
+----
+$ gem install minitest-reporters
+----
+
+gemインストールが完了したらコマンドラインに `ruby test/fibonacci_test.rb` コマンドを入力してテストを実施します。
+
 [source, bash]
 ----
 $ ruby test/fibonacci_test.rb 
@@ -124,24 +152,20 @@ Finished in 0.01040s
 ...
 ----
 
+テストは無事実行されたようですね。続いてテストが失敗するか確認しておきましょう。 `greeting` メソッドの `hello world` を `hello world!` に変更してテストを実行します。
+
 [source, ruby]
 ----
-# frozen_string_literal: true
-
-require 'minitest/reporters'
-Minitest::Reporters.use!
-require 'minitest/autorun'
-
+...
 class Fibonacci < Minitest::Test
   def greeting
     'hello world!'
   end
-
-  def test_greeting
-    assert_equal 'hello world', greeting
-  end
+...
 end
 ----
+
+テストは失敗して以下のようなメッセージが表示されました。
 
 [source, bash]
 ----
@@ -160,6 +184,38 @@ Finished in 0.00398s
 1 tests, 1 assertions, 1 failures, 0 errors, 0 skips
 ----
 
+テスティングフレームワークのセットアップと動作確認が終了したので最初の失敗するテストを書きます。まずは *アサーションファースト*　でサンプルコードを削除して以下のコードにします。
+
+[source, ruby]
+----
+...
+class FibonacciTest < Minitest::Test
+  def test_fibonacci
+    assert_equal 0, fib(0)
+  end
+end
+----
+
+テストは無事？失敗します。
+
+[source, bash]
+----
+$ ruby test/fibonacci_test.rb 
+Started with run options --seed 21656
+
+ERROR["test_fibonacci", <Minitest::Reporters::Suite:0x0000559acae8d068 @name="FibonacciTest">, 0.001314591965638101]
+ test_fibonacci#FibonacciTest (0.00s)
+Minitest::UnexpectedError:         NoMethodError: undefined method `fib' for #<FibonacciTest:0x0000559acae8d860>
+            test/fibonacci_test.rb:9:in `test_fibonacci'`
+
+  1/1: [========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00419s
+1 tests, 0 assertions, 0 failures, 1 errors, 0 skips
+----
+
+まずは *仮実装* でテストを通すようにしましょう。
+
 [source, ruby]
 ----
 ...
@@ -174,6 +230,8 @@ class FibonacciTest < Minitest::Test
 end
 ----
 
+テストはレッドからグリーンになりました。
+
 [source, bash]
 ----
 $ ruby test/fibonacci_test.rb 
@@ -184,6 +242,8 @@ Started with run options --seed 2885
 Finished in 0.00352s
 1 tests, 1 assertions, 0 failures, 0 errors, 0 skips
 ----
+
+テストが通ったのでバージョン管理システムにコミットしておきます。
 
 [source, bash]
 ----
