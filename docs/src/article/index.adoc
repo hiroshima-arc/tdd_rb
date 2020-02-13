@@ -31,6 +31,9 @@ include::episode_3.adoc[]
 ==== クライアントタスクの自動化
 ==== コードレビュー
 
+== エピソードx
+include::episode_x.adoc[]
+
 == 参照
 
 === 参考サイト
