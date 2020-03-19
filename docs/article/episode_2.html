@@ -425,12 +425,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 </head>
-<body class="article">
+<body class="article toc2 toc-left">
 <div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_自動化から始めるテスト駆動開発">1. 自動化から始めるテスト駆動開発</a>
+<ul class="sectlevel3">
+<li><a href="#_コミットメッセージ">1.1. コミットメッセージ</a></li>
+<li><a href="#_パッケージマネージャ">1.2. パッケージマネージャ</a></li>
+<li><a href="#_静的コード解析">1.3. 静的コード解析</a></li>
+<li><a href="#_コードフォーマッタ">1.4. コードフォーマッタ</a></li>
+<li><a href="#_コードカバレッジ">1.5. コードカバレッジ</a></li>
+<li><a href="#_タスクランナー">1.6. タスクランナー</a></li>
+<li><a href="#_タスクの自動化">1.7. タスクの自動化</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div id="content">
 <div class="sect2">
-<h3 id="_自動化から始めるテスト駆動開発">自動化から始めるテスト駆動開発</h3>
+<h3 id="_自動化から始めるテスト駆動開発">1. 自動化から始めるテスト駆動開発</h3>
 <div class="paragraph">
 <p>エピソード1ではテスト駆動開発のゴールが <strong>動作するきれいなコード</strong> であることを学びました。
 では、良いコードを書き続けるためには何が必要になるでしょうか？それは <a href="https://t-wada.hatenablog.jp/entry/clean-code-that-works" target="_blank" rel="noopener">ソフトウェア開発の三種の神器</a> と呼ばれるものです。</p>
@@ -465,7 +481,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><strong>バージョン管理</strong> と <strong>テスティング</strong> に関してはエピソード1で触れました。本エピソードでは最後の <strong>自動化</strong> に関しての解説と次のエピソードに備えたセットアップ作業を実施しておきたいと思います。ですがその前に <strong>バージョン管理</strong> で1つだけ解説しておきたいことがありますのでそちらから進めて行きたいと思います。</p>
 </div>
 <div class="sect3">
-<h4 id="_コミットメッセージ">コミットメッセージ</h4>
+<h4 id="_コミットメッセージ">1.1. コミットメッセージ</h4>
 <div class="paragraph">
 <p>これまで作業の区切りにごとにレポジトリにコミットしていましたがその際に以下のような書式でメッセージを書いていました。</p>
 </div>
@@ -530,7 +546,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect3">
-<h4 id="_パッケージマネージャ">パッケージマネージャ</h4>
+<h4 id="_パッケージマネージャ">1.2. パッケージマネージャ</h4>
 <div class="paragraph">
 <p>では <strong>自動化</strong> の準備に入りたいのですがそのためにはいくつかの外部プログラムを利用する必要があります。そのためのツールが <strong>RubyGems</strong> です。</p>
 </div>
@@ -631,7 +647,7 @@ Use `bundle info [gemname]` to see where a bundled gem is installed.</code></pre
 </div>
 </div>
 <div class="sect3">
-<h4 id="_静的コード解析">静的コード解析</h4>
+<h4 id="_静的コード解析">1.3. 静的コード解析</h4>
 <div class="paragraph">
 <p>良いコードを書き続けるためにはコードの品質を維持していく必要があります。エピソード1では <strong>テスト駆動開発</strong> によりプログラムを動かしながら品質の改善していきました。出来上がったコードに対する品質チェックの方法として <strong>静的コード解析</strong> があります。Ruby用 <strong>静的コード解析</strong> ツール <a href="https://github.com/rubocop-hq/rubocop" target="_blank" rel="noopener">RuboCop</a> を使って確認してみましょう。プログラムは先程 <strong>Bundler</strong> を使ってインストールしたので以下のコマンドを実行します。</p>
 </div>
@@ -818,7 +834,7 @@ $ git commit -m 'chore: 静的コード解析セットアップ'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_コードフォーマッタ">コードフォーマッタ</h4>
+<h4 id="_コードフォーマッタ">1.4. コードフォーマッタ</h4>
 <div class="paragraph">
 <p>良いコードであるためにはフォーマットも大切な要素です。</p>
 </div>
@@ -976,7 +992,7 @@ Inspecting 5 files
 </div>
 </div>
 <div class="sect3">
-<h4 id="_コードカバレッジ">コードカバレッジ</h4>
+<h4 id="_コードカバレッジ">1.5. コードカバレッジ</h4>
 <div class="paragraph">
 <p>静的コードコード解析による品質の確認はできました。では動的なテストに関してはどうでしょうか？ <strong>コードカバレッジ</strong> を確認する必要あります。</p>
 </div>
@@ -1077,7 +1093,7 @@ $ git commit -m 'chore: コードカバレッジセットアップ'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_タスクランナー">タスクランナー</h4>
+<h4 id="_タスクランナー">1.6. タスクランナー</h4>
 <div class="paragraph">
 <p>ここまででテストの実行、静的コード解析、コードフォーマット、コードカバレッジを実施することができるようになりました。でもコマンドを実行するのにそれぞれコマンドを覚えておくのは面倒ですよね。例えばテストの実行は</p>
 </div>
@@ -1526,7 +1542,7 @@ $ git commit -m 'chore: タスクランナーセットアップ'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_タスクの自動化">タスクの自動化</h4>
+<h4 id="_タスクの自動化">1.7. タスクの自動化</h4>
 <div class="paragraph">
 <p>良いコードを書くためのタスクをまとめることができました。でも、どうせなら自動で実行できるようにしたいですよね。
 タスクを自動実行するためのgemを追加します。 <a href="https://github.com/guard/guard" target="_blank" rel="noopener">Guard</a>とそのプラグインの <a href="https://github.com/guard/guard-shell" target="_blank" rel="noopener">Guard::Shell</a> <a href="https://github.com/guard/guard-minitest" target="_blank" rel="noopener">Guard::Minitest</a> <a href="https://github.com/yujinakayama/guard-rubocop" target="_blank" rel="noopener">guard-rubocop</a> をインストールします。それぞれの詳細は以下を参照してください。</p>
@@ -1748,7 +1764,7 @@ $ git commit -m 'chore: タスクの自動化'</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-08 09:47:25 JST
+Last updated 2020-02-13 14:33:22 JST
 </div>
 </div>
 </body>
