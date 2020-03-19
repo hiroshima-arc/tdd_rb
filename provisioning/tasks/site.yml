@@ -2,10 +2,8 @@
 - hosts: all
   become: yes
   user: vagrant
-  vars:
-    user: "vagrant"
-    home: "/home/{{ user }}"
-    ruby_version: "2.5.5"
+  vars_files:
+    - ../vars/site.yml
   tasks:
     - name: install packages
       apt:
@@ -41,8 +39,12 @@
            version=master
 
     - name: add rbenv path to bash_profile
-      copy: src=files/rbenv.sh dest=/etc/profile.d/rbenv.sh
-      # copy: content="export PATH=\"/home/{{ user }}/.rbenv/bin:$PATH\"\neval \"$(rbenv init -)\"" dest=/etc/profile.d/rbenv.sh
+      template:
+        src: ../templates/rbenv.sh
+        dest: /etc/profile.d/rbenv.sh
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: 0644
 
     - name: install ruby_build
       git: repo=https://github.com/sstephenson/ruby-build.git
@@ -68,7 +70,7 @@
            version=master
 
     - name: add nvm path to bash_profile
-      copy: src=files/nvm.sh dest=/etc/profile.d/nvm.sh
+      copy: src=../files/nvm.sh dest=/etc/profile.d/nvm.sh
 
     - name: change ~/.nvm owner to {{ user }}
       file: path={{ home }}/.nvm state=directory owner={{ user }} group={{ user }} recurse=yes

@@ -66,7 +66,7 @@ Vagrant.configure('2') do |config|
    config.vm.provision "shell", inline: <<-SHELL
      apt-get update
      apt-get install -y ansible
-     cd /vagrant/provisioning
+     cd /vagrant/provisioning/tasks
      ansible-playbook --inventory=localhost, --connection=local site.yml
    SHELL
   # config.vm.provision "ansible" do |ansible|
