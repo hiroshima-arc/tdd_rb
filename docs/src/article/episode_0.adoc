@@ -7,10 +7,107 @@
 
 ==== Engineering Dayboks
 
+[quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
+____
+Eventually Dave asked the obvious question. It turned out that they’d been trained to keep an engineering daybook, a kind of journal in which they recorded what they did, things they’d learned, sketches of ideas, readings from meters: basically anything to do with their work. When the notebook became full, they’d write the date range on the spine, then stick it on the shelf next to previous daybooks. ...
+____
+
 ==== アカウントの登録
+
+===== ITリテラシー
+
+セキュリティ
+
+[quote, 子どもに「パスワード」の付け方を教えられますか？, 'https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html[子どもを守るITリテラシー学^]']
+____
+* 誕生日や電話番号など、親が見てパッと理解できる文字列はダメ
+* 1単語で“読めてしまう”文字列はダメ
+* 8文字以下の文字列は短すぎるからダメ
+____
+
+
+[quote, 子どもに「パスワード」の付け方を教えられますか？, 'https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html[子どもを守るITリテラシー学^]']
+____
+* サービスごとに、3単語以上の英文字を並べる（例：pekinese-optimal-start）
+* なるべく長いパスワードを用意する（例：nagai-pasuwa-do-wo-youi-suru-amari-iirei-deha-naiga）
+* 辞書に載っていないような文字列を用意する（例：Itags80vZyMp）
+____
+
+
+ネーミングルール
+
+* ファイル管理の基本
+* フォルダ管理の基本
+
+===== Microsoftアカウントを作成する
+
+https://support.microsoft.com/ja-jp/help/4026324/microsoft-account-how-to-create[新しい Microsoft アカウントを作成する方法]
+
+===== Googleアカウントを作成する
+
+https://support.google.com/accounts/answer/27441?hl=ja[Google アカウントの作成]
+
+===== GitHubアカウントを作成する
+
+https://github.co.jp/[GitHubに登録する]
+
+===== アカウントにサインインする
+
+https://support.microsoft.com/ja-jp/help/4028195[https://support.microsoft.com/ja-jp/help/4028195]
+
+Microsofアカウントでのサインインに切り替える
+
+==== クラウドストレージのセットアップ
+
+https://support.microsoft.com/ja-jp/help/17184/windows-10-onedrive[PCのOneDrive]
 
 ==== パッケージ管理ツールのセットアップ
 
+https://chocolatey.org/[The Package Manager for Windows]
+
+https://qiita.com/konta220/items/95b40b4647a737cb51aa[Chocolateyを使った環境構築の時のメモ]
+
 ==== エディタのセットアップ
 
+===== インストール
+
+https://qiita.com/kikutaro/items/0e5deb36047d0137a767[Java開発環境がすぐに作れる「Visual Studio Code Installer for Java」を試してみた]
+
+https://code.visualstudio.com/docs/languages/java[Java in Visual Studio Code]
+
+https://aka.ms/vscode-java-installer-win[Download Visual Studio Code Java Pack Installer]
+
+===== パッケージ
+
+https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja[Japanese Language Pack for Visual Studio Code]
+
+
+https://qiita.com/sensuikan1973/items/74cf5383c02dbcd82234[VSCodeのオススメ拡張機能 24 選 (とTipsをいくつか)]
+
+設定の同期
+
 ==== 開発言語のセットアップ
+
+gitのインストール
+
+```
+chocolatey install git
+```
+
+Windows Terminalのインストール
+
+https://qiita.com/aki4000/items/c26e3076c8cec9677415[Windows10 HomeとWSL2でdocker-composeができるようにする]
+
+WSLのインストール
+
+https://qiita.com/rubytomato@github/items/fdfc0a76e848442f374e[WSL (Windows Subsystem for Linux)の基本メモ]
+
+プロビジョニングの実行
+
+追加パッケージのインストール
+
+==== 参照
+
+* https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/[The Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 2nd Edition^]
+* https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html[子どもを守るITリテラシー学^]
+* https://jaminlifelog.com/notes/work/clean-desktop-files[フォルダ管理の基本ルール5選！整理されていないデスクトップにさよならバイバイ！]powh
