@@ -3,7 +3,8 @@
   become: yes
   user: vagrant
   vars:
-    vagrant_home: "/home/vagrant"
+    user: "vagrant"
+    home: "/home/{{ user }}"
     ruby_version: "2.5.5"
   tasks:
     - name: install packages
@@ -36,38 +37,38 @@
 
     - name: install rbenv
       git: repo=https://github.com/sstephenson/rbenv.git
-           dest={{ vagrant_home }}/.rbenv
+           dest={{ home }}/.rbenv
            version=master
 
     - name: add rbenv path to bash_profile
       copy: src=files/rbenv.sh dest=/etc/profile.d/rbenv.sh
-      # copy: content="export PATH=\"/home/vagrant/.rbenv/bin:$PATH\"\neval \"$(rbenv init -)\"" dest=/etc/profile.d/rbenv.sh
+      # copy: content="export PATH=\"/home/{{ user }}/.rbenv/bin:$PATH\"\neval \"$(rbenv init -)\"" dest=/etc/profile.d/rbenv.sh
 
     - name: install ruby_build
       git: repo=https://github.com/sstephenson/ruby-build.git
-           dest={{ vagrant_home }}/.rbenv/plugins/ruby-build
+           dest={{ home }}/.rbenv/plugins/ruby-build
            version=master
 
     - name: install ruby {{ ruby_version }} 
-      shell: "export RBENV_ROOT={{ vagrant_home }}/.rbenv; export PATH=$RBENV_ROOT/bin:$PATH; echo N | rbenv install {{ ruby_version }}; rbenv global {{ ruby_version }}"
+      shell: "export RBENV_ROOT={{ home }}/.rbenv; export PATH=$RBENV_ROOT/bin:$PATH; echo N | rbenv install {{ ruby_version }}; rbenv global {{ ruby_version }}"
       args:
-        creates: "{{ vagrant_home }}/.rbenv/versions/{{ ruby_version }}/"
+        creates: "{{ home }}/.rbenv/versions/{{ ruby_version }}/"
 
     - name: install bundler
-      shell: "{{ vagrant_home }}/.rbenv/shims/gem install bundler"
+      shell: "{{ home }}/.rbenv/shims/gem install bundler"
       args:
-        creates: "{{ vagrant_home }}/.rbenv/shims/bundle"
+        creates: "{{ home }}/.rbenv/shims/bundle"
 
-    - name: change ~/.rbenv owner to vagrant
-      file: path={{ vagrant_home }}/.rbenv state=directory owner=vagrant group=vagrant recurse=yes
+    - name: change ~/.rbenv owner to {{ user }}
+      file: path={{ home }}/.rbenv state=directory owner={{ user }} group={{ user }} recurse=yes
 
     - name: install nvm
       git: repo=https://github.com/nvm-sh/nvm.git
-           dest={{ vagrant_home }}/.nvm
+           dest={{ home }}/.nvm
            version=master
 
     - name: add nvm path to bash_profile
       copy: src=files/nvm.sh dest=/etc/profile.d/nvm.sh
 
-    - name: change ~/.nvm owner to vagrant
-      file: path={{ vagrant_home }}/.nvm state=directory owner=vagrant group=vagrant recurse=yes
+    - name: change ~/.nvm owner to {{ user }}
+      file: path={{ home }}/.nvm state=directory owner={{ user }} group={{ user }} recurse=yes
