@@ -617,6 +617,20 @@ table.CodeRay td.code>pre{padding:0}
 <div class="paragraph">
 <p>ネーミングルール</p>
 </div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Name Well; Rename When Needed.</p>
+</div>
+<div class="paragraph">
+<p>Name to express your intent to readers, and rename as soon as that intent shifts.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Pragmatic Programmer: your journey to mastery<br>
+<cite>20th Anniversary Edition</cite>
+</div>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -632,6 +646,9 @@ table.CodeRay td.code>pre{padding:0}
 <h5 id="_microsoftアカウントを作成する">Microsoftアカウントを作成する</h5>
 <div class="paragraph">
 <p><a href="https://support.microsoft.com/ja-jp/help/4026324/microsoft-account-how-to-create">新しい Microsoft アカウントを作成する方法</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://signup.live.com/signup?wa=wsignin1.0&amp;rpsnv=13&amp;rver=7.3.6963.0&amp;wp=MBI_SSL&amp;wreply=https%3a%2f%2fwww.microsoft.com%2fja-jp%2f&amp;id=74335&amp;aadredir=1&amp;contextid=E56866F842F4E143&amp;bk=1584685585&amp;uiflavor=web&amp;lic=1&amp;mkt=JA-JP&amp;lc=1041&amp;uaid=491fc017de0f48c5c67a3833e7aca9ee">アカウントの作成</a></p>
 </div>
 </div>
 <div class="sect4">
@@ -658,6 +675,26 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="sect3">
 <h4 id="_クラウドストレージのセットアップ">1.3. クラウドストレージのセットアップ</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Keep Knowledge in Plain Text</p>
+</div>
+<div class="paragraph">
+<p>Plain text won&#8217;t become obsolete.It helps leverage your work and simplifies debugging and testing.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Pragmatic Programmer: your journey to mastery<br>
+<cite>20th Anniversary Edition</cite>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://products.office.com/ja-jp/home?SilentAuth=1">Office</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://support.office.com/ja-jp/article/personal-vault-で-onedrive-ファイルを保護する-6540ef37-e9bf-4121-a773-56f98dce78c4">Personal Vault で OneDrive ファイルを保護する</a></p>
+</div>
 <div class="paragraph">
 <p><a href="https://support.microsoft.com/ja-jp/help/17184/windows-10-onedrive">PCのOneDrive</a></p>
 </div>
@@ -673,6 +710,20 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="sect3">
 <h4 id="_エディタのセットアップ">1.5. エディタのセットアップ</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Achieve Editor Fluency</p>
+</div>
+<div class="paragraph">
+<p>An editor is your most important tool. Know how to make it do what you need, quickly and accurately.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Pragmatic Programmer: your journey to mastery<br>
+<cite>20th Anniversary Edition</cite>
+</div>
+</div>
 <div class="sect4">
 <h5 id="_インストール">インストール</h5>
 <div class="paragraph">
@@ -700,12 +751,40 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="sect3">
 <h4 id="_開発言語のセットアップ">1.6. 開発言語のセットアップ</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Always Use Version Control</p>
+</div>
+<div class="paragraph">
+<p>Vsersion control is a time machine for your work;you can go back.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Pragmatic Programmer: your journey to mastery<br>
+<cite>20th Anniversary Edition</cite>
+</div>
+</div>
 <div class="paragraph">
 <p>gitのインストール</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code>chocolatey install git</code></pre>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Use the Power of Command Shells</p>
+</div>
+<div class="paragraph">
+<p>Use the shell when graphical user interfaces don&#8217;t cut it.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Pragmatic Programmer: your journey to mastery<br>
+<cite>20th Anniversary Edition</cite>
 </div>
 </div>
 <div class="paragraph">
@@ -722,6 +801,21 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="paragraph">
 <p>プロビジョニングの実行</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/hiroshima-arc/tdd_rb" class="bare">https://github.com/hiroshima-arc/tdd_rb</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ sudo apt-get update -y
+[sudo] password for newbie4649:
+...
+$ sudo apt install ansible -y
+$ cd provisioning/tasks/
+$ ansible-playbook --inventory=localhost, --connection=local site.yml
+...
+$ ansible-playbook --inventory=localhost, --connection=local site.yml</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>追加パッケージのインストール</p>
@@ -747,7 +841,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-19 17:28:13 JST
+Last updated 2020-03-20 19:27:53 JST
 </div>
 </div>
 </body>

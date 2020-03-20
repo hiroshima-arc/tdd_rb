@@ -36,12 +36,21 @@ ____
 
 ネーミングルール
 
+[quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
+____
+Name Well; Rename When Needed.
+
+Name to express your intent to readers, and rename as soon as that intent shifts.
+____
+
 * ファイル管理の基本
 * フォルダ管理の基本
 
 ===== Microsoftアカウントを作成する
 
 https://support.microsoft.com/ja-jp/help/4026324/microsoft-account-how-to-create[新しい Microsoft アカウントを作成する方法]
+
+https://signup.live.com/signup?wa=wsignin1.0&rpsnv=13&rver=7.3.6963.0&wp=MBI_SSL&wreply=https%3a%2f%2fwww.microsoft.com%2fja-jp%2f&id=74335&aadredir=1&contextid=E56866F842F4E143&bk=1584685585&uiflavor=web&lic=1&mkt=JA-JP&lc=1041&uaid=491fc017de0f48c5c67a3833e7aca9ee[アカウントの作成]
 
 ===== Googleアカウントを作成する
 
@@ -59,6 +68,18 @@ Microsofアカウントでのサインインに切り替える
 
 ==== クラウドストレージのセットアップ
 
+[quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
+____
+Keep Knowledge in Plain Text
+
+Plain text won't become obsolete.It helps leverage your work and simplifies debugging and testing.
+____
+
+https://products.office.com/ja-jp/home?SilentAuth=1[Office]
+
+https://support.office.com/ja-jp/article/personal-vault-で-onedrive-ファイルを保護する-6540ef37-e9bf-4121-a773-56f98dce78c4[Personal Vault で OneDrive ファイルを保護する]
+
+
 https://support.microsoft.com/ja-jp/help/17184/windows-10-onedrive[PCのOneDrive]
 
 ==== パッケージ管理ツールのセットアップ
@@ -68,6 +89,14 @@ https://chocolatey.org/[The Package Manager for Windows]
 https://qiita.com/konta220/items/95b40b4647a737cb51aa[Chocolateyを使った環境構築の時のメモ]
 
 ==== エディタのセットアップ
+
+[quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
+____
+Achieve Editor Fluency
+
+An editor is your most important tool. Know how to make it do what you need, quickly and accurately.
+____
+
 
 ===== インストール
 
@@ -88,11 +117,25 @@ https://qiita.com/sensuikan1973/items/74cf5383c02dbcd82234[VSCodeのオススメ
 
 ==== 開発言語のセットアップ
 
+[quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
+____
+Always Use Version Control
+
+Vsersion control is a time machine for your work;you can go back.
+____
+
 gitのインストール
 
 ```
 chocolatey install git
 ```
+
+[quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
+____
+Use the Power of Command Shells
+
+Use the shell when graphical user interfaces don't cut it.
+____
 
 Windows Terminalのインストール
 
@@ -103,6 +146,19 @@ WSLのインストール
 https://qiita.com/rubytomato@github/items/fdfc0a76e848442f374e[WSL (Windows Subsystem for Linux)の基本メモ]
 
 プロビジョニングの実行
+
+https://github.com/hiroshima-arc/tdd_rb
+
+```bash
+$ sudo apt-get update -y
+[sudo] password for newbie4649:
+...
+$ sudo apt install ansible -y
+$ cd provisioning/tasks/
+$ ansible-playbook --inventory=localhost, --connection=local site.yml
+...
+$ ansible-playbook --inventory=localhost, --connection=local site.yml
+```
 
 追加パッケージのインストール
 
