@@ -1,7 +1,6 @@
 ---
 - hosts: all
   become: yes
-  user: vagrant
   vars_files:
     - ../vars/site.yml
   tasks:
