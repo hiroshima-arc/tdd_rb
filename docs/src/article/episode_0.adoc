@@ -162,6 +162,31 @@ $ ansible-playbook --inventory=localhost, --connection=local site.yml
 
 追加パッケージのインストール
 
+https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby[Ruby for Visual Studio Code]
+
+https://marketplace.visualstudio.com/items?itemName=castwide.solargraph[Ruby Solargraph]
+
+https://marketplace.visualstudio.com/items?itemName=kaiwood.endwise[vscode-endwise]
+
+https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop[https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop]
+
+https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter[Ruby Test Explorer]
+
+
+```bash
+gem install rubocop
+gem install debase
+gem install ruby-debug-ide
+gem install solargraph
+```
+
+設定
+
+https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28[VisualStudioCode でRubyの開発環境を作る]
+
+
+https://qiita.com/kinchiki/items/dabb5c890d9c57907503[Visual Studio Codeで簡単にショートカットキーを変更する方法]
+
 ==== 参照
 
 * https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/[The Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 2nd Edition^]
