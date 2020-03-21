@@ -1,0 +1,4 @@
+---
+user: "vagrant"
+home: "/home/{{ user }}"
+ruby_version: "2.6.5"
