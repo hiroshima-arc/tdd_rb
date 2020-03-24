@@ -526,10 +526,23 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel2">
 <li><a href="#_環境構築から始めるテスト駆動開発">1.1. 環境構築から始めるテスト駆動開発</a>
 <ul class="sectlevel3">
-<li><a href="#_engineering_dayboks">1.1.1. Engineering Dayboks</a></li>
+<li><a href="#_6s">1.1.1. 6S</a>
+<ul class="sectlevel4">
+<li><a href="#_5s">5S</a>
+<ul class="sectlevel5">
+<li><a href="#_整理">整理</a></li>
+<li><a href="#_整頓">整頓</a></li>
+<li><a href="#_清掃">清掃</a></li>
+<li><a href="#_清潔">清潔</a></li>
+<li><a href="#_躾">躾</a></li>
+</ul>
+</li>
+<li><a href="#_セキュリティ_security">セキュリティ(Security)</a></li>
+<li><a href="#_itリテラシ">ITリテラシ</a></li>
+</ul>
+</li>
 <li><a href="#_アカウントの登録">1.1.2. アカウントの登録</a>
 <ul class="sectlevel4">
-<li><a href="#_itリテラシー">ITリテラシー</a></li>
 <li><a href="#_microsoftアカウントを作成する">Microsoftアカウントを作成する</a></li>
 <li><a href="#_googleアカウントを作成する">Googleアカウントを作成する</a></li>
 <li><a href="#_githubアカウントを作成する">GitHubアカウントを作成する</a></li>
@@ -541,10 +554,23 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_エディタのセットアップ">1.1.5. エディタのセットアップ</a>
 <ul class="sectlevel4">
 <li><a href="#_インストール">インストール</a></li>
-<li><a href="#_パッケージ">パッケージ</a></li>
+<li><a href="#_拡張機能の追加">拡張機能の追加</a></li>
+<li><a href="#_設定の同期">設定の同期</a></li>
 </ul>
 </li>
-<li><a href="#_開発言語のセットアップ">1.1.6. 開発言語のセットアップ</a></li>
+<li><a href="#_開発言語のセットアップ">1.1.6. 開発言語のセットアップ</a>
+<ul class="sectlevel4">
+<li><a href="#_gitのインストール">gitのインストール</a></li>
+<li><a href="#_windows_terminalのインストール">Windows Terminalのインストール</a></li>
+<li><a href="#_powershellcoreのインストール">PowerShellCoreのインストール</a></li>
+<li><a href="#_wslのインストール">WSLのインストール</a></li>
+<li><a href="#_hello_world">Hello world</a></li>
+<li><a href="#_ruby環境のセットアップ">Ruby環境のセットアップ</a></li>
+<li><a href="#_プロビジョニングの実行">プロビジョニングの実行</a></li>
+<li><a href="#_追加パッケージのインストール">追加パッケージのインストール</a></li>
+<li><a href="#_設定">設定</a></li>
+</ul>
+</li>
 <li><a href="#_参照">1.1.7. 参照</a></li>
 </ul>
 </li>
@@ -821,7 +847,49 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect2">
 <h3 id="_環境構築から始めるテスト駆動開発">1.1. 環境構築から始めるテスト駆動開発</h3>
 <div class="sect3">
-<h4 id="_engineering_dayboks">1.1.1. Engineering Dayboks</h4>
+<h4 id="_6s">1.1.1. 6S</h4>
+<div class="sect4">
+<h5 id="_5s">5S</h5>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>5S（ごエス、ごーエス）とは、製造業・サービス業などの職場環境の維持改善で用いられるスローガンである。各職場において徹底されるべき事項を5つにまとめたもので、4S運動に「躾」（習慣化の場合もある）を加えた5項。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Wikipedia<br>
+<cite><a href="https://ja.wikipedia.org/wiki/5S" class="bare">https://ja.wikipedia.org/wiki/5S</a></cite>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>整理（せいり、Seiri）
+いらないものを捨てる</p>
+</li>
+<li>
+<p>整頓（せいとん、Seiton）
+決められた物を決められた場所に置き、いつでも取り出せる状態にしておく</p>
+</li>
+<li>
+<p>清掃（せいそう、Seisou）
+常に掃除をする</p>
+</li>
+<li>
+<p>清潔（せいけつ、Seiketsu）
+3S（上の整理・整頓・清掃）を維持し職場の衛生を保つ</p>
+</li>
+<li>
+<p>躾（しつけ、Shitsuke）
+決められたルール・手順を正しく守る習慣をつける</p>
+</li>
+</ul>
+</div>
+<div class="sect5">
+<h6 id="_整理">整理</h6>
+<div class="paragraph">
+<p>Engineering Dayboks</p>
+</div>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -833,13 +901,80 @@ table.CodeRay td.code>pre{padding:0}
 <cite>20th Anniversary Edition</cite>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_アカウントの登録">1.1.2. アカウントの登録</h4>
-<div class="sect4">
-<h5 id="_itリテラシー">ITリテラシー</h5>
 <div class="paragraph">
-<p>セキュリティ</p>
+<p><a href="https://note.com/yukionoguchi/n/n6fa36e6aff86">「超」整理法の思想</a></p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_整頓">整頓</h6>
+<div class="paragraph">
+<p>ネーミングルール</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Name Well; Rename When Needed.</p>
+</div>
+<div class="paragraph">
+<p>Name to express your intent to readers, and rename as soon as that intent shifts.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Pragmatic Programmer: your journey to mastery<br>
+<cite>20th Anniversary Edition</cite>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://at-jinji.jp/work/007">効率的な文書管理方法とは。保管方法、運用ルール作りの3ステップを紹介</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://at-jinji.jp/blog/11259/">書類整理の基本は書類をためないこと！ 「『超』整理術」を簡単解説</a></p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_清掃">清掃</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_清潔">清潔</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_躾">躾</h6>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>私がかつて発見した、そして多くの人に気づいてもらいたい効果とは、反復可能な振る舞いを規則にまで還元することで、規則の適用は機会的に反復可能になるということだ。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; テスト駆動開発
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>ここで、Kent Beckが自ら語ったセリフを思い出しました。「僕は、偉大なプログラマなんかじゃない。偉大な習慣を身につけた少しましなプログラマなんだ」。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; リファクタリング(第2版)
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_セキュリティ_security">セキュリティ(Security)</h5>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>情報セキュリティ（じょうほうセキュリティ、英: information security）とは、情報の機密性、完全性、可用性を維持すること。</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Wikipedia<br>
+<cite><a href="https://ja.wikipedia.org/wiki/%E6%83%85%E5%A0%B1%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3" class="bare">https://ja.wikipedia.org/wiki/%E6%83%85%E5%A0%B1%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3</a></cite>
+</div>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -883,34 +1018,39 @@ table.CodeRay td.code>pre{padding:0}
 <cite><a href="https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html" target="_blank" rel="noopener">子どもを守るITリテラシー学</a></cite>
 </div>
 </div>
-<div class="paragraph">
-<p>ネーミングルール</p>
 </div>
+<div class="sect4">
+<h5 id="_itリテラシ">ITリテラシ</h5>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
-<p>Name Well; Rename When Needed.</p>
-</div>
-<div class="paragraph">
-<p>Name to express your intent to readers, and rename as soon as that intent shifts.</p>
-</div>
-</blockquote>
-<div class="attribution">
-&#8212; Pragmatic Programmer: your journey to mastery<br>
-<cite>20th Anniversary Edition</cite>
-</div>
+<p>今日のソフトウェア開発の世界において絶対になければならない3つの技術的な柱があります。 三本柱と言ったり、三種の神器と言ったりしていますが、それらは</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>ファイル管理の基本</p>
+<p>バージョン管理</p>
 </li>
 <li>
-<p>フォルダ管理の基本</p>
+<p>テスティング</p>
+</li>
+<li>
+<p>自動化</p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>の3つです。</p>
 </div>
+</blockquote>
+<div class="attribution">
+&#8212; https://t-wada.hatenablog.jp/entry/clean-code-that-works
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_アカウントの登録">1.1.2. アカウントの登録</h4>
 <div class="sect4">
 <h5 id="_microsoftアカウントを作成する">Microsoftアカウントを作成する</h5>
 <div class="paragraph">
@@ -1006,16 +1146,17 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect4">
-<h5 id="_パッケージ">パッケージ</h5>
+<h5 id="_拡張機能の追加">拡張機能の追加</h5>
 <div class="paragraph">
 <p><a href="https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja">Japanese Language Pack for Visual Studio Code</a></p>
 </div>
 <div class="paragraph">
 <p><a href="https://qiita.com/sensuikan1973/items/74cf5383c02dbcd82234">VSCodeのオススメ拡張機能 24 選 (とTipsをいくつか)</a></p>
 </div>
-<div class="paragraph">
-<p>設定の同期</p>
 </div>
+<div class="sect4">
+<h5 id="_設定の同期">設定の同期</h5>
+
 </div>
 </div>
 <div class="sect3">
@@ -1034,14 +1175,16 @@ table.CodeRay td.code>pre{padding:0}
 <cite>20th Anniversary Edition</cite>
 </div>
 </div>
-<div class="paragraph">
-<p>gitのインストール</p>
-</div>
+<div class="sect4">
+<h5 id="_gitのインストール">gitのインストール</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>chocolatey install git</code></pre>
+<pre class="CodeRay highlight"><code>chocjo install git</code></pre>
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_windows_terminalのインストール">Windows Terminalのインストール</h5>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -1056,21 +1199,36 @@ table.CodeRay td.code>pre{padding:0}
 <cite>20th Anniversary Edition</cite>
 </div>
 </div>
-<div class="paragraph">
-<p>Windows Terminalのインストール</p>
+</div>
+<div class="sect4">
+<h5 id="_powershellcoreのインストール">PowerShellCoreのインストール</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>choco install pwershell-core</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p><a href="https://qiita.com/aki4000/items/c26e3076c8cec9677415">Windows10 HomeとWSL2でdocker-composeができるようにする</a></p>
 </div>
-<div class="paragraph">
-<p>WSLのインストール</p>
 </div>
+<div class="sect4">
+<h5 id="_wslのインストール">WSLのインストール</h5>
 <div class="paragraph">
 <p><a href="https://qiita.com/rubytomato@github/items/fdfc0a76e848442f374e">WSL (Windows Subsystem for Linux)の基本メモ</a></p>
 </div>
-<div class="paragraph">
-<p>プロビジョニングの実行</p>
 </div>
+<div class="sect4">
+<h5 id="_hello_world">Hello world</h5>
+<div class="paragraph">
+<p><a href="https://www.red-gate.com/simple-talk/sysadmin/powershell/practical-powershell-unit-testing-getting-started/">Practical PowerShell Unit-Testing: Getting Started</a></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_ruby環境のセットアップ">Ruby環境のセットアップ</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_プロビジョニングの実行">プロビジョニングの実行</h5>
 <div class="paragraph">
 <p><a href="https://github.com/hiroshima-arc/tdd_rb" class="bare">https://github.com/hiroshima-arc/tdd_rb</a></p>
 </div>
@@ -1086,8 +1244,41 @@ $ ansible-playbook --inventory=localhost, --connection=local site.yml
 $ ansible-playbook --inventory=localhost, --connection=local site.yml</code></pre>
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_追加パッケージのインストール">追加パッケージのインストール</h5>
 <div class="paragraph">
-<p>追加パッケージのインストール</p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby">Ruby for Visual Studio Code</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://marketplace.visualstudio.com/items?itemName=castwide.solargraph">Ruby Solargraph</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://marketplace.visualstudio.com/items?itemName=kaiwood.endwise">vscode-endwise</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop">https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter">Ruby Test Explorer</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">gem install rubocop
+gem install debase
+gem install ruby-debug-ide
+gem install solargraph</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_設定">設定</h5>
+<div class="paragraph">
+<p><a href="https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28">VisualStudioCode でRubyの開発環境を作る</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://qiita.com/kinchiki/items/dabb5c890d9c57907503">Visual Studio Codeで簡単にショートカットキーを変更する方法</a></p>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -1101,7 +1292,7 @@ $ ansible-playbook --inventory=localhost, --connection=local site.yml</code></pr
 <p><a href="https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html" target="_blank" rel="noopener">子どもを守るITリテラシー学</a></p>
 </li>
 <li>
-<p><a href="https://jaminlifelog.com/notes/work/clean-desktop-files">フォルダ管理の基本ルール5選！整理されていないデスクトップにさよならバイバイ！</a>powh</p>
+<p><a href="https://jaminlifelog.com/notes/work/clean-desktop-files">フォルダ管理の基本ルール5選！整理されていないデスクトップにさよならバイバイ！</a></p>
 </li>
 </ul>
 </div>
@@ -18678,7 +18869,7 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-20 14:17:40 JST
+Last updated 2020-03-21 11:18:09 JST
 </div>
 </div>
 </body>

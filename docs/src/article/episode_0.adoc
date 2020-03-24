@@ -5,18 +5,79 @@
 
 === 環境構築から始めるテスト駆動開発
 
-==== Engineering Dayboks
+==== 6S
+
+===== 5S
+
+[quote, Wikipedia, 'https://ja.wikipedia.org/wiki/5S']
+____
+5S（ごエス、ごーエス）とは、製造業・サービス業などの職場環境の維持改善で用いられるスローガンである。各職場において徹底されるべき事項を5つにまとめたもので、4S運動に「躾」（習慣化の場合もある）を加えた5項。
+____
+
+* 整理（せいり、Seiri）
+  いらないものを捨てる
+
+* 整頓（せいとん、Seiton）
+  決められた物を決められた場所に置き、いつでも取り出せる状態にしておく
+
+* 清掃（せいそう、Seisou）
+  常に掃除をする
+
+* 清潔（せいけつ、Seiketsu）
+  3S（上の整理・整頓・清掃）を維持し職場の衛生を保つ
+
+* 躾（しつけ、Shitsuke）
+  決められたルール・手順を正しく守る習慣をつける
+
+====== 整理
+
+Engineering Dayboks
 
 [quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
 ____
 Eventually Dave asked the obvious question. It turned out that they’d been trained to keep an engineering daybook, a kind of journal in which they recorded what they did, things they’d learned, sketches of ideas, readings from meters: basically anything to do with their work. When the notebook became full, they’d write the date range on the spine, then stick it on the shelf next to previous daybooks. ...
 ____
 
-==== アカウントの登録
 
-===== ITリテラシー
+https://note.com/yukionoguchi/n/n6fa36e6aff86[「超」整理法の思想]
 
-セキュリティ
+====== 整頓
+
+ネーミングルール
+
+[quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
+____
+Name Well; Rename When Needed.
+
+Name to express your intent to readers, and rename as soon as that intent shifts.
+____
+
+https://at-jinji.jp/work/007[効率的な文書管理方法とは。保管方法、運用ルール作りの3ステップを紹介]
+
+https://at-jinji.jp/blog/11259/[書類整理の基本は書類をためないこと！ 「『超』整理術」を簡単解説]
+
+====== 清掃
+
+====== 清潔
+
+====== 躾
+
+[quote, テスト駆動開発]
+____
+私がかつて発見した、そして多くの人に気づいてもらいたい効果とは、反復可能な振る舞いを規則にまで還元することで、規則の適用は機会的に反復可能になるということだ。
+____
+
+[quote, リファクタリング(第2版)]
+____
+ここで、Kent Beckが自ら語ったセリフを思い出しました。「僕は、偉大なプログラマなんかじゃない。偉大な習慣を身につけた少しましなプログラマなんだ」。
+____
+
+===== セキュリティ(Security)
+
+[quote, Wikipedia, 'https://ja.wikipedia.org/wiki/%E6%83%85%E5%A0%B1%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3']
+____
+情報セキュリティ（じょうほうセキュリティ、英: information security）とは、情報の機密性、完全性、可用性を維持すること。
+____
 
 [quote, 子どもに「パスワード」の付け方を教えられますか？, 'https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html[子どもを守るITリテラシー学^]']
 ____
@@ -33,18 +94,21 @@ ____
 * 辞書に載っていないような文字列を用意する（例：Itags80vZyMp）
 ____
 
+===== ITリテラシ
 
-ネーミングルール
-
-[quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
+[quote, https://t-wada.hatenablog.jp/entry/clean-code-that-works]
 ____
-Name Well; Rename When Needed.
+今日のソフトウェア開発の世界において絶対になければならない3つの技術的な柱があります。 三本柱と言ったり、三種の神器と言ったりしていますが、それらは
 
-Name to express your intent to readers, and rename as soon as that intent shifts.
+* バージョン管理
+* テスティング
+* 自動化
+
+の3つです。
 ____
 
-* ファイル管理の基本
-* フォルダ管理の基本
+
+==== アカウントの登録
 
 ===== Microsoftアカウントを作成する
 
@@ -106,14 +170,14 @@ https://code.visualstudio.com/docs/languages/java[Java in Visual Studio Code]
 
 https://aka.ms/vscode-java-installer-win[Download Visual Studio Code Java Pack Installer]
 
-===== パッケージ
+===== 拡張機能の追加
 
 https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja[Japanese Language Pack for Visual Studio Code]
 
 
 https://qiita.com/sensuikan1973/items/74cf5383c02dbcd82234[VSCodeのオススメ拡張機能 24 選 (とTipsをいくつか)]
 
-設定の同期
+===== 設定の同期
 
 ==== 開発言語のセットアップ
 
@@ -124,11 +188,13 @@ Always Use Version Control
 Vsersion control is a time machine for your work;you can go back.
 ____
 
-gitのインストール
+===== gitのインストール
 
 ```
-chocolatey install git
+chocjo install git
 ```
+
+===== Windows Terminalのインストール
 
 [quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
 ____
@@ -137,15 +203,28 @@ Use the Power of Command Shells
 Use the shell when graphical user interfaces don't cut it.
 ____
 
-Windows Terminalのインストール
+
+===== PowerShellCoreのインストール
+
+```
+choco install pwershell-core
+```
+
 
 https://qiita.com/aki4000/items/c26e3076c8cec9677415[Windows10 HomeとWSL2でdocker-composeができるようにする]
 
-WSLのインストール
+===== WSLのインストール
 
 https://qiita.com/rubytomato@github/items/fdfc0a76e848442f374e[WSL (Windows Subsystem for Linux)の基本メモ]
 
-プロビジョニングの実行
+===== Hello world
+
+https://www.red-gate.com/simple-talk/sysadmin/powershell/practical-powershell-unit-testing-getting-started/[Practical PowerShell Unit-Testing: Getting Started]
+
+
+===== Ruby環境のセットアップ
+
+===== プロビジョニングの実行
 
 https://github.com/hiroshima-arc/tdd_rb
 
@@ -160,7 +239,7 @@ $ ansible-playbook --inventory=localhost, --connection=local site.yml
 $ ansible-playbook --inventory=localhost, --connection=local site.yml
 ```
 
-追加パッケージのインストール
+===== 追加パッケージのインストール
 
 https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby[Ruby for Visual Studio Code]
 
@@ -180,7 +259,7 @@ gem install ruby-debug-ide
 gem install solargraph
 ```
 
-設定
+===== 設定
 
 https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28[VisualStudioCode でRubyの開発環境を作る]
 
@@ -191,4 +270,4 @@ https://qiita.com/kinchiki/items/dabb5c890d9c57907503[Visual Studio Codeで簡�
 
 * https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/[The Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 2nd Edition^]
 * https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html[子どもを守るITリテラシー学^]
-* https://jaminlifelog.com/notes/work/clean-desktop-files[フォルダ管理の基本ルール5選！整理されていないデスクトップにさよならバイバイ！]powh
+* https://jaminlifelog.com/notes/work/clean-desktop-files[フォルダ管理の基本ルール5選！整理されていないデスクトップにさよならバイバイ！]
