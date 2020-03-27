@@ -525,15 +525,7 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel3">
 <li><a href="#_6s">1.1. 6S</a>
 <ul class="sectlevel4">
-<li><a href="#_5s">5S</a>
-<ul class="sectlevel5">
-<li><a href="#_整理">整理</a></li>
-<li><a href="#_整頓">整頓</a></li>
-<li><a href="#_清掃">清掃</a></li>
-<li><a href="#_清潔">清潔</a></li>
-<li><a href="#_躾">躾</a></li>
-</ul>
-</li>
+<li><a href="#_5s">5S</a></li>
 <li><a href="#_セキュリティ_security">セキュリティ(Security)</a></li>
 <li><a href="#_itリテラシ">ITリテラシ</a></li>
 </ul>
@@ -555,20 +547,25 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_設定の同期">設定の同期</a></li>
 </ul>
 </li>
-<li><a href="#_開発言語のセットアップ">1.6. 開発言語のセットアップ</a>
+<li><a href="#_開発環境のセットアップ">1.6. 開発環境のセットアップ</a>
 <ul class="sectlevel4">
 <li><a href="#_gitのインストール">gitのインストール</a></li>
 <li><a href="#_windows_terminalのインストール">Windows Terminalのインストール</a></li>
 <li><a href="#_powershellcoreのインストール">PowerShellCoreのインストール</a></li>
 <li><a href="#_wslのインストール">WSLのインストール</a></li>
+<li><a href="#_設定">設定</a></li>
 <li><a href="#_hello_world">Hello world</a></li>
+</ul>
+</li>
+<li><a href="#_開発言語のセットアップ">1.7. 開発言語のセットアップ</a>
+<ul class="sectlevel4">
 <li><a href="#_ruby環境のセットアップ">Ruby環境のセットアップ</a></li>
 <li><a href="#_プロビジョニングの実行">プロビジョニングの実行</a></li>
 <li><a href="#_追加パッケージのインストール">追加パッケージのインストール</a></li>
-<li><a href="#_設定">設定</a></li>
+<li><a href="#_設定_2">設定</a></li>
 </ul>
 </li>
-<li><a href="#_参照">1.7. 参照</a></li>
+<li><a href="#_参照">1.8. 参照</a></li>
 </ul>
 </li>
 </ul>
@@ -579,6 +576,9 @@ table.CodeRay td.code>pre{padding:0}
 <h3 id="_環境構築から始めるテスト駆動開発">1. 環境構築から始めるテスト駆動開発</h3>
 <div class="sect3">
 <h4 id="_6s">1.1. 6S</h4>
+<div class="paragraph">
+<p>環境構築をするにあたっては <strong>5S</strong> + セキュリティの <strong>6S</strong> をベースに進めていきます。まず <strong>5S</strong> について、それからセキュリティについて解説します。</p>
+</div>
 <div class="sect4">
 <h5 id="_5s">5S</h5>
 <div class="quoteblock">
@@ -591,6 +591,9 @@ table.CodeRay td.code>pre{padding:0}
 &#8212; Wikipedia<br>
 <cite><a href="https://ja.wikipedia.org/wiki/5S" class="bare">https://ja.wikipedia.org/wiki/5S</a></cite>
 </div>
+</div>
+<div class="paragraph">
+<p>具体的には、</p>
 </div>
 <div class="ulist">
 <ul>
@@ -616,8 +619,12 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 </ul>
 </div>
-<div class="sect5">
-<h6 id="_整理">整理</h6>
+<div class="paragraph">
+<p>これがプログラミング環境構築とどのように関係していくのでしょうか？</p>
+</div>
+<div class="paragraph">
+<p>いらないものを捨てるのが整理ですがそもそもいらないものが何なのかを決めなければなりません。プログラミングで扱う対象はモノではなく情報です。ではどうやって情報を扱って行けばよいでしょう？まずは <strong>分類するな。ひたすら並べよ</strong> の考えに従い一箇所に記録をまとめていきましょう。そのためのテクニックとして <strong>エンジニアリングデイブックス</strong> があります。これは何をやったか何を学んだかをノートに時系列に記録していくことです。</p>
+</div>
 <div class="paragraph">
 <p>Engineering Dayboks</p>
 </div>
@@ -633,13 +640,10 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="paragraph">
-<p><a href="https://note.com/yukionoguchi/n/n6fa36e6aff86">「超」整理法の思想</a></p>
+<p>ノートは市販のものならどれでも構いませんがおすすめは <a href="https://www.kokuyo-st.co.jp/stationery/softring-note/" target="_blank" rel="noopener">ソフトリングノード</a> のB5サイズが手元に置いてもかさばらず使いやすいです。情報を一箇所に集めて必要なものと不要なものを分ける準備が出来ました。次は必要なものをすぐに取り出せるようにする <strong>整頓</strong> をどのように実践していくかを解説します。</p>
 </div>
-</div>
-<div class="sect5">
-<h6 id="_整頓">整頓</h6>
 <div class="paragraph">
-<p>ネーミングルール</p>
+<p>情報を扱う場合の <strong>整頓</strong> の基本は <strong>分類するな。ひたすら並べよ</strong> です。デジタルデータも一箇所に保存していきましょう。具体的に保存する場所は後で解説します。また、分類するなといっても分類をする必要は当然発生します。分類にあたっては一貫したネーミングルールを適用していきます。具体的な方法は都度解説していきます。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -656,22 +660,8 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="paragraph">
-<p><a href="https://at-jinji.jp/work/007">効率的な文書管理方法とは。保管方法、運用ルール作りの3ステップを紹介</a></p>
+<p>基本は実践しなければ意味がありませんそして習慣にすることで初めてものにできるものです。そのためには自ら躾けていかなければなりません。</p>
 </div>
-<div class="paragraph">
-<p><a href="https://at-jinji.jp/blog/11259/">書類整理の基本は書類をためないこと！ 「『超』整理術」を簡単解説</a></p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_清掃">清掃</h6>
-
-</div>
-<div class="sect5">
-<h6 id="_清潔">清潔</h6>
-
-</div>
-<div class="sect5">
-<h6 id="_躾">躾</h6>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -693,9 +683,11 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 </div>
-</div>
 <div class="sect4">
 <h5 id="_セキュリティ_security">セキュリティ(Security)</h5>
+<div class="paragraph">
+<p><strong>5S</strong> に続いてセキュリティに関してですがここで扱う内容は <strong>情報セキュリティ</strong> に関する内容です。</p>
+</div>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -706,6 +698,9 @@ table.CodeRay td.code>pre{padding:0}
 &#8212; Wikipedia<br>
 <cite><a href="https://ja.wikipedia.org/wiki/%E6%83%85%E5%A0%B1%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3" class="bare">https://ja.wikipedia.org/wiki/%E6%83%85%E5%A0%B1%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3</a></cite>
 </div>
+</div>
+<div class="paragraph">
+<p>ここではパスワードに関する基本だけ抑えておいてください。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -728,6 +723,9 @@ table.CodeRay td.code>pre{padding:0}
 <cite><a href="https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html" target="_blank" rel="noopener">子どもを守るITリテラシー学</a></cite>
 </div>
 </div>
+<div class="paragraph">
+<p>実際にパスワードを設定するときは</p>
+</div>
 <div class="quoteblock">
 <blockquote>
 <div class="ulist">
@@ -749,9 +747,15 @@ table.CodeRay td.code>pre{padding:0}
 <cite><a href="https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html" target="_blank" rel="noopener">子どもを守るITリテラシー学</a></cite>
 </div>
 </div>
+<div class="paragraph">
+<p>を参考にしてください。</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_itリテラシ">ITリテラシ</h5>
+<div class="paragraph">
+<p>プログラミング環境構築にあたっての基本は解説しました。この記事ではソフトウェア開発のための <strong>ITリテラシ</strong> 習得のベースとなる環境構築をすることを目的としています。</p>
+</div>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -782,34 +786,126 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="sect3">
 <h4 id="_アカウントの登録">1.2. アカウントの登録</h4>
+<div class="paragraph">
+<p>まず各種サービスのアカウントを登録します。</p>
+</div>
 <div class="sect4">
 <h5 id="_microsoftアカウントを作成する">Microsoftアカウントを作成する</h5>
 <div class="paragraph">
-<p><a href="https://support.microsoft.com/ja-jp/help/4026324/microsoft-account-how-to-create">新しい Microsoft アカウントを作成する方法</a></p>
+<p><a href="https://signup.live.com/signup?wa=wsignin1.0&amp;rpsnv=13&amp;rver=7.3.6963.0&amp;wp=MBI_SSL&amp;wreply=https%3a%2f%2fwww.microsoft.com%2fja-jp%2f&amp;id=74335&amp;aadredir=1&amp;contextid=E56866F842F4E143&amp;bk=1584685585&amp;uiflavor=web&amp;lic=1&amp;mkt=JA-JP&amp;lc=1041&amp;uaid=491fc017de0f48c5c67a3833e7aca9ee" target="_blank" rel="noopener">アカウントの作成</a> から新しいメールアドレスを取得を選択します。</p>
 </div>
-<div class="paragraph">
-<p><a href="https://signup.live.com/signup?wa=wsignin1.0&amp;rpsnv=13&amp;rver=7.3.6963.0&amp;wp=MBI_SSL&amp;wreply=https%3a%2f%2fwww.microsoft.com%2fja-jp%2f&amp;id=74335&amp;aadredir=1&amp;contextid=E56866F842F4E143&amp;bk=1584685585&amp;uiflavor=web&amp;lic=1&amp;mkt=JA-JP&amp;lc=1041&amp;uaid=491fc017de0f48c5c67a3833e7aca9ee">アカウントの作成</a></p>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ms-001.png" alt="ms 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ms-002.png" alt="ms 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ms-003.png" alt="ms 003">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ms-004.png" alt="ms 004">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ms-005.png" alt="ms 005">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ms-006.png" alt="ms 006">
+</div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_googleアカウントを作成する">Googleアカウントを作成する</h5>
 <div class="paragraph">
-<p><a href="https://support.google.com/accounts/answer/27441?hl=ja">Google アカウントの作成</a></p>
+<p><a href="https://support.google.com/accounts/answer/27441?hl=ja" target="_blank" rel="noopener">Google アカウントの作成</a> から <code>Googleアカウントを作成する</code> を選択します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ggl-001.png" alt="ggl 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ggl-002.png" alt="ggl 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ggl-003.png" alt="ggl 003">
+</div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_githubアカウントを作成する">GitHubアカウントを作成する</h5>
 <div class="paragraph">
-<p><a href="https://github.co.jp/">GitHubに登録する</a></p>
+<p><a href="https://github.co.jp/" target="_blank" rel="noopener">GitHubに登録する</a> から <code>GitHubに登録する</code> を選択します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ghb-001.png" alt="ghb 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ghb-002.png" alt="ghb 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ghb-003.png" alt="ghb 003">
+</div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_アカウントにサインインする">アカウントにサインインする</h5>
 <div class="paragraph">
-<p><a href="https://support.microsoft.com/ja-jp/help/4028195">https://support.microsoft.com/ja-jp/help/4028195</a></p>
+<p><a href="https://support.microsoft.com/ja-jp/help/4028195" target="_blank" rel="noopener">Microsoft アカウントにサインインする方法</a> を参考にしてローカルアカウントからMicrosoftアカウントに切り替えます。</p>
 </div>
-<div class="paragraph">
-<p>Microsofアカウントでのサインインに切り替える</p>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/login-001.png" alt="login 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/login-002.png" alt="login 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/login-003.png" alt="login 003">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/login-004.png" alt="login 004">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/login-005.png" alt="login 005">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/login-006.png" alt="login 006">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/login-007.png" alt="login 007">
+</div>
 </div>
 </div>
 </div>
@@ -830,22 +926,34 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="paragraph">
-<p><a href="https://products.office.com/ja-jp/home?SilentAuth=1">Office</a></p>
+<p><a href="https://products.office.com/ja-jp/home?SilentAuth=1" target="_blank" rel="noopener">Office365</a> からOneDriveの設定を確認します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/drive-001.png" alt="drive 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/drive-002.png" alt="drive 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/drive-003.png" alt="drive 003">
+</div>
 </div>
 <div class="paragraph">
-<p><a href="https://support.office.com/ja-jp/article/personal-vault-で-onedrive-ファイルを保護する-6540ef37-e9bf-4121-a773-56f98dce78c4">Personal Vault で OneDrive ファイルを保護する</a></p>
+<p>アカウントのパスワードなど機密情報は <a href="https://support.office.com/ja-jp/article/personal-vault-で-onedrive-ファイルを保護する-6540ef37-e9bf-4121-a773-56f98dce78c4" target="_blank" rel="noopener">Personal Vault で OneDrive ファイルを保護する</a> を使って管理すると良いでしょう。もしくは <a href="https://1password.com/jp/">1Password</a> などパスワード管理ツールの導入を検討してください。</p>
 </div>
 <div class="paragraph">
-<p><a href="https://support.microsoft.com/ja-jp/help/17184/windows-10-onedrive">PCのOneDrive</a></p>
+<p><a href="https://support.microsoft.com/ja-jp/help/17184/windows-10-onedrive" target="_blank" rel="noopener">PCのOneDrive</a> にあるようにデータはローカルとクラウドの両方にあるので破損・紛失をしても復旧することが出来ます。</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_パッケージ管理ツールのセットアップ">1.4. パッケージ管理ツールのセットアップ</h4>
 <div class="paragraph">
-<p><a href="https://chocolatey.org/">The Package Manager for Windows</a></p>
-</div>
-<div class="paragraph">
-<p><a href="https://qiita.com/konta220/items/95b40b4647a737cb51aa">Chocolateyを使った環境構築の時のメモ</a></p>
+<p>アプリケーションの管理にはパッケージ管理ツール <a href="https://chocolatey.org/" target="_blank" rel="noopener">The Package Manager for Windows</a> を使います。インストールの方法は <a href="https://qiita.com/konta220/items/95b40b4647a737cb51aa" target="_blank" rel="noopener">Chocolateyを使った環境構築の時のメモ</a> を参照してください。</p>
 </div>
 </div>
 <div class="sect3">
@@ -867,31 +975,92 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect4">
 <h5 id="_インストール">インストール</h5>
 <div class="paragraph">
-<p><a href="https://qiita.com/kikutaro/items/0e5deb36047d0137a767">Java開発環境がすぐに作れる「Visual Studio Code Installer for Java」を試してみた</a></p>
+<p><a href="https://aka.ms/vscode-java-installer-win">Download Visual Studio Code Java Pack Installer</a> からVSCodeをダウンロードしてセットアッププログラムを実行します。</p>
 </div>
-<div class="paragraph">
-<p><a href="https://code.visualstudio.com/docs/languages/java">Java in Visual Studio Code</a></p>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/vscode-001.png" alt="vscode 001">
 </div>
-<div class="paragraph">
-<p><a href="https://aka.ms/vscode-java-installer-win">Download Visual Studio Code Java Pack Installer</a></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/vscode-002.png" alt="vscode 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/vscode-003.png" alt="vscode 003">
+</div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_拡張機能の追加">拡張機能の追加</h5>
 <div class="paragraph">
-<p><a href="https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja">Japanese Language Pack for Visual Studio Code</a></p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja" target="_blank" rel="noopener">Japanese Language Pack for Visual Studio Code</a></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/vscode-004.png" alt="vscode 004">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/vscode-005.png" alt="vscode 005">
+</div>
 </div>
 <div class="paragraph">
-<p><a href="https://qiita.com/sensuikan1973/items/74cf5383c02dbcd82234">VSCodeのオススメ拡張機能 24 選 (とTipsをいくつか)</a></p>
+<p><a href="https://qiita.com/sensuikan1973/items/74cf5383c02dbcd82234" target="_blank" rel="noopener">VSCodeのオススメ拡張機能 24 選 (とTipsをいくつか)</a></p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_設定の同期">設定の同期</h5>
-
+<div class="paragraph">
+<p><a href="https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync" target="_blank" rel="noopener">Settings Sync</a></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/sync-001.png" alt="sync 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/sync-002.png" alt="sync 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/sync-003.png" alt="sync 003">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/sync-004.png" alt="sync 004">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/sync-005.png" alt="sync 005">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/sync-006.png" alt="sync 006">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/sync-007.png" alt="sync 007">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/sync-008.png" alt="sync 008">
+</div>
+</div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_開発言語のセットアップ">1.6. 開発言語のセットアップ</h4>
+<h4 id="_開発環境のセットアップ">1.6. 開発環境のセットアップ</h4>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -910,7 +1079,7 @@ table.CodeRay td.code>pre{padding:0}
 <h5 id="_gitのインストール">gitのインストール</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>chocjo install git</code></pre>
+<pre class="CodeRay highlight"><code>choco install git</code></pre>
 </div>
 </div>
 </div>
@@ -930,6 +1099,21 @@ table.CodeRay td.code>pre{padding:0}
 <cite>20th Anniversary Edition</cite>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/terminal-001.png" alt="terminal 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/terminal-002.png" alt="terminal 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/terminal-003.png" alt="terminal 003">
+</div>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_powershellcoreのインストール">PowerShellCoreのインストール</h5>
@@ -938,30 +1122,132 @@ table.CodeRay td.code>pre{padding:0}
 <pre class="CodeRay highlight"><code>choco install pwershell-core</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p><a href="https://qiita.com/aki4000/items/c26e3076c8cec9677415">Windows10 HomeとWSL2でdocker-composeができるようにする</a></p>
-</div>
 </div>
 <div class="sect4">
 <h5 id="_wslのインストール">WSLのインストール</h5>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-001.png" alt="wsl 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-002.png" alt="wsl 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-003.png" alt="wsl 003">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-004.png" alt="wsl 004">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-005.png" alt="wsl 005">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-006.png" alt="wsl 006">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-007.png" alt="wsl 007">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-008.png" alt="wsl 008">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-009.png" alt="wsl 009">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-010.png" alt="wsl 010">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-011.png" alt="wsl 011">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_設定">設定</h5>
 <div class="paragraph">
-<p><a href="https://qiita.com/rubytomato@github/items/fdfc0a76e848442f374e">WSL (Windows Subsystem for Linux)の基本メモ</a></p>
+<p><a href="https://qiita.com/kinchiki/items/dabb5c890d9c57907503">Visual Studio Codeで簡単にショートカットキーを変更する方法</a></p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_hello_world">Hello world</h5>
 <div class="paragraph">
-<p><a href="https://www.red-gate.com/simple-talk/sysadmin/powershell/practical-powershell-unit-testing-getting-started/">Practical PowerShell Unit-Testing: Getting Started</a></p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=buenon.scratchpads">Scratchpads</a></p>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_開発言語のセットアップ">1.7. 開発言語のセットアップ</h4>
 <div class="sect4">
 <h5 id="_ruby環境のセットアップ">Ruby環境のセットアップ</h5>
-
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-012.png" alt="wsl 012">
+</div>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_プロビジョニングの実行">プロビジョニングの実行</h5>
 <div class="paragraph">
-<p><a href="https://github.com/hiroshima-arc/tdd_rb" class="bare">https://github.com/hiroshima-arc/tdd_rb</a></p>
+<p><a href="https://github.com/hiroshima-arc/tdd_rb" target="_blank" rel="noopener">テスト駆動開発から始めるRuby入門</a></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-001.png" alt="provision 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-002.png" alt="provision 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-003.png" alt="provision 003">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-004.png" alt="provision 004">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-005.png" alt="provision 005">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-006.png" alt="provision 006">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-007.png" alt="provision 007">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-008.png" alt="provision 008">
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -970,28 +1256,26 @@ table.CodeRay td.code>pre{padding:0}
 ...
 $ sudo apt install ansible -y
 $ cd provisioning/tasks/
-$ ansible-playbook --inventory=localhost, --connection=local site.yml
-...
-$ ansible-playbook --inventory=localhost, --connection=local site.yml</code></pre>
+$ sudo ansible-playbook --inventory=localhost, --connection=local site.yml</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_追加パッケージのインストール">追加パッケージのインストール</h5>
 <div class="paragraph">
-<p><a href="https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby">Ruby for Visual Studio Code</a></p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby" target="_blank" rel="noopener">Ruby for Visual Studio Code</a></p>
 </div>
 <div class="paragraph">
-<p><a href="https://marketplace.visualstudio.com/items?itemName=castwide.solargraph">Ruby Solargraph</a></p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=castwide.solargraph" target="_blank" rel="noopener">Ruby Solargraph</a></p>
 </div>
 <div class="paragraph">
-<p><a href="https://marketplace.visualstudio.com/items?itemName=kaiwood.endwise">vscode-endwise</a></p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=kaiwood.endwise" target="_blank" rel="noopener">vscode-endwise</a></p>
 </div>
 <div class="paragraph">
-<p><a href="https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop">https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop</a></p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop" target="_blank" rel="noopener">ruby-rubocop</a></p>
 </div>
 <div class="paragraph">
-<p><a href="https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter">Ruby Test Explorer</a></p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter" target="_blank" rel="noopener">Ruby Test Explorer</a></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1003,19 +1287,25 @@ gem install solargraph</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_設定">設定</h5>
+<h5 id="_設定_2">設定</h5>
 <div class="paragraph">
 <p><a href="https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28">VisualStudioCode でRubyの開発環境を作る</a></p>
-</div>
-<div class="paragraph">
-<p><a href="https://qiita.com/kinchiki/items/dabb5c890d9c57907503">Visual Studio Codeで簡単にショートカットキーを変更する方法</a></p>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_参照">1.7. 参照</h4>
+<h4 id="_参照">1.8. 参照</h4>
 <div class="ulist">
 <ul>
+<li>
+<p><a href="https://note.com/yukionoguchi/n/n6fa36e6aff86" target="_blank" rel="noopener">「超」整理法の思想</a></p>
+</li>
+<li>
+<p><a href="https://at-jinji.jp/work/007" target="_blank" rel="noopener">効率的な文書管理方法とは。保管方法、運用ルール作りの3ステップを紹介</a></p>
+</li>
+<li>
+<p><a href="https://at-jinji.jp/blog/11259/" target="_blank" rel="noopener">書類整理の基本は書類をためないこと！ 「『超』整理術」を簡単解説</a></p>
+</li>
 <li>
 <p><a href="https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/" target="_blank" rel="noopener">The Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 2nd Edition</a></p>
 </li>
@@ -1025,6 +1315,27 @@ gem install solargraph</code></pre>
 <li>
 <p><a href="https://jaminlifelog.com/notes/work/clean-desktop-files">フォルダ管理の基本ルール5選！整理されていないデスクトップにさよならバイバイ！</a></p>
 </li>
+<li>
+<p><a href="https://support.microsoft.com/ja-jp/help/4026324/microsoft-account-how-to-create" target="_blank" rel="noopener">新しい Microsoft アカウントを作成する方法</a></p>
+</li>
+<li>
+<p><a href="https://qiita.com/kikutaro/items/0e5deb36047d0137a767">Java開発環境がすぐに作れる「Visual Studio Code Installer for Java」を試してみた</a></p>
+</li>
+<li>
+<p><a href="https://code.visualstudio.com/docs/languages/java">Java in Visual Studio Code</a></p>
+</li>
+<li>
+<p><a href="https://qiita.com/rubytomato@github/items/fdfc0a76e848442f374e">WSL (Windows Subsystem for Linux)の基本メモ</a></p>
+</li>
+<li>
+<p><a href="https://www.red-gate.com/simple-talk/sysadmin/powershell/practical-powershell-unit-testing-getting-started/">Practical PowerShell Unit-Testing: Getting Started</a></p>
+</li>
+<li>
+<p><a href="https://qiita.com/y-tsutsu/items/179717ecbdcc27509e5a">日頃お世話になっているElectronのアプリ開発に入門してみる</a></p>
+</li>
+<li>
+<p><a href="https://qiita.com/kai_kou/items/ceeee47996339e5eecc4">VSCodeの拡張機能「GIST」が便利すぎてHackMDを使うのをやめた</a></p>
+</li>
 </ul>
 </div>
 </div>
@@ -1032,7 +1343,7 @@ gem install solargraph</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-24 17:55:29 JST
+Last updated 2020-03-27 14:21:21 JST
 </div>
 </div>
 </body>
