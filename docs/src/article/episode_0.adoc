@@ -308,14 +308,14 @@ image::../../images/article/episode_0/wsl-011.png[]
 
 ===== Hello world
 
+image::../../images/article/episode_0/hello-001.png[]
+image::../../images/article/episode_0/hello-002.png[]
 image::../../images/article/episode_0/hello-003.png[]
-image::../../images/article/episode_0/hello-004-1.png[]
-image::../../images/article/episode_0/hello-004-2.png[]
-image::../../images/article/episode_0/hello-005-1.png[]
-image::../../images/article/episode_0/hello-005-2.png[]
-image::../../images/article/episode_0/hello-005-3.png[]
-image::../../images/article/episode_0/hello-006-1.png[]
-image::../../images/article/episode_0/hello-006-2.png[]
+image::../../images/article/episode_0/hello-004.png[]
+image::../../images/article/episode_0/hello-005.png[]
+image::../../images/article/episode_0/hello-006.png[]
+image::../../images/article/episode_0/hello-007.png[]
+image::../../images/article/episode_0/hello-008.png[]
 image::../../images/article/episode_0/hello-009.png[]
 image::../../images/article/episode_0/hello-010.png[]
 image::../../images/article/episode_0/hello-011.png[]
@@ -400,7 +400,7 @@ function HelloWorld($name) {
 }
 ```
 
-image::../../images/article/episode_0/hello-018-1.png[]
+image::../../images/article/episode_0/hello-018.png[]
 
 ```
 Describing HelloWorld
@@ -433,7 +433,7 @@ function HelloWorld($name='PowerShell') {
 }
 ```
 
-image::../../images/article/episode_0/hello-018-2.png[]
+image::../../images/article/episode_0/hello-019.png[]
 
 ```
 Describe "HelloWorld" {
@@ -450,7 +450,7 @@ function HelloWorld($name='PowerShell') {
 }
 ```
 
-image::../../images/article/episode_0/hello-019.png[]
+image::../../images/article/episode_0/hello-020.png[]
 
 ===== 設定
 
