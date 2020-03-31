@@ -33,9 +33,7 @@ ____
 * 躾（しつけ、Shitsuke）
   決められたルール・手順を正しく守る習慣をつける
 
-これがプログラミング環境構築とどのように関係していくのでしょうか？
-
-いらないものを捨てるのが整理ですがそもそもいらないものが何なのかを決めなければなりません。プログラミングで扱う対象はモノではなく情報です。ではどうやって情報を扱って行けばよいでしょう？まずは *分類するな。ひたすら並べよ* の考えに従い一箇所に記録をまとめていきましょう。そのためのテクニックとして *エンジニアリングデイブックス* があります。これは何をやったか何を学んだかをノートに時系列に記録していくことです。
+これがプログラミング環境構築とどのように関係していくのでしょうか？まずは *整理* から、いらないものを捨てるのが *整理* ですがそもそもいらないものが何なのかを決めなければなりません。プログラミングで扱う対象はモノではなく情報です。ではどうやって情報を扱って行けばよいでしょう？ここは、 *分類するな。ひたすら並べよ* の考えに従い一箇所に記録をまとめていきましょう。そのためのテクニックとして *エンジニアリングデイブックス* があります。これは何をやったか何を学んだかをノートに時系列に記録していくことです。
 
 Engineering Dayboks
 
@@ -46,7 +44,7 @@ ____
 
 ノートは市販のものならどれでも構いませんがおすすめは https://www.kokuyo-st.co.jp/stationery/softring-note/[ソフトリングノード^] のB5サイズが手元に置いてもかさばらず使いやすいです。情報を一箇所に集めて必要なものと不要なものを分ける準備が出来ました。次は必要なものをすぐに取り出せるようにする *整頓* をどのように実践していくかを解説します。
 
-情報を扱う場合の *整頓* の基本は *分類するな。ひたすら並べよ* です。デジタルデータも一箇所に保存していきましょう。具体的に保存する場所は後で解説します。また、分類するなといっても分類をする必要は当然発生します。分類にあたっては一貫したネーミングルールを適用していきます。具体的な方法は都度解説していきます。
+*整頓* の基本は *分類するな。ひたすら並べよ* です。デジタルデータも一箇所に保存していきましょう。具体的に保存する場所は後で解説します。また、分類するなといっても分類をする必要は当然発生します。分類にあたっては一貫したネーミングルールを適用していきます。具体的な方法は都度解説していきます。
 
 [quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
 ____
@@ -98,7 +96,7 @@ ____
 
 ===== ITリテラシ
 
-プログラミング環境構築にあたっての基本は解説しました。この記事ではソフトウェア開発のための *ITリテラシ* 習得のベースとなる環境構築をすることを目的としています。
+以上がプログラミング環境構築にあたっての基本となる考えです。この記事では6Sを軸としたソフトウェア開発のための *ITリテラシ* 習得のベースとなる環境構築をすることを目的としています。
 
 [quote, https://t-wada.hatenablog.jp/entry/clean-code-that-works]
 ____
@@ -180,6 +178,13 @@ https://support.microsoft.com/ja-jp/help/17184/windows-10-onedrive[PCのOneDrive
 
 アプリケーションの管理にはパッケージ管理ツール https://chocolatey.org/[The Package Manager for Windows^] を使います。インストールの方法は https://qiita.com/konta220/items/95b40b4647a737cb51aa[Chocolateyを使った環境構築の時のメモ^] を参照してください。
 
+image::../../images/article/episode_0/pkg-001.png[]
+image::../../images/article/episode_0/pkg-002.png[]
+image::../../images/article/episode_0/pkg-003.png[]
+image::../../images/article/episode_0/pkg-004.png[]
+image::../../images/article/episode_0/pkg-005.png[]
+image::../../images/article/episode_0/pkg-006.png[]
+
 ==== エディタのセットアップ
 
 [quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
@@ -202,9 +207,41 @@ image::../../images/article/episode_0/vscode-003.png[]
 https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja[Japanese Language Pack for Visual Studio Code^]
 
 image::../../images/article/episode_0/vscode-004.png[]
+image::../../images/article/episode_0/vscode-004-1.png[]
 image::../../images/article/episode_0/vscode-005.png[]
 
-https://qiita.com/sensuikan1973/items/74cf5383c02dbcd82234[VSCodeのオススメ拡張機能 24 選 (とTipsをいくつか)^]
+1. https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons[vscode-icons]
+
+1. https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens[GitLens]
+
+1. https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode[Prettier]
+
+1. https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory[Git History]
+
+1. https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer[Bracket Pair Colorizer]
+
+1. https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks[Bookmarks]
+
+1. https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight[TODO Highlight]
+
+1. https://marketplace.visualstudio.com/items?itemName=ionutvmi.path-autocomplete[Path Autocomplete]
+
+1. https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv[Rainbow CSV]
+
+1. https://marketplace.visualstudio.com/items?itemName=ryu1kn.partial-diff[Partial Diff]
+
+1. https://marketplace.visualstudio.com/items?itemName=mrmlnc.vscode-duplicate[Duplicate action]
+
+1. https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github[GitHub Pull Requests]
+
+1. https://marketplace.visualstudio.com/items?itemName=codezombiech.gitignore[gitignore]
+
+1. https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-todo-plus[Todo+]
+
+1. https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer[Output Colorizer]
+
+1. https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces[Trailing Spaces]
+
 
 ===== 設定の同期
 
@@ -230,8 +267,16 @@ ____
 
 ===== gitのインストール
 
+image::../../images/article/episode_0/git-001.png[]
 ```
 choco install git
+```
+image::../../images/article/episode_0/git-002.png[]
+
+===== PowerShellCoreのインストール
+
+```
+choco install powershell-core
 ```
 
 ===== Windows Terminalのインストール
@@ -247,12 +292,6 @@ image::../../images/article/episode_0/terminal-001.png[]
 image::../../images/article/episode_0/terminal-002.png[]
 image::../../images/article/episode_0/terminal-003.png[]
 
-===== PowerShellCoreのインストール
-
-```
-choco install pwershell-core
-```
-
 ===== WSLのインストール
 
 image::../../images/article/episode_0/wsl-001.png[]
@@ -267,13 +306,155 @@ image::../../images/article/episode_0/wsl-009.png[]
 image::../../images/article/episode_0/wsl-010.png[]
 image::../../images/article/episode_0/wsl-011.png[]
 
+===== Hello world
+
+image::../../images/article/episode_0/hello-003.png[]
+image::../../images/article/episode_0/hello-004-1.png[]
+image::../../images/article/episode_0/hello-004-2.png[]
+image::../../images/article/episode_0/hello-005-1.png[]
+image::../../images/article/episode_0/hello-005-2.png[]
+image::../../images/article/episode_0/hello-005-3.png[]
+image::../../images/article/episode_0/hello-006-1.png[]
+image::../../images/article/episode_0/hello-006-2.png[]
+image::../../images/article/episode_0/hello-009.png[]
+image::../../images/article/episode_0/hello-010.png[]
+image::../../images/article/episode_0/hello-011.png[]
+image::../../images/article/episode_0/hello-012.png[]
+
+```powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $false
+    }
+}
+```
+
+image::../../images/article/episode_0/hello-013.png[]
+image::../../images/article/episode_0/hello-014.png[]
+
+```powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単なフレーズを返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+}
+```
+
+image::../../images/article/episode_0/hello-015.png[]
+
+```powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単なフレーズを返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+}
+
+function HelloWorld {
+    return "Hello from PowerShell"
+}
+```
+
+image::../../images/article/episode_0/hello-016.png[]
+
+```powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単なフレーズを返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+    It "指定した名前で簡単なフレーズを返す" {
+    HelloWorld "VScode" | Should Be "Hello from VSCode"
+    }
+}
+
+function HelloWorld {
+    return "Hello from PowerShell"
+}
+```
+
+image::../../images/article/episode_0/hello-017.png[]
+
+```powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単なフレーズを返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+    It "指定した名前で簡単なフレーズを返す" {
+    HelloWorld "VScode" | Should Be "Hello from VSCode"
+    }
+}
+
+function HelloWorld($name) {
+    return "Hello from $name
+}
+```
+
+image::../../images/article/episode_0/hello-018-1.png[]
+
+```
+Describing HelloWorld
+ [+] 何か便利なものだ 16ms
+ [-] 簡単なフレーズを返す 9ms
+   Expected string length 21 but was 11. Strings differ at index 11.
+   Expected: {Hello from PowerShell}
+   But was:  {Hello from }
+   ----------------------^
+   6:         HelloWorld | Should Be "Hello from PowerShell"
+   at <ScriptBlock>, \\Mac\Home\Desktop\Projects\HelloWorld\Hello.ps1: line 6
+ [+] 指定した名前で簡単なフレーズを返す 14ms
+```
+
+```
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単なフレーズを返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+    It "指定した名前で簡単なフレーズを返す" {
+        HelloWorld "VScode" | Should Be "Hello from VSCode"
+    }
+}
+
+function HelloWorld($name='PowerShell') {
+    return "Hello from $name"
+}
+```
+
+image::../../images/article/episode_0/hello-018-2.png[]
+
+```
+Describe "HelloWorld" {
+    It "何も指定しない場合は既定のフレーズを返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+    It "指定した名前で簡単なフレーズを返す" {
+        HelloWorld "VScode" | Should Be "Hello from VSCode"
+    }
+}
+
+function HelloWorld($name='PowerShell') {
+    return "Hello from $name"
+}
+```
+
+image::../../images/article/episode_0/hello-019.png[]
+
 ===== 設定
 
 https://qiita.com/kinchiki/items/dabb5c890d9c57907503[Visual Studio Codeで簡単にショートカットキーを変更する方法]
-
-===== Hello world
-
-https://marketplace.visualstudio.com/items?itemName=buenon.scratchpads[Scratchpads]
 
 ==== 開発言語のセットアップ
 
@@ -328,7 +509,8 @@ gem install solargraph
 https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28[VisualStudioCode でRubyの開発環境を作る]
 
 ==== 参照
-
+* https://roadmap.sh/[Developer Roadmaps]
+* https://github.com/kamranahmedse/developer-roadmap[WEB DEVELOPER ROADMAP - 2020]
 * https://note.com/yukionoguchi/n/n6fa36e6aff86[「超」整理法の思想^]
 * https://at-jinji.jp/work/007[効率的な文書管理方法とは。保管方法、運用ルール作りの3ステップを紹介^]
 * https://at-jinji.jp/blog/11259/[書類整理の基本は書類をためないこと！ 「『超』整理術」を簡単解説^]
@@ -342,3 +524,4 @@ https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28[VisualStudioCode でR
 * https://www.red-gate.com/simple-talk/sysadmin/powershell/practical-powershell-unit-testing-getting-started/[Practical PowerShell Unit-Testing: Getting Started]
 * https://qiita.com/y-tsutsu/items/179717ecbdcc27509e5a[日頃お世話になっているElectronのアプリ開発に入門してみる]
 * https://qiita.com/kai_kou/items/ceeee47996339e5eecc4[VSCodeの拡張機能「GIST」が便利すぎてHackMDを使うのをやめた]
+* https://qiita.com/sensuikan1973/items/74cf5383c02dbcd82234[VSCodeのオススメ拡張機能 24 選 (とTipsをいくつか)^]
