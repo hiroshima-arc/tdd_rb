@@ -451,6 +451,7 @@ function HelloWorld($name='PowerShell') {
 ```
 
 image::../../images/article/episode_0/hello-020.png[]
+image::../../images/article/episode_0/hello-021.png[]
 
 ===== 設定
 
