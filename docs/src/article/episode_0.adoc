@@ -301,10 +301,20 @@ image::../../images/article/episode_0/wsl-004.png[]
 image::../../images/article/episode_0/wsl-005.png[]
 image::../../images/article/episode_0/wsl-006.png[]
 image::../../images/article/episode_0/wsl-007.png[]
-image::../../images/article/episode_0/wsl-008.png[]
+image::../../images/article/episode_0/wsl-008-1.png[]
+image::../../images/article/episode_0/wsl-008-2.png[]
 image::../../images/article/episode_0/wsl-009.png[]
 image::../../images/article/episode_0/wsl-010.png[]
 image::../../images/article/episode_0/wsl-011.png[]
+
+===== 設定
+image::../../images/article/episode_0/setting-001.png[]
+image::../../images/article/episode_0/setting-002.png[]
+image::../../images/article/episode_0/setting-003.png[]
+image::../../images/article/episode_0/setting-004.png[]
+
+
+https://qiita.com/kinchiki/items/dabb5c890d9c57907503[Visual Studio Codeで簡単にショートカットキーを変更する方法]
 
 ===== Hello world
 
@@ -453,10 +463,6 @@ function HelloWorld($name='PowerShell') {
 image::../../images/article/episode_0/hello-020.png[]
 image::../../images/article/episode_0/hello-021.png[]
 
-===== 設定
-
-https://qiita.com/kinchiki/items/dabb5c890d9c57907503[Visual Studio Codeで簡単にショートカットキーを変更する方法]
-
 ==== 開発言語のセットアップ
 
 ===== Ruby環境のセットアップ
@@ -526,3 +532,5 @@ https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28[VisualStudioCode でR
 * https://qiita.com/y-tsutsu/items/179717ecbdcc27509e5a[日頃お世話になっているElectronのアプリ開発に入門してみる]
 * https://qiita.com/kai_kou/items/ceeee47996339e5eecc4[VSCodeの拡張機能「GIST」が便利すぎてHackMDを使うのをやめた]
 * https://qiita.com/sensuikan1973/items/74cf5383c02dbcd82234[VSCodeのオススメ拡張機能 24 選 (とTipsをいくつか)^]
+* https://qiita.com/n_oshiumi/items/1ad3f55d58f2d9d48d1e[VScodeで保存時に自動で空白を削除しよう！]
+* https://qiita.com/mitashun/items/e2f118a9ca7b96b97840[Visual Studio Codeで保存時自動整形の設定方法]
