@@ -542,33 +542,46 @@ table.CodeRay td.code>pre{padding:0}
 </ul>
 </li>
 <li><a href="#_クラウドストレージのセットアップ">1.1.3. クラウドストレージのセットアップ</a></li>
-<li><a href="#_パッケージ管理ツールのセットアップ">1.1.4. パッケージ管理ツールのセットアップ</a></li>
-<li><a href="#_エディタのセットアップ">1.1.5. エディタのセットアップ</a>
+<li><a href="#_開発環境のセットアップ">1.1.4. 開発環境のセットアップ</a>
 <ul class="sectlevel4">
-<li><a href="#_インストール">インストール</a></li>
-<li><a href="#_拡張機能の追加">拡張機能の追加</a></li>
-<li><a href="#_設定の同期">設定の同期</a></li>
-</ul>
-</li>
-<li><a href="#_開発環境のセットアップ">1.1.6. 開発環境のセットアップ</a>
-<ul class="sectlevel4">
+<li><a href="#_パッケージ管理ツールのインストール">パッケージ管理ツールのインストール</a></li>
 <li><a href="#_gitのインストール">gitのインストール</a></li>
 <li><a href="#_powershellcoreのインストール">PowerShellCoreのインストール</a></li>
 <li><a href="#_windows_terminalのインストール">Windows Terminalのインストール</a></li>
 <li><a href="#_wslのインストール">WSLのインストール</a></li>
-<li><a href="#_設定">設定</a></li>
-<li><a href="#_hello_world">Hello world</a></li>
 </ul>
 </li>
-<li><a href="#_開発言語のセットアップ">1.1.7. 開発言語のセットアップ</a>
+<li><a href="#_エディタのセットアップ">1.1.5. エディタのセットアップ</a>
+<ul class="sectlevel4">
+<li><a href="#_インストール">インストール</a></li>
+<li><a href="#_設定">設定</a></li>
+<li><a href="#_拡張機能の追加">拡張機能の追加</a></li>
+<li><a href="#_設定の同期">設定の同期</a></li>
+<li><a href="#_hello_world">Hello world</a>
+<ul class="sectlevel5">
+<li><a href="#_プログラムを作成する">プログラムを作成する</a></li>
+<li><a href="#_プログラムをデバッグする">プログラムをデバッグする</a></li>
+<li><a href="#_プログラムをレポジトリに保存する">プログラムをレポジトリに保存する</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_開発言語のセットアップ">1.1.6. 開発言語のセットアップ</a>
 <ul class="sectlevel4">
 <li><a href="#_ruby環境のセットアップ">Ruby環境のセットアップ</a></li>
 <li><a href="#_プロビジョニングの実行">プロビジョニングの実行</a></li>
 <li><a href="#_追加パッケージのインストール">追加パッケージのインストール</a></li>
 <li><a href="#_設定_2">設定</a></li>
+<li><a href="#_hello_world_2">Hello world</a>
+<ul class="sectlevel5">
+<li><a href="#_プログラムを作成する_2">プログラムを作成する</a></li>
+<li><a href="#_プログラムをデバッグする_2">プログラムをデバッグする</a></li>
+<li><a href="#_プログラムをレポジトリに保存する_2">プログラムをレポジトリに保存する</a></li>
 </ul>
 </li>
-<li><a href="#_参照">1.1.8. 参照</a></li>
+</ul>
+</li>
+<li><a href="#_参照">1.1.7. 参照</a></li>
 </ul>
 </li>
 </ul>
@@ -1217,7 +1230,9 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect3">
-<h4 id="_パッケージ管理ツールのセットアップ">1.1.4. パッケージ管理ツールのセットアップ</h4>
+<h4 id="_開発環境のセットアップ">1.1.4. 開発環境のセットアップ</h4>
+<div class="sect4">
+<h5 id="_パッケージ管理ツールのインストール">パッケージ管理ツールのインストール</h5>
 <div class="paragraph">
 <p>アプリケーションの管理にはパッケージ管理ツール <a href="https://chocolatey.org/" target="_blank" rel="noopener">The Package Manager for Windows</a> を使います。インストールの方法は <a href="https://qiita.com/konta220/items/95b40b4647a737cb51aa" target="_blank" rel="noopener">Chocolateyを使った環境構築の時のメモ</a> を参照してください。</p>
 </div>
@@ -1249,6 +1264,142 @@ table.CodeRay td.code>pre{padding:0}
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/pkg-006.png" alt="pkg 006">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_gitのインストール">gitのインストール</h5>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Always Use Version Control</p>
+</div>
+<div class="paragraph">
+<p>Vsersion control is a time machine for your work;you can go back.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Pragmatic Programmer: your journey to mastery<br>
+<cite>20th Anniversary Edition</cite>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/git-001.png" alt="git 001">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>choco install git</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/git-002.png" alt="git 002">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_powershellcoreのインストール">PowerShellCoreのインストール</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>choco install powershell-core</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/pwsh-001.png" alt="pwsh 001">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_windows_terminalのインストール">Windows Terminalのインストール</h5>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Use the Power of Command Shells</p>
+</div>
+<div class="paragraph">
+<p>Use the shell when graphical user interfaces don&#8217;t cut it.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Pragmatic Programmer: your journey to mastery<br>
+<cite>20th Anniversary Edition</cite>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/terminal-001.png" alt="terminal 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/terminal-002.png" alt="terminal 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/terminal-003.png" alt="terminal 003">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_wslのインストール">WSLのインストール</h5>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-001.png" alt="wsl 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-002.png" alt="wsl 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-003.png" alt="wsl 003">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-004.png" alt="wsl 004">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-005.png" alt="wsl 005">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-006.png" alt="wsl 006">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-007.png" alt="wsl 007">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-008-1.png" alt="wsl 008 1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-008-2.png" alt="wsl 008 2">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-009.png" alt="wsl 009">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/wsl-010.png" alt="wsl 010">
+</div>
 </div>
 </div>
 </div>
@@ -1290,23 +1441,55 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect4">
+<h5 id="_設定">設定</h5>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/setting-001.png" alt="setting 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/setting-002.png" alt="setting 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/setting-003.png" alt="setting 003">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/setting-004.png" alt="setting 004">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/setting-005.png" alt="setting 005">
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://qiita.com/kinchiki/items/dabb5c890d9c57907503">Visual Studio Codeで簡単にショートカットキーを変更する方法</a>
+<a href="https://loumo.jp/wp/archive/20191125120000/">VSCode 内蔵ターミナルで ctrl-p などのショートカットキーを利用する方法</a></p>
+</div>
+</div>
+<div class="sect4">
 <h5 id="_拡張機能の追加">拡張機能の追加</h5>
 <div class="paragraph">
 <p><a href="https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja" target="_blank" rel="noopener">Japanese Language Pack for Visual Studio Code</a></p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../../images/article/episode_0/vscode-004.png" alt="vscode 004">
+<img src="../../images/article/episode_0/package-001.png" alt="package 001">
 </div>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../../images/article/episode_0/vscode-004-1.png" alt="vscode 004 1">
+<img src="../../images/article/episode_0/package-002.png" alt="package 002">
 </div>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../../images/article/episode_0/vscode-005.png" alt="vscode 005">
+<img src="../../images/article/episode_0/package-003.png" alt="package 003">
 </div>
 </div>
 <div class="olist arabic">
@@ -1408,172 +1591,13 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_開発環境のセットアップ">1.1.6. 開発環境のセットアップ</h4>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>Always Use Version Control</p>
-</div>
-<div class="paragraph">
-<p>Vsersion control is a time machine for your work;you can go back.</p>
-</div>
-</blockquote>
-<div class="attribution">
-&#8212; Pragmatic Programmer: your journey to mastery<br>
-<cite>20th Anniversary Edition</cite>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_gitのインストール">gitのインストール</h5>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/git-001.png" alt="git 001">
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>choco install git</code></pre>
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/git-002.png" alt="git 002">
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_powershellcoreのインストール">PowerShellCoreのインストール</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>choco install powershell-core</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_windows_terminalのインストール">Windows Terminalのインストール</h5>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>Use the Power of Command Shells</p>
-</div>
-<div class="paragraph">
-<p>Use the shell when graphical user interfaces don&#8217;t cut it.</p>
-</div>
-</blockquote>
-<div class="attribution">
-&#8212; Pragmatic Programmer: your journey to mastery<br>
-<cite>20th Anniversary Edition</cite>
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/terminal-001.png" alt="terminal 001">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/terminal-002.png" alt="terminal 002">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/terminal-003.png" alt="terminal 003">
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_wslのインストール">WSLのインストール</h5>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/wsl-001.png" alt="wsl 001">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/wsl-002.png" alt="wsl 002">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/wsl-003.png" alt="wsl 003">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/wsl-004.png" alt="wsl 004">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/wsl-005.png" alt="wsl 005">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/wsl-006.png" alt="wsl 006">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/wsl-007.png" alt="wsl 007">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/wsl-008-1.png" alt="wsl 008 1">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/wsl-008-2.png" alt="wsl 008 2">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/wsl-009.png" alt="wsl 009">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/wsl-010.png" alt="wsl 010">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/wsl-011.png" alt="wsl 011">
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_設定">設定</h5>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/setting-001.png" alt="setting 001">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/setting-002.png" alt="setting 002">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/setting-003.png" alt="setting 003">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/setting-004.png" alt="setting 004">
-</div>
-</div>
-<div class="paragraph">
-<p><a href="https://qiita.com/kinchiki/items/dabb5c890d9c57907503">Visual Studio Codeで簡単にショートカットキーを変更する方法</a></p>
-</div>
-</div>
 <div class="sect4">
 <h5 id="_hello_world">Hello world</h5>
+<div class="sect5">
+<h6 id="_プログラムを作成する">プログラムを作成する</h6>
+<div class="paragraph">
+<p><a href="https://ja.wikipedia.org/wiki/Hello_world" target="_blank" rel="noopener">Hello world</a></p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-001.png" alt="hello 001">
@@ -1619,21 +1643,6 @@ table.CodeRay td.code>pre{padding:0}
 <img src="../../images/article/episode_0/hello-009.png" alt="hello 009">
 </div>
 </div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/hello-010.png" alt="hello 010">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/hello-011.png" alt="hello 011">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/hello-012.png" alt="hello 012">
-</div>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="powershell">Describe &quot;HelloWorld&quot; {
@@ -1645,7 +1654,59 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="imageblock">
 <div class="content">
+<img src="../../images/article/episode_0/hello-010.png" alt="hello 010">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-011.png" alt="hello 011">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="powershell">Describe &quot;HelloWorld&quot; {
+    It &quot;何か便利なものだ&quot; {
+        $true | Should Be $true
+    }
+}</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-012.png" alt="hello 012">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="powershell">Describe &quot;HelloWorld&quot; {
+    It &quot;何か便利なものだ&quot; {
+        $true | Should Be $true
+    }
+    It &quot;簡単な挨拶を返す&quot; {
+        HelloWorld | Should Be &quot;Hello from PowerShell&quot;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
 <img src="../../images/article/episode_0/hello-013.png" alt="hello 013">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="powershell">Describe &quot;HelloWorld&quot; {
+    It &quot;何か便利なものだ&quot; {
+        $true | Should Be $true
+    }
+    It &quot;簡単な挨拶を返す&quot; {
+        HelloWorld | Should Be &quot;Hello from PowerShell&quot;
+    }
+}
+
+function HelloWorld {
+    return &quot;Hello from PowerShell&quot;
+}</code></pre>
 </div>
 </div>
 <div class="imageblock">
@@ -1659,9 +1720,16 @@ table.CodeRay td.code>pre{padding:0}
     It &quot;何か便利なものだ&quot; {
         $true | Should Be $true
     }
-    It &quot;簡単なフレーズを返す&quot; {
+    It &quot;簡単な挨拶を返す&quot; {
         HelloWorld | Should Be &quot;Hello from PowerShell&quot;
     }
+    It &quot;指定された名前で挨拶を返す&quot; {
+        HelloWorld &quot;VSCode&quot; | Should Be &quot;Hello from VSCode&quot;
+    }
+}
+
+function HelloWorld {
+    return &quot;Hello from PowerShell&quot;
 }</code></pre>
 </div>
 </div>
@@ -1672,17 +1740,34 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
+<pre class="CodeRay highlight"><code>...
+Describing HelloWorld
+ [+] 何か便利なものだ 41ms
+ [+] 簡単な挨拶を返す 12ms
+ [-] 指定された名前で挨拶を返す 56ms
+   Expected string length 17 but was 21. Strings differ at index 11.
+   Expected: {Hello from VSCode}
+   But was:  {Hello from PowerShell}
+   ----------------------^
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
 <pre class="CodeRay highlight"><code data-lang="powershell">Describe &quot;HelloWorld&quot; {
     It &quot;何か便利なものだ&quot; {
         $true | Should Be $true
     }
-    It &quot;簡単なフレーズを返す&quot; {
+    It &quot;簡単な挨拶を返す&quot; {
         HelloWorld | Should Be &quot;Hello from PowerShell&quot;
+    }
+    It &quot;指定された名前で挨拶を返す&quot; {
+        HelloWorld &quot;VSCode&quot; | Should Be &quot;Hello from VSCode&quot;
     }
 }
 
-function HelloWorld {
-    return &quot;Hello from PowerShell&quot;
+function HelloWorld($name) {
+    return &quot;Hello from $name&quot;
 }</code></pre>
 </div>
 </div>
@@ -1693,20 +1778,34 @@ function HelloWorld {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="powershell">Describe &quot;HelloWorld&quot; {
-    It &quot;何か便利なものだ&quot; {
+<pre class="CodeRay highlight"><code>Describing HelloWorld
+ [+] 何か便利なものだ 39ms
+ [-] 簡単な挨拶を返す 23ms
+   Expected string length 21 but was 11. Strings differ at index 11.
+   Expected: {Hello from PowerShell}
+   But was:  {Hello from }
+   ----------------------^
+...
+ [+] 指定された名前で挨拶を返す 29ms
+...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>Describe "HelloWorld" {
+    It "何か便利なものだ" {
         $true | Should Be $true
     }
-    It &quot;簡単なフレーズを返す&quot; {
-        HelloWorld | Should Be &quot;Hello from PowerShell&quot;
+    It "簡単な挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
     }
-    It &quot;指定した名前で簡単なフレーズを返す&quot; {
-    HelloWorld &quot;VScode&quot; | Should Be &quot;Hello from VSCode&quot;
+    It "指定された名前で挨拶を返す" {
+        HelloWorld "VSCode" | Should Be "Hello from VSCode"
     }
 }
 
-function HelloWorld {
-    return &quot;Hello from PowerShell&quot;
+function HelloWorld($name = "PowerShell") {
+    return "Hello from $name"
 }</code></pre>
 </div>
 </div>
@@ -1717,20 +1816,17 @@ function HelloWorld {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="powershell">Describe &quot;HelloWorld&quot; {
-    It &quot;何か便利なものだ&quot; {
-        $true | Should Be $true
+<pre class="CodeRay highlight"><code>Describe "HelloWorld" {
+    It "何も指定されていない場合は既定の挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
     }
-    It &quot;簡単なフレーズを返す&quot; {
-        HelloWorld | Should Be &quot;Hello from PowerShell&quot;
-    }
-    It &quot;指定した名前で簡単なフレーズを返す&quot; {
-    HelloWorld &quot;VScode&quot; | Should Be &quot;Hello from VSCode&quot;
+    It "指定された名前で挨拶を返す" {
+        HelloWorld "VSCode" | Should Be "Hello from VSCode"
     }
 }
 
-function HelloWorld($name) {
-    return &quot;Hello from $name
+function HelloWorld($name = "PowerShell") {
+    return "Hello from $name"
 }</code></pre>
 </div>
 </div>
@@ -1739,58 +1835,12 @@ function HelloWorld($name) {
 <img src="../../images/article/episode_0/hello-018.png" alt="hello 018">
 </div>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>Describing HelloWorld
- [+] 何か便利なものだ 16ms
- [-] 簡単なフレーズを返す 9ms
-   Expected string length 21 but was 11. Strings differ at index 11.
-   Expected: {Hello from PowerShell}
-   But was:  {Hello from }
-   ----------------------^
-   6:         HelloWorld | Should Be "Hello from PowerShell"
-   at &lt;ScriptBlock&gt;, \\Mac\Home\Desktop\Projects\HelloWorld\Hello.ps1: line 6
- [+] 指定した名前で簡単なフレーズを返す 14ms</code></pre>
 </div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>Describe "HelloWorld" {
-    It "何か便利なものだ" {
-        $true | Should Be $true
-    }
-    It "簡単なフレーズを返す" {
-        HelloWorld | Should Be "Hello from PowerShell"
-    }
-    It "指定した名前で簡単なフレーズを返す" {
-        HelloWorld "VScode" | Should Be "Hello from VSCode"
-    }
-}
-
-function HelloWorld($name='PowerShell') {
-    return "Hello from $name"
-}</code></pre>
-</div>
-</div>
+<div class="sect5">
+<h6 id="_プログラムをデバッグする">プログラムをデバッグする</h6>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-019.png" alt="hello 019">
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>Describe "HelloWorld" {
-    It "何も指定しない場合は既定のフレーズを返す" {
-        HelloWorld | Should Be "Hello from PowerShell"
-    }
-    It "指定した名前で簡単なフレーズを返す" {
-        HelloWorld "VScode" | Should Be "Hello from VSCode"
-    }
-}
-
-function HelloWorld($name='PowerShell') {
-    return "Hello from $name"
-}</code></pre>
 </div>
 </div>
 <div class="imageblock">
@@ -1803,15 +1853,110 @@ function HelloWorld($name='PowerShell') {
 <img src="../../images/article/episode_0/hello-021.png" alt="hello 021">
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-022.png" alt="hello 022">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-023.png" alt="hello 023">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-024.png" alt="hello 024">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-025.png" alt="hello 025">
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_プログラムをレポジトリに保存する">プログラムをレポジトリに保存する</h6>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-026.png" alt="hello 026">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-027.png" alt="hello 027">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-028.png" alt="hello 028">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-029.png" alt="hello 029">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-030.png" alt="hello 030">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-031.png" alt="hello 031">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>git config --global user.name "newbie4649"
+git config --global user.email newbie4649@outlook.jp</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-032.png" alt="hello 032">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-033.png" alt="hello 033">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-034.png" alt="hello 034">
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_開発言語のセットアップ">1.1.7. 開発言語のセットアップ</h4>
+<h4 id="_開発言語のセットアップ">1.1.6. 開発言語のセットアップ</h4>
 <div class="sect4">
 <h5 id="_ruby環境のセットアップ">Ruby環境のセットアップ</h5>
 <div class="imageblock">
 <div class="content">
-<img src="../../images/article/episode_0/wsl-012.png" alt="wsl 012">
+<img src="../../images/article/episode_0/ruby-001.png" alt="ruby 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-002.png" alt="ruby 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-003.png" alt="ruby 003">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-004.png" alt="ruby 004">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-005.png" alt="ruby 005">
 </div>
 </div>
 </div>
@@ -1855,6 +2000,12 @@ function HelloWorld($name='PowerShell') {
 <img src="../../images/article/episode_0/provision-007.png" alt="provision 007">
 </div>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ sudo apt-get update -y
+[sudo] password for newbie4649:</code></pre>
+</div>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/provision-008.png" alt="provision 008">
@@ -1862,12 +2013,63 @@ function HelloWorld($name='PowerShell') {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ sudo apt-get update -y
-[sudo] password for newbie4649:
-...
-$ sudo apt install ansible -y
-$ cd provisioning/tasks/
+<pre class="CodeRay highlight"><code data-lang="bash">$ sudo apt install ansible -y</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-009.png" alt="provision 009">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cd provisioning/tasks/
 $ sudo ansible-playbook --inventory=localhost, --connection=local site.yml</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-010.png" alt="provision 010">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ ruby -v</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-011.png" alt="provision 011">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ code ~/.bashrc</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>...
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] &amp;&amp; \. "$NVM_DIR/bash_completion" # This loads nvm bash_compl</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-012.png" alt="provision 012">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ source ~/.bashrc
+$ nvm install --lts
+$ node -v</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-013.png" alt="provision 013">
 </div>
 </div>
 </div>
@@ -1903,9 +2105,145 @@ gem install solargraph</code></pre>
 <p><a href="https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28">VisualStudioCode でRubyの開発環境を作る</a></p>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_hello_world_2">Hello world</h5>
+<div class="sect5">
+<h6 id="_プログラムを作成する_2">プログラムを作成する</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">false</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>)
+  <span class="keyword">end</span>
+
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_簡単な挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>, hello_world)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_簡単な挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>, hello_world)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">def</span> <span class="function">hello_world</span>
+  <span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_簡単な挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>, hello_world)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_指定された名前で挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from VSCode</span><span class="delimiter">'</span></span>, hello_world(<span class="string"><span class="delimiter">'</span><span class="content">VSCode</span><span class="delimiter">'</span></span>))
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">def</span> <span class="function">hello_world</span>(name)
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from </span><span class="inline"><span class="inline-delimiter">#{</span>name<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_簡単な挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>, hello_world)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_指定された名前で挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from VSCode</span><span class="delimiter">'</span></span>, hello_world(<span class="string"><span class="delimiter">'</span><span class="content">VSCode</span><span class="delimiter">'</span></span>))
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">def</span> <span class="function">hello_world</span>(name = <span class="string"><span class="delimiter">'</span><span class="content">Ruby</span><span class="delimiter">'</span></span>)
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from </span><span class="inline"><span class="inline-delimiter">#{</span>name<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何も指定されていない場合は既定の挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>, hello_world)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_指定された名前で挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from VSCode</span><span class="delimiter">'</span></span>, hello_world(<span class="string"><span class="delimiter">'</span><span class="content">VSCode</span><span class="delimiter">'</span></span>))
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">def</span> <span class="function">hello_world</span>(name = <span class="string"><span class="delimiter">'</span><span class="content">Ruby</span><span class="delimiter">'</span></span>)
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from </span><span class="inline"><span class="inline-delimiter">#{</span>name<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_プログラムをデバッグする_2">プログラムをデバッグする</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_プログラムをレポジトリに保存する_2">プログラムをレポジトリに保存する</h6>
+
+</div>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_参照">1.1.8. 参照</h4>
+<h4 id="_参照">1.1.7. 参照</h4>
 <div class="ulist">
 <ul>
 <li>

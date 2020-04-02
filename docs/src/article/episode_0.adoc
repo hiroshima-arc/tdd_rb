@@ -174,7 +174,9 @@ image::../../images/article/episode_0/drive-003.png[]
 
 https://support.microsoft.com/ja-jp/help/17184/windows-10-onedrive[PCのOneDrive^] にあるようにデータはローカルとクラウドの両方にあるので破損・紛失をしても復旧することが出来ます。
 
-==== パッケージ管理ツールのセットアップ
+==== 開発環境のセットアップ
+
+===== パッケージ管理ツールのインストール
 
 アプリケーションの管理にはパッケージ管理ツール https://chocolatey.org/[The Package Manager for Windows^] を使います。インストールの方法は https://qiita.com/konta220/items/95b40b4647a737cb51aa[Chocolateyを使った環境構築の時のメモ^] を参照してください。
 
@@ -184,6 +186,57 @@ image::../../images/article/episode_0/pkg-003.png[]
 image::../../images/article/episode_0/pkg-004.png[]
 image::../../images/article/episode_0/pkg-005.png[]
 image::../../images/article/episode_0/pkg-006.png[]
+
+
+===== gitのインストール
+
+[quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
+____
+Always Use Version Control
+
+Vsersion control is a time machine for your work;you can go back.
+____
+
+image::../../images/article/episode_0/git-001.png[]
+```
+choco install git
+```
+image::../../images/article/episode_0/git-002.png[]
+
+===== PowerShellCoreのインストール
+
+```
+choco install powershell-core
+```
+
+image::../../images/article/episode_0/pwsh-001.png[]
+
+===== Windows Terminalのインストール
+
+[quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
+____
+Use the Power of Command Shells
+
+Use the shell when graphical user interfaces don't cut it.
+____
+
+image::../../images/article/episode_0/terminal-001.png[]
+image::../../images/article/episode_0/terminal-002.png[]
+image::../../images/article/episode_0/terminal-003.png[]
+
+===== WSLのインストール
+
+image::../../images/article/episode_0/wsl-001.png[]
+image::../../images/article/episode_0/wsl-002.png[]
+image::../../images/article/episode_0/wsl-003.png[]
+image::../../images/article/episode_0/wsl-004.png[]
+image::../../images/article/episode_0/wsl-005.png[]
+image::../../images/article/episode_0/wsl-006.png[]
+image::../../images/article/episode_0/wsl-007.png[]
+image::../../images/article/episode_0/wsl-008-1.png[]
+image::../../images/article/episode_0/wsl-008-2.png[]
+image::../../images/article/episode_0/wsl-009.png[]
+image::../../images/article/episode_0/wsl-010.png[]
 
 ==== エディタのセットアップ
 
@@ -202,13 +255,24 @@ image::../../images/article/episode_0/vscode-001.png[]
 image::../../images/article/episode_0/vscode-002.png[]
 image::../../images/article/episode_0/vscode-003.png[]
 
+===== 設定
+image::../../images/article/episode_0/setting-001.png[]
+image::../../images/article/episode_0/setting-002.png[]
+image::../../images/article/episode_0/setting-003.png[]
+image::../../images/article/episode_0/setting-004.png[]
+image::../../images/article/episode_0/setting-005.png[]
+
+
+https://qiita.com/kinchiki/items/dabb5c890d9c57907503[Visual Studio Codeで簡単にショートカットキーを変更する方法]
+https://loumo.jp/wp/archive/20191125120000/[VSCode 内蔵ターミナルで ctrl-p などのショートカットキーを利用する方法]
+
 ===== 拡張機能の追加
 
 https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja[Japanese Language Pack for Visual Studio Code^]
 
-image::../../images/article/episode_0/vscode-004.png[]
-image::../../images/article/episode_0/vscode-004-1.png[]
-image::../../images/article/episode_0/vscode-005.png[]
+image::../../images/article/episode_0/package-001.png[]
+image::../../images/article/episode_0/package-002.png[]
+image::../../images/article/episode_0/package-003.png[]
 
 1. https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons[vscode-icons]
 
@@ -256,67 +320,11 @@ image::../../images/article/episode_0/sync-006.png[]
 image::../../images/article/episode_0/sync-007.png[]
 image::../../images/article/episode_0/sync-008.png[]
 
-==== 開発環境のセットアップ
-
-[quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
-____
-Always Use Version Control
-
-Vsersion control is a time machine for your work;you can go back.
-____
-
-===== gitのインストール
-
-image::../../images/article/episode_0/git-001.png[]
-```
-choco install git
-```
-image::../../images/article/episode_0/git-002.png[]
-
-===== PowerShellCoreのインストール
-
-```
-choco install powershell-core
-```
-
-===== Windows Terminalのインストール
-
-[quote, Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 'https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/f_0041.xhtml[Engineering Daybooks]']
-____
-Use the Power of Command Shells
-
-Use the shell when graphical user interfaces don't cut it.
-____
-
-image::../../images/article/episode_0/terminal-001.png[]
-image::../../images/article/episode_0/terminal-002.png[]
-image::../../images/article/episode_0/terminal-003.png[]
-
-===== WSLのインストール
-
-image::../../images/article/episode_0/wsl-001.png[]
-image::../../images/article/episode_0/wsl-002.png[]
-image::../../images/article/episode_0/wsl-003.png[]
-image::../../images/article/episode_0/wsl-004.png[]
-image::../../images/article/episode_0/wsl-005.png[]
-image::../../images/article/episode_0/wsl-006.png[]
-image::../../images/article/episode_0/wsl-007.png[]
-image::../../images/article/episode_0/wsl-008-1.png[]
-image::../../images/article/episode_0/wsl-008-2.png[]
-image::../../images/article/episode_0/wsl-009.png[]
-image::../../images/article/episode_0/wsl-010.png[]
-image::../../images/article/episode_0/wsl-011.png[]
-
-===== 設定
-image::../../images/article/episode_0/setting-001.png[]
-image::../../images/article/episode_0/setting-002.png[]
-image::../../images/article/episode_0/setting-003.png[]
-image::../../images/article/episode_0/setting-004.png[]
-
-
-https://qiita.com/kinchiki/items/dabb5c890d9c57907503[Visual Studio Codeで簡単にショートカットキーを変更する方法]
-
 ===== Hello world
+
+====== プログラムを作成する
+
+https://ja.wikipedia.org/wiki/Hello_world[Hello world^]
 
 image::../../images/article/episode_0/hello-001.png[]
 image::../../images/article/episode_0/hello-002.png[]
@@ -327,9 +335,6 @@ image::../../images/article/episode_0/hello-006.png[]
 image::../../images/article/episode_0/hello-007.png[]
 image::../../images/article/episode_0/hello-008.png[]
 image::../../images/article/episode_0/hello-009.png[]
-image::../../images/article/episode_0/hello-010.png[]
-image::../../images/article/episode_0/hello-011.png[]
-image::../../images/article/episode_0/hello-012.png[]
 
 ```powershell
 Describe "HelloWorld" {
@@ -339,7 +344,47 @@ Describe "HelloWorld" {
 }
 ```
 
+image::../../images/article/episode_0/hello-010.png[]
+image::../../images/article/episode_0/hello-011.png[]
+
+```powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+}
+```
+
+image::../../images/article/episode_0/hello-012.png[]
+
+```powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単な挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+}
+```
+
 image::../../images/article/episode_0/hello-013.png[]
+
+```powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単な挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+}
+
+function HelloWorld {
+    return "Hello from PowerShell"
+}
+```
+
 image::../../images/article/episode_0/hello-014.png[]
 
 ```powershell
@@ -347,127 +392,141 @@ Describe "HelloWorld" {
     It "何か便利なものだ" {
         $true | Should Be $true
     }
-    It "簡単なフレーズを返す" {
+    It "簡単な挨拶を返す" {
         HelloWorld | Should Be "Hello from PowerShell"
     }
+    It "指定された名前で挨拶を返す" {
+        HelloWorld "VSCode" | Should Be "Hello from VSCode"
+    }
+}
+
+function HelloWorld {
+    return "Hello from PowerShell"
 }
 ```
 
 image::../../images/article/episode_0/hello-015.png[]
 
+```
+...
+Describing HelloWorld
+ [+] 何か便利なものだ 41ms
+ [+] 簡単な挨拶を返す 12ms
+ [-] 指定された名前で挨拶を返す 56ms
+   Expected string length 17 but was 21. Strings differ at index 11.
+   Expected: {Hello from VSCode}
+   But was:  {Hello from PowerShell}
+   ----------------------^
+...
+```
+
 ```powershell
 Describe "HelloWorld" {
     It "何か便利なものだ" {
         $true | Should Be $true
     }
-    It "簡単なフレーズを返す" {
+    It "簡単な挨拶を返す" {
         HelloWorld | Should Be "Hello from PowerShell"
+    }
+    It "指定された名前で挨拶を返す" {
+        HelloWorld "VSCode" | Should Be "Hello from VSCode"
     }
 }
 
-function HelloWorld {
-    return "Hello from PowerShell"
+function HelloWorld($name) {
+    return "Hello from $name"
 }
 ```
 
 image::../../images/article/episode_0/hello-016.png[]
 
-```powershell
+```
+Describing HelloWorld
+ [+] 何か便利なものだ 39ms
+ [-] 簡単な挨拶を返す 23ms
+   Expected string length 21 but was 11. Strings differ at index 11.
+   Expected: {Hello from PowerShell}
+   But was:  {Hello from }
+   ----------------------^
+...
+ [+] 指定された名前で挨拶を返す 29ms
+...
+```
+
+```
 Describe "HelloWorld" {
     It "何か便利なものだ" {
         $true | Should Be $true
     }
-    It "簡単なフレーズを返す" {
+    It "簡単な挨拶を返す" {
         HelloWorld | Should Be "Hello from PowerShell"
     }
-    It "指定した名前で簡単なフレーズを返す" {
-    HelloWorld "VScode" | Should Be "Hello from VSCode"
+    It "指定された名前で挨拶を返す" {
+        HelloWorld "VSCode" | Should Be "Hello from VSCode"
     }
 }
 
-function HelloWorld {
-    return "Hello from PowerShell"
+function HelloWorld($name = "PowerShell") {
+    return "Hello from $name"
 }
 ```
 
 image::../../images/article/episode_0/hello-017.png[]
 
-```powershell
+```
 Describe "HelloWorld" {
-    It "何か便利なものだ" {
-        $true | Should Be $true
-    }
-    It "簡単なフレーズを返す" {
+    It "何も指定されていない場合は既定の挨拶を返す" {
         HelloWorld | Should Be "Hello from PowerShell"
     }
-    It "指定した名前で簡単なフレーズを返す" {
-    HelloWorld "VScode" | Should Be "Hello from VSCode"
+    It "指定された名前で挨拶を返す" {
+        HelloWorld "VSCode" | Should Be "Hello from VSCode"
     }
 }
 
-function HelloWorld($name) {
-    return "Hello from $name
+function HelloWorld($name = "PowerShell") {
+    return "Hello from $name"
 }
 ```
 
 image::../../images/article/episode_0/hello-018.png[]
 
-```
-Describing HelloWorld
- [+] 何か便利なものだ 16ms
- [-] 簡単なフレーズを返す 9ms
-   Expected string length 21 but was 11. Strings differ at index 11.
-   Expected: {Hello from PowerShell}
-   But was:  {Hello from }
-   ----------------------^
-   6:         HelloWorld | Should Be "Hello from PowerShell"
-   at <ScriptBlock>, \\Mac\Home\Desktop\Projects\HelloWorld\Hello.ps1: line 6
- [+] 指定した名前で簡単なフレーズを返す 14ms
-```
-
-```
-Describe "HelloWorld" {
-    It "何か便利なものだ" {
-        $true | Should Be $true
-    }
-    It "簡単なフレーズを返す" {
-        HelloWorld | Should Be "Hello from PowerShell"
-    }
-    It "指定した名前で簡単なフレーズを返す" {
-        HelloWorld "VScode" | Should Be "Hello from VSCode"
-    }
-}
-
-function HelloWorld($name='PowerShell') {
-    return "Hello from $name"
-}
-```
+====== プログラムをデバッグする
 
 image::../../images/article/episode_0/hello-019.png[]
-
-```
-Describe "HelloWorld" {
-    It "何も指定しない場合は既定のフレーズを返す" {
-        HelloWorld | Should Be "Hello from PowerShell"
-    }
-    It "指定した名前で簡単なフレーズを返す" {
-        HelloWorld "VScode" | Should Be "Hello from VSCode"
-    }
-}
-
-function HelloWorld($name='PowerShell') {
-    return "Hello from $name"
-}
-```
-
 image::../../images/article/episode_0/hello-020.png[]
 image::../../images/article/episode_0/hello-021.png[]
+image::../../images/article/episode_0/hello-022.png[]
+image::../../images/article/episode_0/hello-023.png[]
+image::../../images/article/episode_0/hello-024.png[]
+image::../../images/article/episode_0/hello-025.png[]
+
+====== プログラムをレポジトリに保存する
+
+image::../../images/article/episode_0/hello-026.png[]
+image::../../images/article/episode_0/hello-027.png[]
+image::../../images/article/episode_0/hello-028.png[]
+image::../../images/article/episode_0/hello-029.png[]
+image::../../images/article/episode_0/hello-030.png[]
+image::../../images/article/episode_0/hello-031.png[]
+
+```
+git config --global user.name "newbie4649"
+git config --global user.email newbie4649@outlook.jp
+```
+
+image::../../images/article/episode_0/hello-032.png[]
+image::../../images/article/episode_0/hello-033.png[]
+image::../../images/article/episode_0/hello-034.png[]
 
 ==== 開発言語のセットアップ
 
 ===== Ruby環境のセットアップ
 
-image::../../images/article/episode_0/wsl-012.png[]
+image::../../images/article/episode_0/ruby-001.png[]
+image::../../images/article/episode_0/ruby-002.png[]
+image::../../images/article/episode_0/ruby-003.png[]
+image::../../images/article/episode_0/ruby-004.png[]
+image::../../images/article/episode_0/ruby-005.png[]
 
 ===== プロビジョニングの実行
 
@@ -480,16 +539,53 @@ image::../../images/article/episode_0/provision-004.png[]
 image::../../images/article/episode_0/provision-005.png[]
 image::../../images/article/episode_0/provision-006.png[]
 image::../../images/article/episode_0/provision-007.png[]
-image::../../images/article/episode_0/provision-008.png[]
 
 ```bash
 $ sudo apt-get update -y
 [sudo] password for newbie4649:
-...
+```
+
+image::../../images/article/episode_0/provision-008.png[]
+
+```bash
 $ sudo apt install ansible -y
+```
+
+image::../../images/article/episode_0/provision-009.png[]
+
+```bash
 $ cd provisioning/tasks/
 $ sudo ansible-playbook --inventory=localhost, --connection=local site.yml
 ```
+
+image::../../images/article/episode_0/provision-010.png[]
+
+```bash
+$ ruby -v
+```
+
+image::../../images/article/episode_0/provision-011.png[]
+
+```bash
+$ code ~/.bashrc
+```
+
+```
+...
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_compl
+```
+
+image::../../images/article/episode_0/provision-012.png[]
+
+```bash
+$ source ~/.bashrc
+$ nvm install --lts
+$ node -v
+```
+
+image::../../images/article/episode_0/provision-013.png[]
 
 ===== 追加パッケージのインストール
 
@@ -514,6 +610,126 @@ gem install solargraph
 ===== 設定
 
 https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28[VisualStudioCode でRubyの開発環境を作る]
+
+===== Hello world
+====== プログラムを作成する
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, false)
+  end
+end
+```
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+end
+```
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+end
+```
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+end
+
+def hello_world
+  'Hello from Ruby'
+end
+```
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name)
+  "Hello from #{name}"
+end
+```
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name = 'Ruby')
+  "Hello from #{name}"
+end
+```
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何も指定されていない場合は既定の挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name = 'Ruby')
+  "Hello from #{name}"
+end
+```
+
+====== プログラムをデバッグする
+====== プログラムをレポジトリに保存する
 
 ==== 参照
 * https://roadmap.sh/[Developer Roadmaps]
