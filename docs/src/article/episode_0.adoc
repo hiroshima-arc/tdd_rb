@@ -507,7 +507,8 @@ image::../../images/article/episode_0/hello-027.png[]
 image::../../images/article/episode_0/hello-028.png[]
 image::../../images/article/episode_0/hello-029.png[]
 image::../../images/article/episode_0/hello-030.png[]
-image::../../images/article/episode_0/hello-031.png[]
+image::../../images/article/episode_0/hello-031-1.png[]
+image::../../images/article/episode_0/hello-031-2.png[]
 
 ```
 git config --global user.name "newbie4649"
@@ -538,7 +539,8 @@ image::../../images/article/episode_0/provision-003.png[]
 image::../../images/article/episode_0/provision-004.png[]
 image::../../images/article/episode_0/provision-005.png[]
 image::../../images/article/episode_0/provision-006.png[]
-image::../../images/article/episode_0/provision-007.png[]
+image::../../images/article/episode_0/provision-007-1.png[]
+image::../../images/article/episode_0/provision-007-2.png[]
 
 ```bash
 $ sudo apt-get update -y
@@ -559,6 +561,7 @@ $ sudo ansible-playbook --inventory=localhost, --connection=local site.yml
 ```
 
 image::../../images/article/episode_0/provision-010.png[]
+image::../../images/article/episode_0/provision-010-2.png[]
 
 ```bash
 $ ruby -v
@@ -597,6 +600,8 @@ https://marketplace.visualstudio.com/items?itemName=kaiwood.endwise[vscode-endwi
 
 https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop[ruby-rubocop^]
 
+https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer[Test Explorer UI^]
+
 https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter[Ruby Test Explorer^]
 
 
@@ -613,6 +618,10 @@ https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28[VisualStudioCode でR
 
 ===== Hello world
 ====== プログラムを作成する
+
+image::../../images/article/episode_0/ruby-hello-001.png[]
+image::../../images/article/episode_0/ruby-hello-002.png[]
+
 ```ruby
 require 'minitest/autorun'
 
@@ -622,6 +631,11 @@ class TestHelloWorld < Minitest::Test
   end
 end
 ```
+
+image::../../images/article/episode_0/ruby-hello-003.png[]
+image::../../images/article/episode_0/ruby-hello-004.png[]
+image::../../images/article/episode_0/ruby-hello-005.png[]
+image::../../images/article/episode_0/ruby-hello-006.png[]
 
 ```ruby
 require 'minitest/autorun'
@@ -633,6 +647,8 @@ class TestHelloWorld < Minitest::Test
 
 end
 ```
+
+image::../../images/article/episode_0/ruby-hello-007.png[]
 
 ```ruby
 require 'minitest/autorun'
@@ -647,6 +663,8 @@ class TestHelloWorld < Minitest::Test
   end
 end
 ```
+
+image::../../images/article/episode_0/ruby-hello-008.png[]
 
 ```ruby
 require 'minitest/autorun'
@@ -665,6 +683,32 @@ def hello_world
   'Hello from Ruby'
 end
 ```
+
+image::../../images/article/episode_0/ruby-hello-009.png[]
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world
+  "Hello from Ruby"
+end
+```
+
+image::../../images/article/episode_0/ruby-hello-010.png[]
 
 ```ruby
 require 'minitest/autorun'
@@ -688,6 +732,8 @@ def hello_world(name)
 end
 ```
 
+image::../../images/article/episode_0/ruby-hello-011.png[]
+
 ```ruby
 require 'minitest/autorun'
 
@@ -710,6 +756,8 @@ def hello_world(name = 'Ruby')
 end
 ```
 
+image::../../images/article/episode_0/ruby-hello-012.png[]
+
 ```ruby
 require 'minitest/autorun'
 
@@ -728,8 +776,21 @@ def hello_world(name = 'Ruby')
 end
 ```
 
+image::../../images/article/episode_0/ruby-hello-013.png[]
+
 ====== プログラムをデバッグする
+
+image::../../images/article/episode_0/ruby-debug-001.png[]
+image::../../images/article/episode_0/ruby-debug-002.png[]
+image::../../images/article/episode_0/ruby-debug-003.png[]
+image::../../images/article/episode_0/ruby-debug-004.png[]
+image::../../images/article/episode_0/ruby-debug-005.png[]
+
 ====== プログラムをレポジトリに保存する
+
+image::../../images/article/episode_0/ruby-git-001.png[]
+image::../../images/article/episode_0/ruby-git-002.png[]
+image::../../images/article/episode_0/ruby-git-003.png[]
 
 ==== 参照
 * https://roadmap.sh/[Developer Roadmaps]

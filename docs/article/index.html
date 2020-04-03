@@ -1903,7 +1903,12 @@ function HelloWorld($name = "PowerShell") {
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../../images/article/episode_0/hello-031.png" alt="hello 031">
+<img src="../../images/article/episode_0/hello-031-1.png" alt="hello 031 1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-031-2.png" alt="hello 031 2">
 </div>
 </div>
 <div class="listingblock">
@@ -1997,7 +2002,12 @@ git config --global user.email newbie4649@outlook.jp</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../../images/article/episode_0/provision-007.png" alt="provision 007">
+<img src="../../images/article/episode_0/provision-007-1.png" alt="provision 007 1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-007-2.png" alt="provision 007 2">
 </div>
 </div>
 <div class="listingblock">
@@ -2030,6 +2040,11 @@ $ sudo ansible-playbook --inventory=localhost, --connection=local site.yml</code
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/provision-010.png" alt="provision 010">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/provision-010-2.png" alt="provision 010 2">
 </div>
 </div>
 <div class="listingblock">
@@ -2088,6 +2103,9 @@ $ node -v</code></pre>
 <p><a href="https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop" target="_blank" rel="noopener">ruby-rubocop</a></p>
 </div>
 <div class="paragraph">
+<p><a href="https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer" target="_blank" rel="noopener">Test Explorer UI</a></p>
+</div>
+<div class="paragraph">
 <p><a href="https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter" target="_blank" rel="noopener">Ruby Test Explorer</a></p>
 </div>
 <div class="listingblock">
@@ -2109,6 +2127,16 @@ gem install solargraph</code></pre>
 <h5 id="_hello_world_2">Hello world</h5>
 <div class="sect5">
 <h6 id="_プログラムを作成する_2">プログラムを作成する</h6>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-hello-001.png" alt="ruby hello 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-hello-002.png" alt="ruby hello 002">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
@@ -2118,6 +2146,26 @@ gem install solargraph</code></pre>
     assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">false</span>)
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-hello-003.png" alt="ruby hello 003">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-hello-004.png" alt="ruby hello 004">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-hello-005.png" alt="ruby hello 005">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-hello-006.png" alt="ruby hello 006">
 </div>
 </div>
 <div class="listingblock">
@@ -2130,6 +2178,11 @@ gem install solargraph</code></pre>
   <span class="keyword">end</span>
 
 <span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-hello-007.png" alt="ruby hello 007">
 </div>
 </div>
 <div class="listingblock">
@@ -2145,6 +2198,11 @@ gem install solargraph</code></pre>
     assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>, hello_world)
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-hello-008.png" alt="ruby hello 008">
 </div>
 </div>
 <div class="listingblock">
@@ -2164,6 +2222,39 @@ gem install solargraph</code></pre>
 <span class="keyword">def</span> <span class="function">hello_world</span>
   <span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>
 <span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-hello-009.png" alt="ruby hello 009">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_簡単な挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>, hello_world)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_指定された名前で挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from VSCode</span><span class="delimiter">'</span></span>, hello_world(<span class="string"><span class="delimiter">'</span><span class="content">VSCode</span><span class="delimiter">'</span></span>))
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">def</span> <span class="function">hello_world</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from Ruby</span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-hello-010.png" alt="ruby hello 010">
 </div>
 </div>
 <div class="listingblock">
@@ -2189,6 +2280,11 @@ gem install solargraph</code></pre>
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-hello-011.png" alt="ruby hello 011">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
@@ -2212,6 +2308,11 @@ gem install solargraph</code></pre>
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-hello-012.png" alt="ruby hello 012">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
@@ -2231,14 +2332,57 @@ gem install solargraph</code></pre>
 <span class="keyword">end</span></code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-hello-013.png" alt="ruby hello 013">
+</div>
+</div>
 </div>
 <div class="sect5">
 <h6 id="_プログラムをデバッグする_2">プログラムをデバッグする</h6>
-
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-debug-001.png" alt="ruby debug 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-debug-002.png" alt="ruby debug 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-debug-003.png" alt="ruby debug 003">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-debug-004.png" alt="ruby debug 004">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-debug-005.png" alt="ruby debug 005">
+</div>
+</div>
 </div>
 <div class="sect5">
 <h6 id="_プログラムをレポジトリに保存する_2">プログラムをレポジトリに保存する</h6>
-
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-git-001.png" alt="ruby git 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-git-002.png" alt="ruby git 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-git-003.png" alt="ruby git 003">
+</div>
+</div>
 </div>
 </div>
 </div>
