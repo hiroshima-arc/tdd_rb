@@ -702,24 +702,63 @@ image::../../images/article/episode_0/hello-034.png[]
 
 ===== Ruby環境のセットアップ
 
+画面左下の `><` を押してメニューから `Remote-WSL: New Window` を選択します。
+
 image::../../images/article/episode_0/ruby-001.png[]
+
+`アクセスを許可する` を押します。
+
 image::../../images/article/episode_0/ruby-002.png[]
+
+新しいウィンドウが立ち上がったらExtensionメニューから `Install Local Extensions in "WSL: Ubuntu'..."` を押します。
+
 image::../../images/article/episode_0/ruby-003.png[]
+
+全てにチェックをしてインストールします。
+
 image::../../images/article/episode_0/ruby-004.png[]
+
+拡張機能のインストールが終わったら `Reload Window` を押して拡張機能を読み込みます。
+
 image::../../images/article/episode_0/ruby-005.png[]
 
 ===== プロビジョニングの実行
 
+Ruby開発環境の自動構築をするため以下のレポジトリを自分のレポジトリにフォークします。
+
 https://github.com/hiroshima-arc/tdd_rb[テスト駆動開発から始めるRuby入門^]
 
+
+`Fork` を押します。
+
 image::../../images/article/episode_0/provision-001.png[]
+
+`Fork` が完了して自分のレポジトリにコピーされたら `Clone or download` を押してレポジトリのURLをコピーします。
+
 image::../../images/article/episode_0/provision-002.png[]
+
+エクスプローラアイコンメニューから `レポジトリをクローンする` を押します。
+
 image::../../images/article/episode_0/provision-003.png[]
+
+先程コピーしたレポジトリのURLを貼り付けます。
+
 image::../../images/article/episode_0/provision-004.png[]
+
+保存先はそのままで `OK` を押します。
+
 image::../../images/article/episode_0/provision-005.png[]
+
+`開く` を押します。
+
 image::../../images/article/episode_0/provision-006.png[]
+
+メニューから `ターミナル` `新しいターミナル` を選択します。
+
 image::../../images/article/episode_0/provision-007-1.png[]
 image::../../images/article/episode_0/provision-007-2.png[]
+
+ターミナルに以下のコマンドを入力します。実行時にパスワード入力が求められるのでWSLで設定したパスワードを入力してください。
 
 ```bash
 $ sudo apt-get update -y
@@ -728,9 +767,13 @@ $ sudo apt-get update -y
 
 image::../../images/article/episode_0/provision-008.png[]
 
+続いて、ターミナルに以下のコマンドを入力します。
+
 ```bash
 $ sudo apt install ansible -y
 ```
+
+続いて、エクスプローラから　`provisioning/vars/site.yml` をファイルを開いて `user:` の名前をWSLで設定したユーザーIDに変更します。変更を保存したらターミナルに以下のコマンドを入力します。
 
 image::../../images/article/episode_0/provision-009.png[]
 
@@ -740,7 +783,12 @@ $ sudo ansible-playbook --inventory=localhost, --connection=local site.yml
 ```
 
 image::../../images/article/episode_0/provision-010.png[]
+
+セットアップが完了したらエディタを再起動してプロジェクトを開きます。
+
 image::../../images/article/episode_0/provision-010-2.png[]
+
+以下のコマンドを入力してRubyがセットアップされていることを確認します。
 
 ```bash
 $ ruby -v
@@ -748,9 +796,14 @@ $ ruby -v
 
 image::../../images/article/episode_0/provision-011.png[]
 
+
+続いて、ターミナルに以下のコマンドを入力します。
+
 ```bash
 $ code ~/.bashrc
 ```
+
+表示されたファイルの一番最後に以下のコードを追加して保存します。
 
 ```
 ...
@@ -760,6 +813,8 @@ export NVM_DIR="$HOME/.nvm"
 ```
 
 image::../../images/article/episode_0/provision-012.png[]
+
+保存したら以下のコマンドを実行してNode.jsのバージョンが表示されたらセットアップ完了です。
 
 ```bash
 $ source ~/.bashrc
