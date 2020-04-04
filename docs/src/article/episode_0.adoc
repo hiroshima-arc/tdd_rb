@@ -33,7 +33,7 @@ ____
 * 躾（しつけ、Shitsuke）
   決められたルール・手順を正しく守る習慣をつける
 
-これがプログラミング環境構築とどのように関係していくのでしょうか？まずは *整理* から、いらないものを捨てるのが *整理* ですがそもそもいらないものが何なのかを決めなければなりません。プログラミングで扱う対象はモノではなく情報です。ではどうやって情報を扱って行けばよいでしょう？ここは、 *分類するな。ひたすら並べよ* の考えに従い一箇所に記録をまとめていきましょう。そのためのテクニックとして *エンジニアリングデイブックス* があります。これは何をやったか何を学んだかをノートに時系列に記録していくことです。
+これがプログラミング環境構築とどのように関係していくのでしょうか？まずは、いらないものを捨てるのが *整理* ですがそもそもいらないものが何なのかを決めなければなりません。プログラミングで扱う対象はモノではなく情報です。ではどうやって情報を扱っていけばよいでしょう？ここは、 *分類するな。ひたすら並べよ* の考えに従い一箇所に記録をまとめていきましょう。そのためのテクニックとして *エンジニアリングデイブックス* があります。これは何をやったか何を学んだかをノートに時系列に記録していくことです。
 
 Engineering Dayboks
 
@@ -53,7 +53,7 @@ Name Well; Rename When Needed.
 Name to express your intent to readers, and rename as soon as that intent shifts.
 ____
 
-基本は実践しなければ意味がありませんそして習慣にすることで初めてものにできるものです。そのためには自ら躾けていかなければなりません。
+基本は実践しなければ意味がありません。そして習慣にすることで初めてものにできるものです。そのためには自ら躾けて習慣化していかなければなりません。
 
 [quote, テスト駆動開発]
 ____
@@ -140,6 +140,9 @@ https://github.co.jp/[GitHubに登録する^] から `GitHubに登録する` を
 
 image::../../images/article/episode_0/ghb-001.png[]
 image::../../images/article/episode_0/ghb-002.png[]
+
+Freeプランを選択します
+
 image::../../images/article/episode_0/ghb-003.png[]
 
 ===== アカウントにサインインする
@@ -180,8 +183,16 @@ https://support.microsoft.com/ja-jp/help/17184/windows-10-onedrive[PCのOneDrive
 
 アプリケーションの管理にはパッケージ管理ツール https://chocolatey.org/[The Package Manager for Windows^] を使います。インストールの方法は https://qiita.com/konta220/items/95b40b4647a737cb51aa[Chocolateyを使った環境構築の時のメモ^] を参照してください。
 
+`Get Started` を選択します。
+
 image::../../images/article/episode_0/pkg-001.png[]
+
+コードをコピーします。
+
 image::../../images/article/episode_0/pkg-002.png[]
+
+画面左下のスタートボタンを右クリックして `Windows PowerSHell(管理者)(A)` を起動してコピーしたコードを貼り付け実行します。
+
 image::../../images/article/episode_0/pkg-003.png[]
 image::../../images/article/episode_0/pkg-004.png[]
 image::../../images/article/episode_0/pkg-005.png[]
@@ -198,12 +209,17 @@ Vsersion control is a time machine for your work;you can go back.
 ____
 
 image::../../images/article/episode_0/git-001.png[]
+
+画面左下のスタートボタンを右クリックして `Windows PowerSHell(管理者)(A)` を起動して以下のコマンドを入力します。質問には全てYを入力してください。
+
 ```
 choco install git
 ```
 image::../../images/article/episode_0/git-002.png[]
 
 ===== PowerShellCoreのインストール
+
+続いて、以下のコマンドを入力します。質問には全てYを入力してください。
 
 ```
 choco install powershell-core
@@ -220,21 +236,59 @@ Use the Power of Command Shells
 Use the shell when graphical user interfaces don't cut it.
 ____
 
+
+画面左下のスタートメニューから `Microsft Store` を選択します。
+
 image::../../images/article/episode_0/terminal-001.png[]
+
+検索欄に `terminal` と入力したら表示されられる候補の中から `Windows Terminal` を選択します。
+
 image::../../images/article/episode_0/terminal-002.png[]
+
+`入手` を押してアプリケーションをインストールします。
+
 image::../../images/article/episode_0/terminal-003.png[]
 
 ===== WSLのインストール
 
+続いて、検索欄に `ubuntu` と入力して候補の中から `Ubuntu` を選択します。
+
 image::../../images/article/episode_0/wsl-001.png[]
+
+入手を押してアプリケーションをインストールします。
+
 image::../../images/article/episode_0/wsl-002.png[]
+
+インストール後に起動を実行しても必要な設定があるため実行できません。一旦アプリケーションを閉じます。
+
 image::../../images/article/episode_0/wsl-003.png[]
+
+画面左下のスタートメニューから歯車のアイコンを選択してWindowsの設定画面を表示します。
+
 image::../../images/article/episode_0/wsl-004.png[]
+
+`アプリ` を選択します。
+
 image::../../images/article/episode_0/wsl-005.png[]
+
+`アプリと機能` から `プログラミングと機能` を選択します。
+
 image::../../images/article/episode_0/wsl-006.png[]
+
+`Windows Subsystem for Linux` にチェックを入れてOKボタンを押します。
+
 image::../../images/article/episode_0/wsl-007.png[]
+
+`今すぐ再起動` を押してWindowsを再起動します。
+
 image::../../images/article/episode_0/wsl-008-1.png[]
+
+画面左下のスタートメニューから `Ubuntu` を選択します。
+
 image::../../images/article/episode_0/wsl-008-2.png[]
+
+セットアップが始まるのでユーザーIDとパスワードを設定してください。
+
 image::../../images/article/episode_0/wsl-009.png[]
 image::../../images/article/episode_0/wsl-010.png[]
 
@@ -256,23 +310,53 @@ image::../../images/article/episode_0/vscode-002.png[]
 image::../../images/article/episode_0/vscode-003.png[]
 
 ===== 設定
+
+エディタが起動すると画面右下にWSL拡張機能インストールのポップアップが表示されるので `Install` を押して拡張機能をインストールします。
+
 image::../../images/article/episode_0/setting-001.png[]
+
+続いて画面左下の歯車を選択してメニューから `Settings` を選択します。
+
 image::../../images/article/episode_0/setting-002.png[]
+
+検索欄に `trim` と入力します。
+
 image::../../images/article/episode_0/setting-003.png[]
+
+チェックをオンにします。
+
 image::../../images/article/episode_0/setting-004.png[]
+
+同様に検索欄に `format on save` と入力してチェックをオンにします。
+
 image::../../images/article/episode_0/setting-005.png[]
 
 
-https://qiita.com/kinchiki/items/dabb5c890d9c57907503[Visual Studio Codeで簡単にショートカットキーを変更する方法]
-https://loumo.jp/wp/archive/20191125120000/[VSCode 内蔵ターミナルで ctrl-p などのショートカットキーを利用する方法]
+必要に応じてキーバインドなども自分が使いやすいようにカスタマイズします。
+
+* https://qiita.com/kinchiki/items/dabb5c890d9c57907503[Visual Studio Codeで簡単にショートカットキーを変更する方法^]
+
+* https://loumo.jp/wp/archive/20191125120000/[VSCode 内蔵ターミナルで ctrl-p などのショートカットキーを利用する方法^]
 
 ===== 拡張機能の追加
 
+エディタのメニューが英語なので日本語に変更する拡張機能をインストールします。
+
 https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja[Japanese Language Pack for Visual Studio Code^]
 
+画面左のExtensionアイコンを選択して検索欄に `japanese` と入力したら日本語拡張パッケージが表示されるので `Install` を押します。
+
 image::../../images/article/episode_0/package-001.png[]
+
+`Restart Now` を押してエディタを再起動します。
+
 image::../../images/article/episode_0/package-002.png[]
+
+メニューが日本語になりました。
+
 image::../../images/article/episode_0/package-003.png[]
+
+同様の手順で以下の拡張機能をインストールします。
 
 1. https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons[vscode-icons]
 
@@ -309,32 +393,64 @@ image::../../images/article/episode_0/package-003.png[]
 
 ===== 設定の同期
 
-https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync[Settings Sync^]
+エディタの設定をして拡張機能をインストールしました。再インストールなどでエディタを再インストールする場合に上記の作業を再度するのは手間なので設定をオンライに保存してすぐにセットアップできるようにしておきます。
+
+https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync[Settings Sync^] をインストールすると以下の画面が表示されるので `LOGIN WITH GITHUB` を選択します。
 
 image::../../images/article/episode_0/sync-001.png[]
+
+`アクセスを許可する` を押します。
+
 image::../../images/article/episode_0/sync-002.png[]
+
+`開く` を押します。
+
 image::../../images/article/episode_0/sync-003.png[]
+
+ブラウザが起動するので `Authorize` を押します。
+
 image::../../images/article/episode_0/sync-004.png[]
 image::../../images/article/episode_0/sync-005.png[]
+
+`SKIP` を押します。
+
 image::../../images/article/episode_0/sync-006.png[]
+
+エディタメニューの `表示` から `コマンドパレット` を選択して `Sync` と入力して入力候補の中から `アップデート・アップロードの設定` を選択します。
+
 image::../../images/article/episode_0/sync-007.png[]
+
+`はい` を押して設定をアップロードします。
+
 image::../../images/article/episode_0/sync-008.png[]
+
+エディタの設定を変更した際はアップロードすることで最新の設定を保存することができます。保存した設定を読み込む場合はコマンドパレットから `Sync: 設定をダウンロード` を選択します。
 
 ===== Hello world
 
 ====== プログラムを作成する
 
-https://ja.wikipedia.org/wiki/Hello_world[Hello world^]
+エディタのセットアップが出来たのでかんたんなプログラムを作ってみましょう。
+お題は https://ja.wikipedia.org/wiki/Hello_world[Hello world^] です。
+まず、プログラムを作成する場所ですが今回はディスクトップの直下に `Projects` というフォルダを作成してその中に配置したいと思います。
 
 image::../../images/article/episode_0/hello-001.png[]
 image::../../images/article/episode_0/hello-002.png[]
 image::../../images/article/episode_0/hello-003.png[]
 image::../../images/article/episode_0/hello-004.png[]
+
+エディタを起動したらエクスプローラアイコンから `フォルダを開く` を選択して作成したフォルダを開きます。
+
 image::../../images/article/episode_0/hello-005.png[]
 image::../../images/article/episode_0/hello-006.png[]
 image::../../images/article/episode_0/hello-007.png[]
+
+フォルダを開いたらファイルアイコンを選択して `HelloWorld.ps1` ファイルを作成します。
+
 image::../../images/article/episode_0/hello-008.png[]
 image::../../images/article/episode_0/hello-009.png[]
+
+まず、以下のコードを入力してキーボードのF5を押します。
 
 ```powershell
 Describe "HelloWorld" {
@@ -345,7 +461,12 @@ Describe "HelloWorld" {
 ```
 
 image::../../images/article/episode_0/hello-010.png[]
+
+プログラムの実行と一緒にテストの実行結果が表示されます。
+
 image::../../images/article/episode_0/hello-011.png[]
+
+テストが通るように修正します。
 
 ```powershell
 Describe "HelloWorld" {
@@ -356,6 +477,8 @@ Describe "HelloWorld" {
 ```
 
 image::../../images/article/episode_0/hello-012.png[]
+
+テスティングフレームワークの動作が確認できたのでプログラム作成に入ります。
 
 ```powershell
 Describe "HelloWorld" {
@@ -369,6 +492,8 @@ Describe "HelloWorld" {
 ```
 
 image::../../images/article/episode_0/hello-013.png[]
+
+`HelloWorld` 関数を追加します。
 
 ```powershell
 Describe "HelloWorld" {
@@ -385,7 +510,7 @@ function HelloWorld {
 }
 ```
 
-image::../../images/article/episode_0/hello-014.png[]
+F5キーを押してテストが通ったことを確認したらテストケースを追加します。
 
 ```powershell
 Describe "HelloWorld" {
@@ -407,6 +532,8 @@ function HelloWorld {
 
 image::../../images/article/episode_0/hello-015.png[]
 
+`HelloWorld` 関数は既定の挨拶しか返さないのでテストが失敗します。
+
 ```
 ...
 Describing HelloWorld
@@ -419,6 +546,8 @@ Describing HelloWorld
    ----------------------^
 ...
 ```
+
+`HelloWorld` 関数に引数を追加して表示できるように変更します。
 
 ```powershell
 Describe "HelloWorld" {
@@ -438,7 +567,11 @@ function HelloWorld($name) {
 }
 ```
 
+F5を押します。
+
 image::../../images/article/episode_0/hello-016.png[]
+
+`指定された名前で挨拶を返す` テストは通りましたが今度は `簡単な挨拶を返す` テストが失敗してしまいました。
 
 ```
 Describing HelloWorld
@@ -452,6 +585,8 @@ Describing HelloWorld
  [+] 指定された名前で挨拶を返す 29ms
 ...
 ```
+
+`HelloWorld` 関数にデフォルト引数を設定してテストを通るようにします。
 
 ```
 Describe "HelloWorld" {
@@ -471,7 +606,11 @@ function HelloWorld($name = "PowerShell") {
 }
 ```
 
+F5を押します。
+
 image::../../images/article/episode_0/hello-017.png[]
+
+仕上げに不要なテストを削除してテストケースの文言をわかりやすくしておきます。
 
 ```
 Describe "HelloWorld" {
@@ -490,25 +629,59 @@ function HelloWorld($name = "PowerShell") {
 
 image::../../images/article/episode_0/hello-018.png[]
 
+`HelloWorld` プログラムの完成です。
+
 ====== プログラムをデバッグする
 
+プログラムを作成していると思った通りに動かないことが多々あります。そのようなときにプログラムの動作を確認するにはエディタのデバッグ機能を使います。
+
+まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。
+
 image::../../images/article/episode_0/hello-019.png[]
+
+ブレークポイントを設定したらF5を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。
+
 image::../../images/article/episode_0/hello-020.png[]
+
+画面上の実行ボタンを押すと次のブレークポイントに移動します。
+
 image::../../images/article/episode_0/hello-021.png[]
 image::../../images/article/episode_0/hello-022.png[]
 image::../../images/article/episode_0/hello-023.png[]
+
+デバッガを終了するには終了ボタンを押します。
+
 image::../../images/article/episode_0/hello-024.png[]
+
+ブレークポイントを再度押すことで解除ができます。
+
 image::../../images/article/episode_0/hello-025.png[]
 
 ====== プログラムをレポジトリに保存する
 
+作成したプログラムをレポジトリに保存します。まずソース管理アイコンを選択して `リポジトリを初期化する` を押します。
+
 image::../../images/article/episode_0/hello-026.png[]
 image::../../images/article/episode_0/hello-027.png[]
+
+`変更をステージ` を選択します。
+
 image::../../images/article/episode_0/hello-028.png[]
+
+変更内容を入力します。ここでは `feat: HelloWorld` を入力しておきます。
+
 image::../../images/article/episode_0/hello-029.png[]
+
+`コミット` を押します。
+
 image::../../images/article/episode_0/hello-030.png[]
+
+初回登録時は以下の警告が表示されるので追加作業が必要になります。
+
 image::../../images/article/episode_0/hello-031-1.png[]
 image::../../images/article/episode_0/hello-031-2.png[]
+
+以下のコマンドをターミナルに入力します。
 
 ```
 git config --global user.name "newbie4649"
@@ -516,7 +689,13 @@ git config --global user.email newbie4649@outlook.jp
 ```
 
 image::../../images/article/episode_0/hello-032.png[]
+
+再度 `コミット` を押してレポジトリに保存します。
+
 image::../../images/article/episode_0/hello-033.png[]
+
+レポジトリの記録内容は `GitLens` から確認することが出来ます。
+
 image::../../images/article/episode_0/hello-034.png[]
 
 ==== 開発言語のセットアップ

@@ -633,7 +633,7 @@ table.CodeRay td.code>pre{padding:0}
 </ul>
 </div>
 <div class="paragraph">
-<p>これがプログラミング環境構築とどのように関係していくのでしょうか？まずは <strong>整理</strong> から、いらないものを捨てるのが <strong>整理</strong> ですがそもそもいらないものが何なのかを決めなければなりません。プログラミングで扱う対象はモノではなく情報です。ではどうやって情報を扱って行けばよいでしょう？ここは、 <strong>分類するな。ひたすら並べよ</strong> の考えに従い一箇所に記録をまとめていきましょう。そのためのテクニックとして <strong>エンジニアリングデイブックス</strong> があります。これは何をやったか何を学んだかをノートに時系列に記録していくことです。</p>
+<p>これがプログラミング環境構築とどのように関係していくのでしょうか？まずは、いらないものを捨てるのが <strong>整理</strong> ですがそもそもいらないものが何なのかを決めなければなりません。プログラミングで扱う対象はモノではなく情報です。ではどうやって情報を扱っていけばよいでしょう？ここは、 <strong>分類するな。ひたすら並べよ</strong> の考えに従い一箇所に記録をまとめていきましょう。そのためのテクニックとして <strong>エンジニアリングデイブックス</strong> があります。これは何をやったか何を学んだかをノートに時系列に記録していくことです。</p>
 </div>
 <div class="paragraph">
 <p>Engineering Dayboks</p>
@@ -670,7 +670,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="paragraph">
-<p>基本は実践しなければ意味がありませんそして習慣にすることで初めてものにできるものです。そのためには自ら躾けていかなければなりません。</p>
+<p>基本は実践しなければ意味がありません。そして習慣にすることで初めてものにできるものです。そのためには自ら躾けて習慣化していかなければなりません。</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -871,6 +871,9 @@ table.CodeRay td.code>pre{padding:0}
 <img src="../../images/article/episode_0/ghb-002.png" alt="ghb 002">
 </div>
 </div>
+<div class="paragraph">
+<p>Freeプランを選択します</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/ghb-003.png" alt="ghb 003">
@@ -967,15 +970,24 @@ table.CodeRay td.code>pre{padding:0}
 <div class="paragraph">
 <p>アプリケーションの管理にはパッケージ管理ツール <a href="https://chocolatey.org/" target="_blank" rel="noopener">The Package Manager for Windows</a> を使います。インストールの方法は <a href="https://qiita.com/konta220/items/95b40b4647a737cb51aa" target="_blank" rel="noopener">Chocolateyを使った環境構築の時のメモ</a> を参照してください。</p>
 </div>
+<div class="paragraph">
+<p><code>Get Started</code> を選択します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/pkg-001.png" alt="pkg 001">
 </div>
 </div>
+<div class="paragraph">
+<p>コードをコピーします。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/pkg-002.png" alt="pkg 002">
 </div>
+</div>
+<div class="paragraph">
+<p>画面左下のスタートボタンを右クリックして <code>Windows PowerSHell(管理者)(A)</code> を起動してコピーしたコードを貼り付け実行します。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1019,6 +1031,9 @@ table.CodeRay td.code>pre{padding:0}
 <img src="../../images/article/episode_0/git-001.png" alt="git 001">
 </div>
 </div>
+<div class="paragraph">
+<p>画面左下のスタートボタンを右クリックして <code>Windows PowerSHell(管理者)(A)</code> を起動して以下のコマンドを入力します。質問には全てYを入力してください。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code>choco install git</code></pre>
@@ -1032,6 +1047,9 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="sect4">
 <h5 id="_powershellcoreのインストール">PowerShellCoreのインストール</h5>
+<div class="paragraph">
+<p>続いて、以下のコマンドを入力します。質問には全てYを入力してください。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code>choco install powershell-core</code></pre>
@@ -1059,15 +1077,24 @@ table.CodeRay td.code>pre{padding:0}
 <cite>20th Anniversary Edition</cite>
 </div>
 </div>
+<div class="paragraph">
+<p>画面左下のスタートメニューから <code>Microsft Store</code> を選択します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/terminal-001.png" alt="terminal 001">
 </div>
 </div>
+<div class="paragraph">
+<p>検索欄に <code>terminal</code> と入力したら表示されられる候補の中から <code>Windows Terminal</code> を選択します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/terminal-002.png" alt="terminal 002">
 </div>
+</div>
+<div class="paragraph">
+<p><code>入手</code> を押してアプリケーションをインストールします。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1077,50 +1104,80 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="sect4">
 <h5 id="_wslのインストール">WSLのインストール</h5>
+<div class="paragraph">
+<p>続いて、検索欄に <code>ubuntu</code> と入力して候補の中から <code>Ubuntu</code> を選択します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/wsl-001.png" alt="wsl 001">
 </div>
+</div>
+<div class="paragraph">
+<p>入手を押してアプリケーションをインストールします。</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/wsl-002.png" alt="wsl 002">
 </div>
 </div>
+<div class="paragraph">
+<p>インストール後に起動を実行しても必要な設定があるため実行できません。一旦アプリケーションを閉じます。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/wsl-003.png" alt="wsl 003">
 </div>
+</div>
+<div class="paragraph">
+<p>画面左下のスタートメニューから歯車のアイコンを選択してWindowsの設定画面を表示します。</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/wsl-004.png" alt="wsl 004">
 </div>
 </div>
+<div class="paragraph">
+<p><code>アプリ</code> を選択します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/wsl-005.png" alt="wsl 005">
 </div>
+</div>
+<div class="paragraph">
+<p><code>アプリと機能</code> から <code>プログラミングと機能</code> を選択します。</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/wsl-006.png" alt="wsl 006">
 </div>
 </div>
+<div class="paragraph">
+<p><code>Windows Subsystem for Linux</code> にチェックを入れてOKボタンを押します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/wsl-007.png" alt="wsl 007">
 </div>
+</div>
+<div class="paragraph">
+<p><code>今すぐ再起動</code> を押してWindowsを再起動します。</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/wsl-008-1.png" alt="wsl 008 1">
 </div>
 </div>
+<div class="paragraph">
+<p>画面左下のスタートメニューから <code>Ubuntu</code> を選択します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/wsl-008-2.png" alt="wsl 008 2">
 </div>
+</div>
+<div class="paragraph">
+<p>セットアップが始まるのでユーザーIDとパスワードを設定してください。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1173,25 +1230,40 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="sect4">
 <h5 id="_設定">設定</h5>
+<div class="paragraph">
+<p>エディタが起動すると画面右下にWSL拡張機能インストールのポップアップが表示されるので <code>Install</code> を押して拡張機能をインストールします。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/setting-001.png" alt="setting 001">
 </div>
+</div>
+<div class="paragraph">
+<p>続いて画面左下の歯車を選択してメニューから <code>Settings</code> を選択します。</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/setting-002.png" alt="setting 002">
 </div>
 </div>
+<div class="paragraph">
+<p>検索欄に <code>trim</code> と入力します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/setting-003.png" alt="setting 003">
 </div>
 </div>
+<div class="paragraph">
+<p>チェックをオンにします。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/setting-004.png" alt="setting 004">
 </div>
+</div>
+<div class="paragraph">
+<p>同様に検索欄に <code>format on save</code> と入力してチェックをオンにします。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1199,29 +1271,53 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="paragraph">
-<p><a href="https://qiita.com/kinchiki/items/dabb5c890d9c57907503">Visual Studio Codeで簡単にショートカットキーを変更する方法</a>
-<a href="https://loumo.jp/wp/archive/20191125120000/">VSCode 内蔵ターミナルで ctrl-p などのショートカットキーを利用する方法</a></p>
+<p>必要に応じてキーバインドなども自分が使いやすいようにカスタマイズします。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://qiita.com/kinchiki/items/dabb5c890d9c57907503" target="_blank" rel="noopener">Visual Studio Codeで簡単にショートカットキーを変更する方法</a></p>
+</li>
+<li>
+<p><a href="https://loumo.jp/wp/archive/20191125120000/" target="_blank" rel="noopener">VSCode 内蔵ターミナルで ctrl-p などのショートカットキーを利用する方法</a></p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_拡張機能の追加">拡張機能の追加</h5>
 <div class="paragraph">
+<p>エディタのメニューが英語なので日本語に変更する拡張機能をインストールします。</p>
+</div>
+<div class="paragraph">
 <p><a href="https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja" target="_blank" rel="noopener">Japanese Language Pack for Visual Studio Code</a></p>
+</div>
+<div class="paragraph">
+<p>画面左のExtensionアイコンを選択して検索欄に <code>japanese</code> と入力したら日本語拡張パッケージが表示されるので <code>Install</code> を押します。</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/package-001.png" alt="package 001">
 </div>
 </div>
+<div class="paragraph">
+<p><code>Restart Now</code> を押してエディタを再起動します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/package-002.png" alt="package 002">
 </div>
 </div>
+<div class="paragraph">
+<p>メニューが日本語になりました。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/package-003.png" alt="package 003">
 </div>
+</div>
+<div class="paragraph">
+<p>同様の手順で以下の拡張機能をインストールします。</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1279,22 +1375,34 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect4">
 <h5 id="_設定の同期">設定の同期</h5>
 <div class="paragraph">
-<p><a href="https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync" target="_blank" rel="noopener">Settings Sync</a></p>
+<p>エディタの設定をして拡張機能をインストールしました。再インストールなどでエディタを再インストールする場合に上記の作業を再度するのは手間なので設定をオンライに保存してすぐにセットアップできるようにしておきます。</p>
+</div>
+<div class="paragraph">
+<p><a href="https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync" target="_blank" rel="noopener">Settings Sync</a> をインストールすると以下の画面が表示されるので <code>LOGIN WITH GITHUB</code> を選択します。</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/sync-001.png" alt="sync 001">
 </div>
 </div>
+<div class="paragraph">
+<p><code>アクセスを許可する</code> を押します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/sync-002.png" alt="sync 002">
 </div>
 </div>
+<div class="paragraph">
+<p><code>開く</code> を押します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/sync-003.png" alt="sync 003">
 </div>
+</div>
+<div class="paragraph">
+<p>ブラウザが起動するので <code>Authorize</code> を押します。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1306,20 +1414,32 @@ table.CodeRay td.code>pre{padding:0}
 <img src="../../images/article/episode_0/sync-005.png" alt="sync 005">
 </div>
 </div>
+<div class="paragraph">
+<p><code>SKIP</code> を押します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/sync-006.png" alt="sync 006">
 </div>
+</div>
+<div class="paragraph">
+<p>エディタメニューの <code>表示</code> から <code>コマンドパレット</code> を選択して <code>Sync</code> と入力して入力候補の中から <code>アップデート・アップロードの設定</code> を選択します。</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/sync-007.png" alt="sync 007">
 </div>
 </div>
+<div class="paragraph">
+<p><code>はい</code> を押して設定をアップロードします。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/sync-008.png" alt="sync 008">
 </div>
+</div>
+<div class="paragraph">
+<p>エディタの設定を変更した際はアップロードすることで最新の設定を保存することができます。保存した設定を読み込む場合はコマンドパレットから <code>Sync: 設定をダウンロード</code> を選択します。</p>
 </div>
 </div>
 <div class="sect4">
@@ -1327,7 +1447,9 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect5">
 <h6 id="_プログラムを作成する">プログラムを作成する</h6>
 <div class="paragraph">
-<p><a href="https://ja.wikipedia.org/wiki/Hello_world" target="_blank" rel="noopener">Hello world</a></p>
+<p>エディタのセットアップが出来たのでかんたんなプログラムを作ってみましょう。
+お題は <a href="https://ja.wikipedia.org/wiki/Hello_world" target="_blank" rel="noopener">Hello world</a> です。
+まず、プログラムを作成する場所ですが今回はディスクトップの直下に <code>Projects</code> というフォルダを作成してその中に配置したいと思います。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1349,6 +1471,9 @@ table.CodeRay td.code>pre{padding:0}
 <img src="../../images/article/episode_0/hello-004.png" alt="hello 004">
 </div>
 </div>
+<div class="paragraph">
+<p>エディタを起動したらエクスプローラアイコンから <code>フォルダを開く</code> を選択して作成したフォルダを開きます。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-005.png" alt="hello 005">
@@ -1364,6 +1489,9 @@ table.CodeRay td.code>pre{padding:0}
 <img src="../../images/article/episode_0/hello-007.png" alt="hello 007">
 </div>
 </div>
+<div class="paragraph">
+<p>フォルダを開いたらファイルアイコンを選択して <code>HelloWorld.ps1</code> ファイルを作成します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-008.png" alt="hello 008">
@@ -1373,6 +1501,9 @@ table.CodeRay td.code>pre{padding:0}
 <div class="content">
 <img src="../../images/article/episode_0/hello-009.png" alt="hello 009">
 </div>
+</div>
+<div class="paragraph">
+<p>まず、以下のコードを入力してキーボードのF5を押します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1388,10 +1519,16 @@ table.CodeRay td.code>pre{padding:0}
 <img src="../../images/article/episode_0/hello-010.png" alt="hello 010">
 </div>
 </div>
+<div class="paragraph">
+<p>プログラムの実行と一緒にテストの実行結果が表示されます。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-011.png" alt="hello 011">
 </div>
+</div>
+<div class="paragraph">
+<p>テストが通るように修正します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1406,6 +1543,9 @@ table.CodeRay td.code>pre{padding:0}
 <div class="content">
 <img src="../../images/article/episode_0/hello-012.png" alt="hello 012">
 </div>
+</div>
+<div class="paragraph">
+<p>テスティングフレームワークの動作が確認できたのでプログラム作成に入ります。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1424,6 +1564,9 @@ table.CodeRay td.code>pre{padding:0}
 <img src="../../images/article/episode_0/hello-013.png" alt="hello 013">
 </div>
 </div>
+<div class="paragraph">
+<p><code>HelloWorld</code> 関数を追加します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="powershell">Describe &quot;HelloWorld&quot; {
@@ -1440,10 +1583,8 @@ function HelloWorld {
 }</code></pre>
 </div>
 </div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/hello-014.png" alt="hello 014">
-</div>
+<div class="paragraph">
+<p>F5キーを押してテストが通ったことを確認したらテストケースを追加します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1469,6 +1610,9 @@ function HelloWorld {
 <img src="../../images/article/episode_0/hello-015.png" alt="hello 015">
 </div>
 </div>
+<div class="paragraph">
+<p><code>HelloWorld</code> 関数は既定の挨拶しか返さないのでテストが失敗します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code>...
@@ -1482,6 +1626,9 @@ Describing HelloWorld
    ----------------------^
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>HelloWorld</code> 関数に引数を追加して表示できるように変更します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1502,10 +1649,16 @@ function HelloWorld($name) {
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>F5を押します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-016.png" alt="hello 016">
 </div>
+</div>
+<div class="paragraph">
+<p><code>指定された名前で挨拶を返す</code> テストは通りましたが今度は <code>簡単な挨拶を返す</code> テストが失敗してしまいました。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1520,6 +1673,9 @@ function HelloWorld($name) {
  [+] 指定された名前で挨拶を返す 29ms
 ...</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>HelloWorld</code> 関数にデフォルト引数を設定してテストを通るようにします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1540,10 +1696,16 @@ function HelloWorld($name = "PowerShell") {
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>F5を押します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-017.png" alt="hello 017">
 </div>
+</div>
+<div class="paragraph">
+<p>仕上げに不要なテストを削除してテストケースの文言をわかりやすくしておきます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1566,18 +1728,33 @@ function HelloWorld($name = "PowerShell") {
 <img src="../../images/article/episode_0/hello-018.png" alt="hello 018">
 </div>
 </div>
+<div class="paragraph">
+<p><code>HelloWorld</code> プログラムの完成です。</p>
+</div>
 </div>
 <div class="sect5">
 <h6 id="_プログラムをデバッグする">プログラムをデバッグする</h6>
+<div class="paragraph">
+<p>プログラムを作成していると思った通りに動かないことが多々あります。そのようなときにプログラムの動作を確認するにはエディタのデバッグ機能を使います。</p>
+</div>
+<div class="paragraph">
+<p>まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-019.png" alt="hello 019">
 </div>
 </div>
+<div class="paragraph">
+<p>ブレークポイントを設定したらF5を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-020.png" alt="hello 020">
 </div>
+</div>
+<div class="paragraph">
+<p>画面上の実行ボタンを押すと次のブレークポイントに移動します。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1594,10 +1771,16 @@ function HelloWorld($name = "PowerShell") {
 <img src="../../images/article/episode_0/hello-023.png" alt="hello 023">
 </div>
 </div>
+<div class="paragraph">
+<p>デバッガを終了するには終了ボタンを押します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-024.png" alt="hello 024">
 </div>
+</div>
+<div class="paragraph">
+<p>ブレークポイントを再度押すことで解除ができます。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1607,6 +1790,9 @@ function HelloWorld($name = "PowerShell") {
 </div>
 <div class="sect5">
 <h6 id="_プログラムをレポジトリに保存する">プログラムをレポジトリに保存する</h6>
+<div class="paragraph">
+<p>作成したプログラムをレポジトリに保存します。まずソース管理アイコンを選択して <code>リポジトリを初期化する</code> を押します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-026.png" alt="hello 026">
@@ -1617,20 +1803,32 @@ function HelloWorld($name = "PowerShell") {
 <img src="../../images/article/episode_0/hello-027.png" alt="hello 027">
 </div>
 </div>
+<div class="paragraph">
+<p><code>変更をステージ</code> を選択します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-028.png" alt="hello 028">
 </div>
+</div>
+<div class="paragraph">
+<p>変更内容を入力します。ここでは <code>feat: HelloWorld</code> を入力しておきます。</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-029.png" alt="hello 029">
 </div>
 </div>
+<div class="paragraph">
+<p><code>コミット</code> を押します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-030.png" alt="hello 030">
 </div>
+</div>
+<div class="paragraph">
+<p>初回登録時は以下の警告が表示されるので追加作業が必要になります。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1641,6 +1839,9 @@ function HelloWorld($name = "PowerShell") {
 <div class="content">
 <img src="../../images/article/episode_0/hello-031-2.png" alt="hello 031 2">
 </div>
+</div>
+<div class="paragraph">
+<p>以下のコマンドをターミナルに入力します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1653,10 +1854,16 @@ git config --global user.email newbie4649@outlook.jp</code></pre>
 <img src="../../images/article/episode_0/hello-032.png" alt="hello 032">
 </div>
 </div>
+<div class="paragraph">
+<p>再度 <code>コミット</code> を押してレポジトリに保存します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-033.png" alt="hello 033">
 </div>
+</div>
+<div class="paragraph">
+<p>レポジトリの記録内容は <code>GitLens</code> から確認することが出来ます。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -2182,7 +2389,7 @@ gem install solargraph</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-03 19:41:02 JST
+Last updated 2020-04-04 17:04:50 JST
 </div>
 </div>
 </body>
