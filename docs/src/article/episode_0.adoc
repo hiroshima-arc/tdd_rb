@@ -773,9 +773,11 @@ image::../../images/article/episode_0/provision-008.png[]
 $ sudo apt install ansible -y
 ```
 
-続いて、エクスプローラから　`provisioning/vars/site.yml` をファイルを開いて `user:` の名前をWSLで設定したユーザーIDに変更します。変更を保存したらターミナルに以下のコマンドを入力します。
+続いて、エクスプローラから　`provisioning/vars/site.yml` をファイルを開いて `user:` の名前をWSLで設定したユーザーIDに変更します。
 
 image::../../images/article/episode_0/provision-009.png[]
+
+変更を保存したらターミナルに以下のコマンドを入力します。
 
 ```bash
 $ cd provisioning/tasks/
