@@ -728,6 +728,7 @@ image::../../images/article/episode_0/hello-034.png[]
 
 ==== 開発言語のセットアップ
 
+include::episode_0_win.adoc[]
 include::episode_0_wsl.adoc[]
 
 ==== 参照

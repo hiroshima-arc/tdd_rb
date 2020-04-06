@@ -568,14 +568,25 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_開発言語のセットアップ">1.1.6. 開発言語のセットアップ</a>
 <ul class="sectlevel4">
-<li><a href="#_ruby環境のセットアップ_wsl版">Ruby環境のセットアップ(WSL版)</a></li>
-<li><a href="#_プロビジョニングの実行">プロビジョニングの実行</a></li>
+<li><a href="#_ruby環境のセットアップ_windows版">Ruby環境のセットアップ(Windows版)</a></li>
+<li><a href="#_インストール_2">インストール</a></li>
 <li><a href="#_追加パッケージのインストール">追加パッケージのインストール</a></li>
+<li><a href="#_設定_2">設定</a></li>
 <li><a href="#_hello_world_2">Hello world</a>
 <ul class="sectlevel5">
 <li><a href="#_プログラムを作成する_2">プログラムを作成する</a></li>
 <li><a href="#_プログラムをデバッグする_2">プログラムをデバッグする</a></li>
 <li><a href="#_プログラムをレポジトリに保存する_2">プログラムをレポジトリに保存する</a></li>
+</ul>
+</li>
+<li><a href="#_ruby環境のセットアップ_wsl版">Ruby環境のセットアップ(WSL版)</a></li>
+<li><a href="#_プロビジョニングの実行">プロビジョニングの実行</a></li>
+<li><a href="#_追加パッケージのインストール_2">追加パッケージのインストール</a></li>
+<li><a href="#_hello_world_3">Hello world</a>
+<ul class="sectlevel5">
+<li><a href="#_プログラムを作成する_3">プログラムを作成する</a></li>
+<li><a href="#_プログラムをデバッグする_3">プログラムをデバッグする</a></li>
+<li><a href="#_プログラムをレポジトリに保存する_3">プログラムをレポジトリに保存する</a></li>
 </ul>
 </li>
 </ul>
@@ -2194,6 +2205,461 @@ git config --global user.email newbie4649@outlook.jp</code></pre>
 <div class="sect3">
 <h4 id="_開発言語のセットアップ">1.1.6. 開発言語のセットアップ</h4>
 <div class="sect4">
+<h5 id="_ruby環境のセットアップ_windows版">Ruby環境のセットアップ(Windows版)</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_インストール_2">インストール</h5>
+<div class="paragraph">
+<p><a href="https://rubyinstaller.org/downloads/" target="_blank" rel="noopener">RubyInstaller</a>からWITH DEVKITをインストールします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-install-001.png" alt="ruby win install 001">
+</div>
+</div>
+<div class="paragraph">
+<p>インストラーの指示に従います。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-install-002.png" alt="ruby win install 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-install-003.png" alt="ruby win install 003">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-install-004.png" alt="ruby win install 004">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-install-005.png" alt="ruby win install 005">
+</div>
+</div>
+<div class="paragraph">
+<p>3を入力してエンターキーを押します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-install-006.png" alt="ruby win install 006">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_追加パッケージのインストール">追加パッケージのインストール</h5>
+<div class="paragraph">
+<p><a href="https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby" target="_blank" rel="noopener">Ruby for Visual Studio Code</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://marketplace.visualstudio.com/items?itemName=castwide.solargraph" target="_blank" rel="noopener">Ruby Solargraph</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://marketplace.visualstudio.com/items?itemName=kaiwood.endwise" target="_blank" rel="noopener">vscode-endwise</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop" target="_blank" rel="noopener">ruby-rubocop</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer" target="_blank" rel="noopener">Test Explorer UI</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter" target="_blank" rel="noopener">Ruby Test Explorer</a></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_設定_2">設定</h5>
+<div class="paragraph">
+<p>既定のシェルをPowerShell Coreに変更します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-vscode-001.png" alt="ruby win vscode 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-vscode-002.png" alt="ruby win vscode 002">
+</div>
+</div>
+<div class="paragraph">
+<p>新しいターミナルを開いて以下のコマンドを入力します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">gem install rubocop
+gem install debase
+gem install ruby-debug-ide
+gem install solargraph</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-vscode-003.png" alt="ruby win vscode 003">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-vscode-004.png" alt="ruby win vscode 004">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_hello_world_2">Hello world</h5>
+<div class="sect5">
+<h6 id="_プログラムを作成する_2">プログラムを作成する</h6>
+<div class="paragraph">
+<p><code>Projects</code> フォルダ内に <code>Ruby</code> フォルダを作成してエディタからフォルダを開きます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-001.png" alt="ruby win hello 001">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-002.png" alt="ruby win hello 002">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-003.png" alt="ruby win hello 003">
+</div>
+</div>
+<div class="paragraph">
+<p><code>新しいファイル</code> 作成アイコンを押します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-004.png" alt="ruby win hello 004">
+</div>
+</div>
+<div class="paragraph">
+<p>ファイル名は <code>main.rb</code> とします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-005.png" alt="ruby win hello 005">
+</div>
+</div>
+<div class="paragraph">
+<p>ファイルに以下のコードを入力したらRunアイコンを選択して <code>create a launch.json file</code> を押してメニューからRubyを選択します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">false</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-006.png" alt="ruby win hello 006">
+</div>
+</div>
+<div class="paragraph">
+<p><code>Debug Local File</code> を選択します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-007.png" alt="ruby win hello 007">
+</div>
+</div>
+<div class="paragraph">
+<p><code>launch.json</code> ファイルが作成されたら <code>main.rb</code> タブに戻ってF5キーを押します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-008.png" alt="ruby win hello 008">
+</div>
+</div>
+<div class="paragraph">
+<p>デバッグコンソールに実行結果が表示されれば準備完了です。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-009.png" alt="ruby win hello 009">
+</div>
+</div>
+<div class="paragraph">
+<p>テストをパスするようにコードを修正してF5キーを押します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>)
+  <span class="keyword">end</span>
+
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-010.png" alt="ruby win hello 010">
+</div>
+</div>
+<div class="paragraph">
+<p>テスティングフレームワークの動作が確認できたので <code>hello_world</code> 関数の作成に入ります。まず以下のコードを追加してF5キーを押してテストが失敗することを確認します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_簡単な挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>, hello_world)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-011.png" alt="ruby win hello 011">
+</div>
+</div>
+<div class="paragraph">
+<p><code>hello_world</code> 関数を追加してテストをパスさせます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_簡単な挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>, hello_world)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">def</span> <span class="function">hello_world</span>
+  <span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-012.png" alt="ruby win hello 012">
+</div>
+</div>
+<div class="paragraph">
+<p>指定された名前で挨拶を返すようにします。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_簡単な挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>, hello_world)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_指定された名前で挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from VSCode</span><span class="delimiter">'</span></span>, hello_world(<span class="string"><span class="delimiter">'</span><span class="content">VSCode</span><span class="delimiter">'</span></span>))
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">def</span> <span class="function">hello_world</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from Ruby</span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-013.png" alt="ruby win hello 013">
+</div>
+</div>
+<div class="paragraph">
+<p>関数に引数を追加します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_簡単な挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>, hello_world)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_指定された名前で挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from VSCode</span><span class="delimiter">'</span></span>, hello_world(<span class="string"><span class="delimiter">'</span><span class="content">VSCode</span><span class="delimiter">'</span></span>))
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">def</span> <span class="function">hello_world</span>(name)
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from </span><span class="inline"><span class="inline-delimiter">#{</span>name<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-014.png" alt="ruby win hello 014">
+</div>
+</div>
+<div class="paragraph">
+<p><code>指定された名前で挨拶を返す</code> テストはパスしましたが今度は <code>簡単な挨拶を返す</code> テストが失敗するようになりましたのでデフォルト引数を設定してテストをパスするようにします。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何か便利なもの</span>
+    assert_equal(<span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_簡単な挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>, hello_world)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_指定された名前で挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from VSCode</span><span class="delimiter">'</span></span>, hello_world(<span class="string"><span class="delimiter">'</span><span class="content">VSCode</span><span class="delimiter">'</span></span>))
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">def</span> <span class="function">hello_world</span>(name = <span class="string"><span class="delimiter">'</span><span class="content">Ruby</span><span class="delimiter">'</span></span>)
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from </span><span class="inline"><span class="inline-delimiter">#{</span>name<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-015.png" alt="ruby win hello 015">
+</div>
+</div>
+<div class="paragraph">
+<p>仕上げに不要なテストを削除してテストケースの文言をわかりやすくしておきます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
+
+<span class="keyword">class</span> <span class="class">TestHelloWorld</span> &lt; <span class="constant">Minitest</span>::<span class="constant">Test</span>
+  <span class="keyword">def</span> <span class="function">test_何も指定されていない場合は既定の挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from Ruby</span><span class="delimiter">'</span></span>, hello_world)
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">test_指定された名前で挨拶を返す</span>
+    assert_equal(<span class="string"><span class="delimiter">'</span><span class="content">Hello from VSCode</span><span class="delimiter">'</span></span>, hello_world(<span class="string"><span class="delimiter">'</span><span class="content">VSCode</span><span class="delimiter">'</span></span>))
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">def</span> <span class="function">hello_world</span>(name = <span class="string"><span class="delimiter">'</span><span class="content">Ruby</span><span class="delimiter">'</span></span>)
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from </span><span class="inline"><span class="inline-delimiter">#{</span>name<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-hello-016.png" alt="ruby win hello 016">
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_プログラムをデバッグする_2">プログラムをデバッグする</h6>
+<div class="paragraph">
+<p>まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-debug-001.png" alt="ruby win debug 001">
+</div>
+</div>
+<div class="paragraph">
+<p>ブレークポイントを設定したらF5を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-debug-002.png" alt="ruby win debug 002">
+</div>
+</div>
+<div class="paragraph">
+<p>画面上の実行ボタンを押すと次のブレークポイントに移動します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-debug-003.png" alt="ruby win debug 003">
+</div>
+</div>
+<div class="paragraph">
+<p>デバッガを終了するには終了ボタンを押します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-debug-004.png" alt="ruby win debug 004">
+</div>
+</div>
+<div class="paragraph">
+<p>ブレークポイントを再度押すことで解除ができます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-debug-005.png" alt="ruby win debug 005">
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_プログラムをレポジトリに保存する_2">プログラムをレポジトリに保存する</h6>
+<div class="paragraph">
+<p>ソース管理を選択して <code>リポジトリを初期化する</code> を押します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-git-001.png" alt="ruby win git 001">
+</div>
+</div>
+<div class="paragraph">
+<p><code>全ての変更をステージ</code> を選択します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-git-002.png" alt="ruby win git 002">
+</div>
+</div>
+<div class="paragraph">
+<p>変更内容に <code>feat: HelloWorld</code> と入力して <code>コミット</code> を押します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-git-003.png" alt="ruby win git 003">
+</div>
+</div>
+<div class="paragraph">
+<p>変更内容は <code>GitLens</code> から確認できます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/ruby-win-git-004.png" alt="ruby win git 004">
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
 <h5 id="_ruby環境のセットアップ_wsl版">Ruby環境のセットアップ(WSL版)</h5>
 <div class="paragraph">
 <p>画面左下の <code>&gt;&lt;</code> を押してメニューから <code>Remote-WSL: New Window</code> を選択します。</p>
@@ -2411,7 +2877,7 @@ $ node -v</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_追加パッケージのインストール">追加パッケージのインストール</h5>
+<h5 id="_追加パッケージのインストール_2">追加パッケージのインストール</h5>
 <div class="paragraph">
 <p><a href="https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby" target="_blank" rel="noopener">Ruby for Visual Studio Code</a></p>
 </div>
@@ -2443,9 +2909,9 @@ gem install solargraph</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_hello_world_2">Hello world</h5>
+<h5 id="_hello_world_3">Hello world</h5>
 <div class="sect5">
-<h6 id="_プログラムを作成する_2">プログラムを作成する</h6>
+<h6 id="_プログラムを作成する_3">プログラムを作成する</h6>
 <div class="paragraph">
 <p><code>REAMD.md</code> を選択してから <code>新しいファイル</code> 作成アイコンを押します。</p>
 </div>
@@ -2697,7 +3163,7 @@ gem install solargraph</code></pre>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_プログラムをデバッグする_2">プログラムをデバッグする</h6>
+<h6 id="_プログラムをデバッグする_3">プログラムをデバッグする</h6>
 <div class="paragraph">
 <p>まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。</p>
 </div>
@@ -2740,7 +3206,7 @@ gem install solargraph</code></pre>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_プログラムをレポジトリに保存する_2">プログラムをレポジトリに保存する</h6>
+<h6 id="_プログラムをレポジトリに保存する_3">プログラムをレポジトリに保存する</h6>
 <div class="paragraph">
 <p><code>全ての変更をステージ</code> を選択します。</p>
 </div>
