@@ -1,5 +1,1577 @@
 これはとあるプログラマがどのような思考を経てテスト駆動開発でアプリケーションを構築していったかを解説した内容である。隣りに座って話を聞きながらコードを追いかけているイメージで読み進めてみてださい。
 
+# エピソード0
+
+## 環境構築から始めるテスト駆動開発
+
+### 6S
+
+環境構築をするにあたっては **5S** + セキュリティの **6S** をベースに進めていきます。まず **5S**
+について、それからセキュリティについて解説します。
+
+#### 5S
+
+> 5S（ごエス、ごーエス）とは、製造業・サービス業などの職場環境の維持改善で用いられるスローガンである。各職場において徹底されるべき事項を5つにまとめたもので、4S運動に「躾」（習慣化の場合もある）を加えた5項。
+>
+> —  Wikipedia <https://ja.wikipedia.org/wiki/5S>
+
+具体的には、
+
+  - 整理（せいり、Seiri） いらないものを捨てる
+
+  - 整頓（せいとん、Seiton） 決められた物を決められた場所に置き、いつでも取り出せる状態にしておく
+
+  - 清掃（せいそう、Seisou） 常に掃除をする
+
+  - 清潔（せいけつ、Seiketsu） 3S（上の整理・整頓・清掃）を維持し職場の衛生を保つ
+
+  - 躾（しつけ、Shitsuke） 決められたルール・手順を正しく守る習慣をつける
+
+これがプログラミング環境構築とどのように関係していくのでしょうか？まずは、いらないものを捨てるのが **整理**
+ですがそもそもいらないものが何なのかを決めなければなりません。プログラミングで扱う対象はモノではなく情報です。ではどうやって情報を扱っていけばよいでしょう？ここは、
+**分類するな。ひたすら並べよ** の考えに従い一箇所に記録をまとめていきましょう。そのためのテクニックとして
+**エンジニアリングデイブックス**
+があります。これは何をやったか何を学んだかをノートに時系列に記録していくことです。
+
+Engineering Dayboks
+
+> Eventually Dave asked the obvious question. It turned out that they’d
+> been trained to keep an engineering daybook, a kind of journal in
+> which they recorded what they did, things they’d learned, sketches of
+> ideas, readings from meters: basically anything to do with their work.
+> When the notebook became full, they’d write the date range on the
+> spine, then stick it on the shelf next to previous daybooks. …​
+>
+> —  Pragmatic Programmer: your journey to mastery 20th Anniversary
+> Edition
+
+ノートは市販のものならどれでも構いませんがおすすめは
+[ソフトリングノード](https://www.kokuyo-st.co.jp/stationery/softring-note/)
+のB5サイズが手元に置いてもかさばらず使いやすいです。情報を一箇所に集めて必要なものと不要なものを分ける準備が出来ました。次は必要なものをすぐに取り出せるようにする
+**整頓** をどのように実践していくかを解説します。
+
+**整頓** の基本は **分類するな。ひたすら並べよ**
+です。デジタルデータも一箇所に保存していきましょう。具体的に保存する場所は後で解説します。また、分類するなといっても分類をする必要は当然発生します。分類にあたっては一貫したネーミングルールを適用していきます。具体的な方法は都度解説していきます。
+
+> Name Well; Rename When Needed.
+>
+> Name to express your intent to readers, and rename as soon as that
+> intent shifts.
+>
+> —  Pragmatic Programmer: your journey to mastery 20th Anniversary
+> Edition
+>
+
+基本は実践しなければ意味がありません。そして習慣にすることで初めてものにできるものです。そのためには自ら躾けて習慣化していかなければなりません。
+
+> 私がかつて発見した、そして多くの人に気づいてもらいたい効果とは、反復可能な振る舞いを規則にまで還元することで、規則の適用は機会的に反復可能になるということだ。
+>
+> —  テスト駆動開発
+
+> ここで、Kent
+> Beckが自ら語ったセリフを思い出しました。「僕は、偉大なプログラマなんかじゃない。偉大な習慣を身につけた少しましなプログラマなんだ」。
+>
+> —  リファクタリング(第2版)
+
+#### セキュリティ(Security)
+
+**5S** に続いてセキュリティに関してですがここで扱う内容は **情報セキュリティ** に関する内容です。
+
+> 情報セキュリティ（じょうほうセキュリティ、英: information security）とは、情報の機密性、完全性、可用性を維持すること。
+>
+> —  Wikipedia
+> <https://ja.wikipedia.org/wiki/%E6%83%85%E5%A0%B1%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3>
+>
+
+ここではパスワードに関する基本だけ抑えておいてください。
+
+>   - 誕生日や電話番号など、親が見てパッと理解できる文字列はダメ
+>
+>   - 1単語で“読めてしまう”文字列はダメ
+>
+>   - 8文字以下の文字列は短すぎるからダメ
+>
+> —  子どもに「パスワード」の付け方を教えられますか？
+> [子どもを守るITリテラシー学](https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html)
+>
+
+実際にパスワードを設定するときは
+
+>   - サービスごとに、3単語以上の英文字を並べる（例：pekinese-optimal-start）
+>
+>   - なるべく長いパスワードを用意する（例：nagai-pasuwa-do-wo-youi-suru-amari-iirei-deha-naiga）
+>
+>   - 辞書に載っていないような文字列を用意する（例：Itags80vZyMp）
+>
+> —  子どもに「パスワード」の付け方を教えられますか？
+> [子どもを守るITリテラシー学](https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html)
+>
+
+を参考にしてください。
+
+#### ITリテラシ
+
+以上がプログラミング環境構築にあたっての基本となる考えです。この記事では6Sを軸としたソフトウェア開発のための **ITリテラシ**
+習得のベースとなる環境構築をすることを目的としています。
+
+> 今日のソフトウェア開発の世界において絶対になければならない3つの技術的な柱があります。
+> 三本柱と言ったり、三種の神器と言ったりしていますが、それらは
+>
+>   - バージョン管理
+>
+>   - テスティング
+>
+>   - 自動化
+>
+> の3つです。
+>
+> —  https://t-wada.hatenablog.jp/entry/clean-code-that-works
+
+### アカウントの登録
+
+まず各種サービスのアカウントを登録します。ここでは以下のアカウント設定で作業を進めていきますが各自作業の際は読み替えてください。
+
+|          |                         |
+| -------- | ----------------------- |
+| Microsft | <newbie4649@outlook.jp> |
+| Google   | <newbie4649@gmail.com>  |
+| GitHub   | newbie4649              |
+| Windows  | <newbie4649@outlook.jp> |
+| WSL      | newbie4649              |
+
+また、パスワードに関しては **セキュリティ**
+を参考に設定してください。アカウントIDに関しては可能な限り共通のID名を設定すると管理しやすくなります。登録アカウントとパスワードは一箇所に記録していつでも確認できるようにして置いてください。理想はパスワードマネージャーの使用ですがクラウドストレージでもいいです。他人にみられることがないように注意して管理しましょう。クラウドストレージで安全に保存する自身が無い場合は
+**エンジニアリングデイブックス**
+に記録しておきましょう。その際、もし落として他人にみられてもわからないような工夫をしておきましょう。手段はどうあれ
+**保存する場所は一箇所**
+が原則です。
+
+#### Microsoftアカウントを作成する
+
+[アカウントの作成](https://signup.live.com/signup?wa=wsignin1.0&rpsnv=13&rver=7.3.6963.0&wp=MBI_SSL&wreply=https%3a%2f%2fwww.microsoft.com%2fja-jp%2f&id=74335&aadredir=1&contextid=E56866F842F4E143&bk=1584685585&uiflavor=web&lic=1&mkt=JA-JP&lc=1041&uaid=491fc017de0f48c5c67a3833e7aca9ee)
+から新しいメールアドレスを取得を選択します。
+
+![ms 001](../../images/article/episode_0/ms-001.png)
+
+![ms 002](../../images/article/episode_0/ms-002.png)
+
+![ms 003](../../images/article/episode_0/ms-003.png)
+
+![ms 004](../../images/article/episode_0/ms-004.png)
+
+![ms 005](../../images/article/episode_0/ms-005.png)
+
+![ms 006](../../images/article/episode_0/ms-006.png)
+
+#### Googleアカウントを作成する
+
+[Google
+アカウントの作成](https://support.google.com/accounts/answer/27441?hl=ja)
+から `Googleアカウントを作成する` を選択します。
+
+![ggl 001](../../images/article/episode_0/ggl-001.png)
+
+![ggl 002](../../images/article/episode_0/ggl-002.png)
+
+![ggl 003](../../images/article/episode_0/ggl-003.png)
+
+#### GitHubアカウントを作成する
+
+[GitHubに登録する](https://github.co.jp/) から `GitHubに登録する` を選択します。
+
+![ghb 001](../../images/article/episode_0/ghb-001.png)
+
+![ghb 002](../../images/article/episode_0/ghb-002.png)
+
+Freeプランを選択します
+
+![ghb 003](../../images/article/episode_0/ghb-003.png)
+
+#### アカウントにサインインする
+
+[Microsoft
+アカウントにサインインする方法](https://support.microsoft.com/ja-jp/help/4028195)
+を参考にしてローカルアカウントからMicrosoftアカウントに切り替えます。
+
+![login 001](../../images/article/episode_0/login-001.png)
+
+![login 002](../../images/article/episode_0/login-002.png)
+
+![login 003](../../images/article/episode_0/login-003.png)
+
+![login 004](../../images/article/episode_0/login-004.png)
+
+![login 005](../../images/article/episode_0/login-005.png)
+
+![login 006](../../images/article/episode_0/login-006.png)
+
+![login 007](../../images/article/episode_0/login-007.png)
+
+### クラウドストレージのセットアップ
+
+> Keep Knowledge in Plain Text
+>
+> Plain text won’t become obsolete.It helps leverage your work and
+> simplifies debugging and testing.
+>
+> —  Pragmatic Programmer: your journey to mastery 20th Anniversary
+> Edition
+
+[Office365](https://products.office.com/ja-jp/home?SilentAuth=1)
+からOneDriveの設定を確認します。
+
+![drive 001](../../images/article/episode_0/drive-001.png)
+
+![drive 002](../../images/article/episode_0/drive-002.png)
+
+![drive 003](../../images/article/episode_0/drive-003.png)
+
+アカウントのパスワードなど機密情報は [Personal Vault で OneDrive
+ファイルを保護する](https://support.office.com/ja-jp/article/personal-vault-で-onedrive-ファイルを保護する-6540ef37-e9bf-4121-a773-56f98dce78c4)
+を使って管理すると良いでしょう。もしくは [1Password](https://1password.com/jp/)
+などパスワード管理ツールの導入を検討してください。
+
+[PCのOneDrive](https://support.microsoft.com/ja-jp/help/17184/windows-10-onedrive)
+にあるようにデータはローカルとクラウドの両方にあるので破損・紛失をしても復旧することが出来ます。
+
+### 開発環境のセットアップ
+
+#### パッケージ管理ツールのインストール
+
+アプリケーションの管理にはパッケージ管理ツール [The Package Manager for
+Windows](https://chocolatey.org/) を使います。インストールの方法は
+[Chocolateyを使った環境構築の時のメモ](https://qiita.com/konta220/items/95b40b4647a737cb51aa)
+を参照してください。
+
+`Get Started` を選択します。
+
+![pkg 001](../../images/article/episode_0/pkg-001.png)
+
+コードをコピーします。
+
+![pkg 002](../../images/article/episode_0/pkg-002.png)
+
+画面左下のスタートボタンを右クリックして `Windows PowerSHell(管理者)(A)`
+を起動してコピーしたコードを貼り付け実行します。
+
+![pkg 003](../../images/article/episode_0/pkg-003.png)
+
+![pkg 004](../../images/article/episode_0/pkg-004.png)
+
+![pkg 005](../../images/article/episode_0/pkg-005.png)
+
+![pkg 006](../../images/article/episode_0/pkg-006.png)
+
+#### gitのインストール
+
+> Always Use Version Control
+>
+> Vsersion control is a time machine for your work;you can go back.
+>
+> —  Pragmatic Programmer: your journey to mastery 20th Anniversary
+> Edition
+
+![git 001](../../images/article/episode_0/git-001.png)
+
+画面左下のスタートボタンを右クリックして `Windows PowerSHell(管理者)(A)`
+を起動して以下のコマンドを入力します。質問には全てYを入力してください。
+
+    choco install git
+
+![git 002](../../images/article/episode_0/git-002.png)
+
+#### PowerShellCoreのインストール
+
+続いて、以下のコマンドを入力します。質問には全てYを入力してください。
+
+    choco install powershell-core
+
+![pwsh 001](../../images/article/episode_0/pwsh-001.png)
+
+#### Windows Terminalのインストール
+
+> Use the Power of Command Shells
+>
+> Use the shell when graphical user interfaces don’t cut it.
+>
+> —  Pragmatic Programmer: your journey to mastery 20th Anniversary
+> Edition
+
+画面左下のスタートメニューから `Microsft Store` を選択します。
+
+![terminal 001](../../images/article/episode_0/terminal-001.png)
+
+検索欄に `terminal` と入力したら表示されられる候補の中から `Windows Terminal` を選択します。
+
+![terminal 002](../../images/article/episode_0/terminal-002.png)
+
+`入手` を押してアプリケーションをインストールします。
+
+![terminal 003](../../images/article/episode_0/terminal-003.png)
+
+#### WSLのインストール
+
+続いて、検索欄に `ubuntu` と入力して候補の中から `Ubuntu` を選択します。
+
+![wsl 001](../../images/article/episode_0/wsl-001.png)
+
+入手を押してアプリケーションをインストールします。
+
+![wsl 002](../../images/article/episode_0/wsl-002.png)
+
+インストール後に起動を実行しても必要な設定があるため実行できません。一旦アプリケーションを閉じます。
+
+![wsl 003](../../images/article/episode_0/wsl-003.png)
+
+画面左下のスタートメニューから歯車のアイコンを選択してWindowsの設定画面を表示します。
+
+![wsl 004](../../images/article/episode_0/wsl-004.png)
+
+`アプリ` を選択します。
+
+![wsl 005](../../images/article/episode_0/wsl-005.png)
+
+`アプリと機能` から `プログラミングと機能` を選択します。
+
+![wsl 006](../../images/article/episode_0/wsl-006.png)
+
+`Windows Subsystem for Linux` にチェックを入れてOKボタンを押します。
+
+![wsl 007](../../images/article/episode_0/wsl-007.png)
+
+`今すぐ再起動` を押してWindowsを再起動します。
+
+![wsl 008 1](../../images/article/episode_0/wsl-008-1.png)
+
+画面左下のスタートメニューから `Ubuntu` を選択します。
+
+![wsl 008 2](../../images/article/episode_0/wsl-008-2.png)
+
+セットアップが始まるのでユーザーIDとパスワードを設定してください。
+
+![wsl 009](../../images/article/episode_0/wsl-009.png)
+
+![wsl 010](../../images/article/episode_0/wsl-010.png)
+
+### エディタのセットアップ
+
+> Achieve Editor Fluency
+>
+> An editor is your most important tool. Know how to make it do what you
+> need, quickly and accurately.
+>
+> —  Pragmatic Programmer: your journey to mastery 20th Anniversary
+> Edition
+
+#### インストール
+
+[Download Visual Studio Code Java Pack
+Installer](https://aka.ms/vscode-java-installer-win)
+からVSCodeをダウンロードしてセットアッププログラムを実行します。
+
+![vscode 001](../../images/article/episode_0/vscode-001.png)
+
+![vscode 002](../../images/article/episode_0/vscode-002.png)
+
+![vscode 003](../../images/article/episode_0/vscode-003.png)
+
+#### 設定
+
+エディタが起動すると画面右下にWSL拡張機能インストールのポップアップが表示されるので `Install`
+を押して拡張機能をインストールします。
+
+![setting 001](../../images/article/episode_0/setting-001.png)
+
+続いて画面左下の歯車を選択してメニューから `Settings` を選択します。
+
+![setting 002](../../images/article/episode_0/setting-002.png)
+
+検索欄に `trim` と入力します。
+
+![setting 003](../../images/article/episode_0/setting-003.png)
+
+チェックをオンにします。
+
+![setting 004](../../images/article/episode_0/setting-004.png)
+
+同様に検索欄に `format on save` と入力してチェックをオンにします。
+
+![setting 005](../../images/article/episode_0/setting-005.png)
+
+必要に応じてキーバインドなども自分が使いやすいようにカスタマイズします。
+
+  - [Visual Studio
+    Codeで簡単にショートカットキーを変更する方法](https://qiita.com/kinchiki/items/dabb5c890d9c57907503)
+
+  - [VSCode 内蔵ターミナルで ctrl-p
+    などのショートカットキーを利用する方法](https://loumo.jp/wp/archive/20191125120000/)
+
+#### 拡張機能の追加
+
+エディタのメニューが英語なので日本語に変更する拡張機能をインストールします。
+
+[Japanese Language Pack for Visual Studio
+Code](https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja)
+
+画面左のExtensionアイコンを選択して検索欄に `japanese` と入力したら日本語拡張パッケージが表示されるので `Install`
+を押します。
+
+![package 001](../../images/article/episode_0/package-001.png)
+
+`Restart Now` を押してエディタを再起動します。
+
+![package 002](../../images/article/episode_0/package-002.png)
+
+メニューが日本語になりました。
+
+![package
+    003](../../images/article/episode_0/package-003.png)
+
+同様の手順で以下の拡張機能をインストールします。
+
+1.  [vscode-icons](https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons)
+
+2.  [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+
+3.  [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+
+4.  [Git
+    History](https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory)
+
+5.  [Bracket Pair
+    Colorizer](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer)
+
+6.  [Bookmarks](https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks)
+
+7.  [TODO
+    Highlight](https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight)
+
+8.  [Path
+    Autocomplete](https://marketplace.visualstudio.com/items?itemName=ionutvmi.path-autocomplete)
+
+9.  [Rainbow
+    CSV](https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv)
+
+10. [Partial
+    Diff](https://marketplace.visualstudio.com/items?itemName=ryu1kn.partial-diff)
+
+11. [Duplicate
+    action](https://marketplace.visualstudio.com/items?itemName=mrmlnc.vscode-duplicate)
+
+12. [GitHub Pull
+    Requests](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github)
+
+13. [gitignore](https://marketplace.visualstudio.com/items?itemName=codezombiech.gitignore)
+
+14. [Todo+](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-todo-plus)
+
+15. [Output
+    Colorizer](https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer)
+
+16. [Trailing
+    Spaces](https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces)
+
+#### 設定の同期
+
+エディタの設定をして拡張機能をインストールしました。再インストールなどでエディタを再インストールする場合に上記の作業を再度するのは手間なので設定をオンライに保存してすぐにセットアップできるようにしておきます。
+
+[Settings
+Sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync)
+をインストールすると以下の画面が表示されるので `LOGIN WITH GITHUB` を選択します。
+
+![sync 001](../../images/article/episode_0/sync-001.png)
+
+`アクセスを許可する` を押します。
+
+![sync 002](../../images/article/episode_0/sync-002.png)
+
+`開く` を押します。
+
+![sync 003](../../images/article/episode_0/sync-003.png)
+
+ブラウザが起動するので `Authorize` を押します。
+
+![sync 004](../../images/article/episode_0/sync-004.png)
+
+![sync 005](../../images/article/episode_0/sync-005.png)
+
+`SKIP` を押します。
+
+![sync 006](../../images/article/episode_0/sync-006.png)
+
+エディタメニューの `表示` から `コマンドパレット` を選択して `Sync` と入力して入力候補の中から
+`アップデート・アップロードの設定` を選択します。
+
+![sync 007](../../images/article/episode_0/sync-007.png)
+
+`はい` を押して設定をアップロードします。
+
+![sync 008](../../images/article/episode_0/sync-008.png)
+
+エディタの設定を変更した際はアップロードすることで最新の設定を保存することができます。保存した設定を読み込む場合はコマンドパレットから
+`Sync: 設定をダウンロード` を選択します。
+
+もし、GitHub連携で以下のような画面になった場合は登録メールアドレスに認証コードが送られているので確認してください。
+
+![sync 009](../../images/article/episode_0/sync-009.png)
+
+![sync 010](../../images/article/episode_0/sync-010.png)
+
+#### Hello world
+
+##### プログラムを作成する
+
+エディタのセットアップが出来たのでかんたんなプログラムを作ってみましょう。 お題は [Hello
+world](https://ja.wikipedia.org/wiki/Hello_world) です。
+まず、プログラムを作成する場所ですが今回はディスクトップの直下に
+`Projects` というフォルダを作成してその中に配置したいと思います。
+
+![hello 001](../../images/article/episode_0/hello-001.png)
+
+`Projects` フォルダの中に `PowerShell` フォルダを作成します。
+
+![hello 002](../../images/article/episode_0/hello-002.png)
+
+![hello 003](../../images/article/episode_0/hello-003.png)
+
+エディタを起動します。
+
+![hello 004](../../images/article/episode_0/hello-004.png)
+
+エディタを起動したらエクスプローラアイコンから `フォルダを開く` を選択して作成したフォルダを開きます。
+
+![hello 005](../../images/article/episode_0/hello-005.png)
+
+![hello 007](../../images/article/episode_0/hello-007.png)
+
+フォルダを開いたらファイルアイコンを選択して `HelloWorld.ps1` ファイルを作成します。
+
+![hello 008](../../images/article/episode_0/hello-008.png)
+
+![hello 009](../../images/article/episode_0/hello-009.png)
+
+まず、以下のコードを入力してキーボードのF5を押します。
+
+``` powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $false
+    }
+}
+```
+
+![hello 010](../../images/article/episode_0/hello-010.png)
+
+プログラムの実行と一緒にテストの実行結果が表示されます。
+
+![hello 011](../../images/article/episode_0/hello-011.png)
+
+テストが通るように修正します。
+
+``` powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+}
+```
+
+![hello 012](../../images/article/episode_0/hello-012.png)
+
+テスティングフレームワークの動作が確認できたのでプログラム作成に入ります。
+
+``` powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単な挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+}
+```
+
+![hello 013](../../images/article/episode_0/hello-013.png)
+
+`HelloWorld` 関数を追加します。
+
+``` powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単な挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+}
+
+function HelloWorld {
+    return "Hello from PowerShell"
+}
+```
+
+![hello
+014](../../images/article/episode_0/hello-014.png)
+
+F5キーを押してテストが通ったことを確認したらテストケースを追加します。もしテストが失敗するようなら保存のタイミングあっていない場合があるので再度F5キーを押して実行してみてください。
+
+``` powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単な挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+    It "指定された名前で挨拶を返す" {
+        HelloWorld "VSCode" | Should Be "Hello from VSCode"
+    }
+}
+
+function HelloWorld {
+    return "Hello from PowerShell"
+}
+```
+
+![hello 015](../../images/article/episode_0/hello-015.png)
+
+`HelloWorld` 関数は既定の挨拶しか返さないのでテストが失敗します。
+
+    ...
+    Describing HelloWorld
+     [+] 何か便利なものだ 41ms
+     [+] 簡単な挨拶を返す 12ms
+     [-] 指定された名前で挨拶を返す 56ms
+       Expected string length 17 but was 21. Strings differ at index 11.
+       Expected: {Hello from VSCode}
+       But was:  {Hello from PowerShell}
+       ----------------------^
+    ...
+
+`HelloWorld` 関数に引数を追加して表示できるように変更します。
+
+``` powershell
+Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単な挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+    It "指定された名前で挨拶を返す" {
+        HelloWorld "VSCode" | Should Be "Hello from VSCode"
+    }
+}
+
+function HelloWorld($name) {
+    return "Hello from $name"
+}
+```
+
+F5を押します。
+
+![hello 016](../../images/article/episode_0/hello-016.png)
+
+`指定された名前で挨拶を返す` テストは通りましたが今度は `簡単な挨拶を返す` テストが失敗してしまいました。
+
+    Describing HelloWorld
+     [+] 何か便利なものだ 39ms
+     [-] 簡単な挨拶を返す 23ms
+       Expected string length 21 but was 11. Strings differ at index 11.
+       Expected: {Hello from PowerShell}
+       But was:  {Hello from }
+       ----------------------^
+    ...
+     [+] 指定された名前で挨拶を返す 29ms
+    ...
+
+`HelloWorld` 関数にデフォルト引数を設定してテストを通るようにします。
+
+    Describe "HelloWorld" {
+        It "何か便利なものだ" {
+            $true | Should Be $true
+        }
+        It "簡単な挨拶を返す" {
+            HelloWorld | Should Be "Hello from PowerShell"
+        }
+        It "指定された名前で挨拶を返す" {
+            HelloWorld "VSCode" | Should Be "Hello from VSCode"
+        }
+    }
+
+    function HelloWorld($name = "PowerShell") {
+        return "Hello from $name"
+    }
+
+F5を押します。
+
+![hello 017](../../images/article/episode_0/hello-017.png)
+
+仕上げに不要なテストを削除してテストケースの文言をわかりやすくしておきます。
+
+    Describe "HelloWorld" {
+        It "何も指定されていない場合は既定の挨拶を返す" {
+            HelloWorld | Should Be "Hello from PowerShell"
+        }
+        It "指定された名前で挨拶を返す" {
+            HelloWorld "VSCode" | Should Be "Hello from VSCode"
+        }
+    }
+
+    function HelloWorld($name = "PowerShell") {
+        return "Hello from $name"
+    }
+
+![hello 018](../../images/article/episode_0/hello-018.png)
+
+`HelloWorld`
+プログラムの完成です。
+
+##### プログラムをデバッグする
+
+プログラムを作成していると思った通りに動かないことが多々あります。そのようなときにプログラムの動作を確認するにはエディタのデバッグ機能を使います。
+
+まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。
+
+![hello
+019](../../images/article/episode_0/hello-019.png)
+
+ブレークポイントを設定したらF5を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。
+
+![hello 020](../../images/article/episode_0/hello-020.png)
+
+画面上の実行ボタンを押すと次のブレークポイントに移動します。
+
+![hello 021](../../images/article/episode_0/hello-021.png)
+
+![hello 022](../../images/article/episode_0/hello-022.png)
+
+![hello 023](../../images/article/episode_0/hello-023.png)
+
+デバッガを終了するには終了ボタンを押します。
+
+![hello 024](../../images/article/episode_0/hello-024.png)
+
+ブレークポイントを再度押すことで解除ができます。
+
+![hello 025](../../images/article/episode_0/hello-025.png)
+
+##### プログラムをレポジトリに保存する
+
+作成したプログラムをレポジトリに保存します。まずソース管理アイコンを選択して `リポジトリを初期化する` を押します。
+
+![hello 026](../../images/article/episode_0/hello-026.png)
+
+![hello 027](../../images/article/episode_0/hello-027.png)
+
+`変更をステージ` を選択します。
+
+![hello 028](../../images/article/episode_0/hello-028.png)
+
+変更内容を入力します。ここでは `feat: HelloWorld` を入力しておきます。
+
+![hello 029](../../images/article/episode_0/hello-029.png)
+
+`コミット` を押します。
+
+![hello 030](../../images/article/episode_0/hello-030.png)
+
+初回登録時は以下の警告が表示されるので追加作業が必要になります。
+
+![hello 031 1](../../images/article/episode_0/hello-031-1.png)
+
+![hello 031 2](../../images/article/episode_0/hello-031-2.png)
+
+以下のコマンドをターミナルに入力します。
+
+    git config --global user.name "newbie4649"
+    git config --global user.email newbie4649@outlook.jp
+
+![hello 032](../../images/article/episode_0/hello-032.png)
+
+再度 `コミット` を押してレポジトリに保存します。
+
+![hello 033](../../images/article/episode_0/hello-033.png)
+
+レポジトリの記録内容は `GitLens` から確認することが出来ます。
+
+![hello 034](../../images/article/episode_0/hello-034.png)
+
+### 開発言語のセットアップ
+
+#### Ruby環境のセットアップ(Windows版)
+
+#### インストール
+
+[RubyInstaller](https://rubyinstaller.org/downloads/)からWITH
+DEVKITをインストールします。
+
+![ruby win install
+001](../../images/article/episode_0/ruby-win-install-001.png)
+
+インストラーの指示に従います。
+
+![ruby win install
+002](../../images/article/episode_0/ruby-win-install-002.png)
+
+![ruby win install
+003](../../images/article/episode_0/ruby-win-install-003.png)
+
+![ruby win install
+004](../../images/article/episode_0/ruby-win-install-004.png)
+
+![ruby win install
+005](../../images/article/episode_0/ruby-win-install-005.png)
+
+3を入力してエンターキーを押します。
+
+![ruby win install
+006](../../images/article/episode_0/ruby-win-install-006.png)
+
+#### 追加パッケージのインストール
+
+[Ruby for Visual Studio
+Code](https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby)
+
+[Ruby
+Solargraph](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph)
+
+[vscode-endwise](https://marketplace.visualstudio.com/items?itemName=kaiwood.endwise)
+
+[ruby-rubocop](https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop)
+
+[Test Explorer
+UI](https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer)
+
+[Ruby Test
+Explorer](https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter)
+
+#### 設定
+
+既定のシェルをPowerShell Coreに変更します。
+
+![ruby win vscode
+001](../../images/article/episode_0/ruby-win-vscode-001.png)
+
+![ruby win vscode
+002](../../images/article/episode_0/ruby-win-vscode-002.png)
+
+新しいターミナルを開いて以下のコマンドを入力します。
+
+``` bash
+gem install rubocop
+gem install debase
+gem install ruby-debug-ide
+gem install solargraph
+```
+
+![ruby win vscode
+003](../../images/article/episode_0/ruby-win-vscode-003.png)
+
+![ruby win vscode
+004](../../images/article/episode_0/ruby-win-vscode-004.png)
+
+#### Hello world
+
+##### プログラムを作成する
+
+`Projects` フォルダ内に `Ruby` フォルダを作成してエディタからフォルダを開きます。
+
+![ruby win hello
+001](../../images/article/episode_0/ruby-win-hello-001.png)
+
+![ruby win hello
+002](../../images/article/episode_0/ruby-win-hello-002.png)
+
+![ruby win hello
+003](../../images/article/episode_0/ruby-win-hello-003.png)
+
+`新しいファイル` 作成アイコンを押します。
+
+![ruby win hello
+004](../../images/article/episode_0/ruby-win-hello-004.png)
+
+ファイル名は `main.rb` とします。
+
+![ruby win hello
+005](../../images/article/episode_0/ruby-win-hello-005.png)
+
+ファイルに以下のコードを入力したらRunアイコンを選択して `create a launch.json file`
+を押してメニューからRubyを選択します。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, false)
+  end
+end
+```
+
+![ruby win hello
+006](../../images/article/episode_0/ruby-win-hello-006.png)
+
+`Debug Local File` を選択します。
+
+![ruby win hello
+007](../../images/article/episode_0/ruby-win-hello-007.png)
+
+`launch.json` ファイルが作成されたら `main.rb` タブに戻ってF5キーを押します。
+
+![ruby win hello
+008](../../images/article/episode_0/ruby-win-hello-008.png)
+
+デバッグコンソールに実行結果が表示されれば準備完了です。
+
+![ruby win hello
+009](../../images/article/episode_0/ruby-win-hello-009.png)
+
+テストをパスするようにコードを修正してF5キーを押します。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+end
+```
+
+![ruby win hello
+010](../../images/article/episode_0/ruby-win-hello-010.png)
+
+テスティングフレームワークの動作が確認できたので `hello_world`
+関数の作成に入ります。まず以下のコードを追加してF5キーを押してテストが失敗することを確認します。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+end
+```
+
+![ruby win hello
+011](../../images/article/episode_0/ruby-win-hello-011.png)
+
+`hello_world` 関数を追加してテストをパスさせます。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+end
+
+def hello_world
+  'Hello from Ruby'
+end
+```
+
+![ruby win hello
+012](../../images/article/episode_0/ruby-win-hello-012.png)
+
+指定された名前で挨拶を返すようにします。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world
+  "Hello from Ruby"
+end
+```
+
+![ruby win hello
+013](../../images/article/episode_0/ruby-win-hello-013.png)
+
+関数に引数を追加します。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name)
+  "Hello from #{name}"
+end
+```
+
+![ruby win hello
+014](../../images/article/episode_0/ruby-win-hello-014.png)
+
+`指定された名前で挨拶を返す` テストはパスしましたが今度は `簡単な挨拶を返す`
+テストが失敗するようになりましたのでデフォルト引数を設定してテストをパスするようにします。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name = 'Ruby')
+  "Hello from #{name}"
+end
+```
+
+![ruby win hello
+015](../../images/article/episode_0/ruby-win-hello-015.png)
+
+仕上げに不要なテストを削除してテストケースの文言をわかりやすくしておきます。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何も指定されていない場合は既定の挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name = 'Ruby')
+  "Hello from #{name}"
+end
+```
+
+![ruby win hello
+016](../../images/article/episode_0/ruby-win-hello-016.png)
+
+##### プログラムをデバッグする
+
+まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。
+
+![ruby win debug
+001](../../images/article/episode_0/ruby-win-debug-001.png)
+
+ブレークポイントを設定したらF5を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。
+
+![ruby win debug
+002](../../images/article/episode_0/ruby-win-debug-002.png)
+
+画面上の実行ボタンを押すと次のブレークポイントに移動します。
+
+![ruby win debug
+003](../../images/article/episode_0/ruby-win-debug-003.png)
+
+デバッガを終了するには終了ボタンを押します。
+
+![ruby win debug
+004](../../images/article/episode_0/ruby-win-debug-004.png)
+
+ブレークポイントを再度押すことで解除ができます。
+
+![ruby win debug
+005](../../images/article/episode_0/ruby-win-debug-005.png)
+
+##### プログラムをレポジトリに保存する
+
+ソース管理を選択して `リポジトリを初期化する` を押します。
+
+![ruby win git 001](../../images/article/episode_0/ruby-win-git-001.png)
+
+`全ての変更をステージ` を選択します。
+
+![ruby win git 002](../../images/article/episode_0/ruby-win-git-002.png)
+
+変更内容に `feat: HelloWorld` と入力して `コミット` を押します。
+
+![ruby win git 003](../../images/article/episode_0/ruby-win-git-003.png)
+
+変更内容は `GitLens` から確認できます。
+
+![ruby win git 004](../../images/article/episode_0/ruby-win-git-004.png)
+
+#### Ruby環境のセットアップ(WSL版)
+
+画面左下の `><` を押してメニューから `Remote-WSL: New Window` を選択します。
+
+![ruby 001](../../images/article/episode_0/ruby-001.png)
+
+`アクセスを許可する` を押します。
+
+![ruby 002](../../images/article/episode_0/ruby-002.png)
+
+新しいウィンドウが立ち上がったらExtensionメニューから `Install Local Extensions in "WSL:
+Ubuntu'…​"` を押します。
+
+![ruby 003](../../images/article/episode_0/ruby-003.png)
+
+全てにチェックをしてインストールします。
+
+![ruby 004](../../images/article/episode_0/ruby-004.png)
+
+拡張機能のインストールが終わったら `Reload Window` を押して拡張機能を読み込みます。
+
+![ruby 005](../../images/article/episode_0/ruby-005.png)
+
+#### プロビジョニングの実行
+
+Ruby開発環境の自動構築をするため以下のレポジトリを自分のレポジトリにフォークします。
+
+[テスト駆動開発から始めるRuby入門](https://github.com/hiroshima-arc/tdd_rb)
+
+`Fork` を押します。
+
+![provision 001](../../images/article/episode_0/provision-001.png)
+
+`Fork` が完了して自分のレポジトリにコピーされたら `Clone or download` を押してレポジトリのURLをコピーします。
+
+![provision 002](../../images/article/episode_0/provision-002.png)
+
+エクスプローラアイコンメニューから `レポジトリをクローンする` を押します。
+
+![provision 003](../../images/article/episode_0/provision-003.png)
+
+先程コピーしたレポジトリのURLを貼り付けます。
+
+![provision 004](../../images/article/episode_0/provision-004.png)
+
+保存先はそのままで `OK` を押します。
+
+![provision 005](../../images/article/episode_0/provision-005.png)
+
+`開く` を押します。
+
+![provision 006](../../images/article/episode_0/provision-006.png)
+
+メニューから `ターミナル` `新しいターミナル` を選択します。
+
+![provision 007 1](../../images/article/episode_0/provision-007-1.png)
+
+![provision 007 2](../../images/article/episode_0/provision-007-2.png)
+
+ターミナルに以下のコマンドを入力します。実行時にパスワード入力が求められるのでWSLで設定したパスワードを入力してください。
+
+``` bash
+$ sudo apt-get update -y
+[sudo] password for newbie4649:
+```
+
+![provision 008](../../images/article/episode_0/provision-008.png)
+
+続いて、ターミナルに以下のコマンドを入力します。
+
+``` bash
+$ sudo apt install ansible -y
+```
+
+続いて、エクスプローラから　`provisioning/vars/site.yml` をファイルを開いて `user:`
+の名前をWSLで設定したユーザーIDに変更します。
+
+![provision 009](../../images/article/episode_0/provision-009.png)
+
+変更を保存したらターミナルに以下のコマンドを入力します。
+
+``` bash
+$ cd provisioning/tasks/
+$ sudo ansible-playbook --inventory=localhost, --connection=local site.yml
+```
+
+![provision 010](../../images/article/episode_0/provision-010.png)
+
+セットアップが完了したらエディタを再起動してプロジェクトを開きます。
+
+![provision 010 2](../../images/article/episode_0/provision-010-2.png)
+
+以下のコマンドを入力してRubyがセットアップされていることを確認します。
+
+``` bash
+$ ruby -v
+```
+
+![provision 011](../../images/article/episode_0/provision-011.png)
+
+続いて、ターミナルに以下のコマンドを入力します。
+
+``` bash
+$ code ~/.bashrc
+```
+
+表示されたファイルの一番最後に以下のコードを追加して保存します。
+
+    ...
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_compl
+
+![provision 012](../../images/article/episode_0/provision-012.png)
+
+保存したら以下のコマンドを実行してNode.jsのバージョンが表示されたらセットアップ完了です。
+
+``` bash
+$ source ~/.bashrc
+$ nvm install --lts
+$ node -v
+```
+
+![provision 013](../../images/article/episode_0/provision-013.png)
+
+#### 追加パッケージのインストール
+
+[Ruby for Visual Studio
+Code](https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby)
+
+[Ruby
+Solargraph](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph)
+
+[vscode-endwise](https://marketplace.visualstudio.com/items?itemName=kaiwood.endwise)
+
+[ruby-rubocop](https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop)
+
+[Test Explorer
+UI](https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer)
+
+[Ruby Test
+Explorer](https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter)
+
+ターミナルに以下のコマンドを入力します。
+
+``` bash
+gem install rubocop
+gem install debase
+gem install ruby-debug-ide
+gem install solargraph
+```
+
+#### Hello world
+
+##### プログラムを作成する
+
+`REAMD.md` を選択してから `新しいファイル` 作成アイコンを押します。
+
+![ruby hello 001](../../images/article/episode_0/ruby-hello-001.png)
+
+ファイル名は `main.rb` とします。
+
+![ruby hello 002](../../images/article/episode_0/ruby-hello-002.png)
+
+ファイルに以下のコードを入力したらRunアイコンを選択して `create a launch.json file`
+を押してメニューからRubyを選択します。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, false)
+  end
+end
+```
+
+![ruby hello 003](../../images/article/episode_0/ruby-hello-003.png)
+
+`Debug Local File` を選択します。
+
+![ruby hello 004](../../images/article/episode_0/ruby-hello-004.png)
+
+`launch.json` ファイルが作成されたら `main.rb` タブに戻ってF5キーを押します。
+
+![ruby hello 005](../../images/article/episode_0/ruby-hello-005.png)
+
+デバッグコンソールに実行結果が表示されれば準備完了です。
+
+![ruby hello 006](../../images/article/episode_0/ruby-hello-006.png)
+
+テストをパスするようにコードを修正してF5キーを押します。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+end
+```
+
+![ruby hello 007](../../images/article/episode_0/ruby-hello-007.png)
+
+テスティングフレームワークの動作が確認できたので `hello_world`
+関数の作成に入ります。まず以下のコードを追加してF5キーを押してテストが失敗することを確認します。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+end
+```
+
+![ruby hello 008](../../images/article/episode_0/ruby-hello-008.png)
+
+`hello_world` 関数を追加してテストをパスさせます。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+end
+
+def hello_world
+  'Hello from Ruby'
+end
+```
+
+![ruby hello 009](../../images/article/episode_0/ruby-hello-009.png)
+
+指定された名前で挨拶を返すようにします。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world
+  "Hello from Ruby"
+end
+```
+
+![ruby hello 010](../../images/article/episode_0/ruby-hello-010.png)
+
+関数に引数を追加します。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name)
+  "Hello from #{name}"
+end
+```
+
+![ruby hello 011](../../images/article/episode_0/ruby-hello-011.png)
+
+`指定された名前で挨拶を返す` テストはパスしましたが今度は `簡単な挨拶を返す`
+テストが失敗するようになりましたのでデフォルト引数を設定してテストをパスするようにします。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name = 'Ruby')
+  "Hello from #{name}"
+end
+```
+
+![ruby hello 012](../../images/article/episode_0/ruby-hello-012.png)
+
+仕上げに不要なテストを削除してテストケースの文言をわかりやすくしておきます。
+
+``` ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何も指定されていない場合は既定の挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name = 'Ruby')
+  "Hello from #{name}"
+end
+```
+
+![ruby hello 013](../../images/article/episode_0/ruby-hello-013.png)
+
+##### プログラムをデバッグする
+
+まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。
+
+![ruby debug
+001](../../images/article/episode_0/ruby-debug-001.png)
+
+ブレークポイントを設定したらF5を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。
+
+![ruby debug 002](../../images/article/episode_0/ruby-debug-002.png)
+
+画面上の実行ボタンを押すと次のブレークポイントに移動します。
+
+![ruby debug 003](../../images/article/episode_0/ruby-debug-003.png)
+
+デバッガを終了するには終了ボタンを押します。
+
+![ruby debug 004](../../images/article/episode_0/ruby-debug-004.png)
+
+ブレークポイントを再度押すことで解除ができます。
+
+![ruby debug 005](../../images/article/episode_0/ruby-debug-005.png)
+
+##### プログラムをレポジトリに保存する
+
+`全ての変更をステージ` を選択します。
+
+![ruby git 001](../../images/article/episode_0/ruby-git-001.png)
+
+変更内容に `feat: HelloWorld` と入力して `コミット` を押します。
+
+![ruby git 002](../../images/article/episode_0/ruby-git-002.png)
+
+変更内容は `GitLens` から確認できます。
+
+![ruby git 003](../../images/article/episode_0/ruby-git-003.png)
+
+### 参照
+
+  - [Developer Roadmaps](https://roadmap.sh/)
+
+  - [WEB DEVELOPER ROADMAP
+    - 2020](https://github.com/kamranahmedse/developer-roadmap)
+
+  - [「超」整理法の思想](https://note.com/yukionoguchi/n/n6fa36e6aff86)
+
+  - [効率的な文書管理方法とは。保管方法、運用ルール作りの3ステップを紹介](https://at-jinji.jp/work/007)
+
+  - [書類整理の基本は書類をためないこと！ 「『超』整理術」を簡単解説](https://at-jinji.jp/blog/11259/)
+
+  - [The Pragmatic Programmer: your journey to mastery, 20th Anniversary
+    Edition, 2nd
+    Edition](https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/)
+
+  - [子どもを守るITリテラシー学](https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html)
+
+  - [フォルダ管理の基本ルール5選！整理されていないデスクトップにさよならバイバイ！](https://jaminlifelog.com/notes/work/clean-desktop-files)
+
+  - [新しい Microsoft
+    アカウントを作成する方法](https://support.microsoft.com/ja-jp/help/4026324/microsoft-account-how-to-create)
+
+  - [Java開発環境がすぐに作れる「Visual Studio Code Installer for
+    Java」を試してみた](https://qiita.com/kikutaro/items/0e5deb36047d0137a767)
+
+  - [Java in Visual Studio
+    Code](https://code.visualstudio.com/docs/languages/java)
+
+  - [WSL (Windows Subsystem for
+    Linux)の基本メモ](https://qiita.com/rubytomato@github/items/fdfc0a76e848442f374e)
+
+  - [Practical PowerShell Unit-Testing: Getting
+    Started](https://www.red-gate.com/simple-talk/sysadmin/powershell/practical-powershell-unit-testing-getting-started/)
+
+  - [日頃お世話になっているElectronのアプリ開発に入門してみる](https://qiita.com/y-tsutsu/items/179717ecbdcc27509e5a)
+
+  - [VSCodeの拡張機能「GIST」が便利すぎてHackMDを使うのをやめた](https://qiita.com/kai_kou/items/ceeee47996339e5eecc4)
+
+  - [VSCodeのオススメ拡張機能 24 選
+    (とTipsをいくつか)](https://qiita.com/sensuikan1973/items/74cf5383c02dbcd82234)
+
+  - [VScodeで保存時に自動で空白を削除しよう！](https://qiita.com/n_oshiumi/items/1ad3f55d58f2d9d48d1e)
+
+  - [Visual Studio
+    Codeで保存時自動整形の設定方法](https://qiita.com/mitashun/items/e2f118a9ca7b96b97840)
+
+  - [VisualStudioCode
+    でRubyの開発環境を作る](https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28)
+
 # エピソード1
 
 ## TODOリストから始めるテスト駆動開発
@@ -9,10 +1581,10 @@
 プログラムを作成するにあたってまず何をすればよいだろうか？私は、まず仕様の確認をして **TODOリスト** を作るところから始めます。
 
 > TODOリスト
-> 
+>
 > 何をテストすべきだろうか----着手する前に、必要になりそうなテストをリストに書き出しておこう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 仕様
 
@@ -39,7 +1611,7 @@ TODOリスト
 まず `数を文字列にして返す`作業に取り掛かりたいのですがまだプログラミング対象としてはサイズが大きいようですね。もう少し具体的に分割しましょう。
 
   - 数を文字列にして返す
-    
+
       - 1を渡したら文字列"1"を返す
 
 これならプログラムの対象として実装できそうですね。
@@ -51,16 +1623,16 @@ TODOリスト
 最初にプログラムする対象を決めたので早速プロダクトコードを実装・・・ではなく **テストファースト** で作業を進めていきましょう。まずはプログラムを実行するための準備作業を進める必要がありますね。
 
 > テストファースト
-> 
+>
 > いつテストを書くべきだろうか----それはテスト対象のコードを書く前だ。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 では、どうやってテストすればいいでしょうか？テスティングフレームワークを使って自動テストを書きましょう。
 
 > テスト（名詞） どうやってソフトウェアをテストすればよいだろか----自動テストを書こう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 今回Rubyのテスティングフレームワークには [Minitest](http://docs.seattlerb.org/minitest/)を利用します。Minitestの詳しい使い方に関しては *Minitestの基本* [6](#pruby)を参照してください。では、まず以下の内容のテキストファイルを作成して `main.rb` で保存します。
 
@@ -165,7 +1737,7 @@ $ git commit -m 'test: セットアップ'
 TODOリスト
 
   - 数を文字列にして返す
-    
+
       - **1を渡したら文字列"1"を返す**
 
   - 3 の倍数のときは数の代わりに｢Fizz｣と返す
@@ -182,16 +1754,16 @@ TODOリスト
 アサーションを最初に書きましょう。
 
 > アサートファースト
-> 
+>
 > いつアサーションを書くべきだろうか----最初に書こう
-> 
+>
 >   - システム構築はどこから始めるべきだろうか。システム構築が終わったらこうなる、というストーリーを語るところからだ。
-> 
+>
 >   - 機能はどこから書き始めるべきだろうか。コードが書き終わったらこのように動く、というテストを書くところからだ。
-> 
+>
 >   - ではテストはどこから書き始めるべきだろうか。それはテストの終わりにパスすべきアサーションを書くところからだ。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 まず、セットアッププログラムは不要なので削除しておきましょう。
 
@@ -204,8 +1776,8 @@ require 'minitest/autorun'
 テストコードを書きます。え？日本語でテストケースを書くの？ですかって。開発体制にもよりますが日本人が開発するのであれば無理に英語で書くよりドキュメントとしての可読性が上がるのでテストコードであれば問題は無いと思います。
 
 > テストコードを読みやすくするのは、テスト以外のコードを読みやすくするのと同じくらい大切なことだ。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 ``` ruby
 require 'minitest/reporters'
@@ -240,10 +1812,10 @@ Finished in 0.00201s
 `NameError: NameError: uninitialized constant FizzBuzzTest::FizzBuzz`…​FizzBuzzが定義されていない。そうですねまだ作ってないのだから当然ですよね。では`FizzBuzz::generate` メソッドを作りましょう。どんな振る舞いを書けばいいのでしょうか？とりあえず最初のテストを通すために **仮実装** から始めるとしましょう。
 
 > 仮実装を経て本実装へ
-> 
+>
 > 失敗するテストを書いてから、最初に行う実装はどのようなものだろうか----ベタ書きの値を返そう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 `FizzBuzz` **クラス** を定義して **文字列リテラル** を返す `FizzBuzz::generate` **クラスメソッド** を作成しましょう。ちょっと何言ってるかわからないかもしれませんがとりあえずそんなものだと思って書いてみてください。
 
@@ -273,7 +1845,7 @@ Finished in 0.00094s
 TODOリスト
 
   - 数を文字列にして返す
-    
+
       - **1を渡したら文字列"1"を返す**
 
   - 3 の倍数のときは数の代わりに｢Fizz｣と返す
@@ -293,9 +1865,9 @@ TODOリスト
 TODOリスト
 
   - 数を文字列にして返す
-    
+
       - ~~1を渡したら文字列"1"を返す~~
-    
+
       - **2を渡したら文字列"2"を返す**
 
   - 3 の倍数のときは数の代わりに｢Fizz｣と返す
@@ -343,7 +1915,7 @@ Finished in 0.00179s
 
 Rubyの公式リファレンスは <https://docs.ruby-lang.org/> です。[日本語リファレンス](https://docs.ruby-lang.org/ja/) から[るりまサーチ](https://docs.ruby-lang.org/ja/search/)を選択してキーワード検索してみましょう。[文字列 変換](https://docs.ruby-lang.org/ja/search/query:%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B/)キーワードで検索すると `to_s` というキーワードが出てきました。今度は[to\_s](https://docs.ruby-lang.org/ja/search/query:to_s/)で検索すると色々出てきました、どうやら `to_s` を使えばいいみたいですね。
 
-ちなみに検索エンジンから [Ruby 文字列 変換](https://www.google.com/search?hl=ja&sxsrf=ACYBGNRISq_mMHcQ1nGzgT3k_igW82f1Sg%3A1579494685196&source=hp&ei=HS0lXqnSCeeumAXN5ZigCg&q=Ruby+%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B&oq=Ruby+%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B&gs_l=psy-ab.3..0i4i37l2j0i8i30l6.1386.6456..6820…​2.0..0.139.2322.1j20…​…​0…​.1..gws-wiz…​…​.0i131i4j0i4j0i131j35i39j0j0i8i4i30.FfEPbOjPZcw&ved=0ahUKEwjp1IidrJHnAhVnF6YKHc0yBqQQ4dUDCAg&uact=5)で検索してもいろいろ出てくるのですがすべてのサイトが必ずしも正確な説明をしているまたは最新のバージョンに対応しているとは限らないので始めは公式リファレンスや市販の書籍から調べる癖をつけておきましょう。
+ちなみに検索エンジンから [Ruby 文字列 変換](https://www.google.com/search?hl=ja&sxsrf=ACYBGNRISq_mMHcQ1nGzgT3k_igW82f1Sg%3A1579494685196&source=hp&ei=HS0lXqnSCeeumAXN5ZigCg&q=Ruby+%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B&oq=Ruby+%E6%96%87%E5%AD%97%E5%88%97%E3%80%80%E5%A4%89%E6%8F%9B&gs_l=psy-ab.3..0i4i37l2j0i8i30l6.1386.6456..6820…​2.0..0.139.2322.1j20…​…​0…​.1..gws-wiz…​…​.0i131i4j0i4j0i131j35i39j0j0i8i4i30.FfEPbOjPZcw&ved=0ahUKEwjp1IidrJHnAhVnF6YKHc0yBqQQ4dUDCAg&uact=5)で検索してもいろいろ出てくるのですがすべてのサイトが必ずしも正確な説明をしているまたは最新のバージョンに対応しているとは限らないので始めは公式リファレンスや市販の書籍から調べる癖をつけておきましょう。
 
 ``` ruby
 ...
@@ -369,17 +1941,17 @@ Finished in 0.00098s
 テストが無事通りました。このように２つ目のテストによって `FizzBuzz::generate` メソッドの一般化を実現することができました。このようなアプローチを **三角測量** と言います。
 
 > 三角測量
-> 
+>
 > テストから最も慎重に一般化を引き出すやり方はどのようなものだろうか----２つ以上の例があるときだけ、一般化を行うようにしよう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 TODOリスト
 
   - **数を文字列にして返す**
-    
+
       - ~~1を渡したら文字列"1"を返す~~
-    
+
       - ~~2を渡したら文字列"2"を返す~~
 
   - 3 の倍数のときは数の代わりに｢Fizz｣と返す
@@ -395,7 +1967,7 @@ TODOリスト
 たかが **数を文字列にして返す** プログラムを書くのにこんなに細かいステップを踏んでいくの？と思ったかもしれません。プログラムを書くということは細かいステップを踏んで行くことなのです。そして、細かいステップを踏み続けることが大切なことなのです。
 
 > TDDで大事なのは、細かいステップを踏むことではなく、細かいステップを踏み続けられるようになることだ。
-> 
+>
 > —  テスト駆動開発
 
 
@@ -414,8 +1986,8 @@ TODOリスト
 ```
 
 > テストの本質というのは、「こういう状況と入力から、こういう振る舞いと出力を期待する」のレベルまで要約できる。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 ここで一段落ついたので、これまでの作業内容をバージョン管理システムにコミットしておきましょう。
 
@@ -431,24 +2003,24 @@ $ git commit -m 'test: 数を文字列にして返す'
 ここでテスト駆動開発の流れを確認しておきましょう。
 
 > 1.  レッド：動作しない、おそらく最初のうちはコンパイルも通らないテストを１つ書く。
-> 
+>
 > 2.  グリーン:そのテストを迅速に動作させる。このステップでは罪を犯してもよい。
-> 
+>
 > 3.  リファクタリング:テストを通すために発生した重複をすべて除去する。
-> 
+>
 > レッド・グリーン・リファクタリング。それがTDDのマントラだ。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 コードはグリーンの状態ですが **リファクタリング** を実施していませんね。重複を除去しましょう。
 
 > リファクタリング(名詞) 外部から見たときの振る舞いを保ちつつ、理解や修正が簡単になるように、ソフトウェアの内部構造を変化させること。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 > リファクタリングする(動詞) 一連のリファクタリングを適用して、外部から見た振る舞いの変更なしに、ソフトウェアを再構築すること。
-> 
-> —  リファクタリング(第2版 
+>
+> —  リファクタリング(第2版
 
 #### メソッドの抽出
 
@@ -456,12 +2028,12 @@ $ git commit -m 'test: 数を文字列にして返す'
 **メソッドの抽出** を適用して重複を除去しましょう。
 
 > メソッドの抽出
-> 
+>
 > ひとまとめにできるコードの断片がある。
-> 
+>
 > コードの断片をメソッドにして、それを目的を表すような名前をつける。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 ``` ruby
 class FizzBuzzTest < Minitest::Test
@@ -528,12 +2100,12 @@ end
 引数の名前が `n` ですね。コンピュータにはわかるかもしれませんが人間が読むコードとして少し不親切です。特にRubyのような動的言語では型が明確に定義されないのでなおさらです。ここは **変数名の変更** を適用して人間にとって読みやすいコードにリファクタリングしましょう。
 
 > コンパイラがわかるコードは誰にでも書ける。すぐれたプログラマは人間にとってわかりやすいコードを書く。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 > 名前は短いコメントだと思えばいい。短くてもいい名前をつければ、それだけ多くの情報を伝えることができる。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 ``` ruby
 ...
@@ -594,12 +2166,12 @@ Finished in 0.00746s
 最初にプロダクトコードを書いて一通りの機能を作ってから動作を確認する進め方だとこの手の間違いはいつどこで作り込んだのかわからなくなるため原因の調査に時間がかかり残念な経験をしたドジっ子プログラマは変更なんてするもんじゃないと思いコードを変更することに不安を持つようになるでしょう。でも、テスト駆動開発ならそんなドジっ子プログラマでも自動テストと小さなステップのおかげで上記のようなしょうもない間違いもすぐに見つけてすぐに対応することができるのでコードを変更する勇気を持つことができるのです。
 
 > テスト駆動開発は、プログラミング中の不安をコントロールする手法だ。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 > リファクタリングでは小さなステップでプログラムを変更していく。そのため間違ってもバグを見つけるのは簡単である。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 このグリーンの状態にいつでも戻れるようにコミットして次の **TODOリスト** の内容に取り掛かるとしましょう。
 
@@ -609,8 +2181,8 @@ $ git commit -m 'refactor: 変数名の変更'
 ```
 
 > リファクタリングが成功するたびにコミットしておけば、たとえ壊してしまったとしても、動いていた状態に戻すことができます。変更をコミットしておき、意味のある単位としてまとまってから、共有のリポジトリに変更をプッシュすればよいのです。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 ### 明白な実装
 
@@ -619,13 +2191,13 @@ $ git commit -m 'refactor: 変数名の変更'
 TODOリスト
 
   - *数を文字列にして返す*
-    
+
       - ~~1を渡したら文字列"1"を返す~~
-    
+
       - ~~2を渡したら文字列"2"を返す~~
 
   - 3 の倍数のときは数の代わりに｢Fizz｣と返す
-    
+
       - **3を渡したら文字列"Fizz"を返す**
 
   - 5 の倍数のときは｢Buzz｣と返す
@@ -670,14 +2242,14 @@ Finished in 0.05129s
 さて、失敗するテストを書いたので次はテストを通すためのプロダクトコードを書くわけですがどうしましょうか？　**仮実装**　でベタなコードを書きますか？実現したい振る舞いは`もし3を渡したらならば文字列Fizzを返す` です。英語なら `If number is 3, result is Fizz`といったところでしょうか。ここは **明白な実装** で片付けた方が早いでしょう。
 
 > 明白な実装
-> 
+>
 > シンプルな操作を実現するにはどうすればいいだろうか----そのまま実装しよう。
-> 
+>
 > 仮実装や三角測量は、細かく細かく刻んだ小さなステップだ。だが、ときには実装をどうすべきか既に見えていることが。
 > そのまま進もう。例えば先ほどのplusメソッドくらいシンプルなものを仮実装する必要が本当にあるだろうか。
 > 普通は、その必要はない。頭に浮かんだ明白な実装をただ単にコードに落とすだけだ。もしもレッドバーが出て驚いたら、あらためてもう少し歩幅を小さくしよう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 ``` ruby
 class FizzBuzz
@@ -724,17 +2296,17 @@ $ git commit -m 'test: 3を渡したら文字列Fizzを返す'
 TODOリスト
 
   - ~~数を文字列にして返す~~
-    
+
       - ~~1を渡したら文字列"1"を返す~~
-    
+
       - ~~2を渡したら文字列"2"を返す~~
 
   - ~~3 の倍数のときは数の代わりに｢Fizz｣と返す~~
-    
+
       - ~~3を渡したら文字列"Fizz"を返す~~
 
   - 5 の倍数のときは｢Buzz｣と返す
-    
+
       - 5を渡したら文字列"Buzz"を返す
 
   - 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
@@ -774,20 +2346,20 @@ end
 ここでは **アルゴリズムの置き換え** を適用します。 **メソッドチェーンと述語メソッド** を使ってRubyらしい書き方にリファクタリングしてみました。
 
 > アルゴリズムの取り替え
-> 
+>
 > アルゴリズムをよりわかりやすいものに置き換えたい。
-> 
+>
 > メソッドの本体を新たなアルゴリズムで置き換える。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 > メソッドチェーンは言葉の通り、メソッドを繋げて呼び出す方法です。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 > 述語メソッドとはメソッド名の末尾に「？」をつけたメソッドのことを指します。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 リファクタリングによりコードが壊れていないかを確認したらコミットしておきましょう。
 
@@ -811,17 +2383,17 @@ $ git commit -m 'refactor: アルゴリズムの置き換え'
 TODOリスト
 
   - ~~数を文字列にして返す~~
-    
+
       - ~~1を渡したら文字列"1"を返す~~
-    
+
       - ~~2を渡したら文字列"2"を返す~~
 
   - ~~3の倍数のときは数の代わりに｢Fizz｣と返す~~
-    
+
       - ~~3を渡したら文字列"Fizz"を返す~~
 
   - 5 の倍数のときは｢Buzz｣と返す
-    
+
       - **5を渡したら文字列"Buzz"を返す**
 
   - 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
@@ -910,17 +2482,17 @@ $ git commit -m 'test: 5を渡したら文字列Buzzを返す'
 TODOリスト
 
   - ~~数を文字列にして返す~~
-    
+
       - ~~1を渡したら文字列"1"を返す~~
-    
+
       - ~~2を渡したら文字列"2"を返す~~
 
   - ~~3の倍数のときは数の代わりに｢Fizz｣と返す~~
-    
+
       - ~~3を渡したら文字列"Fizz"を返す~~
 
   - 5 の倍数のときは｢Buzz｣と返す
-    
+
       - ~~5を渡したら文字列"Buzz"を返す~~
 
   - 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
@@ -1119,21 +2691,21 @@ Finished in 0.00212s
 ここでは、**メソッドのインライン化** を適用してしてテストコードを読みやすくすることにしました。テストコードの **自己文書化** により動作する仕様書にすることができました。
 
 > メソッドのインライン化
-> 
+>
 > メソッドの本体が、名前をつけて呼ぶまでもなく明らかである。
-> 
+>
 > メソッド本体の呼び出し元にインライン化して、メソッドを除去する
-> 
+>
 > —  新装版 リファクタリング
-> 
+>
 
 > 混乱せずに読めるテストコードを目指すなら（コンピュータではなく人のためにテストを書いていることを忘れてはならない）、テストメソッドの長さは３行を目指そう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 > この関数名は「自己文書化」されている。関数名はいろんなところで使用されるのだから、優れたコメントよりも名前のほうが大切だ。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 テストも無事通るようになったのでコミットしておきます。
 
@@ -1147,21 +2719,21 @@ $ git commit -m 'refactor: メソッドのインライン化'
 TODOリスト
 
   - ~~数を文字列にして返す~~
-    
+
       - ~~1を渡したら文字列"1"を返す~~
-    
+
       - ~~2を渡したら文字列"2"を返す~~
 
   - ~~3の倍数のときは数の代わりに｢Fizz｣と返す~~
-    
+
       - ~~3を渡したら文字列"Fizz"を返す~~
 
   - ~~5 の倍数のときは｢Buzz｣と返す~~
-    
+
       - ~~5を渡したら文字列"Buzz"を返す~~
 
   - 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
-    
+
       - **15を渡したら文字列FizzBuzzを返す**
 
   - 1 から 100 までの数
@@ -1235,8 +2807,8 @@ Finished in 0.00964s
 おっと、調子に乗って **明白な実装** をしていたら怒られてしまいました。ここは一旦ギアを下げて小さなステップで何が問題かを調べることにしましょう。
 
 > 明白な実装はセカンドギアだ。頭で考えていることがうまくコードに落とせないときは、ギアを下げる用意をしよう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 調べるにあたってコードを頭から読んでもいいのですが、問題が発生したのは `15を渡したら文字列FizzBuzzを返す` テストを追加したあとですよね？ということは原因は追加したコードにあるはずですよね？よって、追加部分をデバッグすれば原因をすぐ発見できると思いませんか？
 
@@ -1402,8 +2974,8 @@ $ git commit -m 'test: 15を渡したら文字列FizzBuzzを返す'
 ```
 
 > 私はテスト駆動開発を長年行っているので、他人にミスを気づかれる前に、自分の誤りを修正できるだけなのだ。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 先程のコードですが・・・
 
@@ -1428,8 +3000,8 @@ end
 **if式** の中でさらに **if式** をネストしています。いわゆる **コードの不吉な臭い** がしますね。ここは仕様の文言にある `3と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること。` に沿った記述にするとともにネストした部分をわかりやすくするために **アルゴリズムの置き換え** を適用してリファクタリングをしましょう。
 
 > ネストの深いコードは理解しにくい。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 ``` ruby
 ...
@@ -1472,21 +3044,21 @@ $ git commit -m 'refactor: アルゴリズムの置き換え'
 TODOリスト
 
   - ~~数を文字列にして返す~~
-    
+
       - ~~1を渡したら文字列"1"を返す~~
-    
+
       - ~~2を渡したら文字列"2"を返す~~
 
   - ~~3の倍数のときは数の代わりに｢Fizz｣と返す~~
-    
+
       - ~~3を渡したら文字列"Fizz"を返す~~
 
   - ~~5 の倍数のときは｢Buzz｣と返す~~
-    
+
       - ~~5を渡したら文字列"Buzz"を返す~~
 
   - ~~3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す~~
-    
+
       - ~~15を渡したら文字列FizzBuzzを返す~~
 
   - **1 から 100 までの数**
@@ -1496,17 +3068,17 @@ TODOリスト
 数を引数にして文字列を返す `FizzBuzz::generate` メソッドはできたみたいですね。次のやることは・・・新しいメソッドを追加する必要がありそうです。気分を切り替えるため少し休憩を取りましょう。
 
 > 疲れたり手詰まりになったりしたときはどうすればいいだろうか----休憩を取ろう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 引き続き **TODOリスト** を片付けたいのですが `1から100までの数` を返すプログラムを書かないといけません。3を渡したらFizzのような **リテラル** を返すプログラムではなく 1から100までの **配列オブジェクト** を返すようなプログラムにする必要がありそうです。**TODOリスト** にするとこんな感じでしょうか。
 
 TODOリスト
 
   - 1 から 100 までの数の配列を返す
-    
+
       - 配列の初めは文字列の1を返す
-    
+
       - 配列の最後は文字列の100を返す
 
   - プリントする
@@ -1514,8 +3086,8 @@ TODOリスト
 どうやら **配列オブジェクト** を返すプログラムを書かないといけないようですね。え？ **明白な実装** の実装イメージがわかない。そんな時はステップを小さくして **仮実装** から始めるとしましょう。
 
 > 何を書くべきかわかっているときは、明白な実装を行う。わからないときには仮実装を行う。まだ正しい実装が見えてこないなら、三角測量を行う。それでもまだわからないなら、シャワーを浴びに行こう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 ### 学習用テスト
 
@@ -1839,8 +3411,8 @@ end
 ```
 
 > %記法とは、文字列や正規表現などを定義する際に、%を使った特別な書き方をすることでエスケープ文字を省略するなど、可読性を高めることができる記法です。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` bash
 $ ruby main.rb
@@ -1855,17 +3427,17 @@ Finished in 0.00195s
 **TODOリスト** の１つ目を **仮実装** で片づけことができました。ちなみにテストコードを使ってソフトウェアの振る舞いを検証するテクニックを **学習用テスト** と言います。
 
 > 学習用テスト
-> 
+>
 > チーム外の誰かが書いたソフトウェアのテストを書くのはどのようなときか----そのソフトウェアの新機能を初めて使う際に書いてみよう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 TODOリスト
 
   - 1 から 100 までの数の配列を返す
-    
+
       - ~~配列の初めは文字列の1を返す~~
-    
+
       - 配列の最後は文字列の100を返す
 
   - プリントする
@@ -1909,8 +3481,8 @@ Finished in 0.02936s
 配列は3までなので想定通りテストは失敗します。さて、1から100までの文字列で構成される配列をどうやって作りましょうか？ 先程は **if式** を使って **条件分岐** をプログラムで実行しました。今回は **繰り返し処理** をプログラムで実行する必要がありそうですね。Rubyの繰り返し処理には **for式** **while/until/loop** などがありますが実際のところ **eachメソッド** を使った繰り返し処理が主流です。とはいえ、実際に動かして振る舞いを確認しないとイメージは難しいですよね。 **学習用テスト** を書いてもいいのですが今回は *irb上で簡単なコードを動かしてみる*[6](#pruby)ことで振る舞いを検証してみましょう。まずコマンドラインで`irb`を起動します。
 
 > Rubyにはfor文はあります。ですが、ほとんどのRubyプログラマはfor文を使いません。筆者も5〜6年Rubyを使っていますが、for文を書いたことは一度もありません。Rubyの場合はforのような構文で繰り返し処理をさせるのではなく、配列自身に対して「繰り返せ」という命令を送ります。ここで登場するのがeachメソッドです。
-> 
-> —  プロを目指す人のためのRuby入門 
+>
+> —  プロを目指す人のためのRuby入門
 
 ``` bash
 $ irb
@@ -1934,11 +3506,11 @@ irb(main):003:0> result.each do |n| p n end
 => ["1", "2", "3"]
 ```
 
-配列の中身を繰り返し処理で取り出す方法はわかりました。あとは100までの配列をどうやって作ればよいのでしょうか？`['1','2','3'…​'100']`と手書きで作りますか？100件ぐらいならまあできなくもないでしょうが1000件,10000件ならどうでしょうか？無理ですね。計算機にやってもらいましょう、調べてみるとRubyには **レンジオブジェクト(Range)** というもの用意されいるそうです。説明を読んでもピンと来ないので実際に動作を確認してみましょう。
+配列の中身を繰り返し処理で取り出す方法はわかりました。あとは100までの配列をどうやって作ればよいのでしょうか？`['1','2','3'…​'100']`と手書きで作りますか？100件ぐらいならまあできなくもないでしょうが1000件,10000件ならどうでしょうか？無理ですね。計算機にやってもらいましょう、調べてみるとRubyには **レンジオブジェクト(Range)** というもの用意されいるそうです。説明を読んでもピンと来ないので実際に動作を確認してみましょう。
 
 > レンジオブジェクト（範囲オブジェクトとも呼ばれます）はRangeクラスのオブジェクトのことで、「..」や「…​」演算子を使って定義します。「1..3」のように定義し、主に整数値や文字列を使って範囲を表現します。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` bash
 irb(main):008:0> (1..5).each do |n| p n end
@@ -2067,9 +3639,9 @@ $ git commit -m 'test: 1から100までの数を返す'
 TODOリスト
 
   - 1 から 100 までの数の配列を返す
-    
+
       - ~~配列の初めは文字列の1を返す~~
-    
+
       - ~~配列の最後は文字列の100を返す~~
 
   - プリントする
@@ -2081,11 +3653,11 @@ TODOリスト
 TODOリスト
 
   - 1 から 100 までの数の配列を返す
-    
+
       - ~~配列の初めは文字列の1を返す~~
-    
+
       - ~~配列の最後は文字列の100を返す~~
-    
+
       - **配列の2番めは文字列のFizzを返す**
 
   - プリントする
@@ -2217,8 +3789,8 @@ end
 **説明変数** への代入が重複しています。ついでに **メソッドの抽出** をして重複をなくしておきましょう。
 
 > 最初のステップ「準備(Arrange)」は、テスト間で重複しがちだ。それとは対象的に「実行(Act)」「アサート(Assert)」は重複しないことが多い。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 ``` ruby
 ...
@@ -2270,15 +3842,15 @@ $ git commit -m 'test: 1から100までのFizzBuzzの配列を返す'
 TODOリスト
 
   - ~~1 から 100 までのFizzBuzzの配列を返す~~
-    
+
       - ~~配列の初めは文字列の1を返す~~
-    
+
       - ~~配列の最後は文字列の100を返す~~
-    
+
       - ~~配列の2番めは文字列のFizzを返す~~
-    
+
       - ~~配列の4番目は文字列のBuzzを返す~~
-    
+
       - ~~配列の14番目は文字列のFizzBuzzを返す~~
 
   - プリントする
@@ -2393,8 +3965,8 @@ $ git commit -m 'test: 学習用テスト'
 終わりが見えてきましたがまだリファクタリングの必要がありそうです。
 
 > 開発を終えるまでに考えつくまでに考えつく限りのテストを書き、テストに支えられたリファクタリングが、網羅性のあるテストに支えられてたリファクタリングになるようにしなければならない。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 ここでプロダクトコードを眺めてみましょう。
 
@@ -2425,24 +3997,24 @@ end
 #### 不思議な名前
 
 > 不思議な名前
-> 
+>
 > 明快なコードにするために最も重要なのは、適切な名前付けです。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 > 変数や関数などの構成要素の名前は、抽象的ではなく具体的なものにしよう。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 まず、気になったのが `print_1_to_100` メソッドです。このメソッドはFizzBuzzの配列を返すメソッドであって1から100までを表示するメソッドではありませんよね。ここは **メソッド名の変更** を適用して処理の内容に沿った名前に変更しましょう。え？動いている処理をわざわざ変更してプログラムを壊す危険を犯す必要があるのかですって。確かに自動テストのない状況でドジっ子プログラマがそんなことをすればいずれ残念なことになるでしょうね。でも、すでに自動テストが用意されている今なら自信をもって動いている処理でも変更できますよね。
 
 > リファクタリングに入る前に、しっかりとした一連のテスト群を用意しておくこと。これらのテストには自己診断機能が不可欠である。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 > テストは不安を退屈に変える賢者の石だ。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 ``` ruby
 ...
@@ -2526,16 +4098,16 @@ $ git commit -m 'refactor:　メソッド名の変更'
 ```
 
 > TDDにおけるテストの考え方は実用主義に貫かれている。TDDにおいてテストは目的を達成するための手段であり、その目的は、大きなる自信を伴うコードだ。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 #### 長い関数
 
 > 長い関数
-> 
+>
 > 経験上、長く充実した人生を送るのは、短い関数を持ったプログラムです。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 次に気になったのが `FizzBuzz::generate` メソッド内のif分岐処理ですね。こうした条件分岐には仕様変更の際に追加ロジックが新たなif分岐として追加されてどんどん長くなって読みづらいコードに成長する危険性があります。そういうコードは早めに対策を打っておくのが賢明です。
 
@@ -2592,8 +4164,8 @@ end
 `FizzBuzz` の **メソッド** は大きく分けて **変数** の初期化 **条件分岐** **繰り返し処理** による判断、計算そして結果の **代入** を行い最後に **代入** された **変数** を返す流れになっています。 そこで各単位ごとにスペースを挿入してコードの可読性を上げておきましょう。
 
 > 人間の脳はグループや階層を１つの単位として考える。コードの概要をすばやく把握してもらうには、このような「単位」を作ればいい。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 処理の単位ごとに区切りをつけました。次はif分岐ですがこうします。
 
@@ -2642,16 +4214,16 @@ Finished in 0.00296s
 条件に該当した場合は処理を最後まで進めずその場で終了させる書き方を **ガード節** と言います。このように書くことで追加ロジックが発生しても既存のコードを編集することなく追加することができるので安全に簡単に変更できるコードにすることができます。
 
 > ガード節による入れ子条件記述の置き換え
-> 
+>
 > メソッド内に正常ルートが不明確な条件つき振る舞いがある。
-> 
+>
 > 特殊ケースすべてに対してガード節を使う。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 > 関数で複数のreturn文を使ってはいけないと思っている人がいる。アホくさ。関数から早く返すのはいいことだ。むしろ望ましいときもある。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 ``` bash
 $ git add main.rb
@@ -2661,12 +4233,12 @@ $ git commit -m 'refactor: ガード節による入れ子条件の置き換え'
 どの条件にも該当しない場合は数字を文字列してかえすのですが **一時変数** の `result` は最後でしか使われていませんね。このような場合は **変数のインライン化** を適用しましょう。
 
 > 一時変数のインライン化
-> 
+>
 > 簡単な式によって一度だけ代入される一時変数があり、それが他のリファクタリングの障害となっている。
-> 
+>
 > その一時変数への参照をすべて式で置き換える。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 ``` ruby
 class FizzBuzz
@@ -2714,12 +4286,12 @@ $ git commit -m 'refactor:　変数のインライン化'
 続いて、FizzBuzzを判定する部分ですがもう少しわかりやすくするため **説明用変数の導入** を適用します。
 
 > 説明用変数の導入
-> 
+>
 > 複雑な式がある。
-> 
+>
 > その式の結果または部分的な結果を、その目的を説明する名前をつけた一時変数に代入する。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 ``` ruby
 class FizzBuzz
@@ -2751,16 +4323,16 @@ class FizzBuzz
 ３で割り切れる場合の結果を `isFizz` 変数に 5で割り切れる場合の結果 `isBuzz` 変数に代入して使えるようにしました。このような変数を **説明変数** と呼びます。また似たようなパターンに **要約変数** というものがあります。FizzBuzzを返す判定部分にこの **説明変数** を適用しました。壊れていないか確認しておきましょう。
 
 > 説明変数
-> 
+>
 > 式を簡単に分割するには、式を表す変数を使えばいい。この変数を「説明変数」と呼ぶこともある。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 > 要約変数
-> 
+>
 > 大きなコードの塊を小さな名前に置き換えて、管理や把握を簡単にする変数のことを要約変数と呼ぶ。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 ``` ruby
 class FizzBuzz
@@ -2797,10 +4369,10 @@ $ git commit -m 'refactor:　変数の抽出'
 #### ループと変更可能なデータ
 
 > ループ
-> 
+>
 > プログラミング言語の黎明期から、ループは中心的な存在でした。しかし今ではベルボトムのジーンズやペナントのお土産のように、あまり重要でなくなりつつあります。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 `FizzBuzz::generate` メソッドのリファクタリングはできたので続いて `FizzBuzz::generate_list` メソッドを見ていきましょう。
 
@@ -2849,14 +4421,14 @@ Finished in 0.03063s
 せっかく作った配列を初期化して返してしまいましたね。このようにミュータブルな変数はバグを作り込む原因となる傾向があります。まず一時変数を使わないように変更しましょう。
 
 > 変更可能なデータ
-> 
+>
 > データの変更はしばしば予期せぬ結果や、厄介なバグを引き起こします。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 > 「永続的に変更されない」変数は扱いやすい。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 ``` ruby
 ...
@@ -2909,11 +4481,11 @@ Finished in 0.03285s
 19 tests, 18 assertions, 2 failures, 3 errors, 0 skips
 ```
 
-結果を配列にして返したいのですが **eachメソッド** ではうまくできませんね。Rubyには新しい配列を作成する **mapメソッド** が用意されいるのでそちらを使いましょう。
+結果を配列にして返したいのですが **eachメソッド** ではうまくできませんね。Rubyには新しい配列を作成する **mapメソッド** が用意されいるのでそちらを使いましょう。
 
 > mapは配列の要素を画する際によく利用されるメソッドで、ブロックの最後の要素（メモ）で新しい配列を作ります。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` ruby
 ...
@@ -2955,15 +4527,15 @@ Finished in 0.00238s
 **パイプラインによるループの置き換え** の適用により **eachメソッド** による繰り返し処理を **mapメソッド** を使ったイミュータブルなコレクションパイプライン処理に変えることができました。
 
 > パイプラインによるループの置き換え
-> 
+>
 > 多くのプログラマと同様に、私もオブジェクトの集合の反復処理にはループを使うように教えられました。しかし言語環境は、よりすぐれた仕組みとしてコレクションのパイプラインを提供するようになりました。
-> 
+>
 > —  リファクタリング(第2版)
-> 
+>
 
 > Rubyに限らず、プログラミングの世界ではしばしばミュータブル（mutable)とイミュータブル（imutable）と言う言葉が登場します。ミュータブルは「変更可能な」という意味で、反対にイミュータブルは「変更できない、不変の」という意味です。
-> 
-> —  プロを目指す人のためのRuby入門 
+>
+> —  プロを目指す人のためのRuby入門
 
 ``` bash
 $ git add main.rb
@@ -2975,12 +4547,12 @@ $ git commit -m 'refactor: パイプラインによるループの置き換え'
 最大値は100にしていますが変更することもあるので **マジックナンバーの置き換え** を適用してわかりやすくしておきましょう。
 
 > シンボル定数によるマジックナンバーの置き換え
-> 
+>
 > 特別な意味を持った数字のリテラルがある。
-> 
+>
 > 定数を作り、それにふさわしい名前をつけて、そのリテラルを置き換える。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 Rubyでは定数は英字の大文字で始まる名前をつけると自動的に定数として扱われます。
 
@@ -2999,12 +4571,12 @@ end
 意味のわかる定数として宣言しました。コードに直接記述された `100` をといった **数値リテラル** はマジックナンバーと呼ばれ往々にして後で何を意味するものかわからなくなり変更を難しくする原因となります。早めに意味を表す定数にしておきましょう。
 
 > 名前付けされずにプログラム内に直接記述されている数値をマジックナンバーと呼び、一般的には極力避けるようにします。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 > いい名前というのは、変数の目的や値を表すものだ。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 ``` bash
 $ ruby main.rb
@@ -3030,15 +4602,15 @@ end
 ここではなぜこのような処理を選択したかをコメントしましたが何でもコメントすればよいというわけではありません。
 
 > コメント
-> 
+>
 > ここでコメントについて言及しているのは、コメントが消臭剤として使われることがあるからです。コメントが非常に丁寧に書かれているのは、実はわかりにくいコードを補うためだったとうことがよくあるのです。
-> 
+>
 > —  リファクタリング(第2版)
-> 
+>
 
 > コメントを書くのであれば、正確に書くべきだ（できるだけ明確で詳細に）。また、コメントには画面の領域を取られるし、読むのにも時間がかかるので、簡潔なものでなければいけない。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 ``` bash
 $ git add main.rb
@@ -3050,33 +4622,33 @@ $ git commit -m 'refactor: マジックナンバーの置き換え'
 TODOリスト
 
   - ~~数を文字列にして返す~~
-    
+
       - ~~1を渡したら文字列"1"を返す~~
-    
+
       - ~~2を渡したら文字列"2"を返す~~
 
   - ~~3の倍数のときは数の代わりに｢Fizz｣と返す~~
-    
+
       - ~~3を渡したら文字列"Fizz"を返す~~
 
   - ~~5 の倍数のときは｢Buzz｣と返す~~
-    
+
       - ~~5を渡したら文字列"Buzz"を返す~~
 
   - ~~13 と 5 両方の倍数の場合には｢FizzBuzz｣と返す~~
-    
+
       - ~~15を渡したら文字列FizzBuzzを返す~~
 
   - ~~1 から 100 までのFizzBuzzの配列を返す~~
-    
+
       - ~~配列の初めは文字列の1を返す~~
-    
+
       - ~~配列の最後は文字列の100を返す~~
-    
+
       - ~~配列の2番めは文字列のFizzを返す~~
-    
+
       - ~~配列の4番目は文字列のBuzzを返す~~
-    
+
       - ~~配列の14番目は文字列のFizzBuzzを返す~~
 
   - プリントする
@@ -3131,27 +4703,27 @@ class FizzBuzzTest < Minitest::Test
 Rubyで別のファイルを読み込むには **require** を使います。
 
 > requireを使う用途は主に三つあります。
-> 
+>
 >   - 標準添付ライブラリを読み込む
-> 
+>
 >   - 第三者が作成しているライブラリを読み込む
-> 
+>
 >   - 別ファイルに定義した自分のファイルを読み込む
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 また、**require\_relative**
 > という方法も用意されています。どう違うのでしょうか？
 
 > require\_relativeは$LOAD\_PATHの参照は行わず「relative」という名称の通り相対的なパスでファイルの読み込みを行います。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ちょっと何言ってるかわからないうちは **require** を上記のフォルダ構成で使っていてください。一応以下の使い分けがありますが今は頭の隅に留めるだけでいいと思います。
 
 > requireは標準添付ライブラリなどの自分が書いていないコードを読み込む時に使い、こちらのrequire\_relativeは自分の書いたコードを読み込む時に使うように使い分けるのが良いでしょう。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` bash
 $ ruby test/fizz_buzz_test.rb
@@ -3182,8 +4754,8 @@ puts FizzBuzz.generate_list
 **puts** は結果を画面に出力するメソッドです。 先程は **p** メソッドを使って画面に **配列** の中身を１件ずつ表示していましたが今回は **配列** 自体を改行して画面に出力するため **puts** メソッドを使います。機能的にはほどんど変わらないのですが以下の様に使い分けるそうです。
 
 > まず、用途としてはputsメソッドとprintメソッドは一般ユーザ向け、pメソッドは開発者向け、というふうに別かれます。
-> 
-> —  プロを目指す人のためのRuby入門 
+>
+> —  プロを目指す人のためのRuby入門
 
 ``` bash
 $ ruby main.rb
@@ -3222,33 +4794,33 @@ $ git commit -m 'feat: プリントする'
 TODOリスト
 
   - ~~数を文字列にして返す~~
-    
+
       - ~~1を渡したら文字列"1"を返す~~
-    
+
       - ~~2を渡したら文字列"2"を返す~~
 
   - ~~3の倍数のときは数の代わりに｢Fizz｣と返す~~
-    
+
       - ~~3を渡したら文字列"Fizz"を返す~~
 
   - ~~5 の倍数のときは｢Buzz｣と返す~~
-    
+
       - ~~5を渡したら文字列"Buzz"を返す~~
 
   - ~~13 と 5 両方の倍数の場合には｢FizzBuzz｣と返す~~
-    
+
       - ~~15を渡したら文字列FizzBuzzを返す~~
 
   - ~~1 から 100 までのFizzBuzzの配列を返す~~
-    
+
       - ~~配列の初めは文字列の1を返す~~
-    
+
       - ~~配列の最後は文字列の100を返す~~
-    
+
       - ~~配列の2番めは文字列のFizzを返す~~
-    
+
       - ~~配列の4番目は文字列のBuzzを返す~~
-    
+
       - ~~配列の14番目は文字列のFizzBuzzを返す~~
 
   - ~~プリントする~~
@@ -3260,36 +4832,36 @@ TODOリスト
 まず **TODOリスト** を作成して **テストファースト** で１つずつ小さなステップで開発を進めていきました。 **仮実装を経て本実装へ** の過程で Rubyの **クラス** を定義して **文字列リテラル** を返す **メソッド** を作成しました。この時点でRubyの **オブジェクトとメソッド** という概念に触れています。
 
 > Rubyの世界では、ほぼどのような値もオブジェクトという概念で表されます。オブジェクトという表現はかなり範囲の広い表現方法で、クラスやインスタンスを含めてオブジェクトと称します。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 > プログラミング言語においてメソッド、あるいは関数と呼ばれるものを簡単に説明すると処理をひとかたまりにまとめたものと言って良いでしょう。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ちょっと何言ってるかわからないかもしれませんが、今はそういう概念があってこうやって書くのねという程度の理解で十分です。
 
 その後 **リファクタリング** を通じて多くの概念に触れることになりました。 まず **変数名の変更** でRubyにおける **変数**の概念と操作を通じて名前付けの重要性を学びました。
 
 > Rubyでは変数を扱うために特別な宣言やキーワードは必要ありません。「=」 の左辺に任意の変数名を記述するだけで変数宣言となります。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 続いて **明白な実装** を通して **制御構造** のうち **条件分岐** のための **if式** と **演算子** を使いプログラムを制御し判定・計算をする方法を学びました。また、**アルゴリズムの置き換え** を適用してコードをよりわかりやすくしました。
 
 > Rubyではプログラムを構成する最小の要素を式と呼びます。変数やリテラル、制御構文、演算子などが式として扱われます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 そして、 **学習用テスト** を通して新しい問題を解決するために **配列オブジェクト** **レンジオブジェクト** といった **文字列リテラル** **数値リテラル** 以外の **データ構造** の使い方を学習して、**配列** を操作するための **制御構造** として **繰り返し処理** を **eachメソッド** を使って実現しました。
 
 > これら「100」や「3.14」といった部分を数値リテラルと呼びます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 > このように文字列をシングルクオートやダブルクオートで括っている表記を文字列リテラルと呼びます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 仕上げは、**コードの不吉な臭い** からさらなる改善を実施しました。 **不思議な名前** の **メソッド** を **自動的テスト**を用意することで自信を持って **リファクタリング** を実施し、**長い関数** に対して **ガード節** を導入し **一時変数** **説明変数** など **変数** バリエーションの取り扱いを学びました。そして、**ループ** と **変更可能なデータ** から **コレクションパイプライン** の使い方と **ミュータブル** **イミュータブル** の概念を学び、**コメント** のやり方と **定数** と **マジックナンバー** の問題を学びました。
 
@@ -3497,16 +5069,16 @@ end
 TODOリスト
 
   - タイプ1の場合
-    
+
       - 数を文字列にして返す
-        
+
           - 1を渡したら文字列"1"を返す
 
 次に何をやるかはもうわかりますよね。テスト駆動開発とはただ失敗するテストを１つずつ書いて通していくことではありません。
 
 > TDDは分析技法であり、設計技法であり、実際には開発のすべてのアクティビティを構造化する技法なのだ。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 ではテストファーストで書けば質の高い良いコードがかけるようになるのでしょうか？以下のコードを見てください。
 
@@ -3601,46 +5173,46 @@ Finished in 0.00135s
 プログラムは動くしテストも通ります。でもこれはテスト駆動開発で作られたと言えるでしょうか？質の高い良いコードでしょうか？何が足りないかはわかりますよね。
 
 > テスト駆動開発における質の向上の手段は、リファクタリングによる継続的でインクリメンタルな設計であり、「単なるテストファースト」と「テスト駆動開発」の違いはそこにあります。
-> 
-> —  テスト駆動開発 付録C 訳者解説 
+>
+> —  テスト駆動開発 付録C 訳者解説
 
 そもそも良いコードは何なのでしょうか？いくつかの見解があるようです。
 
 > TDDは「より良いコードを書けば、よりうまくいく」という素朴で奇妙な仮設によって成り立っている
-> 
+>
 > —  テスト駆動開発
-> 
+>
 
 > 「動作するきれいなコード」。RonJeffriesのこの簡潔な言葉が、テスト駆動開発(TDD)のゴールだ。動作するきれいなコードはあらゆる意味で価値がある。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 > 良いコードかどうかは、変更がどれだけ容易なのかで決まる。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 > コードは理解しやすくなければいけない。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 > コードは他の人が最短時間で理解できるように書かなければいけない。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 > 優れたソースコードは「目に優しい」ものでなければいけない。
-> 
+>
 > —  リーダブルコード
 
 
 少なくともテスト駆動開発のゴールに良いコードがあるということはいえるでしょう。え？どうやったら良いコードを書けるようになるかって？私が教えてほしいのですがただ言えることは他の分野と同様に規律の習得と絶え間ない練習と実践の積み重ねのむこうにあるのだろうということだけです。
 
 > 私がかつて発見した、そして多くの人に気づいてもらいたい効果とは、反復可能な振る舞いを規則にまで還元することで、規則の適用は機会的に反復可能になるということだ。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 >ここで、Kent Beckが自ら語ったセリフを思い出しました。「僕は、偉大なプログラマなんかじゃない。偉大な習慣を身につけた少しましなプログラマなんだ」。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 # エピソード2
 
@@ -3650,16 +5222,16 @@ Finished in 0.00135s
 
 > 今日のソフトウェア開発の世界において絶対になければならない3つの技術的な柱があります。
 > 三本柱と言ったり、三種の神器と言ったりしていますが、それらは
-> 
+>
 >   - バージョン管理
-> 
+>
 >   - テスティング
-> 
+>
 >   - 自動化
-> 
+>
 > の3つです。
-> 
-> —  https://t-wada.hatenablog.jp/entry/clean-code-that-works 
+>
+> —  https://t-wada.hatenablog.jp/entry/clean-code-that-works
 
 **バージョン管理** と **テスティング** に関してはエピソード1で触れました。本エピソードでは最後の **自動化** に関しての解説と次のエピソードに備えたセットアップ作業を実施しておきたいと思います。ですがその前に **バージョン管理** で1つだけ解説しておきたいことがありますのでそちらから進めて行きたいと思います。
 
@@ -3714,8 +5286,8 @@ $ git commit -m 'refactor: メソッドの抽出'
 では **自動化** の準備に入りたいのですがそのためにはいくつかの外部プログラムを利用する必要があります。そのためのツールが **RubyGems** です。
 
 > RubyGemsとは、Rubyで記述されたサードパーティ製のライブラリを管理するためのツールで、RubyGemsで扱うライブラリをgemパッケージと呼びます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 **RubyGems** はすでに何度か使っています。例えばエピソード1の初めの `minitest-reporters`
 のインストールなどです。
@@ -3727,8 +5299,8 @@ $ gem install minitest-reporters
 では、これからもこのようにして必要な外部プログラムを一つ一つインストールしていくのでしょうか？また、開発用マシンを変えた時にも同じことを繰り返さないといけないのでしょうか？面倒ですよね。そのような面倒なことをしないで済む仕組みがRubyには用意されています。それが **Bundler** です。
 
 > Bundlerとは、作成したアプリケーションがどのgemパッケージに依存しているか、そしてインストールしているバージョンはいくつかという情報を管理するためのgemパッケージです。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 **Bundler** をインストールしてgemパッケージを束ねましょう。
 
@@ -3952,8 +5524,8 @@ $ git commit -m 'chore: 静的コード解析セットアップ'
 良いコードであるためにはフォーマットも大切な要素です。
 
 > 優れたソースコードは「目に優しい」ものでなければいけない。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 Rubyにはいくつかフォーマットアプリケーションはあるのですがここは `RuboCop` の機能を使って実現することにしましょう。以下のコードのフォーマットをわざと崩してみます。
 
@@ -4094,8 +5666,8 @@ Inspecting 5 files
 
 > コード網羅率（コードもうらりつ、英: Code coverage
 > ）コードカバレッジは、ソフトウェアテストで用いられる尺度の1つである。プログラムのソースコードがテストされた割合を意味する。この場合のテストはコードを見ながら行うもので、ホワイトボックステストに分類される。
-> 
-> —  ウィキペディア 
+>
+> —  ウィキペディア
 
 Ruby用 **コードカバレッジ** 検出プログラムとして [SimpleCov](https://github.com/colszowka/simplecov)を使います。Gemfileに追加して **Bundler** でインストールをしましょう。
 
@@ -4190,14 +5762,14 @@ Finished in 0.00261s
 このようにしていました。では静的コードの解析はどうやりましたか？フォーマットはどうやりましたか？調べるのも面倒ですよね。いちいち調べるのが面倒なことは全部 **タスクランナー** にやらせるようにしましょう。
 
 > タスクランナーとは、アプリケーションのビルドなど、一定の手順で行う作業をコマンド一つで実行できるように予めタスクとして定義したものです。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 Rubyの **タスクランナー** は `Rake` です。
 
 > RakeはRubyにおけるタスクランナーです。rakeコマンドと起点となるRakefileというタスクを記述するファイルを用意することで、タスクの実行や登録されたタスクの一覧表示を行えます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 早速、テストタスクから作成しましょう。まず `Rakefile` を作ります。Mac/Linuxでは `touch`
 コマンドでファイルを作れます。Windowsの場合は手作業で追加してください。
@@ -4814,9 +6386,9 @@ Gemfile   Guardfile     main.rb  Rakefile      test       Vagrantfile
 TODOリスト
 
   - タイプ1の場合
-    
+
       - 数を文字列にして返す
-        
+
           - 1を渡したら文字列"1"を返す
 
 #### タイプ1の場合
@@ -4863,8 +6435,8 @@ Finished in 0.00796s
 `ArgumentError: wrong number of arguments (given 2, expected 1)` **引数** が違うと指摘されていますね。 `FizzBuzz.generate` メソッドの引数の変更したいのですが既存のテストを壊したくないのでここは **デフォルト引数** 使ってみましょう。
 
 > メソッドの引数にはデフォルト値を指定する定義方法があります。これは、メソッドの引数を省略した場合に割り当てられる値です。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` bash
 ...
@@ -5064,57 +6636,57 @@ $ git commit -m 'refactor: メソッドのインライン化'
 TODOリスト
 
   - タイプ1の場合
-    
+
       - 数を文字列にして返す
-        
+
           - ~~1を渡したら文字列"1"を返す~~
-    
+
       - 3 の倍数のときは数の代わりに｢Fizz｣と返す\_
-        
+
           - ~~3を渡したら文字列"Fizz"を返す~~
-    
+
       - 5 の倍数のときは｢Buzz｣と返す\_
-        
+
           - ~~5を渡したら文字列"Buzz"を返す~~
-    
+
       - 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す\_
-        
+
           - ~~15を渡したら文字列"FizzBuzz"を返す~~
 
   - タイプ2の場合
-    
+
       - 数を文字列にして返す
-        
+
           - 1を渡したら文字列"1"を返す
-    
+
       - 3 の倍数のときは数を文字列にして返す
-        
+
           - 3を渡したら文字列"3"を返す
-    
+
       - 5 の倍数のときは数を文字列にして返す
-        
+
           - 5を渡したら文字列"5"を返す
-    
+
       - 3 と 5 両方の倍数の場合には数を文字列にして返す
-        
+
           - 15を渡したら文字列"15"を返す
 
   - タイプ3の場合
-    
+
       - 数を文字列にして返す
-        
+
           - 1を渡したら文字列"1"を返す
-    
+
       - 3 の倍数のときは数を文字列にして返す
-        
+
           - 3を渡したら文字列"3"を返す
-    
+
       - 5 の倍数のときは数を文字列にして返す
-        
+
           - 5を渡したら文字列"5"を返す
-    
+
       - 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
-        
+
           - 15を渡したら文字列"FizzBuzz"を返す
 
 #### タイプ2の場合
@@ -5124,39 +6696,39 @@ TODOリスト
   - ~~タイプ1の場合~~
 
   - タイプ2の場合
-    
+
       - 数を文字列にして返す
-        
+
           - 1を渡したら文字列"1"を返す
-    
+
       - 3 の倍数のときは数を文字列にして返す
-        
+
           - 3を渡したら文字列"3"を返す
-    
+
       - 5 の倍数のときは数を文字列にして返す
-        
+
           - 5を渡したら文字列"5"を返す
-    
+
       - 3 と 5 両方の倍数の場合には数を文字列にして返す
-        
+
           - 15を渡したら文字列"15"を返す
 
   - タイプ3の場合
-    
+
       - 数を文字列にして返す
-        
+
           - 1を渡したら文字列"1"を返す
-    
+
       - 3 の倍数のときは数を文字列にして返す
-        
+
           - 3を渡したら文字列"3"を返す
-    
+
       - 5 の倍数のときは数を文字列にして返す
-        
+
           - 5を渡したら文字列"5"を返す
-    
+
       - 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
-        
+
           - 15を渡したら文字列"FizzBuzz"を返す
 
 続いて、タイプ2の場合に取り掛かりましょう。
@@ -5358,39 +6930,39 @@ TODOリスト
   - ~~タイプ1の場合~~
 
   - タイプ2の場合
-    
+
       - 数を文字列にして返す
-        
+
           - ~~1を渡したら文字列"1"を返す~~
-    
+
       - 3 の倍数のときは数を文字列にして返す
-        
+
           - ~~3を渡したら文字列"3"を返す~~
-    
+
       - 5 の倍数のときは数を文字列にして返す
-        
+
           - ~~5を渡したら文字列"5"を返す~~
-    
+
       - 3 と 5 両方の倍数の場合には数を文字列にして返す
-        
+
           - ~~15を渡したら文字列"15"を返す~~
 
   - タイプ3の場合
-    
+
       - 数を文字列にして返す
-        
+
           - 1を渡したら文字列"1"を返す
-    
+
       - 3 の倍数のときは数を文字列にして返す
-        
+
           - 3を渡したら文字列"3"を返す
-    
+
       - 5 の倍数のときは数を文字列にして返す
-        
+
           - 5を渡したら文字列"5"を返す
-    
+
       - 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
-        
+
           - 15を渡したら文字列"FizzBuzz"を返す
 
 #### タイプ3の場合
@@ -5402,21 +6974,21 @@ TODOリスト
   - ~~タイプ2の場合~~
 
   - タイプ3の場合
-    
+
       - 数を文字列にして返す
-        
+
           - 1を渡したら文字列"1"を返す
-    
+
       - 3 の倍数のときは数を文字列にして返す
-        
+
           - 3を渡したら文字列"3"を返す
-    
+
       - 5 の倍数のときは数を文字列にして返す
-        
+
           - 5を渡したら文字列"5"を返す
-    
+
       - 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
-        
+
           - 15を渡したら文字列"FizzBuzz"を返す
 
 続いて、タイプ3の場合ですがやることは同じなので今回は一気にテストを書いてみましょう。
@@ -5553,18 +7125,18 @@ $ git commit -m 'test: タイプ3の場合'
 処理の追加により一部重複が発生しました。ここは、 **ステートメントのスライド** を適用して重複をなくしておきましょう。
 
 > ステートメントのスライド
-> 
+>
 > 旧：重複した条件記述の断片の統合
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 > 重複した条件記述の断片の統合
-> 
+>
 > 条件式のすべて分岐に同じコードの断片がある。
-> 
+>
 > それを式の外側に移動する。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 ``` ruby
 ...
@@ -5637,21 +7209,21 @@ TODOリスト
   - ~~タイプ2の場合~~
 
   - タイプ3の場合
-    
+
       - 数を文字列にして返す
-        
+
           - ~~1を渡したら文字列"1"を返す~~
-    
+
       - 3 の倍数のときは数を文字列にして返す
-        
+
           - ~~3を渡したら文字列"3"を返す~~
-    
+
       - 5 の倍数のときは数を文字列にして返す
-        
+
           - ~~5を渡したら文字列"5"を返す~~
-    
+
       - 3 と 5 両方の倍数の場合には｢FizzBuzz｣と返す
-        
+
           - ~~15を渡したら文字列"FizzBuzz"を返す~~
 
 #### それ以外のタイプの場合
@@ -5671,8 +7243,8 @@ TODOリスト
 **例外処理** を追加します。まず、例外のテストですが以下の様に書きます。
 
 > 例外とは記述したプログラムが想定していない値を受け取ったり、何らかの障害が発生した場合に処理を中断して、例外オブジェクトを生成して呼び出し元のメソッドに処理を戻す機構です。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` ruby
     describe 'タイプ3の場合' do
@@ -5712,8 +7284,8 @@ Finished in 0.00609s
 **case式** に該当しないタイプが指定された場合は **例外を発生させる** ようにします。
 
 > 例外を明示的に発生させるには「raise」を使います。raiseには発生させたい例外クラスを指定するのですが、何も指定しない場合はRuntimeErrorオブジェクトが生成されます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` ruby
 ...
@@ -5823,9 +7395,9 @@ puts list
 処理の流れをフローチャートにしたものです、実態はコードに記述されている内容を記号に置き換えて人間が読めるようにしたものです。
 
     start
-    
+
     repeat
-    
+
       if (タイプ1) then (yes)
         if (カウンタが3と5で割り切れる) then (yes)
           :変数にFizzBuzzをセットする;
@@ -5847,10 +7419,10 @@ puts list
       else (no)
        :変数に該当するタイプは存在しませんをセットする;
       endif
-    
+
       :カウンタを1増やす;
     repeat while (カウンタが100になるまで)
-    
+
     stop
 
 #### オブジェクト指向プログラム
@@ -5858,8 +7430,8 @@ puts list
 続いて、これまでに作ってきたコードがこちらになります。上記の **手続き型コード** との大きな違いとして `class` というキーワードでくくられている部分があります。
 
 > クラスとは、大まかに説明すると何らかの値と処理（メソッド）をひとかたまりにしたものです。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` ruby
 class FizzBuzz
@@ -5906,14 +7478,14 @@ end
 
     participant "Main" as A
     participant "FizzBuzz" as B
-    
+
     A -> B : generate_list()
     activate B
-    
+
     loop 100 times
       B -> B : generate()
     end loop
-    
+
     A <<-- B : list
     deactivate B
 
@@ -5947,12 +7519,12 @@ end
 まず、 **インスタンス変数** 追加します。次に `self` キーワードを外して **クラスメソッド** から **インスタンスメソッド** に変更します。
 
 > クラスメソッドはいくつか定義方法がありますが、どの方法を使ってもクラスメソッドとして定義されれば「クラス名.メソッド名」という形で呼び出せます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 > インスタンスメソッドはコンストラクタと同じようにクラス内でdefキーワードを使ってメソッドを定義するだけで作成できます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` ruby
 class FizzBuzz
@@ -6037,8 +7609,8 @@ Minitest::UnexpectedError:         NoMethodError: undefined method `generate' fo
 FizzBuzz配列を **インスタンス変数** `@list` に **代入** して **インスタンス変数** 経由で取得できるように変更しました。変更にあたり **クラスメソッド** `FizzBuzz.generate` と `FizzBuzz.generate_list` を **インスタンスメソッド** に変更しています。それに伴ってテストが失敗して ``NoMethodError: undefined method `generate'`` と表示されるようになってしまいました。**インスタンスメソッド** が使えるようにするため　`new` メソッドを使ってFizzBuzzクラスの **インスタンス** を作りFizzBuzz配列を **インスタンス変数** 経由で取得するようにテストコードを変更します。
 
 > クラスとして定義された情報を元に具体的な値を伴ったオブジェクトを作成することをインスタンス化と呼び、生成されたオブジェクトのことをインスタンスと呼びます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` ruby
 ...
@@ -6100,16 +7672,16 @@ Finished in 0.00616s
 **インスタンス変数** に直接アクセスしているのでここは **アクセッサメソッド** を使って **フィールドのカプセル化** を適用しておきます。
 
 > オブジェクト指向ではクラス内の値をカプセル化することが重要ですが、時には内部で保持しているインスタンス変数を参照や更新できる方が良い場合もあります。複雑な処理ではなく、単にインスタンス変数にアクセスするためのメソッドのことを、アクセッサメソッドと呼びます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 > フィールドのカプセル化
-> 
+>
 > 公開フィールドがある。
-> 
+>
 > それを非公開にして、そのアクセサを用意する。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 自動実行の結果、以下のように書き換えられている部分を変更します。
 
@@ -6144,8 +7716,8 @@ $ git commit -m 'refactor: フィールドのカプセル化'
 引き続き、FizzBuzz配列は保持できるようになりましたがタイプごとに出力される配列のパターンは違います。FizzBuzzクラスにタイプを持たる必要があります。ここでは **コンストラクタ** を使って **インスタンス化** する際に **インスタンス変数** に **代入** するようにします。Rubyでは **initialize** というメソッドを使って初期化処理を実行します。
 
 > クラスをインスタンス化した時に初期化処理を行うシチュエーションはよくあります。このような初期化処理を行うメソッドをコンストラクタと呼び、Rubyではinitializeという特別なメソッドを用意することで実現できます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` ruby
 class FizzBuzz
@@ -6461,25 +8033,25 @@ class FizzBuzz
 FizzBuzz配列が初期化されてしまいました。**アクセッサメソッド** に参照のための **getter** と 更新するための **setter** が許可されているため　**カプセル化** が破られてしまいました。ここは **setterの削除** を適用して外部からの更新を出来ないようにしておきましょう。
 
 > getterを定義するには、「attr\_reader」を使います。このメソッドにインスタンス変数の「@」を除いた名称をシンボル表現にしたものを列挙します。複数ある場合はカンマで区切って複数の値を指定することができます。
-> 
+>
 > —  かんたんRuby
-> 
+>
 
 > setterを定義するには、「attr\_writer」を使います。このメソッドもattr\_readerと同じくインスタンス変数名の「@」を除いた名称をシンボル表現にしたものを列挙します。複数ある場合はカンマで区切って複数の値を指定することができます。
-> 
+>
 > —  かんたんRuby
-> 
+>
 
 > getter/setterの両方を定義する場合、そのインスタンスは属しているクラス外から自由に参照や更新ができてしまいます。これはカプセル化の観点には反した挙動なので、できる限りattr\_readerだけで済ませられないか検討しましょう。
-> 
+>
 > —  かんたんRuby
-> 
+>
 
 > setterの削除
-> 
+>
 > setterが用意されているということは、フィールドが変更される可能性があることを意味します。オブジェクトを生成した後でフィールドを変更したくないなら、setterは用意しません（加えて、フィールドを変更不可にします）。そうすることで、フィールドはコンストラクタでのみで設定され、変更させないという意図が明確になって、フィールドが変更される可能性を、たいていは排除できます。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 Rubyでは以下のようにして **インスタンス変数** を読み取り専用にします。
 
@@ -6604,25 +8176,25 @@ lib/fizz_buzz.rb:11:3: C: Metrics/PerceivedComplexity: Perceived complexity for 
 コードの不吉な臭いである **スイッチ文** に該当するコードのようなのでここはリファクタリングカタログに従って **ポリモーフィズムによる条件記述の置き換え** を適用していきましょう。比較的大きなリファクタリングなのでいくつかのステップに分けて進めていきます。
 
 > スイッチ文
-> 
+>
 > オブジェクト指向プログラミングのメリットして、スイッチ文が従来にくらべて少なくなるということがあります。スイッチ文は重複したコードを生み出す問題児です。コードのあちらこちらに同じようなスイッチ文が見られることがあります。これでは新たな分岐を追加したときに、すべてのスイッチ文を探して似たような変更をしていかなければなりません。オブジェクト指向ではポリモーフィズムを使い、この問題をエレガントに解決できます。
-> 
+>
 > —  新装版 リファクタリング
-> 
+>
 
 > 重複したスイッチ文
-> 
+>
 > 最近はポリモーフィズムも一般的となり、15年前に比べるとswitch文が単純に赤信号というわけでもなくなりました。また、多くのプログラミング言語が、基本データ型以外をサポートする、より洗練されたswitch文を提供してきています。そこで、今後問題とするのは、重複したswitch文のみとします。switch/case文や、ネストしたif/else文の形で、コードのさまざまな箇所に同じ条件分岐ロジックが書かれていれば、それは「不吉な臭い」です。重複した条件分岐が問題なのは、新たな分岐を追加したら、すべての重複した条件分岐を探して更新指定かなけれけならないからです。ポリモーフィズムは、そうした単調な繰り返しに誘うダークフォースに対抗するための、洗練された武器です。コードベースをよりモダンにしていきましょう。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 > ポリモーフィズムによる条件記述の置き換え
-> 
+>
 > オブジェクトのタイプによって異なる振る舞いを選択する条件記述がある。
-> 
+>
 > 条件記述の各アクション部をサブクラスでオーバーライドするメソッドに移動する。元のメソッドはabstractにする。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 ``` ruby
 class FizzBuzz
@@ -7012,12 +8584,12 @@ $ git commit -m 'refactor ポリモーフィズムによる条件記述の置き
 仕上げは　**State/Strategyによるタイプコードの置き換え** を適用して、警告メッセージを消すとしましょう。
 
 > State/Strategyによるタイプコードの置き換え
-> 
+>
 > クラスの振る舞いに影響するタイプコードがあるが、サブクラス化はできない。
-> 
+>
 > 状態オブジェクトでタイプコードを置き換える
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
     class FizzBuzz {
         MAX_NUMBER = 100
@@ -7132,10 +8704,10 @@ Finished in 0.00925s
 警告が消えました。しかもテストは壊れていないようです。実は `FizzBuzz#generate` メソッドはどこからも使われていないためテストも壊れることが無いのですがこれでは不要なメソッドになってしまうので **移譲の隠蔽** を実施して、ロジックを **カプセル化** します。
 
 > 委譲の隠蔽
-> 
+>
 > オブジェクト指向について最初に教わる時、カプセル化とはフィールドを隠すことだと習うでしょう。しかし経験を積むにつれて、他にもカプセル化できるものがあることに気づきます。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 ``` ruby
 ...
@@ -7243,12 +8815,12 @@ $ git commit -m 'refactor: State/Strategyによるタイプコードの置き換
 分割したタイプクラスのメソッドに重複する処理があるので **継承** を使ってリファクタリングしましょう。ここでは **スーパークラスの抽出**を適用します。
 
 > スーパークラスの抽出
-> 
+>
 > 似通った特性を持つ２つのクラスがある。
-> 
+>
 > スーパークラスを作成して、共通の特性を移動する。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 #### スーパークラスの抽出
 
@@ -7276,8 +8848,8 @@ $ git commit -m 'refactor: State/Strategyによるタイプコードの置き換
 まずは、タイプクラスのスーパークラスとなる `FizzBuzzType` クラスを作成して各タイプクラスに継承させます。
 
 > クラスベースのオブジェクト指向言語の多くはクラスの継承機能を有しています。クラスの継承とはあるクラスを元として、新しいクラスを定義することです。この時、継承元となるクラスを親クラスやスーパークラスと呼び、継承したクラスのことを子クラスやサブクラスと呼びます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 Rubyの **クラスの継承** は以下のように書きます。
 
@@ -7497,7 +9069,7 @@ lib/fizz_buzz.rb:39:7: C: Naming/PredicateName: Rename is_buzz to buzz?.
 1 file inspected, 2 offenses detected
 ```
 
-[Naming/PredicateName](https://rubocop.readthedocs.io/en/latest/cops_naming/#namingpredicatename) Rubyのネーミングとしてはよろしくないようなので指示に従って **メソッド名の変更** を実施しましょう。
+[Naming/PredicateName](https://rubocop.readthedocs.io/en/latest/cops_naming/#namingpredicatename) Rubyのネーミングとしてはよろしくないようなので指示に従って **メソッド名の変更** を実施しましょう。
 
 ``` ruby
 ...
@@ -7622,19 +9194,19 @@ $ git commit -m 'refactor: メソッド名の変更'
 `FizzBuzz` クラスの **ファクトリメソッド** ですが **特性の横恋慕** の臭いがするので **メソッドの移動** を実施します。
 
 > 特性の横恋慕
-> 
+>
 > オブジェクト指向には、処理および処理に必要なデータを１つにまとめてしまうという重要な考え方があります。あるメソッドが、自分のクラスより他のクラスに興味を持つような場合には、古典的な誤りを犯しています。
-> 
+>
 > —  新装版 リファクタリング
-> 
+>
 
 > メソッドの移動
-> 
+>
 > あるクラスでメソッドが定義されているが、現在または将来において、そのクラスの特性よりも他のクラスの特性の方が、そのメソッドを使ったり、そのメソッドから使われたりすることが多い。
-> 
+>
 > 同様の本体を持つ新たなメソッドを、それを最も多用するクラスに作成する。元のメソッドは、単純な委譲とするか、またはまるごと取り除く。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 ``` ruby
 class FizzBuzz
@@ -7812,38 +9384,38 @@ fizz_buzz = FizzBuzz.new(1)
 ```
 
 > クラスとして定義された情報を元に具体的な値を伴ったオブジェクトを作成することをインスタンス化と呼び、生成されたオブジェクトのことをインスタンスと呼びます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 **コンストラクタ** の **引数** に渡される `1` は何を表しているのでしょうか？もちろんタイプですが初めてこのコードを見る人にはわからないでしょう。このような整数、浮動小数点、文字列などの基本データ（プリミティブ）型の使い方からは **基本データ型への執着**の臭いがします。 **オブジェクトによるプリミティブの置き換え** を実施してコードの意図を明確にしましょう。
 
 > 基本データ型への執着
-> 
+>
 > オブジェクト指向のメリットとして、基本データ型とそれより大きなクラスとの境界を取り除くということがあります。プログラミング言語の組み込み（built-in）型と区別できないような小さなクラスを自分で定義することが容易です。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 > 基本データ型への執着
-> 
+>
 > 興味深いことに、多くのプログラマは、対象としているドメインに役立つ、貨幣、座標、範囲などの基本的な型を導入するのを嫌がる傾向があります。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 > オブジェクトによるデータ値の置き換え
-> 
+>
 > 追加のデータや振る舞いが必要なデータ項目がある。
-> 
+>
 > そのデータ項目をオブジェクトに変える。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 > オブジェクトによるプリミティブの置き換え
-> 
+>
 > 旧：オブジェクトによるデータ値の置き換え
-> 
+>
 > 旧：クラスによるタイプコードの置き換え
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 ``` ruby
 class FizzBuzz
@@ -8103,8 +9675,8 @@ $ git commit -m 'refactor: マジックナンバーの置き換え'
 次に **基本データ型への執着** の臭いがする箇所として `FizzBuzz#generate` メソッドが返すFizzBuzzの値が文字型である点です。文字列の代わりに **値オブジェクト** `FizzBuzzValue` クラスを定義します。
 
 > 値の種類ごとに専用の型を用意するとコードが安定し、コードの意図が明確になります。このように、値を扱うための専用クラスを作るやり方を値オブジェクト（ValueObject）と呼びます。
-> 
-> —  現場で役立つシステム設計の原則 
+>
+> —  現場で役立つシステム設計の原則
 
 ``` ruby
 ...
@@ -8474,17 +10046,17 @@ $ git commit -m 'test: 学習用テスト'
 **値オブジェクト** を扱うFizzBuzzリストですが **コレクションのカプセル化** を適用して **ファーストクラスコレクション** オブジェクトを追加しましょう。
 
 > コレクションのカプセル化
-> 
+>
 > メソッドがコレクションを返している。
-> 
+>
 > 読み取り専用のビューを返して、追加と削除のメソッドを提供する。
-> 
+>
 > —  新装版 リファクタリング
-> 
+>
 
 > このように、コレクション型のデータとロジックを特別扱いにして、コレクションを１つだけ持つ専用クラスを作るやり方をコレクションオブジェクトあるいはファーストクラスコレクションと呼びます。
-> 
-> —  現場で役立つシステム設計の原則 
+>
+> —  現場で役立つシステム設計の原則
 
 まず、 **ファーストクラスコレクション** クラスを追加します。
 
@@ -8548,14 +10120,14 @@ end
 なんだか紛らわしい書き方になってしましました。配列を作るのに以前の配列を元に新しい配列を作るとか回りくどいことをしないで既存の配列を使い回せばいいじゃんと思うかもしれませんが **変更可能なデータ** はバグの原因となる傾向があります。変更可能な **ミュータブル** な変数ではなく 永続的に変更されない **イミュータブル** な変数を使うように心がけましょう。
 
 > 変更可能なデータ
-> 
+>
 > データの変更はしばし予期せぬ結果結果や、厄介なバグを引き起こします。他で違う値を期待していることに気づかないままに、ソフトウェアのある箇所で値を変更してしまえば、それだけで動かなくなってしまいます。これは値が変わる条件がまれにしかない場合、特に見つけにくいバグとなります。そのため、ソフトウェア開発の一つの潮流である関数型プログラミングは、データは不変であるべきで、更新時は常に元にデータ構造のコピーを返すようにし、元データには手を触れないという思想に基づいています。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 > 値オブジェクトと同じようにコレクションオブジェクトも、できるだけ「不変」スタイルで設計します。そのほうがプログラムが安定します。
-> 
-> —  現場で役立つシステム設計の原則 
+>
+> —  現場で役立つシステム設計の原則
 
 ``` bash
 ...
@@ -8755,41 +10327,41 @@ $ git commit -m 'refactor: 学習用テスト'
 
 > SRP:
 > 単一責任の原則
-> 
+>
 > かつて単一責任の原則(SRP)は、以下のように語られてきた。
-> 
+>
 >     モジュールを変更する理由はたったひとつだけであるべきである
-> 
+>
 > ソフトウェアシステムに手を加えるのは、ユーザーやステークホルダーを満足させるためだ。この「ユーザーやステークホルダー」こそが、単一責任の原則（SRP）を指す「変更する理由」である。つまり、この原則は以下のように言い換えられる。
-> 
+>
 >     モジュールはたったひとりのユーザーやステークホルダーに対して責任を負うべきである。
-> 
+>
 > 残念ながら「たったひとりのユーザーやステークホルダー」という表現は適切ではない。複数のユーザーやステークホルダーがシステムを同じように変更したいと考えることもある。ここでは、変更を望む人たちをひとまとめにしたグループとして扱いたい。このグループのことをアクターと呼ぶことにしよう。
 > これを踏まえると、最終的な単一責任の原則（SRP）は以下のようになる。
-> 
+>
 >     モジュールはたったひとつのアクターに対して責任を負うべきである。
-> 
+>
 > さて、ここでいう「モジュール」とは何のことだろう？端的に言えば、モジュールとはソースファイルのことである。たいていの場合は、この定義で問題ないだろう。だが、ソースファイル以外のところにコードを格納する言語や開発環境も存在する。そのような場合の「モジュール」は、いくつかの関数やデータをまとめた凝集性のあるものだと考えよう。
-> 
+>
 > 「凝集性のある」という言葉が単一責任の原則（SRP）を匂わせる。凝集性が、ひとつのアクターに対する責務を負うコードをまとめるフォースとなる。
-> 
+>
 > —  Clean Architecture 達人に学ぶソフトウェアの構造と設計
-> 
+>
 
 > Commandパターン
-> 
+>
 > 処理の呼び出しが、シンプルなメソッド呼び出しよりも複雑になってきたときはどうすればよいだろうか---処理のためのオブジェクトを作成し、それを起動するようにしよう。
-> 
+>
 > —  テスト駆動開発
-> 
+>
 
 > メソッドオブジェクトによるメソッドの置き換え
-> 
+>
 > 長いメソッドで、「メソッドの抽出」を適用できないようなローカル変数の使い方をしている。
-> 
+>
 > メソッド自身をオブジェクトとし、すべてのローカル変数をそのオブジェクトのフィールドとする。そうすれば、そのメソッドを同じオブジェクト中のメソッド群に分解できる。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 #### メソッドオブジェクトによるメソッドの置き換え
 
@@ -9288,14 +10860,14 @@ Finished in 0.00704s
 不要なコードを残しておくとメンテナンスの時に削除していいのかわからなくなり可読性を落とし原因となります。削除できる時に削除しておきましょう。後で必要になったとしてもバージョン管理システムを使えば問題ありません。ということでコミットします。
 
 > デッドコードの削除
-> 
+>
 > コードが使用されなくなったら削除すべきです。そのコードが将来必要になるかもしれないなどという心配はしません。必要になったらいつでも、バージョン管理システムから再び掘り起こせるからです。
-> 
+>
 > （中略）
-> 
+>
 > デッドコードのコメントアウトは、かつては一般的な習慣でした。それは、バージョン管理システムが広く使用される以前の時代や、使いづらかった時代には有用でした。現在では、とても小さなコードベースでもバージョン管理システムに置けるため、もはや必要のない習慣です。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 ``` bash
 $ git add .
@@ -9379,16 +10951,16 @@ $ git commit -m 'refactor: デッドコードの削除'
     Client -> ConcreateCommand
 
 > Value Objectパターン
-> 
+>
 > 広く共有されるものの、同一インスタンスであることはさほど重要でないオブジェクトを設計するにはどうしたらよいだろうか----オブジェクト作成時に状態を設定したら、その後決して変えないようにする。オブジェクトへの操作は必ず新しいオブジェクトを返すようにしよう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 > Factory Methodパターン
-> 
+>
 > オブジェクト作成に柔軟性をもたせたいときは、どうすればよいだろうか---単にコンストラクタで作るのではなく、メソッドを使ってオブジェクトを作成しよう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 [Strategy
 パターン](https://ja.wikipedia.org/wiki/Strategy_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3)
@@ -9411,9 +10983,9 @@ $ git commit -m 'refactor: デッドコードの削除'
 
 作成したコードはパターンと完全に一致しているわけではありませんし、Rubyのような動的言語ではもっと簡単な実現方法もありますがここでは先人の考えた設計パターンというものがありオブジェクト指向設計の [イデオム](https://ja.wikipedia.org/wiki/%E3%82%A4%E3%83%87%E3%82%A3%E3%82%AA%E3%83%A0) として使えること。そしてテスト駆動開発では一般的な設計アプローチとは異なる形で導かれているということくらいを頭に残しておけば結構です。どのパターンをいつ適用するかはリファクタリングを繰り返しているうちに思いつくようになってきます（多分）。
 
-> ただ、書籍『デザインパターン』（通称Gof本）の大ヒットは、その反面、それらパターンを表現する方法の多様性を奪ってしまった。Gof本には、設計をフェーズとして扱うという暗黙の前提があるように見受けられる。つまり、リファクタリングを設計行為として捉えていない。TDDにおける設計は、デザインパターンを少しだけ違う側面から捉えなければならない。
-> 
-> —  テスト駆動開発 
+> ただ、書籍『デザインパターン』（通称Gof本）の大ヒットは、その反面、それらパターンを表現する方法の多様性を奪ってしまった。Gof本には、設計をフェーズとして扱うという暗黙の前提があるように見受けられる。つまり、リファクタリングを設計行為として捉えていない。TDDにおける設計は、デザインパターンを少しだけ違う側面から捉えなければならない。
+>
+> —  テスト駆動開発
 
 あと、設計の観点から今回 **単一責任の原則** に従って `FizzBuzz` クラスを **メソッドオブジェクト** に分割して削除しました。
 
@@ -9453,15 +11025,15 @@ $ git commit -m 'refactor: デッドコードの削除'
 このように既存のコードを変更することなく振る舞いを変更できるので **オープン・クローズドの原則** を満たした設計といえます。
 
 > OCP:オープン・クローズドの原則
-> 
+>
 > 「オープン・クローズドの原則（OCP）」は、1988年にBertrand Maeerが提唱した以下のような原則だ。
-> 
+>
 >     ソフトウェアの構成要素は拡張に対しては開いていて、修正に対しては閉じていなければならない。
 >     　　　　　　　　　　　　『アジャイルソフトウェア開発の奥義　第2版』（SBクリエイティブ）より引用
-> 
+>
 > 言い換えれば、ソフトウェアの振る舞いは、既存の成果物を変更せず拡張できるようにすべきである、ということだ。
-> 
-> —  Clean Architecture 達人に学ぶソフトウェアの構造と設計 
+>
+> —  Clean Architecture 達人に学ぶソフトウェアの構造と設計
 
 ### 例外
 
@@ -9519,10 +11091,10 @@ $ git commit -m 'refactor: デッドコードの削除'
 ここまでは、正常系をリファクタリングして設計を改善してきました。しかし、アプリケーションは例外系も考慮する必要があります。続いて、**アサーションの導入** を適用した例外系のリファクタリングに取り組むとしましょう。
 
 > アサーションの導入
-> 
+>
 > 前提を明示するためのすぐれたテクニックとして、アサーションを記述する方法があります。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 #### アサーションの導入
 
@@ -9560,14 +11132,14 @@ Finished in 0.03159s
 テストを通すためアサーションモジュールを追加します。Rubyでは **モジュール** を使います。
 
 > モジュールはクラスと非常によく似ていますが、以下の二点が異なります。
-> 
+>
 >   - モジュールはインスタンス化できない
-> 
+>
 >   - 本章後半可能なのは include や extend が可能なのはモジュールだけ
-> 
+>
 > それ以外のクラスメソッドや定数の定義などはクラスと同じように定義することができます。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` ruby
 ...
@@ -9602,8 +11174,8 @@ Finished in 0.00621s
 追加したモジュールを `FizzBuzzValue` クラスをに **Mix-in** します。そして、**コンストラクタ** 実行時に数値は0以上であるアサーションを追加します。
 
 > Rubyでの継承は一種類、単一継承しか実行できませんが、複数のクラスを継承する多重継承の代わりにMix-inというメソッドの共有方法を提供します。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` ruby
 class FizzBuzzValue
@@ -9873,7 +11445,7 @@ Finished in 0.00717s
 ...
 ```
 
-仕様変更による反映が出来たのでコミットしましょう。
+仕様変更による反映が出来たのでコミットしましょう。
 
 ``` bash
 $ git add .
@@ -9937,12 +11509,12 @@ $ git commit -m 'refactor: アサーションの導入'
 **アサーションの導入** とは別のアプローチとして **例外** を返す方法もあります。 **例外によるエラーコードの置き換え** を適用してアサーションモジュールを削除しましょう。
 
 > 例外によるエラーコードの置き換え
-> 
+>
 > エラーを示す特別なコードをメソッドがリターンしている。
-> 
+>
 > 代わりに例外を発生させる。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 #### 例外によるエラーコードの置き換え
 
@@ -10162,12 +11734,12 @@ lib/fizz_buzz.rb:58:26: C: Style/NumericPredicate: Use number.negative? instead 
 テストは通りますが警告が表示されるようになりました。 `Style/NumericPredicate: Use number.negative? instead of number < 0.` とのことなので **アルゴリズムの置き換え** を適用しておきましょう。
 
 > アルゴリズムの取り替え
-> 
+>
 > アルゴリズムをよりわかりやすいものに置き換えたい
-> 
+>
 > メソッドの本体を新たなアルゴリズムで置き換える。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 ``` ruby
 ...
@@ -10209,12 +11781,12 @@ $ git commit -m 'refactor: アルゴリズムの置き換え'
 件数に **リテラル** を使っています。ここは **マジックナンバーの置き換え** を適用するべきですね。
 
 > シンボリック定数によるマジックナンバーの置き換え
-> 
+>
 > 特別な意味を持った数字のリテラルがある。
-> 
+>
 > 定数を作り、それにふさわしい名前をつけて、そのリテラルを置き換える。
-> 
-> —  新装版 リファクタリング 
+>
+> —  新装版 リファクタリング
 
 ``` ruby
 ...
@@ -10232,10 +11804,10 @@ class FizzBuzzList
 **式展開** を使ってメッセージ内容も定数から参照するようにしましょう。
 
 > 式展開
-> 
+>
 > 式展開とは、「\#{}」の書式で文字列中に何らかの変数や式を埋め込むことが可能な機能です。これは、ダブルクオートを使用した場合のみの機能です。
-> 
-> —  かんたんRuby 
+>
+> —  かんたんRuby
 
 ``` ruby
 class FizzBuzzList
@@ -10350,21 +11922,21 @@ $ git commit -m 'refactor: マジックナンバーの置き換え'
 最後に **ポリモーフィズム** の応用としてタイプクラスが未定義の場合に **例外** ではなく未定義のタイプクラスを返す **特殊ケースの導入** を適用してみましょう。
 
 > ヌルオブジェクトの導入
-> 
+>
 > null値のチェックが繰り返し現れる。
-> 
+>
 > そのnull値をヌルオブジェクトで置き換える。
-> 
+>
 > —  新装版 リファクタリング
-> 
+>
 
 > 特殊ケースの導入
-> 
+>
 > 旧：ヌルオブジェクトの導入
-> 
+>
 > 特殊ケースの処理を要する典型的な値がnullなので、このパターンをヌルオブジェクトパターンと呼ぶことがあります、しかし、通常の特殊ケースとアプローチは同じです。いわばヌルオブジェクトは「特殊ケース」の特殊ケースです。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 まず、それ以外のタイプの場合の振る舞いを変更します。
 
@@ -10536,10 +12108,10 @@ Finished in 0.00747s
 `FizzBuzzTypeNotDefined` オブジェクトは **Null Objectパターン** を適用したものです。
 
 > Null Objectパターン
-> 
+>
 > 特殊な状況をオブジェクトで表現するにはどうすればよいだろうか---その特殊な状況を表現するオブジェクトを作り、通常のオブジェクトと同じプロトコル（メソッド群）を実装しよう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 **オープン・クローズドの原則** に従って未定義のタイプである **Null Object** を安全に追加することができたのでコミットしておきます。
 
@@ -10713,14 +12285,14 @@ $ git commit -m 'fix: プリントする'
 `fizz_buzz.rb` ファイル内のクラスモジュールをファイルとして分割していきます。まずは **ドメインオブジェクト** を抽出して **ドメインモデル** として整理しましょう。既存のテストを壊さないように１つづつコピー&ペーストしていきます。
 
 > 関連する業務データと業務ロジックを１つにまとめたこのようなオブジェクトをドメインオブジェクトと呼びます。
-> 
+>
 > 「ドメイン」とは、対象領域とか問題領域という意味です。業務アプリケーションの場合、そのアプリケーションが対象となる業務活動全体がドメインです。業務活動という問題領域（ドメイン）で扱うデータと業務ロジックを、オブジェクトとして表現したものドメインオブジェクトです。ドメインオブジェクトは、業務データと業務ロジックを密接に関係づけます。
-> 
-> —  現場で役立つシステム設計の原則 
+>
+> —  現場で役立つシステム設計の原則
 
 > このように業務アプリケーションの対象領域（ドメイン）をオブジェクトのモデルとして整理したものをドメインモデルと呼びます。
-> 
-> —  現場で役立つシステム設計の原則 
+>
+> —  現場で役立つシステム設計の原則
 
     /main.rb
       |--lib/
@@ -10954,8 +12526,8 @@ $ git commit -m 'refactor(WIP): モジュール分割'
 続いて **アプリケーション層** の分割を行います。
 
 > データクラスと機能クラスを分ける手続き型の設計では、アプリケーション層のクラスに業務ロジックの詳細を記述します。
-> 
-> —  現場で役立つシステム設計の原則 
+>
+> —  現場で役立つシステム設計の原則
 
     /main.rb
       |--lib/
@@ -12425,38 +13997,38 @@ end
 エピソード1では **良いコード** について考えました。
 
 > TDDは「より良いコードを書けば、よりうまくいく」という素朴で奇妙な仮設によって成り立っている
-> 
+>
 > —  テスト駆動開発
-> 
+>
 
 > 「動作するきれいなコード」。RonJeffriesのこの簡潔な言葉が、テスト駆動開発(TDD)のゴールだ。動作するきれいなコードはあらゆる意味で価値がある。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 > 良いコードかどうかは、変更がどれだけ容易なのかで決まる。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 > コードは理解しやすくなければいけない。
-> 
-> —  リーダブルコード 
+>
+> —  リーダブルコード
 
 本エピソードでは **テスト駆動開発** による **オブジェクト指向プログラミング** の **リファクタリング** を経てコードベースを改善してきました。そして **オブジェクト指向設計** により **良いコード** のプログラムを **良い設計** のアプリケーションへと進化させることができました。
 
 > どこに何が書いてあるかをわかりやすくし、変更の影響を狭い範囲に閉じ込め、安定して動作する部品を柔軟に組み合わせながらソフトウェアを構築する技法がオブジェクト指向設計です。
-> 
+>
 > —  現場で役立つシステム設計の原則
-> 
+>
 
 > 設計の良し悪しは、ソフトウェアを変更するときにはっきりします。
-> 
+>
 > 構造が入り組んだわかりづらいプログラムは内容の理解に時間がかかります。重複したコードをあちこちで修正する作業が増え、変更の副作用に悩まされます。
-> 
+>
 > 一方、うまく設計されたプログラムは変更が楽で安全です。変更すべき箇所がかんたんにわかり、変更するコード量が少なく、変更の影響を狭い範囲に限定できます。
-> 
+>
 > プログラムの修正に３日かかるか、それとも半日で済むか。その違いを生むのが「設計」なのです。
-> 
-> —  現場で役立つシステム設計の原則 
+>
+> —  現場で役立つシステム設計の原則
 
 では、いつ設計をしていたのでしょうか？ わかりますよね、このエピソードの始まりから終わりまで常に設計をしていたのです。
 
@@ -12485,7 +14057,7 @@ end
 ### クライアントモジュールの分割
 
 ### 本番環境と開発環境で表示を切り返る
- 
+
 ### クライアントタスクの自動化
 
 ### コードレビュー
@@ -12511,21 +14083,21 @@ end
 仕様は以下の通りです。
 
 > n 番目のフィボナッチ数を Fn で表すと、Fn は再帰的に
-> 
+>
 > F0 = 0,
-> 
+>
 > F1 = 1,
-> 
+>
 > Fn + 2 = Fn + Fn + 1 (n ≧ 0)
-> 
+>
 > で定義される。これは、2つの初期条件を持つ漸化式である。
-> 
+>
 > この数列 (Fn)はフィボナッチ数列（フィボナッチすうれつ、（英: Fibonacci sequence）と呼ばれ、
-> 
+>
 > 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987,
 > 1597, 2584, 4181, 6765, 10946, …（オンライン整数列大辞典の数列 A45） と続く。最初の二項は 0, 1
 > であり、以後どの項もその直前の2つの項の和となっている。
-> 
+>
 > —  Wikipedia
 
 
@@ -12539,10 +14111,10 @@ end
 ### TODOリスト
 
 > TODOリスト
-> 
+>
 > 何をテストすべきだろうか----着手する前に、必要になりそうなテストをリストに書き出しておこう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 **TODOリスト** を書き出す取っ掛かりとして仕様で定義されている内容からプログラムで実施できる内容に分解してきましょう。仕様では以下のように定義されているので。
 
@@ -12581,10 +14153,10 @@ end
 ### 仮実装
 
 > 仮実装を経て本実装へ
-> 
+>
 > 失敗するテストを書いてから、最初に行う実装はどのようなものだろうか----ベタ書きの値を返そう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 #### 0を渡したら0を返す
 
@@ -12739,10 +14311,10 @@ $ git commit -m 'test: 0を渡したら0を返す'
 ### 三角測量
 
 > 三角測量
-> 
+>
 > テストから最も慎重に一般化を引き出すやり方はどのようなものだろうか----２つ以上の例があるときだけ、一般化を行うようにしよう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 #### 1を渡したら1を返す
 
@@ -12919,14 +14491,14 @@ $ git commit -m 'test: 1を渡したら2を返す'
 ### 明白な実装
 
 > 明白な実装
-> 
+>
 > シンプルな操作を実現するにはどうすればいいだろうか----そのまま実装しよう。
-> 
+>
 > 仮実装や三角測量は、細かく細かく刻んだ小さなステップだ。だが、ときには実装をどうすべきか既に見えていることが。
 > そのまま進もう。例えば先ほどのplusメソッドくらいシンプルなものを仮実装する必要が本当にあるだろうか。
 > 普通は、その必要はない。頭に浮かんだ明白な実装をただ単にコードに落とすだけだ。もしもレッドバーが出て驚いたら、あらためてもう少し歩幅を小さくしよう。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 #### 3を渡したら2を返す
 
@@ -13304,12 +14876,12 @@ $ git commit -m 'feat: フィボナッチ数計算'
 ### リファクタリング
 
 > リファクタリング(名詞) 外部から見たときの振る舞いを保ちつつ、理解や修正が簡単になるように、ソフトウェアの内部構造を変化させること。
-> 
-> —  リファクタリング(第2版) 
+>
+> —  リファクタリング(第2版)
 
 > リファクタリングする(動詞) 一連のリファクタリングを適用して、外部から見た振る舞いの変更なしに、ソフトウェアを再構築すること。
-> 
-> —  リファクタリング(第2版 
+>
+> —  リファクタリング(第2版
 
 アルゴリズムの実装は出来ましたがアプリケーションとしては不十分なので **リファクタリング** を適用してコードを **動作するきれいなコード** に洗練していきます。
 
@@ -13541,8 +15113,8 @@ $ git commit -m 'refactor: メソッド名の変更'
 ### パフォーマンスチューニング
 
 > 心がけるべきことは、他のパフォーマンス分析とおなじように、実際のデータを使い、リアルな利用パターンを試し、プロファイリングを行ってからでないと、パフォーマンスを問題にする資格はない、ということだ。
-> 
-> —  テスト駆動開発 
+>
+> —  テスト駆動開発
 
 これまでのテストケースでは小さな値を使ってきましたが大きな値の場合のプログラムの挙動が問題無いか確認しておく必要があります [１００番目までのフィボナッチ数列](http://www.suguru.jp/Fibonacci/Fib100.html) を参考に大きな値の場合のテストケースを追加してアプリケーションのパフォーマンスを検証しましょう。
 
@@ -14338,7 +15910,7 @@ $ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置
     Protocol <|-- FibonacciRecursive
     Protocol <|-- FibonacciLoop
     Protocol <|-- FibonacciGeneralTerm
-    
+
     class Fibonacci {
     -algorithm
     exec()
@@ -14828,7 +16400,7 @@ $ git commit -m 'feat: モジュール分割'
       Protocol <|-- GeneralTerm
     }
     main --> Command
-    
+
     package Fibonacci {
       class Command {
       -algorithm
