@@ -28,10 +28,7 @@
   - 躾（しつけ、Shitsuke） 決められたルール・手順を正しく守る習慣をつける
 
 これがプログラミング環境構築とどのように関係していくのでしょうか？まずは、いらないものを捨てるのが **整理**
-ですがそもそもいらないものが何なのかを決めなければなりません。プログラミングで扱う対象はモノではなく情報です。ではどうやって情報を扱っていけばよいでしょう？ここは、
-**分類するな。ひたすら並べよ** の考えに従い一箇所に記録をまとめていきましょう。そのためのテクニックとして
-**エンジニアリングデイブックス**
-があります。これは何をやったか何を学んだかをノートに時系列に記録していくことです。
+ですがそもそもいらないものが何なのかを決めなければなりません。プログラミングで扱う対象はモノではなく情報です。ではどうやって情報を扱っていけばよいでしょう？ここは、**分類するな。ひたすら並べよ** の考えに従い一箇所に記録をまとめていきましょう。そのためのテクニックとして **エンジニアリングデイブックス** があります。これは何をやったか何を学んだかをノートに時系列に記録していくことです。
 
 Engineering Dayboks
 
@@ -45,13 +42,9 @@ Engineering Dayboks
 > —  Pragmatic Programmer: your journey to mastery 20th Anniversary
 > Edition
 
-ノートは市販のものならどれでも構いませんがおすすめは
-[ソフトリングノード](https://www.kokuyo-st.co.jp/stationery/softring-note/)
-のB5サイズが手元に置いてもかさばらず使いやすいです。情報を一箇所に集めて必要なものと不要なものを分ける準備が出来ました。次は必要なものをすぐに取り出せるようにする
-**整頓** をどのように実践していくかを解説します。
+ノートは市販のものならどれでも構いませんがおすすめは [ソフトリングノード](https://www.kokuyo-st.co.jp/stationery/softring-note/) のB5サイズが手元に置いてもかさばらず使いやすいです。情報を一箇所に集めて必要なものと不要なものを分ける準備が出来ました。次は必要なものをすぐに取り出せるようにする **整頓** をどのように実践していくかを解説します。
 
-**整頓** の基本は **分類するな。ひたすら並べよ**
-です。デジタルデータも一箇所に保存していきましょう。具体的に保存する場所は後で解説します。また、分類するなといっても分類をする必要は当然発生します。分類にあたっては一貫したネーミングルールを適用していきます。具体的な方法は都度解説していきます。
+**整頓** の基本は **分類するな。ひたすら並べよ** です。デジタルデータも一箇所に保存していきましょう。具体的に保存する場所は後で解説します。また、分類するなといっても分類をする必要は当然発生します。分類にあたっては一貫したネーミングルールを適用していきます。具体的な方法は都度解説していきます。
 
 > Name Well; Rename When Needed.
 >
@@ -111,8 +104,7 @@ Engineering Dayboks
 
 #### ITリテラシ
 
-以上がプログラミング環境構築にあたっての基本となる考えです。この記事では6Sを軸としたソフトウェア開発のための **ITリテラシ**
-習得のベースとなる環境構築をすることを目的としています。
+以上がプログラミング環境構築にあたっての基本となる考えです。この記事では6Sを軸としたソフトウェア開発のための **ITリテラシ** 習得のベースとなる環境構築をすることを目的としています。
 
 > 今日のソフトウェア開発の世界において絶対になければならない3つの技術的な柱があります。
 > 三本柱と言ったり、三種の神器と言ったりしていますが、それらは
@@ -139,17 +131,11 @@ Engineering Dayboks
 | Windows  | <newbie4649@outlook.jp> |
 | WSL      | newbie4649              |
 
-また、パスワードに関しては **セキュリティ**
-を参考に設定してください。アカウントIDに関しては可能な限り共通のID名を設定すると管理しやすくなります。登録アカウントとパスワードは一箇所に記録していつでも確認できるようにして置いてください。理想はパスワードマネージャーの使用ですがクラウドストレージでもいいです。他人にみられることがないように注意して管理しましょう。クラウドストレージで安全に保存する自身が無い場合は
-**エンジニアリングデイブックス**
-に記録しておきましょう。その際、もし落として他人にみられてもわからないような工夫をしておきましょう。手段はどうあれ
-**保存する場所は一箇所**
-が原則です。
+また、パスワードに関しては **セキュリティ** を参考に設定してください。アカウントIDに関しては可能な限り共通のID名を設定すると管理しやすくなります。登録アカウントとパスワードは一箇所に記録していつでも確認できるようにして置いてください。理想はパスワードマネージャーの使用ですがクラウドストレージでもいいです。他人にみられることがないように注意して管理しましょう。クラウドストレージで安全に保存する自身が無い場合は **エンジニアリングデイブックス** に記録しておきましょう。その際、もし落として他人にみられてもわからないような工夫をしておきましょう。手段はどうあれ **保存する場所は一箇所** が原則です。
 
 #### Microsoftアカウントを作成する
 
-[アカウントの作成](https://signup.live.com/signup?wa=wsignin1.0&rpsnv=13&rver=7.3.6963.0&wp=MBI_SSL&wreply=https%3a%2f%2fwww.microsoft.com%2fja-jp%2f&id=74335&aadredir=1&contextid=E56866F842F4E143&bk=1584685585&uiflavor=web&lic=1&mkt=JA-JP&lc=1041&uaid=491fc017de0f48c5c67a3833e7aca9ee)
-から新しいメールアドレスを取得を選択します。
+[アカウントの作成](https://signup.live.com/signup?wa=wsignin1.0&rpsnv=13&rver=7.3.6963.0&wp=MBI_SSL&wreply=https%3a%2f%2fwww.microsoft.com%2fja-jp%2f&id=74335&aadredir=1&contextid=E56866F842F4E143&bk=1584685585&uiflavor=web&lic=1&mkt=JA-JP&lc=1041&uaid=491fc017de0f48c5c67a3833e7aca9ee) から新しいメールアドレスを取得を選択します。
 
 ![ms 001](../../images/article/episode_0/ms-001.png)
 
@@ -165,9 +151,7 @@ Engineering Dayboks
 
 #### Googleアカウントを作成する
 
-[Google
-アカウントの作成](https://support.google.com/accounts/answer/27441?hl=ja)
-から `Googleアカウントを作成する` を選択します。
+[Google アカウントの作成](https://support.google.com/accounts/answer/27441?hl=ja) から `Googleアカウントを作成する` を選択します。
 
 ![ggl 001](../../images/article/episode_0/ggl-001.png)
 
@@ -189,9 +173,7 @@ Freeプランを選択します
 
 #### アカウントにサインインする
 
-[Microsoft
-アカウントにサインインする方法](https://support.microsoft.com/ja-jp/help/4028195)
-を参考にしてローカルアカウントからMicrosoftアカウントに切り替えます。
+[Microsoft アカウントにサインインする方法](https://support.microsoft.com/ja-jp/help/4028195)を参考にしてローカルアカウントからMicrosoftアカウントに切り替えます。
 
 ![login 001](../../images/article/episode_0/login-001.png)
 
@@ -217,8 +199,7 @@ Freeプランを選択します
 > —  Pragmatic Programmer: your journey to mastery 20th Anniversary
 > Edition
 
-[Office365](https://products.office.com/ja-jp/home?SilentAuth=1)
-からOneDriveの設定を確認します。
+[Office365](https://products.office.com/ja-jp/home?SilentAuth=1) からOneDriveの設定を確認します。
 
 ![drive 001](../../images/article/episode_0/drive-001.png)
 
@@ -226,22 +207,15 @@ Freeプランを選択します
 
 ![drive 003](../../images/article/episode_0/drive-003.png)
 
-アカウントのパスワードなど機密情報は [Personal Vault で OneDrive
-ファイルを保護する](https://support.office.com/ja-jp/article/personal-vault-で-onedrive-ファイルを保護する-6540ef37-e9bf-4121-a773-56f98dce78c4)
-を使って管理すると良いでしょう。もしくは [1Password](https://1password.com/jp/)
-などパスワード管理ツールの導入を検討してください。
+アカウントのパスワードなど機密情報は [Personal Vault で OneDrive ファイルを保護する](https://support.office.com/ja-jp/article/personal-vault-で-onedrive-ファイルを保護する-6540ef37-e9bf-4121-a773-56f98dce78c4) を使って管理すると良いでしょう。もしくは [1Password](https://1password.com/jp/) などパスワード管理ツールの導入を検討してください。
 
-[PCのOneDrive](https://support.microsoft.com/ja-jp/help/17184/windows-10-onedrive)
-にあるようにデータはローカルとクラウドの両方にあるので破損・紛失をしても復旧することが出来ます。
+[PCのOneDrive](https://support.microsoft.com/ja-jp/help/17184/windows-10-onedrive) にあるようにデータはローカルとクラウドの両方にあるので破損・紛失をしても復旧することが出来ます。
 
 ### 開発環境のセットアップ
 
 #### パッケージ管理ツールのインストール
 
-アプリケーションの管理にはパッケージ管理ツール [The Package Manager for
-Windows](https://chocolatey.org/) を使います。インストールの方法は
-[Chocolateyを使った環境構築の時のメモ](https://qiita.com/konta220/items/95b40b4647a737cb51aa)
-を参照してください。
+アプリケーションの管理にはパッケージ管理ツール [The Package Manager for Windows](https://chocolatey.org/) を使います。インストールの方法は [Chocolateyを使った環境構築の時のメモ](https://qiita.com/konta220/items/95b40b4647a737cb51aa) を参照してください。
 
 `Get Started` を選択します。
 
@@ -251,8 +225,7 @@ Windows](https://chocolatey.org/) を使います。インストールの方法�
 
 ![pkg 002](../../images/article/episode_0/pkg-002.png)
 
-画面左下のスタートボタンを右クリックして `Windows PowerSHell(管理者)(A)`
-を起動してコピーしたコードを貼り付け実行します。
+画面左下のスタートボタンを右クリックして `Windows PowerSHell(管理者)(A)` を起動してコピーしたコードを貼り付け実行します。
 
 ![pkg 003](../../images/article/episode_0/pkg-003.png)
 
@@ -273,8 +246,7 @@ Windows](https://chocolatey.org/) を使います。インストールの方法�
 
 ![git 001](../../images/article/episode_0/git-001.png)
 
-画面左下のスタートボタンを右クリックして `Windows PowerSHell(管理者)(A)`
-を起動して以下のコマンドを入力します。質問には全てYを入力してください。
+画面左下のスタートボタンを右クリックして `Windows PowerSHell(管理者)(A)` を起動して以下のコマンドを入力します。質問には全てYを入力してください。
 
     choco install git
 
@@ -365,9 +337,7 @@ Windows](https://chocolatey.org/) を使います。インストールの方法�
 
 #### インストール
 
-[Download Visual Studio Code Java Pack
-Installer](https://aka.ms/vscode-java-installer-win)
-からVSCodeをダウンロードしてセットアッププログラムを実行します。
+[Download Visual Studio Code Java Pack Installer](https://aka.ms/vscode-java-installer-win) からVSCodeをダウンロードしてセットアッププログラムを実行します。
 
 ![vscode 001](../../images/article/episode_0/vscode-001.png)
 
@@ -377,8 +347,7 @@ Installer](https://aka.ms/vscode-java-installer-win)
 
 #### 設定
 
-エディタが起動すると画面右下にWSL拡張機能インストールのポップアップが表示されるので `Install`
-を押して拡張機能をインストールします。
+エディタが起動すると画面右下にWSL拡張機能インストールのポップアップが表示されるので `Install` を押して拡張機能をインストールします。
 
 ![setting 001](../../images/article/episode_0/setting-001.png)
 
@@ -410,11 +379,9 @@ Installer](https://aka.ms/vscode-java-installer-win)
 
 エディタのメニューが英語なので日本語に変更する拡張機能をインストールします。
 
-[Japanese Language Pack for Visual Studio
-Code](https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja)
+[Japanese Language Pack for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja)
 
-画面左のExtensionアイコンを選択して検索欄に `japanese` と入力したら日本語拡張パッケージが表示されるので `Install`
-を押します。
+画面左のExtensionアイコンを選択して検索欄に `japanese` と入力したら日本語拡張パッケージが表示されるので `Install` を押します。
 
 ![package 001](../../images/article/episode_0/package-001.png)
 
@@ -475,9 +442,7 @@ Code](https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-langu
 
 エディタの設定をして拡張機能をインストールしました。再インストールなどでエディタを再インストールする場合に上記の作業を再度するのは手間なので設定をオンライに保存してすぐにセットアップできるようにしておきます。
 
-[Settings
-Sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync)
-をインストールすると以下の画面が表示されるので `LOGIN WITH GITHUB` を選択します。
+[Settings Sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync) をインストールすると以下の画面が表示されるので `LOGIN WITH GITHUB` を選択します。
 
 ![sync 001](../../images/article/episode_0/sync-001.png)
 
@@ -499,8 +464,7 @@ Sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-syn
 
 ![sync 006](../../images/article/episode_0/sync-006.png)
 
-エディタメニューの `表示` から `コマンドパレット` を選択して `Sync` と入力して入力候補の中から
-`アップデート・アップロードの設定` を選択します。
+エディタメニューの `表示` から `コマンドパレット` を選択して `Sync` と入力して入力候補の中から `アップデート・アップロードの設定` を選択します。
 
 ![sync 007](../../images/article/episode_0/sync-007.png)
 
@@ -508,8 +472,7 @@ Sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-syn
 
 ![sync 008](../../images/article/episode_0/sync-008.png)
 
-エディタの設定を変更した際はアップロードすることで最新の設定を保存することができます。保存した設定を読み込む場合はコマンドパレットから
-`Sync: 設定をダウンロード` を選択します。
+エディタの設定を変更した際はアップロードすることで最新の設定を保存することができます。保存した設定を読み込む場合はコマンドパレットから `Sync: 設定をダウンロード` を選択します。
 
 もし、GitHub連携で以下のような画面になった場合は登録メールアドレスに認証コードが送られているので確認してください。
 
@@ -521,10 +484,7 @@ Sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-syn
 
 ##### プログラムを作成する
 
-エディタのセットアップが出来たのでかんたんなプログラムを作ってみましょう。 お題は [Hello
-world](https://ja.wikipedia.org/wiki/Hello_world) です。
-まず、プログラムを作成する場所ですが今回はディスクトップの直下に
-`Projects` というフォルダを作成してその中に配置したいと思います。
+エディタのセットアップが出来たのでかんたんなプログラムを作ってみましょう。 お題は [Hello world](https://ja.wikipedia.org/wiki/Hello_world) です。まず、プログラムを作成する場所ですが今回はディスクトップの直下 `Projects` というフォルダを作成してその中に配置したいと思います。
 
 ![hello 001](../../images/article/episode_0/hello-001.png)
 
@@ -610,8 +570,7 @@ function HelloWorld {
 }
 ```
 
-![hello
-014](../../images/article/episode_0/hello-014.png)
+![hello 014](../../images/article/episode_0/hello-014.png)
 
 F5キーを押してテストが通ったことを確認したらテストケースを追加します。もしテストが失敗するようなら保存のタイミングあっていない場合があるので再度F5キーを押して実行してみてください。
 
@@ -724,8 +683,7 @@ F5を押します。
 
 ![hello 018](../../images/article/episode_0/hello-018.png)
 
-`HelloWorld`
-プログラムの完成です。
+`HelloWorld` プログラムの完成です。
 
 ##### プログラムをデバッグする
 
@@ -733,8 +691,7 @@ F5を押します。
 
 まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。
 
-![hello
-019](../../images/article/episode_0/hello-019.png)
+![hello 019](../../images/article/episode_0/hello-019.png)
 
 ブレークポイントを設定したらF5を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。
 
@@ -803,58 +760,45 @@ F5を押します。
 
 #### インストール
 
-[RubyInstaller](https://rubyinstaller.org/downloads/)からWITH
-DEVKITをインストールします。
+[RubyInstaller](https://rubyinstaller.org/downloads/)からWITH DEVKITをインストールします。
 
-![ruby win install
-001](../../images/article/episode_0/ruby-win-install-001.png)
+![ruby win install 001](../../images/article/episode_0/ruby-win-install-001.png)
 
 インストラーの指示に従います。
 
-![ruby win install
-002](../../images/article/episode_0/ruby-win-install-002.png)
+![ruby win install 002](../../images/article/episode_0/ruby-win-install-002.png)
 
-![ruby win install
-003](../../images/article/episode_0/ruby-win-install-003.png)
+![ruby win install 003](../../images/article/episode_0/ruby-win-install-003.png)
 
-![ruby win install
-004](../../images/article/episode_0/ruby-win-install-004.png)
+![ruby win install 004](../../images/article/episode_0/ruby-win-install-004.png)
 
-![ruby win install
-005](../../images/article/episode_0/ruby-win-install-005.png)
+![ruby win install 005](../../images/article/episode_0/ruby-win-install-005.png)
 
 3を入力してエンターキーを押します。
 
-![ruby win install
-006](../../images/article/episode_0/ruby-win-install-006.png)
+![ruby win install 006](../../images/article/episode_0/ruby-win-install-006.png)
 
 #### 追加パッケージのインストール
 
-[Ruby for Visual Studio
-Code](https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby)
+[Ruby for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby)
 
-[Ruby
-Solargraph](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph)
+[Ruby Solargraph](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph)
 
 [vscode-endwise](https://marketplace.visualstudio.com/items?itemName=kaiwood.endwise)
 
 [ruby-rubocop](https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop)
 
-[Test Explorer
-UI](https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer)
+[Test Explorer UI](https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer)
 
-[Ruby Test
-Explorer](https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter)
+[Ruby Test Explorer](https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter)
 
 #### 設定
 
 既定のシェルをPowerShell Coreに変更します。
 
-![ruby win vscode
-001](../../images/article/episode_0/ruby-win-vscode-001.png)
+![ruby win vscode 001](../../images/article/episode_0/ruby-win-vscode-001.png)
 
-![ruby win vscode
-002](../../images/article/episode_0/ruby-win-vscode-002.png)
+![ruby win vscode 002](../../images/article/episode_0/ruby-win-vscode-002.png)
 
 新しいターミナルを開いて以下のコマンドを入力します。
 
@@ -865,11 +809,9 @@ gem install ruby-debug-ide
 gem install solargraph
 ```
 
-![ruby win vscode
-003](../../images/article/episode_0/ruby-win-vscode-003.png)
+![ruby win vscode 003](../../images/article/episode_0/ruby-win-vscode-003.png)
 
-![ruby win vscode
-004](../../images/article/episode_0/ruby-win-vscode-004.png)
+![ruby win vscode 004](../../images/article/episode_0/ruby-win-vscode-004.png)
 
 #### Hello world
 
@@ -877,24 +819,19 @@ gem install solargraph
 
 `Projects` フォルダ内に `Ruby` フォルダを作成してエディタからフォルダを開きます。
 
-![ruby win hello
-001](../../images/article/episode_0/ruby-win-hello-001.png)
+![ruby win hello 001](../../images/article/episode_0/ruby-win-hello-001.png)
 
-![ruby win hello
-002](../../images/article/episode_0/ruby-win-hello-002.png)
+![ruby win hello 002](../../images/article/episode_0/ruby-win-hello-002.png)
 
-![ruby win hello
-003](../../images/article/episode_0/ruby-win-hello-003.png)
+![ruby win hello 003](../../images/article/episode_0/ruby-win-hello-003.png)
 
 `新しいファイル` 作成アイコンを押します。
 
-![ruby win hello
-004](../../images/article/episode_0/ruby-win-hello-004.png)
+![ruby win hello 004](../../images/article/episode_0/ruby-win-hello-004.png)
 
 ファイル名は `main.rb` とします。
 
-![ruby win hello
-005](../../images/article/episode_0/ruby-win-hello-005.png)
+![ruby win hello 005](../../images/article/episode_0/ruby-win-hello-005.png)
 
 ファイルに以下のコードを入力したらRunアイコンを選択して `create a launch.json file`
 を押してメニューからRubyを選択します。
@@ -909,23 +846,19 @@ class TestHelloWorld < Minitest::Test
 end
 ```
 
-![ruby win hello
-006](../../images/article/episode_0/ruby-win-hello-006.png)
+![ruby win hello 006](../../images/article/episode_0/ruby-win-hello-006.png)
 
 `Debug Local File` を選択します。
 
-![ruby win hello
-007](../../images/article/episode_0/ruby-win-hello-007.png)
+![ruby win hello 007](../../images/article/episode_0/ruby-win-hello-007.png)
 
 `launch.json` ファイルが作成されたら `main.rb` タブに戻ってF5キーを押します。
 
-![ruby win hello
-008](../../images/article/episode_0/ruby-win-hello-008.png)
+![ruby win hello 008](../../images/article/episode_0/ruby-win-hello-008.png)
 
 デバッグコンソールに実行結果が表示されれば準備完了です。
 
-![ruby win hello
-009](../../images/article/episode_0/ruby-win-hello-009.png)
+![ruby win hello 009](../../images/article/episode_0/ruby-win-hello-009.png)
 
 テストをパスするようにコードを修正してF5キーを押します。
 
@@ -940,8 +873,7 @@ class TestHelloWorld < Minitest::Test
 end
 ```
 
-![ruby win hello
-010](../../images/article/episode_0/ruby-win-hello-010.png)
+![ruby win hello 010](../../images/article/episode_0/ruby-win-hello-010.png)
 
 テスティングフレームワークの動作が確認できたので `hello_world`
 関数の作成に入ります。まず以下のコードを追加してF5キーを押してテストが失敗することを確認します。
@@ -960,8 +892,7 @@ class TestHelloWorld < Minitest::Test
 end
 ```
 
-![ruby win hello
-011](../../images/article/episode_0/ruby-win-hello-011.png)
+![ruby win hello 011](../../images/article/episode_0/ruby-win-hello-011.png)
 
 `hello_world` 関数を追加してテストをパスさせます。
 
@@ -983,8 +914,7 @@ def hello_world
 end
 ```
 
-![ruby win hello
-012](../../images/article/episode_0/ruby-win-hello-012.png)
+![ruby win hello 012](../../images/article/episode_0/ruby-win-hello-012.png)
 
 指定された名前で挨拶を返すようにします。
 
@@ -1010,8 +940,7 @@ def hello_world
 end
 ```
 
-![ruby win hello
-013](../../images/article/episode_0/ruby-win-hello-013.png)
+![ruby win hello 013](../../images/article/episode_0/ruby-win-hello-013.png)
 
 関数に引数を追加します。
 
@@ -1037,8 +966,7 @@ def hello_world(name)
 end
 ```
 
-![ruby win hello
-014](../../images/article/episode_0/ruby-win-hello-014.png)
+![ruby win hello 014](../../images/article/episode_0/ruby-win-hello-014.png)
 
 `指定された名前で挨拶を返す` テストはパスしましたが今度は `簡単な挨拶を返す`
 テストが失敗するようになりましたのでデフォルト引数を設定してテストをパスするようにします。
@@ -1065,8 +993,7 @@ def hello_world(name = 'Ruby')
 end
 ```
 
-![ruby win hello
-015](../../images/article/episode_0/ruby-win-hello-015.png)
+![ruby win hello 015](../../images/article/episode_0/ruby-win-hello-015.png)
 
 仕上げに不要なテストを削除してテストケースの文言をわかりやすくしておきます。
 
@@ -1088,35 +1015,29 @@ def hello_world(name = 'Ruby')
 end
 ```
 
-![ruby win hello
-016](../../images/article/episode_0/ruby-win-hello-016.png)
+![ruby win hello 016](../../images/article/episode_0/ruby-win-hello-016.png)
 
 ##### プログラムをデバッグする
 
 まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。
 
-![ruby win debug
-001](../../images/article/episode_0/ruby-win-debug-001.png)
+![ruby win debug 001](../../images/article/episode_0/ruby-win-debug-001.png)
 
 ブレークポイントを設定したらF5を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。
 
-![ruby win debug
-002](../../images/article/episode_0/ruby-win-debug-002.png)
+![ruby win debug 002](../../images/article/episode_0/ruby-win-debug-002.png)
 
 画面上の実行ボタンを押すと次のブレークポイントに移動します。
 
-![ruby win debug
-003](../../images/article/episode_0/ruby-win-debug-003.png)
+![ruby win debug 003](../../images/article/episode_0/ruby-win-debug-003.png)
 
 デバッガを終了するには終了ボタンを押します。
 
-![ruby win debug
-004](../../images/article/episode_0/ruby-win-debug-004.png)
+![ruby win debug 004](../../images/article/episode_0/ruby-win-debug-004.png)
 
 ブレークポイントを再度押すことで解除ができます。
 
-![ruby win debug
-005](../../images/article/episode_0/ruby-win-debug-005.png)
+![ruby win debug 005](../../images/article/episode_0/ruby-win-debug-005.png)
 
 ##### プログラムをレポジトリに保存する
 
@@ -1146,8 +1067,7 @@ end
 
 ![ruby 002](../../images/article/episode_0/ruby-002.png)
 
-新しいウィンドウが立ち上がったらExtensionメニューから `Install Local Extensions in "WSL:
-Ubuntu'…​"` を押します。
+新しいウィンドウが立ち上がったらExtensionメニューから `Install Local Extensions in "WSL: Ubuntu'…​"` を押します。
 
 ![ruby 003](../../images/article/episode_0/ruby-003.png)
 
@@ -1210,8 +1130,7 @@ $ sudo apt-get update -y
 $ sudo apt install ansible -y
 ```
 
-続いて、エクスプローラから　`provisioning/vars/site.yml` をファイルを開いて `user:`
-の名前をWSLで設定したユーザーIDに変更します。
+続いて、エクスプローラから　`provisioning/vars/site.yml` をファイルを開いて `user:` の名前をWSLで設定したユーザーIDに変更します。
 
 ![provision 009](../../images/article/episode_0/provision-009.png)
 
@@ -1263,21 +1182,17 @@ $ node -v
 
 #### 追加パッケージのインストール
 
-[Ruby for Visual Studio
-Code](https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby)
+[Ruby for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby)
 
-[Ruby
-Solargraph](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph)
+[Ruby Solargraph](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph)
 
 [vscode-endwise](https://marketplace.visualstudio.com/items?itemName=kaiwood.endwise)
 
 [ruby-rubocop](https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop)
 
-[Test Explorer
-UI](https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer)
+[Test Explorer UI](https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer)
 
-[Ruby Test
-Explorer](https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter)
+[Ruby Test Explorer](https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter)
 
 ターミナルに以下のコマンドを入力します。
 
@@ -1300,8 +1215,7 @@ gem install solargraph
 
 ![ruby hello 002](../../images/article/episode_0/ruby-hello-002.png)
 
-ファイルに以下のコードを入力したらRunアイコンを選択して `create a launch.json file`
-を押してメニューからRubyを選択します。
+ファイルに以下のコードを入力したらRunアイコンを選択して `create a launch.json file` を押してメニューからRubyを選択します。
 
 ``` ruby
 require 'minitest/autorun'
@@ -1342,8 +1256,7 @@ end
 
 ![ruby hello 007](../../images/article/episode_0/ruby-hello-007.png)
 
-テスティングフレームワークの動作が確認できたので `hello_world`
-関数の作成に入ります。まず以下のコードを追加してF5キーを押してテストが失敗することを確認します。
+テスティングフレームワークの動作が確認できたので `hello_world` 関数の作成に入ります。まず以下のコードを追加してF5キーを押してテストが失敗することを確認します。
 
 ``` ruby
 require 'minitest/autorun'
@@ -1435,8 +1348,7 @@ end
 
 ![ruby hello 011](../../images/article/episode_0/ruby-hello-011.png)
 
-`指定された名前で挨拶を返す` テストはパスしましたが今度は `簡単な挨拶を返す`
-テストが失敗するようになりましたのでデフォルト引数を設定してテストをパスするようにします。
+`指定された名前で挨拶を返す` テストはパスしましたが今度は `簡単な挨拶を返す` テストが失敗するようになりましたのでデフォルト引数を設定してテストをパスするようにします。
 
 ``` ruby
 require 'minitest/autorun'
@@ -16668,3 +16580,6 @@ end
 
   - \[\] プロを目指す人のためのRuby入門 言語仕様からテスト駆動開発・デバッグ技法まで (Software Design
     plusシリーズ) 伊藤 淳一 (著): 技術評論社 (2017/11/25)
+
+  -  The Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition David Thomas (著), Andrew Hunt (著):
+     Addison-Wesley Professional; 2版 (2019/7/30)
