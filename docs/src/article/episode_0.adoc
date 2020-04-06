@@ -111,7 +111,23 @@ ____
 
 ==== アカウントの登録
 
-まず各種サービスのアカウントを登録します。
+まず各種サービスのアカウントを登録します。ここでは以下のアカウント設定で作業を進めていきますが各自作業の際は読み替えてください。
+
+|===
+
+| Microsft | newbie4649@outlook.jp
+
+| Google | newbie4649@gmail.com
+
+| GitHub | newbie4649
+
+| Windows | newbie4649@outlook.jp
+
+| WSL | newbie4649
+
+|===
+
+また、パスワードに関しては *セキュリティ* を参考に設定してください。アカウントIDに関しては可能な限り共通のID名を設定すると管理しやすくなります。登録アカウントとパスワードは一箇所に記録していつでも確認できるようにして置いてください。理想はパスワードマネージャーの使用ですがクラウドストレージでもいいです。他人にみられることがないように注意して管理しましょう。クラウドストレージで安全に保存する自身が無い場合は *エンジニアリングデイブックス* に記録しておきましょう。その際、もし落として他人にみられてもわからないような工夫をしておきましょう。手段はどうあれ *保存する場所は一箇所* が原則です。
 
 ===== Microsoftアカウントを作成する
 
@@ -426,6 +442,11 @@ image::../../images/article/episode_0/sync-008.png[]
 
 エディタの設定を変更した際はアップロードすることで最新の設定を保存することができます。保存した設定を読み込む場合はコマンドパレットから `Sync: 設定をダウンロード` を選択します。
 
+もし、GitHub連携で以下のような画面になった場合は登録メールアドレスに認証コードが送られているので確認してください。
+
+image::../../images/article/episode_0/sync-009.png[]
+image::../../images/article/episode_0/sync-010.png[]
+
 ===== Hello world
 
 ====== プログラムを作成する
@@ -435,14 +456,19 @@ image::../../images/article/episode_0/sync-008.png[]
 まず、プログラムを作成する場所ですが今回はディスクトップの直下に `Projects` というフォルダを作成してその中に配置したいと思います。
 
 image::../../images/article/episode_0/hello-001.png[]
+
+`Projects` フォルダの中に `PowerShell` フォルダを作成します。
+
 image::../../images/article/episode_0/hello-002.png[]
 image::../../images/article/episode_0/hello-003.png[]
+
+エディタを起動します。
+
 image::../../images/article/episode_0/hello-004.png[]
 
 エディタを起動したらエクスプローラアイコンから `フォルダを開く` を選択して作成したフォルダを開きます。
 
 image::../../images/article/episode_0/hello-005.png[]
-image::../../images/article/episode_0/hello-006.png[]
 image::../../images/article/episode_0/hello-007.png[]
 
 フォルダを開いたらファイルアイコンを選択して `HelloWorld.ps1` ファイルを作成します。
@@ -510,7 +536,9 @@ function HelloWorld {
 }
 ```
 
-F5キーを押してテストが通ったことを確認したらテストケースを追加します。
+image::../../images/article/episode_0/hello-014.png[]
+
+F5キーを押してテストが通ったことを確認したらテストケースを追加します。もしテストが失敗するようなら保存のタイミングあっていない場合があるので再度F5キーを押して実行してみてください。
 
 ```powershell
 Describe "HelloWorld" {
@@ -840,6 +868,7 @@ https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer[T
 
 https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter[Ruby Test Explorer^]
 
+ターミナルに以下のコマンドを入力します。
 
 ```bash
 gem install rubocop
@@ -848,15 +877,18 @@ gem install ruby-debug-ide
 gem install solargraph
 ```
 
-===== 設定
-
-https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28[VisualStudioCode でRubyの開発環境を作る]
-
 ===== Hello world
 ====== プログラムを作成する
 
+`REAMD.md` を選択してから `新しいファイル` 作成アイコンを押します。
+
 image::../../images/article/episode_0/ruby-hello-001.png[]
+
+ファイル名は `main.rb` とします。
+
 image::../../images/article/episode_0/ruby-hello-002.png[]
+
+ファイルに以下のコードを入力したらRunアイコンを選択して `create a launch.json file` を押してメニューからRubyを選択します。
 
 ```ruby
 require 'minitest/autorun'
@@ -869,9 +901,20 @@ end
 ```
 
 image::../../images/article/episode_0/ruby-hello-003.png[]
+
+`Debug Local File` を選択します。
+
 image::../../images/article/episode_0/ruby-hello-004.png[]
+
+`launch.json` ファイルが作成されたら `main.rb` タブに戻ってF5キーを押します。
+
 image::../../images/article/episode_0/ruby-hello-005.png[]
+
+デバッグコンソールに実行結果が表示されれば準備完了です。
+
 image::../../images/article/episode_0/ruby-hello-006.png[]
+
+テストをパスするようにコードを修正してF5キーを押します。
 
 ```ruby
 require 'minitest/autorun'
@@ -885,6 +928,8 @@ end
 ```
 
 image::../../images/article/episode_0/ruby-hello-007.png[]
+
+テスティングフレームワークの動作が確認できたので `hello_world` 関数の作成に入ります。まず以下のコードを追加してF5キーを押してテストが失敗することを確認します。
 
 ```ruby
 require 'minitest/autorun'
@@ -901,6 +946,9 @@ end
 ```
 
 image::../../images/article/episode_0/ruby-hello-008.png[]
+
+
+`hello_world` 関数を追加してテストをパスさせます。
 
 ```ruby
 require 'minitest/autorun'
@@ -921,6 +969,9 @@ end
 ```
 
 image::../../images/article/episode_0/ruby-hello-009.png[]
+
+
+指定された名前で挨拶を返すようにします。
 
 ```ruby
 require 'minitest/autorun'
@@ -946,6 +997,8 @@ end
 
 image::../../images/article/episode_0/ruby-hello-010.png[]
 
+関数に引数を追加します。
+
 ```ruby
 require 'minitest/autorun'
 
@@ -967,8 +1020,9 @@ def hello_world(name)
   "Hello from #{name}"
 end
 ```
-
 image::../../images/article/episode_0/ruby-hello-011.png[]
+
+`指定された名前で挨拶を返す` テストはパスしましたが今度は `簡単な挨拶を返す` テストが失敗するようになりましたのでデフォルト引数を設定してテストをパスするようにします。
 
 ```ruby
 require 'minitest/autorun'
@@ -994,6 +1048,8 @@ end
 
 image::../../images/article/episode_0/ruby-hello-012.png[]
 
+仕上げに不要なテストを削除してテストケースの文言をわかりやすくしておきます。
+
 ```ruby
 require 'minitest/autorun'
 
@@ -1016,16 +1072,38 @@ image::../../images/article/episode_0/ruby-hello-013.png[]
 
 ====== プログラムをデバッグする
 
+まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。
+
 image::../../images/article/episode_0/ruby-debug-001.png[]
+
+ブレークポイントを設定したらF5を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。
+
 image::../../images/article/episode_0/ruby-debug-002.png[]
+
+画面上の実行ボタンを押すと次のブレークポイントに移動します。
+
 image::../../images/article/episode_0/ruby-debug-003.png[]
+
+デバッガを終了するには終了ボタンを押します。
+
 image::../../images/article/episode_0/ruby-debug-004.png[]
+
+ブレークポイントを再度押すことで解除ができます。
+
 image::../../images/article/episode_0/ruby-debug-005.png[]
 
 ====== プログラムをレポジトリに保存する
 
+`全ての変更をステージ` を選択します。
+
 image::../../images/article/episode_0/ruby-git-001.png[]
+
+変更内容に `feat: HelloWorld` と入力して `コミット` を押します。
+
 image::../../images/article/episode_0/ruby-git-002.png[]
+
+変更内容は `GitLens` から確認できます。
+
 image::../../images/article/episode_0/ruby-git-003.png[]
 
 ==== 参照
@@ -1047,3 +1125,4 @@ image::../../images/article/episode_0/ruby-git-003.png[]
 * https://qiita.com/sensuikan1973/items/74cf5383c02dbcd82234[VSCodeのオススメ拡張機能 24 選 (とTipsをいくつか)^]
 * https://qiita.com/n_oshiumi/items/1ad3f55d58f2d9d48d1e[VScodeで保存時に自動で空白を削除しよう！]
 * https://qiita.com/mitashun/items/e2f118a9ca7b96b97840[Visual Studio Codeで保存時自動整形の設定方法]
+* https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28[VisualStudioCode でRubyの開発環境を作る]

@@ -568,7 +568,6 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_ruby環境のセットアップ">Ruby環境のセットアップ</a></li>
 <li><a href="#_プロビジョニングの実行">プロビジョニングの実行</a></li>
 <li><a href="#_追加パッケージのインストール">追加パッケージのインストール</a></li>
-<li><a href="#_設定_2">設定</a></li>
 <li><a href="#_hello_world_2">Hello world</a>
 <ul class="sectlevel5">
 <li><a href="#_プログラムを作成する_2">プログラムを作成する</a></li>
@@ -797,7 +796,38 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect3">
 <h4 id="_アカウントの登録">1.2. アカウントの登録</h4>
 <div class="paragraph">
-<p>まず各種サービスのアカウントを登録します。</p>
+<p>まず各種サービスのアカウントを登録します。ここでは以下のアカウント設定で作業を進めていきますが各自作業の際は読み替えてください。</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsft</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="mailto:newbie4649@outlook.jp">newbie4649@outlook.jp</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="mailto:newbie4649@gmail.com">newbie4649@gmail.com</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GitHub</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">newbie4649</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Windows</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="mailto:newbie4649@outlook.jp">newbie4649@outlook.jp</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WSL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">newbie4649</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>また、パスワードに関しては <strong>セキュリティ</strong> を参考に設定してください。アカウントIDに関しては可能な限り共通のID名を設定すると管理しやすくなります。登録アカウントとパスワードは一箇所に記録していつでも確認できるようにして置いてください。理想はパスワードマネージャーの使用ですがクラウドストレージでもいいです。他人にみられることがないように注意して管理しましょう。クラウドストレージで安全に保存する自身が無い場合は <strong>エンジニアリングデイブックス</strong> に記録しておきましょう。その際、もし落として他人にみられてもわからないような工夫をしておきましょう。手段はどうあれ <strong>保存する場所は一箇所</strong> が原則です。</p>
 </div>
 <div class="sect4">
 <h5 id="_microsoftアカウントを作成する">Microsoftアカウントを作成する</h5>
@@ -1441,6 +1471,19 @@ table.CodeRay td.code>pre{padding:0}
 <div class="paragraph">
 <p>エディタの設定を変更した際はアップロードすることで最新の設定を保存することができます。保存した設定を読み込む場合はコマンドパレットから <code>Sync: 設定をダウンロード</code> を選択します。</p>
 </div>
+<div class="paragraph">
+<p>もし、GitHub連携で以下のような画面になった場合は登録メールアドレスに認証コードが送られているので確認してください。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/sync-009.png" alt="sync 009">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/sync-010.png" alt="sync 010">
+</div>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_hello_world">Hello world</h5>
@@ -1456,6 +1499,9 @@ table.CodeRay td.code>pre{padding:0}
 <img src="../../images/article/episode_0/hello-001.png" alt="hello 001">
 </div>
 </div>
+<div class="paragraph">
+<p><code>Projects</code> フォルダの中に <code>PowerShell</code> フォルダを作成します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-002.png" alt="hello 002">
@@ -1465,6 +1511,9 @@ table.CodeRay td.code>pre{padding:0}
 <div class="content">
 <img src="../../images/article/episode_0/hello-003.png" alt="hello 003">
 </div>
+</div>
+<div class="paragraph">
+<p>エディタを起動します。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1477,11 +1526,6 @@ table.CodeRay td.code>pre{padding:0}
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/hello-005.png" alt="hello 005">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../images/article/episode_0/hello-006.png" alt="hello 006">
 </div>
 </div>
 <div class="imageblock">
@@ -1583,8 +1627,13 @@ function HelloWorld {
 }</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/article/episode_0/hello-014.png" alt="hello 014">
+</div>
+</div>
 <div class="paragraph">
-<p>F5キーを押してテストが通ったことを確認したらテストケースを追加します。</p>
+<p>F5キーを押してテストが通ったことを確認したらテストケースを追加します。もしテストが失敗するようなら保存のタイミングあっていない場合があるので再度F5キーを押して実行してみてください。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2112,6 +2161,9 @@ $ node -v</code></pre>
 <div class="paragraph">
 <p><a href="https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter" target="_blank" rel="noopener">Ruby Test Explorer</a></p>
 </div>
+<div class="paragraph">
+<p>ターミナルに以下のコマンドを入力します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">gem install rubocop
@@ -2122,24 +2174,27 @@ gem install solargraph</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_設定_2">設定</h5>
-<div class="paragraph">
-<p><a href="https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28">VisualStudioCode でRubyの開発環境を作る</a></p>
-</div>
-</div>
-<div class="sect4">
 <h5 id="_hello_world_2">Hello world</h5>
 <div class="sect5">
 <h6 id="_プログラムを作成する_2">プログラムを作成する</h6>
+<div class="paragraph">
+<p><code>REAMD.md</code> を選択してから <code>新しいファイル</code> 作成アイコンを押します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/ruby-hello-001.png" alt="ruby hello 001">
 </div>
 </div>
+<div class="paragraph">
+<p>ファイル名は <code>main.rb</code> とします。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/ruby-hello-002.png" alt="ruby hello 002">
 </div>
+</div>
+<div class="paragraph">
+<p>ファイルに以下のコードを入力したらRunアイコンを選択して <code>create a launch.json file</code> を押してメニューからRubyを選択します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2157,20 +2212,32 @@ gem install solargraph</code></pre>
 <img src="../../images/article/episode_0/ruby-hello-003.png" alt="ruby hello 003">
 </div>
 </div>
+<div class="paragraph">
+<p><code>Debug Local File</code> を選択します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/ruby-hello-004.png" alt="ruby hello 004">
 </div>
+</div>
+<div class="paragraph">
+<p><code>launch.json</code> ファイルが作成されたら <code>main.rb</code> タブに戻ってF5キーを押します。</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/ruby-hello-005.png" alt="ruby hello 005">
 </div>
 </div>
+<div class="paragraph">
+<p>デバッグコンソールに実行結果が表示されれば準備完了です。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/ruby-hello-006.png" alt="ruby hello 006">
 </div>
+</div>
+<div class="paragraph">
+<p>テストをパスするようにコードを修正してF5キーを押します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2188,6 +2255,9 @@ gem install solargraph</code></pre>
 <div class="content">
 <img src="../../images/article/episode_0/ruby-hello-007.png" alt="ruby hello 007">
 </div>
+</div>
+<div class="paragraph">
+<p>テスティングフレームワークの動作が確認できたので <code>hello_world</code> 関数の作成に入ります。まず以下のコードを追加してF5キーを押してテストが失敗することを確認します。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2208,6 +2278,9 @@ gem install solargraph</code></pre>
 <div class="content">
 <img src="../../images/article/episode_0/ruby-hello-008.png" alt="ruby hello 008">
 </div>
+</div>
+<div class="paragraph">
+<p><code>hello_world</code> 関数を追加してテストをパスさせます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2232,6 +2305,9 @@ gem install solargraph</code></pre>
 <div class="content">
 <img src="../../images/article/episode_0/ruby-hello-009.png" alt="ruby hello 009">
 </div>
+</div>
+<div class="paragraph">
+<p>指定された名前で挨拶を返すようにします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2261,6 +2337,9 @@ gem install solargraph</code></pre>
 <img src="../../images/article/episode_0/ruby-hello-010.png" alt="ruby hello 010">
 </div>
 </div>
+<div class="paragraph">
+<p>関数に引数を追加します。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
@@ -2288,6 +2367,9 @@ gem install solargraph</code></pre>
 <div class="content">
 <img src="../../images/article/episode_0/ruby-hello-011.png" alt="ruby hello 011">
 </div>
+</div>
+<div class="paragraph">
+<p><code>指定された名前で挨拶を返す</code> テストはパスしましたが今度は <code>簡単な挨拶を返す</code> テストが失敗するようになりましたのでデフォルト引数を設定してテストをパスするようにします。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2317,6 +2399,9 @@ gem install solargraph</code></pre>
 <img src="../../images/article/episode_0/ruby-hello-012.png" alt="ruby hello 012">
 </div>
 </div>
+<div class="paragraph">
+<p>仕上げに不要なテストを削除してテストケースの文言をわかりやすくしておきます。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">minitest/autorun</span><span class="delimiter">'</span></span>
@@ -2344,25 +2429,40 @@ gem install solargraph</code></pre>
 </div>
 <div class="sect5">
 <h6 id="_プログラムをデバッグする_2">プログラムをデバッグする</h6>
+<div class="paragraph">
+<p>まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/ruby-debug-001.png" alt="ruby debug 001">
 </div>
+</div>
+<div class="paragraph">
+<p>ブレークポイントを設定したらF5を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/ruby-debug-002.png" alt="ruby debug 002">
 </div>
 </div>
+<div class="paragraph">
+<p>画面上の実行ボタンを押すと次のブレークポイントに移動します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/ruby-debug-003.png" alt="ruby debug 003">
 </div>
 </div>
+<div class="paragraph">
+<p>デバッガを終了するには終了ボタンを押します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/ruby-debug-004.png" alt="ruby debug 004">
 </div>
+</div>
+<div class="paragraph">
+<p>ブレークポイントを再度押すことで解除ができます。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -2372,15 +2472,24 @@ gem install solargraph</code></pre>
 </div>
 <div class="sect5">
 <h6 id="_プログラムをレポジトリに保存する_2">プログラムをレポジトリに保存する</h6>
+<div class="paragraph">
+<p><code>全ての変更をステージ</code> を選択します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/ruby-git-001.png" alt="ruby git 001">
 </div>
 </div>
+<div class="paragraph">
+<p>変更内容に <code>feat: HelloWorld</code> と入力して <code>コミット</code> を押します。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="../../images/article/episode_0/ruby-git-002.png" alt="ruby git 002">
 </div>
+</div>
+<div class="paragraph">
+<p>変更内容は <code>GitLens</code> から確認できます。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -2448,6 +2557,9 @@ gem install solargraph</code></pre>
 <li>
 <p><a href="https://qiita.com/mitashun/items/e2f118a9ca7b96b97840">Visual Studio Codeで保存時自動整形の設定方法</a></p>
 </li>
+<li>
+<p><a href="https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28">VisualStudioCode でRubyの開発環境を作る</a></p>
+</li>
 </ul>
 </div>
 </div>
@@ -2455,7 +2567,7 @@ gem install solargraph</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-04 17:49:51 JST
+Last updated 2020-04-06 14:20:54 JST
 </div>
 </div>
 </body>
