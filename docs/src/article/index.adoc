@@ -7,6 +7,9 @@
 
 これはとあるプログラマがどのような思考を経てテスト駆動開発でアプリケーションを構築していったかを解説した内容である。隣りに座って話を聞きながらコードを追いかけているイメージで読み進めてみてださい。
 
+== エピソード0
+include::episode_0.adoc[]
+
 == エピソード1
 include::episode_1.adoc[]
 
@@ -82,3 +85,5 @@ include::episode_x.adoc[]
   技術評論社 (2018/6/21)
 - [[[pruby, 8]]] プロを目指す人のためのRuby入門 言語仕様からテスト駆動開発・デバッグ技法まで (Software Design plusシリーズ) 伊藤 淳一  (著):
   技術評論社 (2017/11/25)
+- [[[ppg,9]]] The Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition David Thomas (著), Andrew Hunt (著):
+  Addison-Wesley Professional; 2版 (2019/7/30)

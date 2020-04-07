@@ -425,14 +425,107 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 </head>
-<body class="article">
+<body class="article toc2 toc-left">
 <div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_オブジェクト指向から始めるテスト駆動開発">1. オブジェクト指向から始めるテスト駆動開発</a>
+<ul class="sectlevel3">
+<li><a href="#_テスト駆動開発">1.1. テスト駆動開発</a>
+<ul class="sectlevel4">
+<li><a href="#_todoリスト作成">TODOリスト作成</a></li>
+<li><a href="#_タイプ1の場合">タイプ1の場合</a></li>
+<li><a href="#_タイプ2の場合">タイプ2の場合</a></li>
+<li><a href="#_タイプ3の場合">タイプ3の場合</a></li>
+<li><a href="#_それ以外のタイプの場合">それ以外のタイプの場合</a></li>
+</ul>
+</li>
+<li><a href="#_オブジェクト指向">1.2. オブジェクト指向</a>
+<ul class="sectlevel4">
+<li><a href="#_手続き型プログラム">手続き型プログラム</a></li>
+<li><a href="#_オブジェクト指向プログラム">オブジェクト指向プログラム</a></li>
+</ul>
+</li>
+<li><a href="#_カプセル化">1.3. カプセル化</a>
+<ul class="sectlevel4">
+<li><a href="#_フィールドのカプセル化">フィールドのカプセル化</a></li>
+<li><a href="#_setterの削除">setterの削除</a></li>
+</ul>
+</li>
+<li><a href="#_ポリモーフィズム">1.4. ポリモーフィズム</a>
+<ul class="sectlevel4">
+<li><a href="#_ポリモーフィズムによる条件記述の置き換え_1">ポリモーフィズムによる条件記述の置き換え 1</a></li>
+<li><a href="#_ポリモーフィズムによる条件記述の置き換え_2">ポリモーフィズムによる条件記述の置き換え 2</a></li>
+<li><a href="#_ポリモーフィズムによる条件記述の置き換え_3">ポリモーフィズムによる条件記述の置き換え 3</a></li>
+<li><a href="#_ポリモーフィズムによる条件記述の置き換え_4">ポリモーフィズムによる条件記述の置き換え 4</a></li>
+<li><a href="#_state_strategyによるタイプコードの置き換え">State/Strategyによるタイプコードの置き換え</a></li>
+</ul>
+</li>
+<li><a href="#_継承">1.5. 継承</a>
+<ul class="sectlevel4">
+<li><a href="#_スーパークラスの抽出">スーパークラスの抽出</a></li>
+<li><a href="#_メソッド名の変更">メソッド名の変更</a></li>
+<li><a href="#_メソッドの移動">メソッドの移動</a></li>
+</ul>
+</li>
+<li><a href="#_値オブジェクト">1.6. 値オブジェクト</a>
+<ul class="sectlevel4">
+<li><a href="#_オブジェクトによるプリミティブの置き換え">オブジェクトによるプリミティブの置き換え</a></li>
+<li><a href="#_マジックナンバーの置き換え">マジックナンバーの置き換え</a></li>
+<li><a href="#_オブジェクトによるプリミティブの置き換え_2">オブジェクトによるプリミティブの置き換え</a></li>
+<li><a href="#_学習用テスト">学習用テスト</a></li>
+</ul>
+</li>
+<li><a href="#_ファーストクラスコレクション">1.7. ファーストクラスコレクション</a>
+<ul class="sectlevel4">
+<li><a href="#_コレクションのカプセル化">コレクションのカプセル化</a></li>
+<li><a href="#_学習用テスト_2">学習用テスト</a></li>
+</ul>
+</li>
+<li><a href="#_オブジェクト指向設計">1.8. オブジェクト指向設計</a>
+<ul class="sectlevel4">
+<li><a href="#_メソッドオブジェクトによるメソッドの置き換え">メソッドオブジェクトによるメソッドの置き換え</a></li>
+<li><a href="#_メソッドオブジェクトによるメソッドの置き換え_2">メソッドオブジェクトによるメソッドの置き換え</a></li>
+<li><a href="#_デッドコードの削除">デッドコードの削除</a></li>
+<li><a href="#_デザインパターン">デザインパターン</a></li>
+</ul>
+</li>
+<li><a href="#_例外">1.9. 例外</a>
+<ul class="sectlevel4">
+<li><a href="#_アサーションの導入">アサーションの導入</a></li>
+<li><a href="#_例外によるエラーコードの置き換え">例外によるエラーコードの置き換え</a></li>
+<li><a href="#_アルゴリズムの置き換え">アルゴリズムの置き換え</a></li>
+<li><a href="#_マジックナンバーの置き換え_2">マジックナンバーの置き換え</a></li>
+<li><a href="#_特殊ケースの導入">特殊ケースの導入</a></li>
+</ul>
+</li>
+<li><a href="#_モジュール分割">1.10. モジュール分割</a>
+<ul class="sectlevel4">
+<li><a href="#_ドメインモデル">ドメインモデル</a></li>
+<li><a href="#_アプリケーション">アプリケーション</a></li>
+<li><a href="#_テスト">テスト</a></li>
+<li><a href="#_エントリーポイント">エントリーポイント</a></li>
+</ul>
+</li>
+<li><a href="#_ふりかえり">1.11. ふりかえり</a>
+<ul class="sectlevel4">
+<li><a href="#_オブジェクト指向プログラム_2">オブジェクト指向プログラム</a></li>
+<li><a href="#_オブジェクト指向設計_2">オブジェクト指向設計</a></li>
+<li><a href="#_モジュールの分割">モジュールの分割</a></li>
+<li><a href="#_良い設計">良い設計</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div id="content">
 <div class="sect2">
-<h3 id="_オブジェクト指向から始めるテスト駆動開発">オブジェクト指向から始めるテスト駆動開発</h3>
+<h3 id="_オブジェクト指向から始めるテスト駆動開発">1. オブジェクト指向から始めるテスト駆動開発</h3>
 <div class="sect3">
-<h4 id="_テスト駆動開発">テスト駆動開発</h4>
+<h4 id="_テスト駆動開発">1.1. テスト駆動開発</h4>
 <div class="paragraph">
 <p>エピソード1ので作成したプログラムに以下の仕様を追加します。</p>
 </div>
@@ -1861,7 +1954,7 @@ $ git commit -m 'test: それ以外のタイプの場合'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_オブジェクト指向">オブジェクト指向</h4>
+<h4 id="_オブジェクト指向">1.2. オブジェクト指向</h4>
 <div class="sect4">
 <h5 id="_手続き型プログラム">手続き型プログラム</h5>
 <div class="paragraph">
@@ -1998,7 +2091,7 @@ end</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_カプセル化">カプセル化</h4>
+<h4 id="_カプセル化">1.3. カプセル化</h4>
 <div class="sect4">
 <h5 id="_フィールドのカプセル化">フィールドのカプセル化</h5>
 <div class="imageblock">
@@ -2719,7 +2812,7 @@ $ git commit -m 'refactor: setterの削除'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_ポリモーフィズム">ポリモーフィズム</h4>
+<h4 id="_ポリモーフィズム">1.4. ポリモーフィズム</h4>
 <div class="sect4">
 <h5 id="_ポリモーフィズムによる条件記述の置き換え_1">ポリモーフィズムによる条件記述の置き換え 1</h5>
 <div class="imageblock">
@@ -3442,7 +3535,7 @@ $ git commit -m 'refactor: State/Strategyによるタイプコードの置き換
 </div>
 </div>
 <div class="sect3">
-<h4 id="_継承">継承</h4>
+<h4 id="_継承">1.5. 継承</h4>
 <div class="paragraph">
 <p>分割したタイプクラスのメソッドに重複する処理があるので <strong>継承</strong> を使ってリファクタリングしましょう。ここでは <strong>スーパークラスの抽出</strong> を適用します。</p>
 </div>
@@ -3942,7 +4035,7 @@ $ git commit -m 'refactor: メソッドの移動'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_値オブジェクト">値オブジェクト</h4>
+<h4 id="_値オブジェクト">1.6. 値オブジェクト</h4>
 <div class="imageblock">
 <div class="content">
 <img src="diag-ba1b69256f8ec13b0140b339cd44bac8.png" alt="diag ba1b69256f8ec13b0140b339cd44bac8" width="470" height="251">
@@ -4583,7 +4676,7 @@ $ git commit -m 'test: 学習用テスト'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_ファーストクラスコレクション">ファーストクラスコレクション</h4>
+<h4 id="_ファーストクラスコレクション">1.7. ファーストクラスコレクション</h4>
 <div class="imageblock">
 <div class="content">
 <img src="diag-719d1727313ce1fe35a0a3eaeca9a624.png" alt="diag 719d1727313ce1fe35a0a3eaeca9a624" width="470" height="264">
@@ -4836,7 +4929,7 @@ $ git commit -m 'refactor: 学習用テスト'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_オブジェクト指向設計">オブジェクト指向設計</h4>
+<h4 id="_オブジェクト指向設計">1.8. オブジェクト指向設計</h4>
 <div class="imageblock">
 <div class="content">
 <img src="diag-f753577a92fab80607a2e63cf53e8389.png" alt="diag f753577a92fab80607a2e63cf53e8389" width="764" height="346">
@@ -5481,7 +5574,7 @@ $ git commit -m 'refactor: デッドコードの削除'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_例外">例外</h4>
+<h4 id="_例外">1.9. 例外</h4>
 <div class="imageblock">
 <div class="content">
 <img src="diag-cd1dbf997043a35c9bb55b407c0a2af9.png" alt="diag cd1dbf997043a35c9bb55b407c0a2af9" width="876" height="437">
@@ -6499,7 +6592,7 @@ $ git commit -m 'refactor: 特殊ケースの導入'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_モジュール分割">モジュール分割</h4>
+<h4 id="_モジュール分割">1.10. モジュール分割</h4>
 <div class="imageblock">
 <div class="content">
 <img src="diag-c6752522596ed46a202298ab80d50877.png" alt="diag c6752522596ed46a202298ab80d50877" width="1088" height="437">
@@ -7666,7 +7759,7 @@ $ git commit -m 'refactor: モジュール分割'</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_ふりかえり">ふりかえり</h4>
+<h4 id="_ふりかえり">1.11. ふりかえり</h4>
 <div class="paragraph">
 <p>今回、 <strong>オブジェクト指向プログラム</strong> から <strong>オブジェクト指向設計</strong> そして <strong>モジュール分割</strong> を <strong>テスト駆動開発</strong> を通じて実践しました。各トピックを振り返ってみましょう。</p>
 </div>
@@ -8337,7 +8430,7 @@ end</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-10 11:54:33 JST
+Last updated 2020-04-05 17:45:49 JST
 </div>
 </div>
 </body>
